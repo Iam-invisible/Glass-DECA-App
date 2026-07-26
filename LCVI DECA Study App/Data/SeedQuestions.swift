@@ -1,0 +1,546 @@
+//
+//  SeedQuestions.swift
+//  LCVI DECA Study App
+//
+//  Sample practice questions written for this app.
+//  These are NOT official DECA Ontario or DECA Inc. exam questions — they are
+//  original practice items modelled on the style of cluster exams so the app is
+//  usable the moment it is installed. Import your own bank from Settings ▸
+//  Question Bank Manager to study material from your own class or club.
+//
+
+import Foundation
+
+private func q(_ key: String,
+               _ cluster: DECACluster,
+               _ difficulty: Difficulty,
+               _ text: String,
+               _ a: String, _ b: String, _ c: String, _ d: String,
+               correct: Int,
+               explanation: String,
+               tags: [String],
+               pis: [String]) -> QuestionData {
+    QuestionData(
+        id: UUID.stable("question-\(key)"),
+        text: text,
+        choices: [a, b, c, d],
+        correctIndex: correct,
+        explanation: explanation,
+        cluster: cluster,
+        examType: cluster.examName,
+        difficulty: difficulty,
+        tags: tags,
+        performanceIndicators: pis,
+        isSample: true
+    )
+}
+
+enum SeedQuestions {
+
+    static let all: [QuestionData] = marketing + finance + hospitality
+        + businessManagement + entrepreneurship + personalFinance
+
+    // MARK: - Marketing
+
+    static let marketing: [QuestionData] = [
+        q("mkt-1", .marketing, .medium,
+          "A technology company launches a new pair of wireless earbuds at $329 and lowers the price to $199 eighteen months later. Which pricing strategy is the company using?",
+          "Penetration pricing", "Price skimming", "Loss-leader pricing", "Everyday low pricing",
+          correct: 1,
+          explanation: "Price skimming sets a high introductory price to capture revenue from early adopters who are least price-sensitive, then lowers it over time to reach broader segments. Penetration pricing does the opposite — it starts low to win market share quickly.",
+          tags: ["pricing", "product launch"],
+          pis: ["MK:002"]),
+
+        q("mkt-2", .marketing, .easy,
+          "A sportswear brand divides its market into groups aged 13–18, 19–34, and 35+. Which segmentation base is being used?",
+          "Psychographic", "Geographic", "Demographic", "Behavioural",
+          correct: 2,
+          explanation: "Age, income, gender, education and family size are demographic variables. Psychographic segmentation uses lifestyle and values, geographic uses location, and behavioural uses purchase patterns such as usage rate or loyalty.",
+          tags: ["segmentation", "target market"],
+          pis: ["MK:006"]),
+
+        q("mkt-3", .marketing, .medium,
+          "A local restaurant is featured in a newspaper food review that the restaurant did not pay for. This is an example of which element of the promotional mix?",
+          "Advertising", "Public relations", "Sales promotion", "Personal selling",
+          correct: 1,
+          explanation: "Unpaid, third-party coverage that builds goodwill is publicity, which falls under public relations. Advertising is paid and controlled by the business; sales promotion offers a short-term incentive; personal selling is direct one-to-one persuasion.",
+          tags: ["promotion", "public relations"],
+          pis: ["MK:004"]),
+
+        q("mkt-4", .marketing, .medium,
+          "In a SWOT analysis, which item would be classified as an internal factor?",
+          "A new competitor entering the market", "Rising interest rates", "A highly trained sales team", "A change in consumer privacy law",
+          correct: 2,
+          explanation: "Strengths and weaknesses are internal — they describe resources the business controls, such as staff, brand equity or facilities. Opportunities and threats are external forces like competitors, the economy and regulation.",
+          tags: ["situation analysis", "SWOT", "planning"],
+          pis: ["MK:005"]),
+
+        q("mkt-5", .marketing, .easy,
+          "A marketer reviews Statistics Canada census data before choosing a store location. What type of research is this?",
+          "Primary research", "Secondary research", "Experimental research", "Observational research",
+          correct: 1,
+          explanation: "Secondary research uses data that already exists and was collected by someone else. Primary research is collected first-hand for the current problem through surveys, interviews, observation or experiments.",
+          tags: ["marketing research", "data"],
+          pis: ["MK:007"]),
+
+        q("mkt-6", .marketing, .medium,
+          "Sales of a product have levelled off, competition is intense, and the firm is focusing on differentiation and cost control. Which stage of the product life cycle is this?",
+          "Introduction", "Growth", "Maturity", "Decline",
+          correct: 2,
+          explanation: "Maturity is marked by flat sales, many competitors, and heavy emphasis on differentiation, promotion and efficiency to defend share. In decline, sales actively fall and firms harvest or discontinue the product.",
+          tags: ["product life cycle", "product management"],
+          pis: ["MK:008"]),
+
+        q("mkt-7", .marketing, .medium,
+          "A chewing-gum manufacturer wants its product available in as many convenience stores, gas stations and supermarkets as possible. Which distribution strategy fits best?",
+          "Exclusive distribution", "Selective distribution", "Intensive distribution", "Direct distribution",
+          correct: 2,
+          explanation: "Intensive distribution places convenience goods in the maximum number of outlets because customers will not search or substitute effort for them. Exclusive distribution limits sales to one retailer per area and suits luxury or specialty goods.",
+          tags: ["channel management", "distribution"],
+          pis: ["MK:003"]),
+
+        q("mkt-8", .marketing, .hard,
+          "A retailer buys a jacket for $60 and prices it at $99. What is the markup as a percentage of the selling price?",
+          "39.4%", "65.0%", "60.6%", "35.0%",
+          correct: 0,
+          explanation: "Markup dollars are $99 − $60 = $39. As a percentage of the selling price: $39 ÷ $99 = 39.4%. Note that markup on cost would be $39 ÷ $60 = 65% — always check which base the question asks for.",
+          tags: ["pricing", "markup", "calculation"],
+          pis: ["MK:002"]),
+
+        q("mkt-9", .marketing, .medium,
+          "A brand advertises itself as \"the safest family SUV on the road.\" This statement is primarily an example of",
+          "product positioning.", "channel management.", "market segmentation.", "sales promotion.",
+          correct: 0,
+          explanation: "Positioning is the place a product occupies in the customer's mind relative to competitors. Claiming to be the safest option for families defines that mental space. Segmentation identifies who the customer is; positioning defines how the product is perceived.",
+          tags: ["positioning", "branding"],
+          pis: ["MK:008"]),
+
+        q("mkt-10", .marketing, .medium,
+          "Why do businesses invest in customer relationship management rather than focusing only on new customers?",
+          "New customers always spend less than existing customers.", "Retaining an existing customer usually costs less than acquiring a new one.", "Customer relationship management eliminates the need for advertising.", "Regulations require businesses to track repeat customers.",
+          correct: 1,
+          explanation: "Acquisition costs — advertising, incentives and sales time — typically exceed the cost of keeping a satisfied customer. Loyal customers also buy more often, are less price-sensitive, and generate referrals, which raises lifetime value.",
+          tags: ["customer relations", "loyalty"],
+          pis: ["MK:009"])
+    ]
+
+    // MARK: - Finance
+
+    static let finance: [QuestionData] = [
+        q("fin-1", .finance, .easy,
+          "Which equation correctly states the accounting equation?",
+          "Assets = Liabilities − Owner's Equity", "Assets = Liabilities + Owner's Equity", "Liabilities = Assets + Owner's Equity", "Owner's Equity = Assets + Liabilities",
+          correct: 1,
+          explanation: "Everything a business owns (assets) is financed either by creditors (liabilities) or by owners (equity), so Assets = Liabilities + Owner's Equity. The balance sheet must always satisfy this identity.",
+          tags: ["accounting", "balance sheet"],
+          pis: ["FI:001"]),
+
+        q("fin-2", .finance, .medium,
+          "A company has current assets of $180,000 and current liabilities of $120,000. What is its current ratio, and what does it suggest?",
+          "0.67 — the firm cannot cover short-term debts", "1.50 — the firm can cover short-term debts", "1.50 — the firm is insolvent", "3.00 — the firm has excess inventory",
+          correct: 1,
+          explanation: "Current ratio = current assets ÷ current liabilities = $180,000 ÷ $120,000 = 1.5. A ratio above 1.0 means short-term assets exceed short-term obligations, which generally indicates adequate liquidity.",
+          tags: ["ratios", "liquidity", "calculation"],
+          pis: ["FI:002"]),
+
+        q("fin-3", .finance, .medium,
+          "Why is $1,000 received today worth more than $1,000 received in three years?",
+          "Inflation is always negative over time.", "Money available today can be invested to earn a return.", "Banks charge a fee for future payments.", "Accounting standards require discounting all revenue.",
+          correct: 1,
+          explanation: "The time value of money rests on opportunity cost: cash in hand can be invested and earn interest, so a dollar today has greater purchasing and earning power than the same dollar later. Inflation reinforces this but is not the core reason.",
+          tags: ["time value of money", "finance concepts"],
+          pis: ["FI:003"]),
+
+        q("fin-4", .finance, .hard,
+          "A business has fixed costs of $48,000, sells its product for $40, and has variable costs of $25 per unit. How many units must it sell to break even?",
+          "1,200 units", "1,920 units", "3,200 units", "2,400 units",
+          correct: 2,
+          explanation: "Contribution margin per unit = $40 − $25 = $15. Break-even units = fixed costs ÷ contribution margin = $48,000 ÷ $15 = 3,200 units. Below that volume the firm loses money; above it, each unit adds $15 of profit.",
+          tags: ["break-even", "calculation", "costs"],
+          pis: ["FI:009"]),
+
+        q("fin-5", .finance, .medium,
+          "Which financial statement reports a company's revenues and expenses over a period of time?",
+          "Balance sheet", "Income statement", "Statement of cash flows", "Statement of owner's equity",
+          correct: 1,
+          explanation: "The income statement (profit and loss statement) covers a period and shows revenues minus expenses to arrive at net income. The balance sheet is a snapshot at a single point in time.",
+          tags: ["financial statements", "accounting"],
+          pis: ["FI:001"]),
+
+        q("fin-6", .finance, .medium,
+          "A restaurant purchases liability insurance to protect against customer injury claims. Which risk-management strategy is this?",
+          "Risk avoidance", "Risk retention", "Risk transfer", "Risk reduction",
+          correct: 2,
+          explanation: "Buying insurance transfers the financial consequences of a loss to the insurer. Avoidance means not undertaking the activity, retention means absorbing losses yourself, and reduction means lowering the chance or severity of the loss.",
+          tags: ["risk management", "insurance"],
+          pis: ["FI:006"]),
+
+        q("fin-7", .finance, .easy,
+          "Accounts receivable represents",
+          "money the business owes to suppliers.", "money customers owe to the business.", "cash held in the business's bank account.", "long-term debt owed to a lender.",
+          correct: 1,
+          explanation: "Accounts receivable is an asset — it is money owed to the business by customers who bought on credit. Money the business owes to suppliers is accounts payable, a liability.",
+          tags: ["accounting", "working capital"],
+          pis: ["FI:007"]),
+
+        q("fin-8", .finance, .medium,
+          "A delivery van costing $45,000 loses value over its useful life. Recording that loss of value each year is called",
+          "amortization of goodwill.", "depreciation.", "appreciation.", "liquidation.",
+          correct: 1,
+          explanation: "Depreciation allocates the cost of a tangible asset across the periods that benefit from its use, matching expense to revenue. Amortization performs the same function for intangible assets.",
+          tags: ["accounting", "assets"],
+          pis: ["FI:001"]),
+
+        q("fin-9", .finance, .medium,
+          "A retailer needs financing to cover inventory purchases in the two months before the holiday season. Which financing option is most appropriate?",
+          "A 20-year mortgage", "A line of credit", "Issuing common shares", "A capital lease on a building",
+          correct: 1,
+          explanation: "A line of credit is revolving short-term financing designed for temporary working-capital gaps such as seasonal inventory. Long-term instruments like mortgages or equity issues are used to fund long-lived assets, not two-month cash needs.",
+          tags: ["financing", "working capital"],
+          pis: ["FI:004"]),
+
+        q("fin-10", .finance, .medium,
+          "A business requires that the employee who records cash receipts is not the same employee who deposits the cash. This control is known as",
+          "separation of duties.", "double-entry accounting.", "a bank reconciliation.", "an audit trail.",
+          correct: 0,
+          explanation: "Separation (segregation) of duties splits authorization, custody and record-keeping among different people so no single employee can commit and conceal an error or theft. It is a foundational internal control.",
+          tags: ["internal controls", "accounting"],
+          pis: ["FI:010"])
+    ]
+
+    // MARK: - Hospitality and Tourism
+
+    static let hospitality: [QuestionData] = [
+        q("ht-1", .hospitality, .hard,
+          "A 200-room hotel sells 150 rooms at an average daily rate of $180. What is its RevPAR for the night?",
+          "$180.00", "$135.00", "$120.00", "$150.00",
+          correct: 1,
+          explanation: "RevPAR (revenue per available room) = occupancy × average daily rate = 75% × $180 = $135. Equivalently, total room revenue ($27,000) ÷ total available rooms (200) = $135. RevPAR is stronger than ADR alone because it accounts for empty rooms.",
+          tags: ["revenue management", "lodging", "calculation"],
+          pis: ["HT:003"]),
+
+        q("ht-2", .hospitality, .medium,
+          "Why do hotels deliberately accept more reservations than they have rooms?",
+          "To increase the average daily rate", "To offset expected cancellations and no-shows", "Because provincial law requires it", "To reduce housekeeping costs",
+          correct: 1,
+          explanation: "Controlled overbooking compensates for predictable cancellations and no-shows so the hotel does not run with unsold, unrecoverable inventory. Hotels manage the risk with walk policies that relocate and compensate displaced guests.",
+          tags: ["lodging", "revenue management"],
+          pis: ["HT:003", "HT:002"]),
+
+        q("ht-3", .hospitality, .medium,
+          "The night audit in a lodging property is primarily responsible for",
+          "cleaning guest rooms after late checkout.", "balancing the day's guest accounts and posting room charges.", "negotiating group rates with tour operators.", "inspecting kitchen sanitation.",
+          correct: 1,
+          explanation: "The night audit closes the business day: it verifies postings, reconciles guest folios against departmental revenue, posts room and tax charges, and produces reports management uses the next morning.",
+          tags: ["lodging", "front office"],
+          pis: ["HT:002"]),
+
+        q("ht-4", .hospitality, .medium,
+          "A guest complains loudly that their room was not ready at check-in. What should the front-desk agent do first?",
+          "Explain the hotel's check-in policy in detail", "Listen fully and acknowledge the guest's frustration", "Offer a free night immediately", "Direct the guest to the manager",
+          correct: 1,
+          explanation: "Effective service recovery starts with listening and empathizing so the guest feels heard. Jumping to policy sounds defensive, and leading with a large giveaway skips diagnosis. Apologize, then solve, then follow up.",
+          tags: ["customer relations", "service recovery"],
+          pis: ["HT:004"]),
+
+        q("ht-5", .hospitality, .medium,
+          "Which practice best reduces the risk of foodborne illness in a commercial kitchen?",
+          "Storing raw chicken on the shelf above ready-to-eat salad", "Keeping hot food between 4°C and 60°C for service", "Cooling cooked food quickly and storing it below 4°C", "Thawing frozen meat on the counter at room temperature",
+          correct: 2,
+          explanation: "The temperature danger zone is roughly 4°C to 60°C, where bacteria multiply fastest. Cooling food quickly and holding it below 4°C limits growth. Raw proteins are stored below ready-to-eat foods, and thawing is done under refrigeration or cold running water.",
+          tags: ["food safety", "food service"],
+          pis: ["HT:005"]),
+
+        q("ht-6", .hospitality, .medium,
+          "A tourist spends money at a hotel; the hotel then pays local staff who spend that income in nearby shops. This chain of spending illustrates",
+          "the multiplier effect.", "seasonality.", "the balance of trade.", "carrying capacity.",
+          correct: 0,
+          explanation: "The tourism multiplier effect describes how one visitor dollar circulates through a local economy, generating additional income and jobs beyond the original transaction. It is a central argument in destination economic-impact studies.",
+          tags: ["tourism", "economics"],
+          pis: ["HT:001"]),
+
+        q("ht-7", .hospitality, .easy,
+          "A destination marketing organization (DMO) primarily works to",
+          "operate hotels and restaurants in a region.", "promote a region as a travel destination.", "regulate airline ticket pricing.", "certify food-handler training.",
+          correct: 1,
+          explanation: "DMOs — often called tourism boards or visitor bureaus — market a city or region to travellers and meeting planners. They coordinate branding, campaigns and visitor services rather than operating individual businesses.",
+          tags: ["tourism", "destination marketing"],
+          pis: ["HT:006"]),
+
+        q("ht-8", .hospitality, .medium,
+          "An airline raises fares for a flight as the departure date approaches and seats become scarce. This is an application of",
+          "cost-plus pricing.", "dynamic revenue management.", "penetration pricing.", "bundle pricing.",
+          correct: 1,
+          explanation: "Revenue management adjusts price continuously based on forecast demand, remaining inventory and time until the perishable service expires. Cost-plus ignores demand, and penetration pricing sets a low introductory price.",
+          tags: ["revenue management", "pricing"],
+          pis: ["HT:003"]),
+
+        q("ht-9", .hospitality, .medium,
+          "When planning a large outdoor conference, why does an event planner prepare a contingency plan?",
+          "To reduce the number of attendees", "To lower the venue deposit", "To manage risks such as weather, vendor failure or power loss", "To satisfy accounting standards",
+          correct: 2,
+          explanation: "Contingency planning identifies what could disrupt the event and pre-arranges backup venues, vendors, equipment and communication plans. It protects attendee experience and limits financial exposure when something goes wrong.",
+          tags: ["event management", "risk"],
+          pis: ["HT:007"]),
+
+        q("ht-10", .hospitality, .easy,
+          "A hotel offers guests the option to skip daily linen changes. This programme primarily supports",
+          "revenue management goals.", "sustainability and cost-reduction goals.", "front-office training goals.", "food-safety compliance.",
+          correct: 1,
+          explanation: "Opt-out linen programmes reduce water, energy, detergent and labour, which lowers operating costs while supporting environmental commitments. Many properties also promote it as part of their guest-facing sustainability story.",
+          tags: ["sustainability", "operations"],
+          pis: ["HT:008"])
+    ]
+
+    // MARK: - Business Management and Administration
+
+    static let businessManagement: [QuestionData] = [
+        q("bma-1", .businessManagement, .easy,
+          "Which set correctly lists the four functions of management?",
+          "Planning, organizing, leading, controlling", "Buying, selling, storing, promoting", "Hiring, training, paying, firing", "Producing, marketing, financing, auditing",
+          correct: 0,
+          explanation: "Planning sets goals, organizing arranges resources, leading motivates and directs people, and controlling measures results against the plan and corrects deviations. The other options describe specific business activities, not management functions.",
+          tags: ["management functions", "strategy"],
+          pis: ["BM:002"]),
+
+        q("bma-2", .businessManagement, .medium,
+          "Span of control refers to",
+          "the number of employees a manager directly supervises.", "the physical size of a company's facilities.", "the length of a manager's employment contract.", "the range of products a company sells.",
+          correct: 0,
+          explanation: "A narrow span means few direct reports and closer supervision but taller hierarchies. A wide span flattens the organization, reduces management cost, and requires employees capable of working with less direction.",
+          tags: ["organizational structure", "operations"],
+          pis: ["BM:001"]),
+
+        q("bma-3", .businessManagement, .medium,
+          "What is a key advantage of promoting from within rather than hiring externally?",
+          "It always costs more than external hiring.", "Internal candidates already understand the company's culture and processes.", "It guarantees a more diverse workforce.", "It removes the need for performance reviews.",
+          correct: 1,
+          explanation: "Internal promotion shortens onboarding, rewards performance and improves retention because employees see a path forward. External hiring brings fresh perspective and new skills — strong organizations use both deliberately.",
+          tags: ["human resources", "recruitment"],
+          pis: ["BM:003"]),
+
+        q("bma-4", .businessManagement, .medium,
+          "In a matrix organizational structure, an employee typically",
+          "reports to no manager at all.", "reports to both a functional manager and a project manager.", "works only on a single product line for their whole career.", "is prohibited from joining project teams.",
+          correct: 1,
+          explanation: "Matrix structures overlay project teams on functional departments, so staff have dual reporting lines. This improves cross-functional coordination but can create conflicting priorities that require clear escalation rules.",
+          tags: ["organizational structure"],
+          pis: ["BM:001"]),
+
+        q("bma-5", .businessManagement, .medium,
+          "A company publishes a code of conduct that all employees must review annually. The main purpose is to",
+          "replace the need for managers.", "set clear expectations for ethical behaviour and decision making.", "guarantee higher profits.", "satisfy customers' warranty claims.",
+          correct: 1,
+          explanation: "A code of conduct translates values into concrete expectations — conflicts of interest, gifts, confidentiality, harassment — so employees can recognize and resolve ethical questions consistently before they become incidents.",
+          tags: ["ethics", "professional development"],
+          pis: ["BM:005"]),
+
+        q("bma-6", .businessManagement, .medium,
+          "Under Ontario's occupational health and safety framework, a worker who believes a task is unsafe generally has the right to",
+          "refuse the work and report it to their supervisor.", "leave the workplace permanently without notice.", "perform the work and bill overtime.", "ignore the hazard if a supervisor insists.",
+          correct: 0,
+          explanation: "Health and safety law is built on the internal responsibility system: workers have the right to know about hazards, to participate in safety processes, and to refuse work they reasonably believe is unsafe. The refusal triggers an investigation, not termination.",
+          tags: ["health and safety", "operations", "Ontario"],
+          pis: ["BM:004"]),
+
+        q("bma-7", .businessManagement, .hard,
+          "Which element is required for a contract to be legally enforceable?",
+          "A notarized signature", "Consideration exchanged by both parties", "A minimum value of $500", "Registration with a government office",
+          correct: 1,
+          explanation: "A valid contract needs offer, acceptance, consideration (something of value exchanged), capacity, and a lawful purpose. Notarization, a dollar threshold and registration are not general requirements, though some specific contracts have extra formalities.",
+          tags: ["business law", "contracts"],
+          pis: ["BM:007"]),
+
+        q("bma-8", .businessManagement, .medium,
+          "Employees resist a new scheduling system. Which approach is most likely to reduce that resistance?",
+          "Implementing the change without warning to avoid debate", "Involving employees early and explaining the reasons for the change", "Removing the employees who ask questions", "Delaying all communication until after launch",
+          correct: 1,
+          explanation: "Resistance usually comes from uncertainty and loss of control. Early involvement, clear rationale, training and visible leadership support build ownership. Surprise rollouts increase rumours and reduce adoption.",
+          tags: ["change management", "leadership"],
+          pis: ["BM:008"]),
+
+        q("bma-9", .businessManagement, .easy,
+          "A key performance indicator (KPI) is best described as",
+          "any number a business collects.", "a measurable value that shows progress toward a specific objective.", "a legal requirement for annual reporting.", "the total revenue of a company.",
+          correct: 1,
+          explanation: "KPIs are selected deliberately because they track progress toward a stated goal — for example, on-time delivery rate for an operations objective. Collecting numbers without tying them to objectives produces dashboards nobody acts on.",
+          tags: ["performance measurement", "information management"],
+          pis: ["BM:009"]),
+
+        q("bma-10", .businessManagement, .medium,
+          "A manufacturer maps its production process and removes steps that add no value for the customer. This approach is best described as",
+          "vertical integration.", "process improvement using lean principles.", "outsourcing.", "diversification.",
+          correct: 1,
+          explanation: "Lean thinking identifies and eliminates waste — waiting, excess motion, overproduction, defects — so the same output requires fewer resources. Vertical integration and outsourcing change who does the work, not how efficient the process is.",
+          tags: ["operations", "efficiency"],
+          pis: ["BM:006"])
+    ]
+
+    // MARK: - Entrepreneurship
+
+    static let entrepreneurship: [QuestionData] = [
+        q("ent-1", .entrepreneurship, .easy,
+          "The executive summary of a business plan should",
+          "list every financial assumption in detail.", "concisely present the concept, market opportunity and financial need.", "be written before any research is done.", "contain only the founder's biography.",
+          correct: 1,
+          explanation: "The executive summary is written last but read first. In roughly one page it must state what the business does, who it serves, why it will win, and what is being asked of the reader — usually funding.",
+          tags: ["business plan", "planning"],
+          pis: ["EN:001"]),
+
+        q("ent-2", .entrepreneurship, .medium,
+          "The main purpose of a feasibility study is to determine whether",
+          "the founder enjoys the industry.", "a business concept is workable and likely to be profitable.", "competitors will approve of the venture.", "the business qualifies for a trademark.",
+          correct: 1,
+          explanation: "A feasibility study tests the concept against market demand, operational requirements, competition and financial projections before significant money is committed. It is a go/no-go decision tool that precedes the full business plan.",
+          tags: ["feasibility", "planning"],
+          pis: ["EN:002"]),
+
+        q("ent-3", .entrepreneurship, .medium,
+          "An experienced businessperson invests their own money in an early-stage venture in exchange for equity and often provides mentorship. This investor is called",
+          "a commercial banker.", "an angel investor.", "a bondholder.", "a franchisee.",
+          correct: 1,
+          explanation: "Angel investors are individuals who fund very early companies with personal capital, typically before venture-capital firms are interested. Banks lend debt that must be repaid regardless of success; bondholders are lenders, not owners.",
+          tags: ["financing", "start-up capital"],
+          pis: ["EN:003"]),
+
+        q("ent-4", .entrepreneurship, .medium,
+          "The most significant disadvantage of a sole proprietorship is that",
+          "profits must be shared with partners.", "the owner has unlimited personal liability for business debts.", "it requires the most complex registration process.", "it cannot hire employees.",
+          correct: 1,
+          explanation: "In a sole proprietorship there is no legal separation between owner and business, so personal assets are exposed to business debts and lawsuits. Incorporation creates a separate legal entity and limits that liability.",
+          tags: ["ownership", "business law"],
+          pis: ["EN:004"]),
+
+        q("ent-5", .entrepreneurship, .medium,
+          "A new meal-kit company succeeds because it is the only provider offering same-day delivery in its city. This is best described as its",
+          "break-even point.", "competitive advantage.", "market segment.", "distribution channel.",
+          correct: 1,
+          explanation: "A competitive advantage is the specific reason customers choose you over alternatives, and it must be difficult for rivals to copy quickly. Identifying and defending it is central to positioning a new venture.",
+          tags: ["competitive advantage", "strategy"],
+          pis: ["EN:005"]),
+
+        q("ent-6", .entrepreneurship, .medium,
+          "Why do founders often launch a minimum viable product (MVP) rather than a fully featured product?",
+          "It removes the need for customer feedback.", "It tests core assumptions quickly with less time and money at risk.", "It guarantees the product will be profitable.", "It avoids the need for a business plan.",
+          correct: 1,
+          explanation: "An MVP includes just enough functionality to learn whether customers actually want the solution. Learning early is cheaper than building a full product on untested assumptions, and the feedback shapes what gets built next.",
+          tags: ["product development", "MVP"],
+          pis: ["EN:006"]),
+
+        q("ent-7", .entrepreneurship, .medium,
+          "A successful local bakery wants to expand across the province with limited capital of its own. Which growth strategy best fits that constraint?",
+          "Franchising the concept to independent operators", "Opening company-owned stores funded by cash flow", "Reducing prices to increase volume", "Discontinuing its most popular product",
+          correct: 0,
+          explanation: "Franchising lets franchisees supply the capital and local management while the franchisor earns fees and royalties and protects brand standards. It trades some control for much faster, less capital-intensive expansion.",
+          tags: ["growth", "franchising"],
+          pis: ["EN:007"]),
+
+        q("ent-8", .entrepreneurship, .hard,
+          "A founder creates a distinctive logo and name for their venture. Which form of intellectual property protection applies?",
+          "Patent", "Copyright", "Trademark", "Trade secret",
+          correct: 2,
+          explanation: "Trademarks protect brand identifiers such as names, logos and slogans that distinguish a source of goods or services. Patents protect inventions, copyright protects original creative works, and trade secrets protect confidential business information.",
+          tags: ["intellectual property", "business law"],
+          pis: ["EN:008"]),
+
+        q("ent-9", .entrepreneurship, .medium,
+          "A start-up is profitable on paper but cannot pay its suppliers this month. The most likely cause is",
+          "a negative gross margin.", "a cash-flow timing problem.", "excessive owner equity.", "a lack of trademarks.",
+          correct: 1,
+          explanation: "Profit is recorded when a sale is made; cash arrives when the customer actually pays. If receivables are collected slowly while payables come due quickly, a profitable business can still run out of cash — the most common cause of start-up failure.",
+          tags: ["cash flow", "financing"],
+          pis: ["EN:003", "FI:007"]),
+
+        q("ent-10", .entrepreneurship, .easy,
+          "Before launching, an entrepreneur surveys 200 potential customers about pricing and features. This activity primarily helps the founder",
+          "avoid paying business taxes.", "validate demand and refine the offer.", "secure a patent.", "hire employees faster.",
+          correct: 1,
+          explanation: "Customer discovery replaces assumptions with evidence about who the buyer is, what problem they will pay to solve, and what price they accept. That evidence drives both the product roadmap and the financial projections in the plan.",
+          tags: ["market research", "validation"],
+          pis: ["EN:002", "EN:005"])
+    ]
+
+    // MARK: - Personal Financial Literacy
+
+    static let personalFinance: [QuestionData] = [
+        q("pfl-1", .personalFinancialLiteracy, .easy,
+          "A student earns $1,400 per month and has expenses of $1,150. The $250 difference is best described as a",
+          "budget deficit.", "budget surplus.", "fixed expense.", "liability.",
+          correct: 1,
+          explanation: "A surplus occurs when income exceeds expenses, and it can be directed toward savings, investing or debt repayment. A deficit is the reverse and must be covered by savings or borrowing.",
+          tags: ["budgeting", "money management"],
+          pis: ["PF:001"]),
+
+        q("pfl-2", .personalFinancialLiteracy, .medium,
+          "Which factor generally has the largest impact on a consumer's credit score?",
+          "The number of bank accounts held", "Payment history", "Annual income", "Employment length",
+          correct: 1,
+          explanation: "Payment history — whether bills are paid on time — carries the greatest weight, followed by credit utilization. Income and employment are not part of the score itself, although lenders consider them separately when approving credit.",
+          tags: ["credit", "debt"],
+          pis: ["PF:002"]),
+
+        q("pfl-3", .personalFinancialLiteracy, .medium,
+          "The relationship between risk and return in investing means that",
+          "higher potential returns generally come with higher risk of loss.", "all investments carry identical risk.", "government bonds return more than stocks.", "risk can be eliminated through diversification.",
+          correct: 0,
+          explanation: "Investors demand extra expected return to accept extra uncertainty. Diversification reduces company-specific risk but cannot remove market-wide risk, so it lowers volatility rather than eliminating it.",
+          tags: ["investing", "risk"],
+          pis: ["PF:003"]),
+
+        q("pfl-4", .personalFinancialLiteracy, .hard,
+          "In Canada, which statement best distinguishes a TFSA from an RRSP?",
+          "Contributions to a TFSA are tax-deductible; RRSP withdrawals are tax-free.", "TFSA withdrawals are generally tax-free; RRSP contributions are generally tax-deductible.", "Both accounts allow unlimited annual contributions.", "Neither account allows the holder to invest in stocks.",
+          correct: 1,
+          explanation: "A TFSA is funded with after-tax dollars and qualified withdrawals are not taxed. An RRSP gives a deduction on contribution and defers tax until withdrawal, typically in retirement when income may be lower. Both have annual contribution limits and can hold a range of investments.",
+          tags: ["investing", "Canada", "taxes"],
+          pis: ["PF:004", "PF:005"]),
+
+        q("pfl-5", .personalFinancialLiteracy, .easy,
+          "Gross pay differs from net pay because net pay",
+          "includes overtime but not base salary.", "is the amount remaining after deductions such as income tax and CPP.", "is always higher than gross pay.", "excludes all employer contributions.",
+          correct: 1,
+          explanation: "Gross pay is total earnings before deductions. Net pay — take-home pay — is what remains after income tax, Canada Pension Plan contributions, Employment Insurance premiums and any voluntary deductions.",
+          tags: ["income", "taxes", "Canada"],
+          pis: ["PF:005"]),
+
+        q("pfl-6", .personalFinancialLiteracy, .medium,
+          "An insurance deductible is",
+          "the monthly amount paid to keep a policy active.", "the amount the policyholder pays out of pocket before coverage applies.", "the maximum the insurer will ever pay.", "a government rebate on premiums.",
+          correct: 1,
+          explanation: "The deductible is the policyholder's share of a claim. Choosing a higher deductible usually lowers the premium but increases out-of-pocket cost when a loss occurs — a direct trade-off between certainty and monthly cost.",
+          tags: ["insurance", "risk"],
+          pis: ["PF:006"]),
+
+        q("pfl-7", .personalFinancialLiteracy, .hard,
+          "Using the Rule of 72, approximately how long will it take an investment earning 6% annually to double?",
+          "6 years", "9 years", "12 years", "15 years",
+          correct: 2,
+          explanation: "The Rule of 72 estimates doubling time as 72 ÷ annual rate = 72 ÷ 6 = 12 years. It is a quick approximation of compound growth and works the same way in reverse for estimating how quickly compounding debt grows.",
+          tags: ["compound interest", "saving", "calculation"],
+          pis: ["PF:007"]),
+
+        q("pfl-8", .personalFinancialLiteracy, .medium,
+          "Which statement about grants and student loans is accurate?",
+          "Both must be repaid with interest.", "Grants generally do not need to be repaid; loans do.", "Loans are always interest-free in Canada.", "Grants must be repaid only if the student graduates.",
+          correct: 1,
+          explanation: "Grants and scholarships are non-repayable aid based on need or merit. Loans must be repaid, usually beginning after studies end, so students should exhaust grant and scholarship options before borrowing.",
+          tags: ["education financing", "Canada"],
+          pis: ["PF:008"]),
+
+        q("pfl-9", .personalFinancialLiteracy, .medium,
+          "Financial planners commonly recommend an emergency fund covering",
+          "one week of expenses.", "three to six months of essential expenses.", "five years of expenses.", "the value of all owned assets.",
+          correct: 1,
+          explanation: "Three to six months of essential expenses held in an accessible account covers job loss, medical costs or major repairs without resorting to high-interest credit. The right size depends on income stability and fixed obligations.",
+          tags: ["saving", "money management"],
+          pis: ["PF:001", "PF:007"]),
+
+        q("pfl-10", .personalFinancialLiteracy, .medium,
+          "Paying only the minimum payment on a credit card each month usually results in",
+          "a lower credit score immediately.", "paying substantially more in interest over time.", "the balance being forgiven after one year.", "no interest being charged.",
+          correct: 1,
+          explanation: "Minimum payments cover mostly interest, so the principal falls slowly and total interest paid grows dramatically. Paying the statement balance in full each month avoids interest entirely on purchases.",
+          tags: ["credit", "debt", "interest"],
+          pis: ["PF:002", "PF:007"])
+    ]
+}
