@@ -68,6 +68,11 @@ struct RootView: View {
         // `scrollIndicators` is environment-based, so one call covers every
         // descendant scroll view, including pushed and presented screens.
         .scrollIndicators(.hidden)
+        // The system switch was redrawn between iOS 16 and 26. `ToggleStyle`
+        // propagates through the environment, so setting it once here covers
+        // every Toggle in the app — including ones written later, which is the
+        // part a per-call-site fix would not survive.
+        .toggleStyle(.app)
         .preferredColorScheme(store.settings.appearance.colorScheme)
         .animation(reduceMotion ? nil : Motion.gentle, value: store.settings.hasOnboarded)
         .animation(reduceMotion ? nil : Motion.gentle, value: store.showIntro)

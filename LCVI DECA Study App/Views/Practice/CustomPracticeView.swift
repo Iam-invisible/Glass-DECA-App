@@ -29,14 +29,9 @@ struct CustomPracticeView: View {
                             .font(.appCallout)
                             .tint(Palette.accent)
                         if !allClusters {
-                            Picker("Cluster", selection: $cluster) {
-                                ForEach(DECACluster.allCases) { item in
-                                    Text(item.shortName).tag(item)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(Palette.accent)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            AppMenuPicker("Cluster", selection: $cluster,
+                                          options: DECACluster.allCases) { $0.shortName }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                 }
@@ -48,13 +43,12 @@ struct CustomPracticeView: View {
                                 chip(title: "\(value)", selected: count == value) { count = value }
                             }
                         }
-                        Stepper(value: $count, in: 1...100) {
+                        AppStepper(value: $count, in: 1...100) {
                             Text("\(count) questions")
                                 .font(.appCallout.weight(.medium))
                                 .foregroundStyle(Palette.textPrimary)
                                 .monospacedDigit()
                         }
-                        .onChange(of: count) { _ in Haptics.tap() }
                     }
                 }
 
@@ -241,13 +235,12 @@ struct ExamCramSetupView: View {
                                     }
                                 }
                             } else {
-                                Stepper(value: $customCount, in: 5...60, step: 5) {
+                                AppStepper(value: $customCount, in: 5...60, step: 5) {
                                     Text("\(customCount) questions")
                                         .font(.appCallout.weight(.medium))
                                         .foregroundStyle(Palette.textPrimary)
                                         .monospacedDigit()
                                 }
-                                .onChange(of: customCount) { _ in Haptics.tap() }
                             }
                         }
                         .appCard()

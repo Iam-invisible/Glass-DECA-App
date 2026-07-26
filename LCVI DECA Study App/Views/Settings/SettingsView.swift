@@ -133,9 +133,9 @@ struct SettingsView: View {
                             .foregroundStyle(Palette.accent)
                             .monospacedDigit()
                     }
-                    Stepper(value: Binding(get: { settings.dailyGoal },
-                                           set: { settings.dailyGoal = $0; store.refresh() }),
-                            in: 1...100) {
+                    AppStepper(value: Binding(get: { settings.dailyGoal },
+                                              set: { settings.dailyGoal = $0; store.refresh() }),
+                               in: 1...100) {
                         Text("\(settings.dailyGoal) questions per day")
                             .font(.appCaption)
                             .foregroundStyle(Palette.textSecondary)
@@ -193,13 +193,10 @@ struct SettingsView: View {
                         Text("Reminder style")
                             .font(.appCallout)
                             .foregroundStyle(Palette.textPrimary)
-                        Picker("Style", selection: Binding(get: { settings.reminderStyle },
-                                                           set: { settings.reminderStyle = $0; syncNotifications() })) {
-                            ForEach(ReminderStyle.allCases) { style in
-                                Text(style.title).tag(style)
-                            }
-                        }
-                        .pickerStyle(.segmented)
+                        AppSegmentedPicker("Reminder style",
+                                           selection: Binding(get: { settings.reminderStyle },
+                                                              set: { settings.reminderStyle = $0; syncNotifications() }),
+                                           options: ReminderStyle.allCases) { $0.title }
                         Text("“\(settings.reminderStyle.body(goal: settings.dailyGoal, remaining: settings.dailyGoal))”")
                             .font(.appCaption)
                             .foregroundStyle(Palette.textTertiary)
@@ -432,13 +429,10 @@ struct SettingsView: View {
                     Text("Theme")
                         .font(.appCallout)
                         .foregroundStyle(Palette.textPrimary)
-                    Picker("Theme", selection: Binding(get: { settings.appearance },
-                                                       set: { settings.appearance = $0; Haptics.select() })) {
-                        ForEach(AppearanceMode.allCases, id: \.self) { mode in
-                            Text(mode.title).tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    AppSegmentedPicker("Theme",
+                                       selection: Binding(get: { settings.appearance },
+                                                          set: { settings.appearance = $0 }),
+                                       options: AppearanceMode.allCases) { $0.title }
                 }
 
                 Divider().overlay(Palette.stroke)
@@ -496,13 +490,10 @@ struct SettingsView: View {
                     Text("Intro style")
                         .font(.appCallout)
                         .foregroundStyle(Palette.textPrimary)
-                    Picker("Intro style", selection: Binding(get: { settings.introStyle },
-                                                            set: { settings.introStyle = $0; Haptics.select() })) {
-                        ForEach(IntroStyle.allCases, id: \.self) { style in
-                            Text(style.title).tag(style)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    AppSegmentedPicker("Intro style",
+                                       selection: Binding(get: { settings.introStyle },
+                                                          set: { settings.introStyle = $0 }),
+                                       options: IntroStyle.allCases) { $0.title }
                     Text(settings.introStyle.detail)
                         .font(.appFootnote)
                         .foregroundStyle(Palette.textSecondary)

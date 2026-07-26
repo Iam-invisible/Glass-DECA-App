@@ -273,13 +273,8 @@ struct RoleplayDetailView: View {
                     .font(.appCaptionBold)
                     .foregroundStyle(Palette.textSecondary)
 
-                Picker("Prep style", selection: $prepMode) {
-                    ForEach(PrepMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .tint(Palette.accent)
+                AppSegmentedPicker("Prep style", selection: $prepMode,
+                                   options: PrepMode.allCases) { $0.title }
 
                 if prepMode == .structured {
                     structuredPrepFields

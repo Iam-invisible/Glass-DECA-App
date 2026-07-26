@@ -278,14 +278,13 @@ struct GoalStepper: View {
                         .font(.appFootnote)
                         .foregroundStyle(Palette.textSecondary)
                     Spacer()
-                    Stepper(value: $goal, in: 1...100, step: 1) {
+                    AppStepper(value: $goal, in: 1...100, step: 1) {
                         Text("\(goal) questions")
                             .font(.appCallout.weight(.medium))
                             .foregroundStyle(Palette.textPrimary)
                             .monospacedDigit()
                     }
                     .fixedSize()
-                    .onChange(of: goal) { _ in Haptics.tap() }
                 }
                 .padding(.horizontal, 4)
                 .transition(.opacity.combined(with: .move(edge: .top)))

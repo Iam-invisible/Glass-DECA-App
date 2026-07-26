@@ -454,25 +454,16 @@ struct QuestionEditorView: View {
                         HStack {
                             Text("Cluster").font(.appCallout).foregroundStyle(Palette.textPrimary)
                             Spacer()
-                            Picker("Cluster", selection: $cluster) {
-                                ForEach(DECACluster.allCases) { item in
-                                    Text(item.shortName).tag(item)
-                                }
-                            }
-                            .pickerStyle(.menu)
-                            .tint(Palette.accent)
+                            AppMenuPicker("Cluster", selection: $cluster,
+                                          options: DECACluster.allCases) { $0.shortName }
                         }
                         Divider().overlay(Palette.stroke)
                         HStack {
                             Text("Difficulty").font(.appCallout).foregroundStyle(Palette.textPrimary)
                             Spacer()
-                            Picker("Difficulty", selection: $difficulty) {
-                                ForEach(Difficulty.allCases) { item in
-                                    Text(item.title).tag(item)
-                                }
-                            }
-                            .pickerStyle(.segmented)
-                            .frame(width: 200)
+                            AppSegmentedPicker("Difficulty", selection: $difficulty,
+                                               options: Difficulty.allCases) { $0.title }
+                                .frame(width: 200)
                         }
                         Divider().overlay(Palette.stroke)
                         TextField("Exam type (optional)", text: $examType)

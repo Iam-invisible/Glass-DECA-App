@@ -56,13 +56,8 @@ struct BulkImportView: View {
                     HStack {
                         Text("Cluster").font(.appCallout).foregroundStyle(Palette.textPrimary)
                         Spacer()
-                        Picker("Cluster", selection: $defaultCluster) {
-                            ForEach(DECACluster.allCases) { item in
-                                Text(item.shortName).tag(item)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .tint(Palette.accent)
+                        AppMenuPicker("Cluster", selection: $defaultCluster,
+                                      options: DECACluster.allCases) { $0.shortName }
                     }
                     .appCard()
                 }

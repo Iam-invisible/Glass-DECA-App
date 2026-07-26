@@ -70,13 +70,8 @@ struct MockExamsView: View {
                         .font(.appCallout)
                         .foregroundStyle(Palette.textPrimary)
                     Spacer()
-                    Picker("Cluster", selection: $config.cluster) {
-                        ForEach(DECACluster.allCases) { item in
-                            Text(item.shortName).tag(item)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Palette.accent)
+                    AppMenuPicker("Cluster", selection: $config.cluster,
+                                  options: DECACluster.allCases) { $0.shortName }
                 }
 
                 Divider().overlay(Palette.stroke)
