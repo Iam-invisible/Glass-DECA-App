@@ -64,6 +64,14 @@ struct RootView: View {
                     .transition(.opacity)
             }
         }
+        // Sits at the very top of the hierarchy, before anything downstream
+        // ignores the safe area, because that is the only place a
+        // `GeometryReader` can still read the real status-bar inset. The intro
+        // is exempt: it is a full-bleed scene with nothing scrolling under the
+        // clock, and a bar across it would break the reveal.
+        .overlay(alignment: .top) {
+            if !store.showIntro { StatusBarScrim() }
+        }
         // This is a native app, not a web page — no scroll position bars.
         // `scrollIndicators` is environment-based, so one call covers every
         // descendant scroll view, including pushed and presented screens.
