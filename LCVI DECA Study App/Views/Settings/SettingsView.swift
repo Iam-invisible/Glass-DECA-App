@@ -24,6 +24,12 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScreenHeader("Settings",
+                                 eyebrow: "On this phone only",
+                                 eyebrowSymbol: "lock.shield",
+                                 subtitle: "No account, no sync, no tracking.")
+                        .appearIn(0)
+
                     studySection.appearIn(0)
                     reminderSection.appearIn(1)
                     aiSection.appearIn(2)
@@ -37,8 +43,7 @@ struct SettingsView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
+            .rootScreenChrome()
         }
         .onAppear {
             store.ai.refreshAvailability()
@@ -590,6 +595,7 @@ struct ClusterSettingsView: View {
         }
         .appCanvas()
         .navigationTitle("Cluster")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { selection = store.settings.cluster }
         .onChange(of: selection) { newValue in
@@ -675,6 +681,7 @@ struct AIStatusView: View {
         }
         .appCanvas()
         .navigationTitle("AI feedback")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { store.ai.refreshAvailability() }
     }

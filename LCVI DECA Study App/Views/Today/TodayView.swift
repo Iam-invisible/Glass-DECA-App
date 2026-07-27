@@ -36,12 +36,7 @@ struct TodayView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Today").font(.appHeadline).foregroundStyle(Palette.textPrimary)
-                }
-            }
+            .rootScreenChrome()
         }
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload)
@@ -69,31 +64,37 @@ struct TodayView: View {
     // MARK: - Greeting
 
     private var greeting: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(greetingLine)
-                .font(.appLargeTitle)
-                .foregroundStyle(Palette.textPrimary)
-            HStack(spacing: 6) {
-                Image(systemName: cluster.symbol)
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(cluster.tint)
-                Text(cluster.displayName)
-                    .font(.appCallout)
-                    .foregroundStyle(Palette.textSecondary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+        ScreenHeader(greetingLine,
+                     eyebrow: cluster.displayName,
+                     eyebrowSymbol: cluster.symbol,
+                     eyebrowTint: cluster.tint,
+                     subtitle: dayLine)
+    }
+
+    /// The one line on the home screen that changes every day. Streak
+    /// first when there is one to protect — that is the thing a student
+    /// actually does not want to break.
+    private var dayLine: String {
+        if dash.today.goalMet {
+            return dash.streak.current > 1
+                ? "Goal met. \(dash.streak.current) days running."
+                : "Goal met for today."
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
+        let left = max(0, store.settings.dailyGoal - dash.today.answered)
+        if dash.streak.current > 1 {
+            return "\(left) more to keep a \(dash.streak.current)-day streak alive."
+        }
+        return left == store.settings.dailyGoal
+            ? "\(left) questions to start today off."
+            : "\(left) to go today."
     }
 
     private var greetingLine: String {
-        let hour = Calendar.current.component(.hour, from: Date())
-        switch hour {
-        case 5..<12:  return "Today's DECA Practice"
-        case 12..<17: return "Today's DECA Practice"
-        default:      return "Tonight's DECA Practice"
+        switch Calendar.current.component(.hour, from: Date()) {
+        case 0..<5:   return "Still up"
+        case 5..<12:  return "Good morning"
+        case 12..<17: return "Good afternoon"
+        default:      return "Good evening"
         }
     }
 

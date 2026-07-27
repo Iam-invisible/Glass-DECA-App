@@ -19,17 +19,31 @@ struct RoleplayView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
+                    ScreenHeader(title: "Roleplay",
+                                 eyebrow: showAllClusters ? "All clusters"
+                                    : store.settings.cluster.displayName,
+                                 eyebrowSymbol: showAllClusters ? "square.grid.2x2"
+                                    : store.settings.cluster.symbol,
+                                 eyebrowTint: showAllClusters ? Palette.accent
+                                    : store.settings.cluster.tint,
+                                 subtitle: "Judge-style scenarios with prep timers and a rubric.") {
+                        Button {
+                            Haptics.tap()
+                            withAnimation(Motion.snappy) { showAllClusters.toggle() }
+                            reload()
+                        } label: {
+                            Text(showAllClusters ? "My cluster" : "Show all")
+                                .font(.appCaption.weight(.semibold))
+                                .foregroundStyle(Palette.accent)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .appearIn(0)
+
                     quickThinkCard.appearIn(0)
 
-                    SectionHeader(title: "Roleplay scenarios",
-                                  subtitle: showAllClusters
-                                    ? "All clusters"
-                                    : store.settings.cluster.displayName,
-                                  actionTitle: showAllClusters ? "My cluster" : "Show all") {
-                        withAnimation(Motion.snappy) { showAllClusters.toggle() }
-                        reload()
-                    }
-                    .appearIn(1)
+                    SectionHeader(title: "Scenarios")
+                        .appearIn(1)
 
                     if prompts.isEmpty {
                         EmptyStateView(systemImage: "person.wave.2",
@@ -61,8 +75,7 @@ struct RoleplayView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationTitle("Roleplay")
-            .navigationBarTitleDisplayMode(.large)
+            .rootScreenChrome()
         }
         .onAppear(perform: reload)
         .fullScreenCover(isPresented: $showingQuickThink) {

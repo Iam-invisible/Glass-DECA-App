@@ -30,6 +30,13 @@ struct ProgressDashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScreenHeader("Progress",
+                                 eyebrow: store.settings.cluster.displayName,
+                                 eyebrowSymbol: store.settings.cluster.symbol,
+                                 eyebrowTint: store.settings.cluster.tint,
+                                 subtitle: "Everything you've answered, and what it says about exam day.")
+                        .appearIn(0)
+
                     todaySection.appearIn(0)
                     headlineStats.appearIn(1)
                     weekSection.appearIn(2)
@@ -46,8 +53,7 @@ struct ProgressDashboardView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationTitle("Progress")
-            .navigationBarTitleDisplayMode(.large)
+            .rootScreenChrome()
         }
         .onAppear(perform: reload)
         .fullScreenCover(item: $session) { payload in
@@ -470,6 +476,7 @@ struct AchievementsView: View {
         }
         .appCanvas()
         .navigationTitle("Achievements")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { statuses = store.achievements.statuses() }
     }

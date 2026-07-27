@@ -69,6 +69,7 @@ struct QuestionBankManagerView: View {
         }
         .appCanvas()
         .navigationTitle("Question Bank")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchText, prompt: "Search questions")
         .toolbar {

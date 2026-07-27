@@ -18,6 +18,14 @@ struct PracticeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScreenHeader("Practice",
+                                 eyebrow: store.settings.cluster.displayName,
+                                 eyebrowSymbol: store.settings.cluster.symbol,
+                                 eyebrowTint: store.settings.cluster.tint,
+                                 subtitle: dash.questionBankCount == 0 ? nil
+                                    : "\(dash.questionBankCount) questions in your bank.")
+                        .appearIn(0)
+
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
                                        title: "No questions yet",
@@ -34,8 +42,7 @@ struct PracticeView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationTitle("Practice")
-            .navigationBarTitleDisplayMode(.large)
+            .rootScreenChrome()
         }
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload).environmentObject(store)
@@ -229,6 +236,7 @@ struct ClusterPracticeList: View {
         }
         .appCanvas()
         .navigationTitle("By Cluster")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { counts = store.bank.clusterCounts() }
     }
@@ -277,6 +285,7 @@ struct TopicPracticeList: View {
         }
         .appCanvas()
         .navigationTitle("By Topic")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { reload() }
     }
@@ -333,6 +342,7 @@ struct IndicatorPracticeList: View {
         }
         .appCanvas()
         .navigationTitle("Performance Indicators")
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             stats = store.indicators.stats(cluster: store.settings.cluster)

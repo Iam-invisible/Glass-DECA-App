@@ -20,6 +20,13 @@ struct MockExamsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScreenHeader("Mock Exams",
+                                 eyebrow: summaries.isEmpty ? "No attempts yet"
+                                    : "\(summaries.count) attempt\(summaries.count == 1 ? "" : "s")",
+                                 eyebrowSymbol: "timer",
+                                 subtitle: "Full-length practice under real time pressure.")
+                        .appearIn(0)
+
                     if bankCount == 0 {
                         EmptyStateView(systemImage: "doc.text",
                                        title: "No questions yet",
@@ -36,8 +43,7 @@ struct MockExamsView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .navigationTitle("Mock Exams")
-            .navigationBarTitleDisplayMode(.large)
+            .rootScreenChrome()
         }
         .onAppear(perform: reload)
         .fullScreenCover(item: $runningExam) { payload in

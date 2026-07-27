@@ -74,6 +74,7 @@ struct RoleplayDetailView: View {
         }
         .appCanvas()
         .navigationTitle(prompt.title)
+        .toolbar(.visible, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .animation(reduceMotion ? nil : Motion.snappy, value: phase)
         .onAppear {
