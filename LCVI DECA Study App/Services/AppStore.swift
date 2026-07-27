@@ -70,6 +70,9 @@ final class AppStore: ObservableObject {
     let notifications: NotificationService
     let importExport: ImportExportService
     let ai: FoundationModelFeedbackService
+    /// Second AI tier for devices Apple Intelligence does not reach.
+    /// Nothing downloads unless the student asks for it.
+    let localModel: LocalModelService
 
     // Derived state
     @Published private(set) var dashboard = DashboardState()
@@ -122,6 +125,7 @@ final class AppStore: ObservableObject {
         self.notifications = NotificationService()
         self.importExport = ImportExportService(context: ctx, bank: bank)
         self.ai = FoundationModelFeedbackService()
+        self.localModel = LocalModelService()
 
         self.ai.userEnabled = settings.aiEnabled
         Haptics.enabled = settings.hapticsEnabled

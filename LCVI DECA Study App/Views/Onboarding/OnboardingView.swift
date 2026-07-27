@@ -253,6 +253,12 @@ struct OnboardingView: View {
                                title: "The app is fully usable without AI",
                                message: "Practice, mock exams, roleplays, streaks and progress all work offline. Explanations come from the question bank and roleplays use a manual rubric.",
                                tint: Palette.success)
+
+                    // Only offered when Apple's model is unavailable — there
+                    // is no reason to spend a student's data on a smaller
+                    // model when a better one is already built into the phone.
+                    LocalAICoachCard(service: store.localModel)
+                        .appCard()
                 }
 
                 InfoBanner(systemImage: "lock.shield",
