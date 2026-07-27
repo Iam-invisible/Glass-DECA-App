@@ -45,7 +45,13 @@ import UIKit
 /// will terminate the app somewhere north of ~1.3 GB resident. A 1B model at
 /// Q4_K_M leaves room for Core Data, the view tree and the KV cache; the next
 /// size up does not.
-enum LocalModelCatalog {
+/// `nonisolated` because the target builds with
+/// `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, which would otherwise pin
+/// these constants to the main actor. They are immutable `Sendable` values
+/// read from the URLSession delegate's background callbacks and from the
+/// detached hashing task, so isolating them is both wrong and — under Swift 6
+/// — an error.
+nonisolated enum LocalModelCatalog {
     static let displayName = "Llama 3.2 1B Instruct"
     static let quantisation = "Q4_K_M"
 
