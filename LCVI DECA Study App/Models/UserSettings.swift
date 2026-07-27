@@ -79,7 +79,7 @@ enum IntroStyle: String, CaseIterable, Codable, Identifiable {
     var detail: String {
         switch self {
         case .script:  return "\"glass\" written out in script, then filled as glass."
-        case .classic: return "\"Glass\" traced in Fraunces, then filled as glass."
+        case .classic: return "\"Glass\" traced in Instrument Serif, then filled as glass."
         }
     }
 }

@@ -2,7 +2,21 @@
 //  OnboardingView.swift
 //  LCVI DECA Study App
 //
-//  Five short screens: welcome, cluster, daily goal, reminders, AI status.
+//  Setup as one continuous surface rather than a carousel of pages.
+//
+//  The old version was five `TabView` slides. It worked, but it read like
+//  every other onboarding: title, subtitle, rows, dot, repeat. Nothing about
+//  it was Glass.
+//
+//  This one keeps the space the intro leaves behind. The same drifting
+//  backdrop stays on screen and the setup assembles on top of it — each
+//  question opens, gets answered, then collapses into a compact line that
+//  stays visible. The student watches their own setup stack up instead of
+//  watching a progress dot advance, so progress *is* the screen rather than an
+//  indicator on it, and every earlier answer stays one tap away.
+//
+//  Everything is reversible, nothing is required, and the whole thing can be
+//  skipped in one tap with sane defaults.
 //
 
 import SwiftUI
@@ -11,299 +25,463 @@ struct OnboardingView: View {
     @EnvironmentObject private var store: AppStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var step = 0
+    private enum Stage: Int, CaseIterable, Identifiable {
+        case cluster, goal, reminders, coaching
+        var id: Int { rawValue }
+    }
+
+    @State private var stage: Stage = .cluster
+    @State private var done: Set<Stage> = []
+
     @State private var cluster: DECACluster = .marketing
     @State private var goal = 10
     @State private var wantsReminders = false
-    @State private var reminderTime = Calendar.current.date(from: DateComponents(hour: 18, minute: 30)) ?? Date()
+    @State private var reminderHour = 18
+    @State private var reminderMinute = 30
     @State private var permissionRequested = false
     @State private var permissionGranted = false
 
-    private let lastStep = 4
+    private var everythingDone: Bool { done.count == Stage.allCases.count }
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
+        ZStack {
+            // The intro hands over mid-scene rather than cutting to a new one.
+            IntroBackdrop(opacity: 1, drift: true)
 
-            TabView(selection: $step) {
-                welcome.tag(0)
-                clusterStep.tag(1)
-                goalStep.tag(2)
-                reminderStep.tag(3)
-                aiStep.tag(4)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .animation(reduceMotion ? nil : Motion.snappy, value: step)
-
-            footer
-        }
-        .appCanvas()
-        .onAppear {
-            cluster = store.settings.cluster
-            goal = store.settings.dailyGoal
-            store.ai.refreshAvailability()
-        }
-    }
-
-    // MARK: Chrome
-
-    private var header: some View {
-        HStack(spacing: 6) {
-            ForEach(0...lastStep, id: \.self) { index in
-                Capsule()
-                    .fill(index <= step ? Palette.accent : Palette.stroke)
-                    .frame(height: 4)
-                    .animation(reduceMotion ? nil : Motion.snappy, value: step)
-            }
-        }
-        .padding(.horizontal, Metrics.gutter)
-        .padding(.top, 12)
-        .padding(.bottom, 8)
-        .accessibilityElement()
-        .accessibilityLabel("Step \(step + 1) of \(lastStep + 1)")
-    }
-
-    private var footer: some View {
-        VStack(spacing: 10) {
-            PrimaryButton(title: step == lastStep ? "Start studying" : "Continue") {
-                advance()
-            }
-            if step > 0 {
-                Button("Back") {
-                    Haptics.tap()
-                    withAnimation(reduceMotion ? nil : Motion.snappy) { step -= 1 }
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 14) {
+                        masthead
+                        ForEach(Stage.allCases) { s in
+                            pane(for: s).id(s)
+                        }
+                        footer
+                    }
+                    .padding(.horizontal, Metrics.gutter)
+                    .padding(.top, 10)
+                    .padding(.bottom, 40)
                 }
-                .font(.appFootnote.weight(.medium))
-                .foregroundStyle(Palette.textSecondary)
+                .onChange(of: stage) { newValue in
+                    withAnimation(reduceMotion ? nil : Motion.gentle) {
+                        proxy.scrollTo(newValue, anchor: .center)
+                    }
+                }
             }
         }
-        .padding(.horizontal, Metrics.gutter)
-        .padding(.bottom, 14)
-        .padding(.top, 8)
     }
 
-    private func advance() {
-        if step < lastStep {
-            withAnimation(reduceMotion ? nil : Motion.snappy) { step += 1 }
+    // MARK: Masthead
+
+    private var masthead: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Glass")
+                .font(.appLargeTitle)
+                .foregroundStyle(Palette.textPrimary)
+            Text("Four quick choices and you're studying. Everything here is editable later, and none of it leaves your phone.")
+                .font(.appFootnote)
+                .foregroundStyle(Palette.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.bottom, 4)
+        .accessibilityElement(children: .combine)
+    }
+
+    // MARK: Panes
+
+    @ViewBuilder
+    private func pane(for s: Stage) -> some View {
+        if stage == s {
+            open(s)
+                .transition(reduceMotion ? .opacity
+                            : .opacity.combined(with: .move(edge: .top)))
+        } else if done.contains(s) {
+            summary(for: s)
+        }
+        // Unstarted stages render nothing: the column grows as it is answered,
+        // which is what makes the stack itself read as progress.
+    }
+
+    @ViewBuilder
+    private func open(_ s: Stage) -> some View {
+        switch s {
+        case .cluster:   clusterPane
+        case .goal:      goalPane
+        case .reminders: reminderPane
+        case .coaching:  coachingPane
+        }
+    }
+
+    private func summary(for s: Stage) -> some View {
+        Button {
+            Haptics.tap()
+            withAnimation(reduceMotion ? nil : Motion.snappy) { stage = s }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Palette.success)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(title(for: s))
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textTertiary)
+                    Text(answer(for: s))
+                        .font(.appCallout.weight(.medium))
+                        .foregroundStyle(Palette.textPrimary)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
+                Text("Change")
+                    .font(.appCaption.weight(.semibold))
+                    .foregroundStyle(Palette.accent)
+            }
+            .appCard(padding: 13)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Double tap to change")
+    }
+
+    private func title(for s: Stage) -> String {
+        switch s {
+        case .cluster:   return "Your event"
+        case .goal:      return "Daily goal"
+        case .reminders: return "Reminder"
+        case .coaching:  return "Coaching"
+        }
+    }
+
+    private func answer(for s: Stage) -> String {
+        switch s {
+        case .cluster:
+            return cluster.displayName
+        case .goal:
+            return "\(goal) question\(goal == 1 ? "" : "s") a day"
+        case .reminders:
+            guard wantsReminders else { return "No reminders" }
+            return String(format: "Every day at %d:%02d", reminderHour, reminderMinute)
+        case .coaching:
+            if store.ai.availability.isUsable { return "Apple's on-device model" }
+            return store.localModel.state.isReady ? "Local AI coach installed"
+                                                  : "Written explanations"
+        }
+    }
+
+    // MARK: Stage 1 — event
+
+    private var clusterPane: some View {
+        paneShell(step: 1,
+                  title: "Which event are you preparing for?",
+                  detail: "This decides which questions, roleplays and performance indicators you see first. You can switch any time.") {
+            VStack(spacing: 8) {
+                ForEach(DECACluster.allCases) { item in
+                    clusterRow(item)
+                }
+            }
+            PrimaryButton(title: "Continue", systemImage: "arrow.right") {
+                complete(.cluster)
+            }
+            .padding(.top, 4)
+        }
+    }
+
+    private func clusterRow(_ item: DECACluster) -> some View {
+        let selected = cluster == item
+        return Button {
+            Haptics.select()
+            withAnimation(reduceMotion ? nil : Motion.quick) { cluster = item }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: item.symbol)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(selected ? .white : item.tint)
+                    .frame(width: 32, height: 32)
+                    .background(Circle().fill(selected ? item.tint : item.tint.opacity(0.13)))
+                Text(item.displayName)
+                    .font(.appCallout.weight(selected ? .semibold : .regular))
+                    .foregroundStyle(Palette.textPrimary)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 17))
+                    .foregroundStyle(selected ? item.tint : Palette.inactive)
+            }
+            .padding(.vertical, 9)
+            .padding(.horizontal, 12)
+            .background(
+                RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                    .fill(selected ? item.tint.opacity(0.09) : Palette.cardSunken)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                    .strokeBorder(selected ? item.tint.opacity(0.45) : Palette.stroke, lineWidth: 1)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(item.displayName)
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
+    }
+
+    // MARK: Stage 2 — goal
+
+    private var goalPane: some View {
+        paneShell(step: 2,
+                  title: "How many questions a day?",
+                  detail: "Small and daily beats heroic and rare. Ten takes about five minutes.") {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                CountingNumber(value: Double(goal), font: .numeric(46), color: Palette.accent)
+                Text("a day")
+                    .font(.appCallout)
+                    .foregroundStyle(Palette.textSecondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 2)
+            .accessibilityHidden(true)
+
+            HStack(spacing: 8) {
+                ForEach([5, 10, 20, 30], id: \.self) { value in
+                    goalChip(value)
+                }
+            }
+
+            AppStepper(value: $goal, in: 1...100) {
+                Text("Fine-tune")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textSecondary)
+            }
+
+            PrimaryButton(title: "Continue", systemImage: "arrow.right") {
+                complete(.goal)
+            }
+            .padding(.top, 4)
+        }
+    }
+
+    private func goalChip(_ value: Int) -> some View {
+        let selected = goal == value
+        return Button {
+            Haptics.select()
+            withAnimation(reduceMotion ? nil : Motion.quick) { goal = value }
+        } label: {
+            Text("\(value)")
+                .font(.appFootnote.weight(.semibold))
+                .foregroundStyle(selected ? .white : Palette.textPrimary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .background(
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(selected ? Palette.accent : Palette.cardSunken)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(value) questions a day")
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
+    }
+
+    // MARK: Stage 3 — reminders
+
+    private var reminderPane: some View {
+        paneShell(step: 3,
+                  title: "Want a nudge?",
+                  detail: "One quiet notification, local to this phone. If you've already hit your goal that day, it stays quiet.") {
+            Toggle(isOn: $wantsReminders) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Remind me daily")
+                        .font(.appBodyMedium)
+                        .foregroundStyle(Palette.textPrimary)
+                    Text(permissionRequested && !permissionGranted
+                         ? "Notifications are turned off in iOS Settings."
+                         : "You'll be asked for permission once.")
+                        .font(.appCaption)
+                        .foregroundStyle(permissionRequested && !permissionGranted
+                                         ? Palette.danger : Palette.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .onChange(of: wantsReminders) { newValue in
+                guard newValue else { return }
+                Task {
+                    permissionGranted = await store.notifications.requestAuthorization()
+                    permissionRequested = true
+                    if !permissionGranted { wantsReminders = false }
+                }
+            }
+
+            if wantsReminders {
+                // Preset times rather than a wheel: `DatePicker` is drawn by
+                // the OS and looks different on iOS 16 and iOS 26, which is
+                // exactly what the custom controls exist to avoid. Four
+                // after-school times cover almost everyone, and Settings still
+                // offers an exact time later.
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("What time?")
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textSecondary)
+                    HStack(spacing: 8) {
+                        timeChip(16, 0)
+                        timeChip(17, 30)
+                        timeChip(18, 30)
+                        timeChip(20, 0)
+                    }
+                }
+                .transition(.opacity)
+            }
+
+            PrimaryButton(title: wantsReminders ? "Continue" : "Not now",
+                          systemImage: "arrow.right") {
+                complete(.reminders)
+            }
+            .padding(.top, 4)
+        }
+        .animation(reduceMotion ? nil : Motion.snappy, value: wantsReminders)
+    }
+
+    private func timeChip(_ hour: Int, _ minute: Int) -> some View {
+        let selected = reminderHour == hour && reminderMinute == minute
+        return Button {
+            Haptics.select()
+            withAnimation(reduceMotion ? nil : Motion.quick) {
+                reminderHour = hour; reminderMinute = minute
+            }
+        } label: {
+            Text(String(format: "%d:%02d", hour, minute))
+                .font(.appFootnote.weight(.semibold))
+                .foregroundStyle(selected ? .white : Palette.textPrimary)
+                .monospacedDigit()
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .background(
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(selected ? Palette.accent : Palette.cardSunken)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(format: "%d:%02d", hour, minute))
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
+    }
+
+    // MARK: Stage 4 — coaching
+
+    private var coachingPane: some View {
+        paneShell(step: 4,
+                  title: "AI coaching",
+                  detail: "Explanations and roleplay feedback, generated on this phone. Never a server — and never the source of a correct answer, which always comes from the question bank.") {
+            AIStatusCard(availability: store.ai.availability)
+
+            if store.ai.availability.isUsable {
+                VStack(spacing: 10) {
+                    FeatureRow(symbol: "text.bubble",
+                               title: "Why an answer is wrong",
+                               detail: "Explanations connected to business reasoning.")
+                    FeatureRow(symbol: "checklist",
+                               title: "Roleplay rubric feedback",
+                               detail: "Judge-style scoring with a stronger sample answer.")
+                }
+            } else {
+                LocalAICoachCard(service: store.localModel)
+                    .appCard()
+            }
+
+            PrimaryButton(title: "Start studying", systemImage: "arrow.right") {
+                complete(.coaching)
+            }
+            .padding(.top, 4)
+        }
+    }
+
+    // MARK: Shell
+
+    private func paneShell<Content: View>(step: Int,
+                                          title: String,
+                                          detail: String,
+                                          @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 13) {
+            HStack(spacing: 9) {
+                Text("\(step)")
+                    .font(.numeric(12, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 22, height: 22)
+                    .background(Circle().fill(Palette.accent))
+                Text("Step \(step) of \(Stage.allCases.count)")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
+            }
+            .accessibilityElement(children: .combine)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title)
+                    .font(.appTitle)
+                    .foregroundStyle(Palette.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(detail)
+                    .font(.appFootnote)
+                    .foregroundStyle(Palette.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            content()
+        }
+        .appCard(padding: 17)
+    }
+
+    // MARK: Footer
+
+    @ViewBuilder
+    private var footer: some View {
+        if everythingDone {
+            PrimaryButton(title: "Start studying", systemImage: "checkmark") {
+                finish()
+            }
+            .padding(.top, 6)
+        } else {
+            Button {
+                Haptics.tap()
+                finish()
+            } label: {
+                Text("Skip setup — use the defaults")
+                    .font(.appFootnote.weight(.medium))
+                    .foregroundStyle(Palette.textTertiary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Starts the app with marketing, ten questions a day and no reminders")
+        }
+    }
+
+    // MARK: Flow
+
+    private func complete(_ s: Stage) {
+        done.insert(s)
+        // Reopening an answered stage should hand back to whatever is still
+        // unanswered, rather than marching the student through the rest again.
+        guard let next = Stage.allCases.first(where: { !done.contains($0) }) else {
+            Haptics.success()
+            finish()
             return
         }
-        finish()
+        Haptics.tap()
+        withAnimation(reduceMotion ? nil : Motion.snappy) { stage = next }
     }
 
     private func finish() {
         store.settings.cluster = cluster
         store.settings.dailyGoal = goal
         store.settings.remindersEnabled = wantsReminders && permissionGranted
-        store.settings.reminderDate = reminderTime
+        store.settings.reminderHour = reminderHour
+        store.settings.reminderMinute = reminderMinute
         store.settings.hasOnboarded = true
         Haptics.success()
         store.refresh()
         Task { await store.syncNotifications() }
     }
-
-    // MARK: Step 1 — welcome
-
-    private var welcome: some View {
-        OnboardingPage {
-            VStack(spacing: 22) {
-                ZStack {
-                    Circle()
-                        .fill(Palette.accentSoft)
-                        .frame(width: 96, height: 96)
-                    Image(systemName: "graduationcap.fill")
-                        .font(.system(size: 42, weight: .semibold))
-                        .foregroundStyle(Palette.accent)
-                }
-                .appearIn(0)
-
-                VStack(spacing: 10) {
-                    Text("Glass")
-                        .font(.appLargeTitle)
-                        .foregroundStyle(Palette.textPrimary)
-                        .multilineTextAlignment(.center)
-                    Text("Your DECA Ontario study companion. Exams, roleplays and daily practice — all of it works offline.")
-                        .font(.appBody)
-                        .foregroundStyle(Palette.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .appearIn(1)
-
-                VStack(spacing: 10) {
-                    FeatureRow(symbol: "list.bullet.rectangle.portrait",
-                               title: "Cluster exam practice",
-                               detail: "Targeted multiple-choice sessions that adapt to your weak spots.")
-                    FeatureRow(symbol: "timer",
-                               title: "Mock exams",
-                               detail: "Full timed exams with a detailed breakdown afterwards.")
-                    FeatureRow(symbol: "person.wave.2.fill",
-                               title: "Roleplays and Quick Think",
-                               detail: "Prep timers, judge-style rubrics and fast thinking drills.")
-                    FeatureRow(symbol: "flame.fill",
-                               title: "Daily streaks",
-                               detail: "Small daily goals, streak freezes and progress you can see.")
-                }
-                .appearIn(2)
-            }
-        }
-    }
-
-    // MARK: Step 2 — cluster
-
-    private var clusterStep: some View {
-        OnboardingPage {
-            VStack(alignment: .leading, spacing: 18) {
-                OnboardingTitle(title: "Choose your event",
-                                subtitle: "We'll personalise practice, mock exams, roleplays and progress around this cluster. You can change it any time in Settings.")
-                ClusterPicker(selection: $cluster)
-            }
-        }
-    }
-
-    // MARK: Step 3 — goal
-
-    private var goalStep: some View {
-        OnboardingPage {
-            VStack(alignment: .leading, spacing: 20) {
-                OnboardingTitle(title: "Set a daily goal",
-                                subtitle: "Meeting your goal completes the day and builds your streak. Ten a day is a solid pace for most students.")
-                GoalStepper(goal: $goal)
-
-                InfoBanner(systemImage: "flame.fill",
-                           title: "Every 10 days earns a streak freeze",
-                           message: "A freeze automatically protects your streak the first day you miss.",
-                           tint: Palette.gold)
-            }
-        }
-    }
-
-    // MARK: Step 4 — reminders
-
-    private var reminderStep: some View {
-        OnboardingPage {
-            VStack(alignment: .leading, spacing: 18) {
-                OnboardingTitle(title: "Daily reminders",
-                                subtitle: "One quiet notification at a time you choose. It's local to your phone — no account, no internet. If you've already met your goal, we skip it.")
-
-                Toggle(isOn: $wantsReminders) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Remind me daily")
-                            .font(.appBodyMedium)
-                            .foregroundStyle(Palette.textPrimary)
-                        Text(permissionRequested && !permissionGranted
-                             ? "Notifications are turned off in iOS Settings."
-                             : "You'll be asked for permission once.")
-                            .font(.appCaption)
-                            .foregroundStyle(permissionRequested && !permissionGranted
-                                             ? Palette.danger : Palette.textSecondary)
-                    }
-                }
-                .tint(Palette.accent)
-                .appCard()
-                .onChange(of: wantsReminders) { newValue in
-                    guard newValue else { return }
-                    Haptics.tap()
-                    Task {
-                        permissionGranted = await store.notifications.requestAuthorization()
-                        permissionRequested = true
-                        if !permissionGranted { wantsReminders = false }
-                    }
-                }
-
-                if wantsReminders && permissionGranted {
-                    DatePicker("Reminder time",
-                               selection: $reminderTime,
-                               displayedComponents: .hourAndMinute)
-                        .font(.appBodyMedium)
-                        .tint(Palette.accent)
-                        .appCard()
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-
-                Text("You can turn reminders on or off later in Settings.")
-                    .font(.appCaption)
-                    .foregroundStyle(Palette.textTertiary)
-            }
-            .animation(reduceMotion ? nil : Motion.snappy, value: wantsReminders)
-            .animation(reduceMotion ? nil : Motion.snappy, value: permissionGranted)
-        }
-    }
-
-    // MARK: Step 5 — AI
-
-    private var aiStep: some View {
-        OnboardingPage {
-            VStack(alignment: .leading, spacing: 18) {
-                OnboardingTitle(title: "AI coaching, if your device supports it",
-                                subtitle: "When Apple Intelligence is available, this app can explain answers and grade roleplays using Apple's on-device model. Nothing is ever sent to a server.")
-
-                AIStatusCard(availability: store.ai.availability)
-
-                if store.ai.availability.isUsable {
-                    VStack(alignment: .leading, spacing: 10) {
-                        FeatureRow(symbol: "text.bubble",
-                                   title: "Why an answer is wrong",
-                                   detail: "Explanations connected to business reasoning.")
-                        FeatureRow(symbol: "checklist",
-                                   title: "Roleplay rubric feedback",
-                                   detail: "Judge-style scoring with a stronger sample answer.")
-                    }
-                } else {
-                    InfoBanner(systemImage: "checkmark.circle",
-                               title: "The app is fully usable without AI",
-                               message: "Practice, mock exams, roleplays, streaks and progress all work offline. Explanations come from the question bank and roleplays use a manual rubric.",
-                               tint: Palette.success)
-
-                    // Only offered when Apple's model is unavailable — there
-                    // is no reason to spend a student's data on a smaller
-                    // model when a better one is already built into the phone.
-                    LocalAICoachCard(service: store.localModel)
-                        .appCard()
-                }
-
-                InfoBanner(systemImage: "lock.shield",
-                           title: "No sign-in, no internet, no tracking",
-                           message: "Every question, answer and statistic stays on this phone.",
-                           tint: Palette.accent)
-            }
-        }
-    }
 }
 
-// MARK: - Pieces
-
-private struct OnboardingPage<Content: View>: View {
-    @ViewBuilder var content: Content
-
-    var body: some View {
-        ScrollView {
-            content
-                .padding(.horizontal, Metrics.gutter)
-                .padding(.top, 18)
-                .padding(.bottom, 24)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-}
-
-private struct OnboardingTitle: View {
-    let title: String
-    let subtitle: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.appLargeTitle)
-                .foregroundStyle(Palette.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(subtitle)
-                .font(.appCallout)
-                .foregroundStyle(Palette.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .accessibilityElement(children: .combine)
-    }
-}
+// MARK: - Pieces shared with Settings
 
 struct FeatureRow: View {
     let symbol: String

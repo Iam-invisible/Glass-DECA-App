@@ -78,32 +78,44 @@ enum Metrics {
 
 // MARK: - Typography
 
-/// Fraunces for display, Inter for text and UI.
+/// Instrument Serif for display, Manrope for text and UI.
 ///
-/// Both ship from Google Fonts as variable fonts. They're instanced at build
-/// time to fixed weights (and, for Fraunces, fixed softness/wonk) but keep their
-/// `opsz` axis, so CoreText still applies optical sizing as text grows.
+/// Instrument Serif is a high-contrast display serif — the thick-to-thin
+/// modulation is the point, since the app is called Glass and that contrast is
+/// what light through glass looks like. It has one weight by design; display
+/// roles are headline contexts where a second weight would only dilute it.
+///
+/// Manrope carries the reading. It was chosen on measurements rather than
+/// taste: of fourteen candidates it has the largest x-height relative to em
+/// (0.540), which is what legibility at caption sizes depends on, and it is
+/// also the second most compact, so more of a question fits on a line at the
+/// same apparent size. It ships `tnum`, which `numeric()` relies on.
+///
+/// Manrope's Google-served static instances all report a PostScript name of
+/// `ManropeExtraLight-*`, inherited from the variable font's default instance.
+/// `Font.custom` resolves by PostScript name, so the name tables were rewritten
+/// by hand — the same fix §7.8 records for Fraunces.
 ///
 /// Everything goes through `Font.custom(_:size:relativeTo:)` rather than a
 /// pre-scaled `UIFont`: a `UIFont` built with `UIFontMetrics` resolves once and
 /// caches, so it silently stops responding to the reader's text-size setting.
 /// `Font.custom` is resolved at render time and keeps Dynamic Type working.
 enum AppType {
-    static let display  = "Fraunces-Display"
+    static let display  = "InstrumentSerif-Regular"
     /// Intro wordmark only — a monoline script whose letters can be written
     /// out along a pen path. Not a UI face; nothing else should set text in it.
     static let script   = "Sacramento-Regular"
-    static let regular  = "Inter-Regular"
-    static let medium   = "Inter-Medium"
-    static let semibold = "Inter-SemiBold"
+    static let regular  = "Manrope-Regular"
+    static let medium   = "Manrope-Medium"
+    static let semibold = "Manrope-SemiBold"
 }
 
 extension Font {
-    // Display — Fraunces
-    static let appLargeTitle = Font.custom(AppType.display, size: 32, relativeTo: .largeTitle)
-    static let appTitle      = Font.custom(AppType.display, size: 22, relativeTo: .title2)
+    // Display — Instrument Serif
+    static let appLargeTitle = Font.custom(AppType.display, size: 38, relativeTo: .largeTitle)
+    static let appTitle      = Font.custom(AppType.display, size: 26, relativeTo: .title2)
 
-    // Text and UI — Inter
+    // Text and UI — Manrope
     static let appHeadline    = Font.custom(AppType.semibold, size: 17, relativeTo: .headline)
     static let appBody        = Font.custom(AppType.regular,  size: 17, relativeTo: .body)
     static let appBodyMedium  = Font.custom(AppType.medium,   size: 17, relativeTo: .body)
@@ -115,14 +127,14 @@ extension Font {
     /// Question and scenario copy — the most-read text in the app.
     static let appQuestion = Font.custom(AppType.semibold, size: 20, relativeTo: .title3)
 
-    /// Inter at a fixed size, for labels inside fixed-height chrome (the tab
+    /// Manrope at a fixed size, for labels inside fixed-height chrome (the tab
     /// bar, chart axes) where Dynamic Type growth would break the layout.
     static func appSans(_ size: CGFloat, weight: Font.Weight = .regular) -> Font {
         Font.custom(name(for: weight), fixedSize: size)
     }
 
     /// Counters, timers and scores. Fixed size on purpose — these sit inside
-    /// progress rings and other fixed-diameter layouts. Inter carries `tnum`,
+    /// progress rings and other fixed-diameter layouts. Manrope carries `tnum`,
     /// so `monospacedDigit()` stops digits jittering as they change.
     static func numeric(_ size: CGFloat, weight: Font.Weight = .bold) -> Font {
         Font.custom(name(for: weight), fixedSize: size).monospacedDigit()

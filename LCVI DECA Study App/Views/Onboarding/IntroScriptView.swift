@@ -136,10 +136,10 @@ struct IntroScriptView: View {
 
     // MARK: Wordmark
 
-    /// Sacramento stands 4.9 x-heights tall against Fraunces' 2.0, almost all
-    /// of it loop, so the script needs a much taller box to end up with
-    /// letterforms of a comparable size. Width still constrains it on a small
-    /// phone, which `transform(into:)` handles.
+    /// Sacramento stands 4.9 x-heights tall against the display serif's 2.0,
+    /// almost all of it loop, so the script needs a much taller box to end up
+    /// with letterforms of a comparable size. Width still constrains it on a
+    /// small phone, which `transform(into:)` handles.
     private var wordmark: some View {
         GeometryReader { geo in
             let rect = CGRect(origin: .zero, size: geo.size)

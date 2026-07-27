@@ -17,10 +17,10 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Inter-Regular.ttf</string>
-		<string>Inter-Medium.ttf</string>
-		<string>Inter-SemiBold.ttf</string>
-		<string>Fraunces-Display.ttf</string>
+		<string>Manrope-Regular.ttf</string>
+		<string>Manrope-Medium.ttf</string>
+		<string>Manrope-SemiBold.ttf</string>
+		<string>InstrumentSerif-Regular.ttf</string>
 		<string>Sacramento.ttf</string>
 	</array>
 </dict>

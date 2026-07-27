@@ -2,15 +2,15 @@
 //  IntroClassicView.swift
 //  LCVI DECA Study App
 //
-//  The original launch reveal: "Glass" traced out in Fraunces, then filled in
-//  as glass. Kept intact and selectable in Settings alongside the handwritten
-//  reveal — this one is the fallback if the new one does not land.
+//  The original launch reveal: "Glass" traced out in the display serif, then
+//  filled in as glass. Kept intact and selectable in Settings alongside the
+//  handwritten reveal — this one is the fallback if the new one does not land.
 //
 //  Apple's setup "hello" works because it's a single script stroke being
-//  written. Fraunces is a serif, so its glyphs are closed outlines rather than
-//  a handwriting path — tracing those draws the *edge* of each letter instead.
-//  That reads as etching rather than handwriting, which suits the name better
-//  anyway: the letters appear to be cut into glass, then fill with light.
+//  written. Instrument Serif is a serif, so its glyphs are closed outlines
+//  rather than a handwriting path — tracing those draws the *edge* of each
+//  letter instead. That reads as etching rather than handwriting, which suits
+//  the name anyway: the letters appear cut into glass, then fill with light.
 //
 //  The choreography is timed to the audio, which swells from 0.3s and peaks at
 //  2.4s — the trace finishes exactly on that hit.
@@ -63,7 +63,7 @@ struct IntroClassicView: View {
     // MARK: Wordmark
 
     /// How far the letterforms puff outward. Stroking the filled shape with a
-    /// round join swells it and rounds off Fraunces' serifs and flat terminals,
+    /// round join swells it and rounds off the serifs and flat terminals,
     /// which is what turns a printed letter into something that looks blown
     /// from glass rod.
     private let inflate: CGFloat = 5
