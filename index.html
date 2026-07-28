@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glass — interactive preview</title>
+<meta name="description" content="A web recreation of Glass, an offline DECA study app for iPhone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/web/app.css">
+</head>
+<body>
+
+<header class="chrome">
+  <div class="chrome-title">
+    <span class="wordmark">Glass</span>
+    <span class="tag">Interactive preview — a web recreation of the iOS app</span>
+  </div>
+  <div class="chrome-controls">
+    <div class="seg" role="group" aria-label="Device">
+      <button data-device="17" class="on" aria-pressed="true">iPhone&nbsp;17</button>
+      <button data-device="8" aria-pressed="false">iPhone&nbsp;8</button>
+    </div>
+    <div class="seg" role="group" aria-label="Appearance">
+      <button data-theme="dark" class="on" aria-pressed="true">Dark</button>
+      <button data-theme="light" aria-pressed="false">Light</button>
+    </div>
+    <button id="restart" class="ghost">Replay intro</button>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="phone" id="phone" data-device="17">
+    <div class="bezel">
+      <div class="island" aria-hidden="true"></div>
+      <div class="notchless-status" aria-hidden="true"></div>
+      <div class="statusbar" aria-hidden="true">
+        <span class="time">9:41</span>
+        <span class="icons">
+          <svg viewBox="0 0 18 12" class="si"><path d="M1 8h2v3H1zM5 6h2v5H5zM9 3.5h2V11H9zM13 1h2v10h-2z"/></svg>
+          <svg viewBox="0 0 16 12" class="si"><path d="M8 10.6 5.9 8.4a3 3 0 0 1 4.2 0zM8 6.6a5 5 0 0 0-3.5 1.4L3.1 6.6a7 7 0 0 1 9.8 0L11.5 8A5 5 0 0 0 8 6.6zM8 2.6a9 9 0 0 0-6.4 2.6L.2 3.8a11 11 0 0 1 15.6 0l-1.4 1.4A9 9 0 0 0 8 2.6z"/></svg>
+          <svg viewBox="0 0 26 12" class="si"><rect x="0.5" y="1" width="21" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1"/><rect x="2" y="2.5" width="16" height="7" rx="1.6"/><path d="M23 4.5v3a2 2 0 0 0 0-3z"/></svg>
+        </span>
+      </div>
+
+      <div class="screen" id="screen">
+        <div class="scrim" aria-hidden="true"></div>
+        <div class="viewport" id="viewport"></div>
+        <nav class="tabbar" id="tabbar" hidden aria-label="Main"></nav>
+      </div>
+
+      <div class="home-indicator" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    <h2>What this is</h2>
+    <p>A faithful web recreation of <strong>Glass</strong>, an offline DECA&nbsp;Ontario study app
+       for iPhone. It uses the app's real type, colours, motion and question bank — including the
+       same handwriting path that draws the wordmark on launch.</p>
+    <p>It is <strong>not</strong> the iOS build. Haptics, notifications, the widget and on-device
+       AI can't exist in a browser, so they're represented rather than real.</p>
+    <h2>Try</h2>
+    <ul>
+      <li>Flip between <strong>iPhone&nbsp;17</strong> and <strong>iPhone&nbsp;8</strong> — the layout
+          is meant to read identically on both.</li>
+      <li>Answer a question in <strong>Practice</strong>.</li>
+      <li>Switch <strong>Dark</strong> / <strong>Light</strong>.</li>
+    </ul>
+    <p class="fine">Sample questions are original practice items written for this app. They are not
+       official DECA&nbsp;Ontario or DECA&nbsp;Inc. competition content.</p>
+  </aside>
+</main>
+
+<script src="/web/app.js"></script>
+</body>
+</html>
