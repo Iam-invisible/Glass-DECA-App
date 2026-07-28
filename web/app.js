@@ -31,9 +31,35 @@ const ICONS = {
 };
 const svg = (path, cls='') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"/></svg>`;
 
+/* ---------------- sound ----------------
+   The four cues and their volumes are taken from Core/SoundEffects.swift.
+   Those levels were matched by A-weighted loudness rather than peak, which is
+   why "wrong" sits so much lower than "correct".
+
+   Browsers refuse to play audio before the visitor has interacted with the
+   page, so the very first intro may run silent. Every later cue — and the
+   Replay intro button, which is itself a click — has sound. */
+const SOUND = {
+  correct:     { src:'/web/audio/answer-correct.m4a',    volume:1.00 },
+  wrong:       { src:'/web/audio/answer-wrong.wav',      volume:0.45 },
+  celebration: { src:'/web/audio/badge-celebration.m4a', volume:0.60 },
+  intro:       { src:'/web/audio/app-intro.m4a',         volume:1.00 }
+};
+let soundOn = true;
+const players = {};
+function play(name) {
+  if (!soundOn) return;
+  const cue = SOUND[name]; if (!cue) return;
+  let a = players[name];
+  if (!a) { a = players[name] = new Audio(cue.src); a.volume = cue.volume; }
+  a.currentTime = 0;
+  a.play().catch(() => {});   // blocked before first interaction; not an error
+}
+function stopSound(name) { const a = players[name]; if (a) { a.pause(); a.currentTime = 0; } }
+
 /* ---------------- state ---------------- */
 const S = {
-  screen:'intro', tab:'today',
+  screen:'intro', tab:'today', dir:1,
   cluster:'marketing', goal:10, reminders:false, reminderTime:'18:30',
   answered:6, streak:12, correct:47, total:63,
   onboard:{ stage:0, done:[] },
@@ -58,7 +84,16 @@ document.querySelectorAll('[data-theme]').forEach(b => {
   };
 });
 document.documentElement.dataset.theme = 'dark';
-$('#restart').onclick = () => { S.screen='intro'; S.onboard={stage:0,done:[]}; render(); };
+$('#sound').onclick = () => {
+  soundOn = !soundOn;
+  if (!soundOn) Object.keys(players).forEach(stopSound);
+  $('#sound').textContent = soundOn ? 'Sound on' : 'Sound off';
+  $('#sound').setAttribute('aria-pressed', String(soundOn));
+};
+$('#restart').onclick = () => {
+  stopSound('intro');
+  S.screen='intro'; S.onboard={stage:0,done:[]}; S.practice=null; render();
+};
 
 /* ---------------- intro ----------------
    Same technique as IntroScriptView: a wide round-capped stroke runs along the
@@ -106,6 +141,7 @@ function renderIntro() {
   vp.appendChild(wrap);
 
   const run = () => {
+    play('intro');
     const pen = $('#pen');
     const len = pen.getTotalLength();
     pen.style.strokeDasharray = len;
@@ -274,7 +310,13 @@ function renderTabBar() {
   TABS.forEach(([id,label,icon]) => {
     const b = el('button', S.tab===id?'on':'', `${svg(icon)}<span>${label}</span>`);
     b.setAttribute('aria-current', S.tab===id ? 'page' : 'false');
-    b.onclick = () => { S.tab = id; S.practice = null; render(); };
+    b.onclick = () => {
+      if (S.tab === id) return;
+      // +1 moving right along the bar, -1 left — set before the tab changes so
+      // the transition knows which way to travel, same as RootView.
+      S.dir = TABS.findIndex(t => t[0] === id) > TABS.findIndex(t => t[0] === S.tab) ? 1 : -1;
+      S.tab = id; S.practice = null; render();
+    };
     bar.appendChild(b);
   });
 }
@@ -300,6 +342,17 @@ function renderApp() {
   const col = el('div','section');
   ({ today:tabToday, practice:tabPractice, mock:tabMock,
      roleplay:tabRoleplay, progress:tabProgress, settings:tabSettings }[S.tab])(col);
+
+  // Sections rise in sequence — 55ms apart, exactly as appearIn(_:) does.
+  if (!reduceMotion) {
+    [...col.children].forEach((child, i) => {
+      child.classList.add('ap');
+      child.style.animationDelay = (i * 55) + 'ms';
+    });
+    // …and the whole page travels in the direction the tab moved.
+    col.classList.add('page-in');
+    col.style.setProperty('--dir', S.dir);
+  }
   vp.appendChild(col);
   vp.scrollTop = 0;
 }
@@ -376,6 +429,7 @@ function startPractice() {
 function practiceRunner(col) {
   const p = S.practice, q = p.pool[p.i];
   if (!q) {
+    play('celebration');
     col.appendChild(header('Session complete', 'Practice', 'var(--accent)',
       `${p.right} of ${p.pool.length} correct.`));
     const b = el('button','btn','Back to Practice');
@@ -400,7 +454,13 @@ function practiceRunner(col) {
     const o = el('button', cls,
       `<span class="letter">${'ABCD'[idx]}</span><span class="mark"></span><span class="grow">${choice}</span>`);
     if (p.picked !== null) o.disabled = true;
-    else o.onclick = () => { p.picked = idx; if (idx === q.correct) p.right++; render(); };
+    else o.onclick = () => {
+      p.picked = idx;
+      const right = idx === q.correct;
+      if (right) p.right++;
+      play(right ? 'correct' : 'wrong');
+      render();
+    };
     opts.appendChild(o);
   });
   card.appendChild(opts);

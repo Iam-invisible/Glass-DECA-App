@@ -18,23 +18,19 @@
     <span class="tag">Interactive preview — a web recreation of the iOS app</span>
   </div>
   <div class="chrome-controls">
-    <div class="seg" role="group" aria-label="Device">
-      <button data-device="17" class="on" aria-pressed="true">iPhone&nbsp;17</button>
-      <button data-device="8" aria-pressed="false">iPhone&nbsp;8</button>
-    </div>
     <div class="seg" role="group" aria-label="Appearance">
       <button data-theme="dark" class="on" aria-pressed="true">Dark</button>
       <button data-theme="light" aria-pressed="false">Light</button>
     </div>
+    <button id="sound" class="ghost" aria-pressed="true">Sound on</button>
     <button id="restart" class="ghost">Replay intro</button>
   </div>
 </header>
 
 <main class="stage">
-  <div class="phone" id="phone" data-device="17">
+  <div class="phone" id="phone">
     <div class="bezel">
       <div class="island" aria-hidden="true"></div>
-      <div class="notchless-status" aria-hidden="true"></div>
       <div class="statusbar" aria-hidden="true">
         <span class="time">9:41</span>
         <span class="icons">
@@ -59,13 +55,14 @@
     <p>A faithful web recreation of <strong>Glass</strong>, an offline DECA&nbsp;Ontario study app
        for iPhone. It uses the app's real type, colours, motion and question bank — including the
        same handwriting path that draws the wordmark on launch.</p>
+    <p>Motion, layout and audio are carried over from the app itself — the same spring timings,
+       the same staggered entrances, the same four sound cues at the same mixed volumes.</p>
     <p>It is <strong>not</strong> the iOS build. Haptics, notifications, the widget and on-device
        AI can't exist in a browser, so they're represented rather than real.</p>
     <h2>Try</h2>
     <ul>
-      <li>Flip between <strong>iPhone&nbsp;17</strong> and <strong>iPhone&nbsp;8</strong> — the layout
-          is meant to read identically on both.</li>
-      <li>Answer a question in <strong>Practice</strong>.</li>
+      <li>Answer a question in <strong>Practice</strong> — the sounds are the app's own.</li>
+      <li>Move between tabs and watch the sections stagger in.</li>
       <li>Switch <strong>Dark</strong> / <strong>Light</strong>.</li>
     </ul>
     <p class="fine">Sample questions are original practice items written for this app. They are not
