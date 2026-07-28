@@ -10,7 +10,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600&family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/web/app.css">
 </head>
-<body>
+<body class="gated">
+
+<!-- Shown before anything else. It exists for two reasons: the opening is
+     scored and worth hearing, and browsers refuse to play audio until the
+     visitor has interacted with the page — so this tap is what unlocks it. -->
+<div id="gate" class="gate">
+  <div class="gate-inner">
+    <p class="gate-kicker">Before you start</p>
+    <h1 class="gate-title">Turn your sound up</h1>
+    <p class="gate-sub">The opening is scored, and the animation is timed to it.
+       It takes about four seconds.</p>
+    <button id="begin" class="gate-btn">Begin</button>
+    <button id="beginQuiet" class="gate-quiet">Continue without sound</button>
+  </div>
+  <p class="gate-fine">Interactive preview — a web recreation of the Glass iOS app</p>
+</div>
+
+<!-- The reveal, at page scale rather than inside the phone. -->
+<div id="fullIntro" class="full-intro" hidden aria-hidden="true"></div>
 
 <header class="chrome">
   <div class="chrome-title">

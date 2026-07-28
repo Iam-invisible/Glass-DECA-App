@@ -59,7 +59,7 @@ function stopSound(name) { const a = players[name]; if (a) { a.pause(); a.curren
 
 /* ---------------- state ---------------- */
 const S = {
-  screen:'intro', tab:'today', dir:1,
+  screen:'onboarding', tab:'today', dir:1,
   cluster:'marketing', goal:10, reminders:false, reminderTime:'18:30',
   answered:6, streak:12, correct:47, total:63,
   onboard:{ stage:0, done:[] },
@@ -92,30 +92,45 @@ $('#sound').onclick = () => {
 };
 $('#restart').onclick = () => {
   stopSound('intro');
-  S.screen='intro'; S.onboard={stage:0,done:[]}; S.practice=null; render();
+  S.onboard = { stage:0, done:[] }; S.practice = null; S.tab = 'today';
+  runReveal(() => { S.screen = 'onboarding'; render(); });
 };
 
-/* ---------------- intro ----------------
-   Same technique as IntroScriptView: a wide round-capped stroke runs along the
-   pen's centreline and masks the real letterforms, so what appears is always
-   the true Sacramento shape. Tracing the glyph outline would draw the letters'
-   edges instead, which is the etched look, not handwriting. */
-function renderIntro() {
-  const vp = $('#viewport'); vp.classList.add('flush'); vp.innerHTML = '';
-  $('#tabbar').hidden = true;
+function dismissGate(withSound) {
+  soundOn = withSound;
+  $('#sound').textContent = soundOn ? 'Sound on' : 'Sound off';
+  $('#sound').setAttribute('aria-pressed', String(soundOn));
+  const gate = $('#gate');
+  gate.classList.add('gone');
+  setTimeout(() => { gate.hidden = true; }, 500);
+  runReveal(openApp);
+}
+$('#begin').onclick      = () => dismissGate(true);
+$('#beginQuiet').onclick = () => dismissGate(false);
 
-  const wrap = el('div','intro');
-  [['--accent',320,-110,-180],['--gold',240,130,210],['--success',200,150,-240]].forEach(([v,s,x,y]) => {
-    const b = el('div','blob');
-    b.style.cssText = `width:${s}px;height:${s}px;background:var(${v});left:calc(50% + ${x}px);top:calc(50% + ${y}px);transform:translate(-50%,-50%)`;
-    wrap.appendChild(b);
-  });
+/* ---------------- the reveal ----------------
+   Runs full-screen, before the phone is shown, because it is the app's opening
+   and deserves the whole window rather than a 402pt box.
 
-  // The letterforms are a baked outline of Sacramento, extracted with the same
-  // tool that produced the pen path and normalised to the same ink box — both
-  // report an aspect of 1.1637. Using an SVG <text> instead looked stretched:
-  // getBBox() on text returns the font's layout box, not tight ink bounds, so
-  // fitting to it scaled x and y by different amounts.
+   The technique matches IntroScriptView: a wide round-capped stroke runs along
+   the pen's centreline and masks the real letterforms, so what appears is
+   always the true Sacramento shape. Tracing the glyph outline would draw the
+   letters' edges instead — that is the etched look, not handwriting. */
+function buildWordmark() {
+  const wrap = el('div','');
+  wrap.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center';
+  [['--accent',420,-190,-150],['--gold',330,200,190],['--success',280,220,-230]]
+    .forEach(([v,size,x,y]) => {
+      const b = el('div','blob');
+      b.style.cssText = `width:${size}px;height:${size}px;background:var(${v});` +
+        `left:calc(50% + ${x}px);top:calc(50% + ${y}px);transform:translate(-50%,-50%)`;
+      wrap.appendChild(b);
+    });
+
+  // Letterforms are a baked Sacramento outline, produced by the same tool as
+  // the pen path and normalised to the same ink box — both report an aspect of
+  // 1.1637. An SVG <text> was tried first and came out stretched: getBBox() on
+  // text returns the font's layout box, not tight ink bounds.
   const [bx, by, bw, bh] = S.data.glyphBox;
   const SW = bh * 0.095;
   const d = 'M ' + S.data.points
@@ -138,34 +153,57 @@ function renderIntro() {
             mask="url(#penmask)" fill="url(#glassfill)"/>
     </svg>`;
   wrap.appendChild(box);
-  vp.appendChild(wrap);
+  return wrap;
+}
 
-  const run = () => {
-    play('intro');
-    const pen = $('#pen');
-    const len = pen.getTotalLength();
-    pen.style.strokeDasharray = len;
-    if (reduceMotion) { pen.style.strokeDashoffset = 0; finish(700); return; }
-    pen.style.strokeDashoffset = len;
-    pen.getBoundingClientRect();
-    // Matches the app: 2.12s, a gentle symmetric ease rather than an ease-out
-    // that spends its speed early.
-    pen.style.transition = 'stroke-dashoffset 2120ms cubic-bezier(.40,0,.40,1)';
+let introRunning = false;
+function runReveal(onDone) {
+  if (introRunning) return;
+  introRunning = true;
+  const stage = $('#fullIntro');
+  stage.hidden = false;
+  stage.classList.remove('gone');
+  stage.innerHTML = '';
+  stage.appendChild(buildWordmark());
+
+  const done = () => {
+    stage.classList.add('gone');
+    setTimeout(() => { stage.hidden = true; stage.innerHTML = ''; introRunning = false; }, 600);
+    onDone && onDone();
+  };
+  stage.onclick = done;   // skippable, like the app
+
+  const pen = $('#pen', stage);
+  const len = pen.getTotalLength();
+  pen.style.strokeDasharray = len;
+  play('intro');
+
+  if (reduceMotion) {
     pen.style.strokeDashoffset = 0;
-    finish(2300);
-  };
-  const finish = delay => {
-    setTimeout(() => {
-      const t = $('#glassword');
-      if (t) { t.style.transition = 'filter 650ms ease-out'; t.style.filter = 'drop-shadow(0 0 14px color-mix(in srgb, var(--accent) 55%, transparent))'; }
-      setTimeout(() => {
-        wrap.classList.add('leaving');
-        setTimeout(() => { S.screen = 'onboarding'; render(); }, reduceMotion ? 0 : 450);
-      }, reduceMotion ? 900 : 1900);
-    }, delay);
-  };
-  requestAnimationFrame(run);
-  wrap.onclick = () => { S.screen='onboarding'; render(); };
+    setTimeout(done, 1400);
+    return;
+  }
+  pen.style.strokeDashoffset = len;
+  pen.getBoundingClientRect();
+  // 2.12s of writing on a gentle symmetric ease, landing on the audio's peak —
+  // the same numbers as the app.
+  pen.style.transition = 'stroke-dashoffset 2120ms cubic-bezier(.40,0,.40,1)';
+  pen.style.strokeDashoffset = 0;
+
+  setTimeout(() => {
+    const w = $('#glassword', stage);
+    if (w) {
+      w.style.transition = 'filter 650ms ease-out';
+      w.style.filter = 'drop-shadow(0 0 26px color-mix(in srgb, var(--accent) 55%, transparent))';
+    }
+    setTimeout(done, 1700);
+  }, 2300);
+}
+
+function openApp() {
+  document.body.classList.remove('gated');
+  S.screen = 'onboarding';
+  render();
 }
 
 /* ---------------- onboarding ----------------
@@ -591,14 +629,13 @@ function tabSettings(col) {
 
 /* ---------------- boot ---------------- */
 function render() {
-  if (S.screen === 'intro') return renderIntro();
   if (S.screen === 'onboarding') return renderOnboarding();
   renderApp();
 }
 
 fetch('/web/data.json')
   .then(r => r.json())
-  .then(d => { S.data = d; render(); })
+  .then(d => { S.data = d; render(); })   // renders behind the gate, ready for the hand-off
   .catch(() => {
     $('#viewport').innerHTML =
       '<div class="card"><div class="t-headline">Could not load content</div>' +
