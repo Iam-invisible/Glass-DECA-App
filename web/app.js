@@ -135,22 +135,92 @@ function buildWordmark() {
   const SW = bh * 0.095;
   const d = 'M ' + S.data.points
     .map(p => `${(bx + p[0]*bw).toFixed(1)} ${(by + p[1]*bh).toFixed(1)}`).join(' L ');
+  // Glass tubing, ported from IntroScriptView's solid(_:) and its three
+  // lighting passes. The letter is filled *and* stroked with a round join —
+  // stroking the contour alone would give hollow balloon letters (§7.17). Every
+  // measurement is expressed against `INF` so it holds at any render size.
+  const INF = bh * 0.020;
+  const solid = (fill, extra='') =>
+    `<path d="${S.data.glyphPath}" fill="${fill}" stroke="${fill}" stroke-width="${INF}"
+           stroke-linejoin="round" stroke-linecap="round" ${extra}/>`;
+
   const box = el('div','word-wrap');
   box.innerHTML = `
-    <svg viewBox="${bx} ${by} ${bw} ${bh}" role="img" aria-label="Glass">
+    <svg viewBox="${bx - INF*6} ${by - INF*6} ${bw + INF*12} ${bh + INF*12}"
+         role="img" aria-label="Glass">
       <defs>
         <mask id="penmask" maskUnits="userSpaceOnUse"
               x="${bx-SW}" y="${by-SW}" width="${bw+SW*2}" height="${bh+SW*2}">
-          <path id="pen" d="${d}" stroke-width="${SW}"/>
+          <path id="pen" d="${d}" stroke-width="${SW}" fill="none"
+                stroke="#fff" stroke-linecap="round" stroke-linejoin="round"/>
         </mask>
+
+        <!-- Clips the shading and highlight to the inside of the letter, the
+             way .mask(solid(Color.black)) does in the app. -->
+        <mask id="inside" maskUnits="userSpaceOnUse"
+              x="${bx-INF*4}" y="${by-INF*4}" width="${bw+INF*8}" height="${bh+INF*8}">
+          ${solid('#fff')}
+        </mask>
+
         <linearGradient id="glassfill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0"   stop-color="var(--accent)"/>
           <stop offset=".55" stop-color="var(--accent)" stop-opacity=".68"/>
           <stop offset="1"   stop-color="var(--text-primary)" stop-opacity=".85"/>
         </linearGradient>
+        <linearGradient id="sweepgrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"   stop-color="#fff" stop-opacity="0"/>
+          <stop offset=".5"  stop-color="#fff" stop-opacity=".9"/>
+          <stop offset="1"   stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="fHalo"  x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="${INF*2.2}"/></filter>
+        <filter id="fShade" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="${INF*0.48}"/></filter>
+        <filter id="fHi"    x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="${INF*0.36}"/></filter>
+        <filter id="fRim"   x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="${INF*0.15}"/></filter>
+        <filter id="fSweep" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="${INF*0.6}"/></filter>
       </defs>
-      <path id="glassword" d="${S.data.glyphPath}"
-            mask="url(#penmask)" fill="url(#glassfill)"/>
+
+      <!-- What has been written so far. -->
+      <g id="written" mask="url(#penmask)">
+        ${solid('url(#glassfill)')}
+        <g mask="url(#inside)">
+          <path d="${S.data.glyphPath}" fill="none" stroke="#fff" stroke-opacity=".45"
+                stroke-width="${INF*0.5}" stroke-linejoin="round" filter="url(#fRim)"/>
+        </g>
+      </g>
+
+      <!-- The finished word, flooding in on the peak. Identical geometry, so
+           the crossfade is invisible; it exists so the lighting passes and
+           anything the pen mask missed arrive together. -->
+      <g id="finished" opacity="0">
+        <g id="halo" filter="url(#fHalo)" opacity=".38">${solid('var(--accent)')}</g>
+        ${solid('url(#glassfill)')}
+        <g mask="url(#inside)">
+          <!-- Shading hugging the lower-right: a blurred contour pass pushed
+               down and clipped inside, which is what gives a flat shape the
+               roundness of a rod. -->
+          <path d="${S.data.glyphPath}" fill="none" stroke="var(--accent)" stroke-opacity=".95"
+                stroke-width="${INF*1.9}" stroke-linejoin="round" filter="url(#fShade)"
+                transform="translate(${INF*0.5} ${INF*0.75})" opacity=".95"/>
+          <!-- The matching highlight along the upper-left: light running down
+               the top of the tube. -->
+          <path d="${S.data.glyphPath}" fill="none" stroke="#fff" stroke-opacity=".85"
+                stroke-width="${INF*0.75}" stroke-linejoin="round" filter="url(#fHi)"
+                transform="translate(${-INF*0.42} ${-INF*0.62})" opacity=".62"/>
+          <!-- Bright rim where the glass turns away at the edge. -->
+          <path d="${S.data.glyphPath}" fill="none" stroke="#fff" stroke-opacity=".5"
+                stroke-width="${INF*0.5}" stroke-linejoin="round" filter="url(#fRim)"
+                opacity=".3"/>
+          <rect id="sweep" x="${bx - bw}" y="${by - INF*4}"
+                width="${bw*0.45}" height="${bh + INF*8}"
+                fill="url(#sweepgrad)" filter="url(#fSweep)"/>
+        </g>
+      </g>
     </svg>`;
   wrap.appendChild(box);
   return wrap;
@@ -180,6 +250,7 @@ function runReveal(onDone) {
 
   if (reduceMotion) {
     pen.style.strokeDashoffset = 0;
+    const fin = $('#finished', stage); if (fin) fin.style.opacity = '1';
     setTimeout(done, 1400);
     return;
   }
@@ -191,11 +262,18 @@ function runReveal(onDone) {
   pen.style.strokeDashoffset = 0;
 
   setTimeout(() => {
-    const w = $('#glassword', stage);
-    if (w) {
-      w.style.transition = 'filter 650ms ease-out';
-      w.style.filter = 'drop-shadow(0 0 26px color-mix(in srgb, var(--accent) 55%, transparent))';
-    }
+    // The reveal: glass floods in on the audio's peak, the written layer hands
+    // over to it, and the sweep travels across 0.22s later — the app's beats.
+    const fin = $('#finished', stage), writ = $('#written', stage);
+    if (fin) { fin.style.transition = 'opacity 650ms ease-out'; fin.style.opacity = '1'; }
+    if (writ) { writ.style.transition = 'opacity 500ms ease-out'; writ.style.opacity = '0'; }
+    setTimeout(() => {
+      const sw = $('#sweep', stage);
+      if (sw) {
+        sw.style.transition = 'transform 1000ms cubic-bezier(.4,0,.2,1)';
+        sw.style.transform = `translateX(${bw * 2.1}px)`;
+      }
+    }, 220);
     setTimeout(done, 1700);
   }, 2300);
 }
