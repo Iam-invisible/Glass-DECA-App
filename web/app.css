@@ -310,3 +310,22 @@ body.gated .chrome, body.gated .stage { opacity:0; pointer-events:none; }
 .full-intro .blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:.22; }
 
 @media (max-width:720px) { .full-intro .word-wrap { width:78vw; } }
+
+/* ---------- App Store review status ---------- */
+.status {
+  display:flex; gap:11px; align-items:flex-start;
+  background:#15181f; border:1px solid #262c37; border-left:3px solid #E8B14A;
+  border-radius:12px; padding:13px 15px; margin:0 0 22px;
+  font-size:13px; line-height:1.55; color:#9aa4b4;
+}
+.status strong { color:#e8ecf3; font-weight:600; }
+.status-dot {
+  width:8px; height:8px; border-radius:99px; background:#E8B14A;
+  flex:none; margin-top:6px; box-shadow:0 0 0 0 rgba(232,177,74,.55);
+  animation:pulse 2.4s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow:0 0 0 0 rgba(232,177,74,.5); }
+  70%  { box-shadow:0 0 0 7px rgba(232,177,74,0); }
+  100% { box-shadow:0 0 0 0 rgba(232,177,74,0); }
+}
