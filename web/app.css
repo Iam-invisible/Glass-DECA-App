@@ -73,7 +73,6 @@ body {
 
 /* ---------- device ---------- */
 .phone { --w:402px; --h:874px; --radius:56px; --top-inset:59px; --bottom-inset:34px; }
-.phone[data-device="8"] { --w:375px; --h:667px; --radius:0px; --top-inset:20px; --bottom-inset:0px; }
 
 .bezel {
   position:relative; width:var(--w); height:var(--h);
@@ -81,14 +80,11 @@ body {
   box-shadow:0 0 0 11px #10141b, 0 0 0 13px #2a313d, 0 34px 70px rgba(0,0,0,.55);
   overflow:hidden; transition:width var(--gentle), height var(--gentle), border-radius var(--gentle);
 }
-.phone[data-device="8"] .bezel { box-shadow:0 0 0 13px #10141b, 0 0 0 15px #2a313d, 0 34px 70px rgba(0,0,0,.55); }
 
 .island {
   position:absolute; top:11px; left:50%; transform:translateX(-50%);
   width:122px; height:33px; border-radius:999px; background:#000; z-index:6;
 }
-.phone[data-device="8"] .island { display:none; }
-.notchless-status { display:none; }
 
 .statusbar {
   position:absolute; top:0; left:0; right:0; height:var(--top-inset); z-index:8;
@@ -96,7 +92,6 @@ body {
   padding:0 26px; color:var(--text-primary); font-size:14px; font-weight:600;
   padding-top:4px;
 }
-.phone[data-device="8"] .statusbar { padding:0 14px; font-size:12px; }
 .statusbar .time { letter-spacing:.2px; }
 .icons { display:flex; gap:5px; align-items:center; }
 .si { height:11px; fill:currentColor; }
@@ -106,7 +101,6 @@ body {
   position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
   width:138px; height:5px; border-radius:99px; background:var(--text-primary); opacity:.28; z-index:6;
 }
-.phone[data-device="8"] .home-indicator { display:none; }
 
 .screen {
   position:absolute; inset:0; background:var(--canvas); color:var(--text-primary);
@@ -226,7 +220,6 @@ body {
 .tabbar[hidden] { display:none; }
 .tabbar button svg { width:19px; height:19px; fill:currentColor; }
 .tabbar button.on { color:var(--accent); background:var(--accent-soft); }
-.phone[data-device="8"] .tabbar button { padding:6px 7px 5px; font-size:9px; }
 
 /* ---------- intro ---------- */
 /* Below the status bar and island (z 5/6): those are physical on a real phone
@@ -247,6 +240,18 @@ body {
 .tick { width:18px; height:18px; flex:none; fill:var(--success); }
 .enter { animation:enter var(--gentle) both; }
 @keyframes enter { from { opacity:0; transform:translateY(-10px);} to { opacity:1; transform:none; } }
+
+/* appearIn(_:) — sections rise and fade in sequence, 14px of travel and 55ms
+   between each, matching Core/Motion.swift. */
+.ap { animation:appearIn 500ms cubic-bezier(.28,1.12,.44,1) both; }
+@keyframes appearIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+/* Tab changes travel in the direction of the move, as .page(direction:) does. */
+.page-in { animation:pageIn 380ms cubic-bezier(.28,1.1,.42,1) both; }
+@keyframes pageIn {
+  from { opacity:0; transform:translateX(calc(var(--dir, 1) * 26px)) scale(.985); }
+  to   { opacity:1; transform:none; }
+}
 
 @media (prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
