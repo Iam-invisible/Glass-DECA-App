@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.shailpatel.LCVI-DECA-Study-App</string>
+		<string>group.com.shailpatel.LCVI-DECA-Study-NewApp</string>
 	</array>
 </dict>
 </plist>

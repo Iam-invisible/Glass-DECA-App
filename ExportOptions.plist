@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ExportOptions.plist
+
+  Used by `xcodebuild -exportArchive` to turn a .xcarchive into an .ipa.
+
+  `method` values (Xcode 16 and later renamed these):
+    app-store-connect  — for TestFlight and the App Store. Needs an Apple
+                         Distribution certificate; Xcode creates one on first
+                         use if your account has permission.
+    release-testing    — was "ad-hoc". Installs only on devices whose UDIDs are
+                         registered in the provisioning profile.
+    debugging          — was "development". Same device restriction.
+    enterprise         — Apple Developer Enterprise Program only.
+
+  Swap `method` below for whichever you need.
+-->
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store-connect</string>
+
+    <key>teamID</key>
+    <string>P9UL285TZF</string>
+
+    <!-- Let Xcode fetch or create the right profile rather than pinning one. -->
+    <key>signingStyle</key>
+    <string>automatic</string>
+
+    <!-- Keeps the upload small; Apple recompiles per device anyway. -->
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <true/>
+
+    <!-- Thin the payload per device model instead of shipping one fat binary. -->
+    <key>compileBitcode</key>
+    <false/>
+    <key>stripSwiftSymbols</key>
+    <true/>
+</dict>
+</plist>
