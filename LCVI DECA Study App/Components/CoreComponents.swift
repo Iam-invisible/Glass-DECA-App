@@ -41,9 +41,15 @@ struct ProgressRing: View {
             // The tip of the arc is a point of light. It rides the same
             // animated state as the trim, so the spring carries both, and it
             // glows just enough to read as the lit end of a glass tube.
+            //
+            // Radius is min/2, not (min - lineWidth)/2: the arc is drawn with
+            // .stroke, which centres the line on the circle's path, so the
+            // stroke centreline sits at min/2. The border-inset radius put
+            // the dot 5.5pt inside the arc — a stray dot beside the tube
+            // instead of the highlight nested in its rounded cap.
             if shown > 0.01 {
                 GeometryReader { geo in
-                    let r = (min(geo.size.width, geo.size.height) - lineWidth) / 2
+                    let r = min(geo.size.width, geo.size.height) / 2
                     Circle()
                         .fill(.white)
                         .frame(width: lineWidth * 0.42, height: lineWidth * 0.42)
