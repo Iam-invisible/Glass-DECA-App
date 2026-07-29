@@ -104,6 +104,9 @@ final class AppStore: ObservableObject {
     /// The guided tour overlay. Fired automatically the moment onboarding
     /// hands over, and replayable from Settings.
     @Published var showGuide = false
+    /// The tour stop currently on stage. Study watches this and scrolls the
+    /// element into view before the spotlight lands on it.
+    @Published var guideFocus: GuideTarget? = nil
 
     /// One tap from any "no questions yet" state to the place that fixes it.
     func openQuestionBankManager() {

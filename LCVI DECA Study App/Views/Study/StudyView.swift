@@ -35,10 +35,12 @@ struct StudyView: View {
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { scroller in
             ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
                     greeting.appearIn(0)
                     goalCard.appearIn(1).guideAnchor(.goalCard)
+                        .id(GuideTarget.goalCard)
 
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
@@ -51,6 +53,7 @@ struct StudyView: View {
                         .appearIn(2)
                     } else {
                         waysToStudy.guideAnchor(.waysToStudy)
+                            .id(GuideTarget.waysToStudy)
                         insightCards
                     }
 
@@ -66,6 +69,15 @@ struct StudyView: View {
             .navigationDestination(isPresented: $pushMock)     { MockExamsView() }
             .navigationDestination(isPresented: $pushRoleplay) { RoleplayView() }
             .navigationDestination(isPresented: $pushLibrary)  { LibraryView() }
+            // When the tour moves to a stop, bring it on screen first. The
+            // anchors are live, so the spotlight follows the scroll.
+            .onChange(of: store.guideFocus) { focus in
+                guard let focus, focus != .tabBar else { return }
+                withAnimation(reduceMotion ? nil : Motion.gentle) {
+                    scroller.scrollTo(focus, anchor: .center)
+                }
+            }
+            }
         }
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload)

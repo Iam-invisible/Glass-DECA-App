@@ -110,12 +110,19 @@ struct RootView: View {
         .overlayPreferenceValue(GuideAnchorKey.self) { anchors in
             GeometryReader { proxy in
                 if store.showGuide {
-                    GuideOverlay(anchors: anchors, proxy: proxy) {
+                    GuideOverlay(anchors: anchors,
+                                 proxy: proxy,
+                                 onTarget: { store.guideFocus = $0 }) {
+                        store.guideFocus = nil
                         store.showGuide = false
                         store.settings.hasSeenGuide = true
                     }
                 }
             }
+            // Full screen, so anchors resolve in the same space the
+            // spotlight draws in — including under the status bar and
+            // around the floating tab bar.
+            .ignoresSafeArea()
         }
         .animation(reduceMotion ? nil : Motion.gentle, value: store.showGuide)
     }

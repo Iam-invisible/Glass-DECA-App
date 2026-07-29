@@ -91,6 +91,10 @@ private struct Spotlight: Shape {
 struct GuideOverlay: View {
     let anchors: [GuideTarget: Anchor<CGRect>]
     let proxy: GeometryProxy
+    /// Fired when a stop takes the stage, so the screen underneath can
+    /// scroll that element into view — the spotlight then lands on it
+    /// wherever the student had scrolled beforehand.
+    var onTarget: ((GuideTarget) -> Void)? = nil
     let onFinish: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -117,9 +121,13 @@ struct GuideOverlay: View {
                 ?? .zero
 
             ZStack {
+                // No ignoresSafeArea here: the host GeometryReader already
+                // spans the full screen, and expanding this view separately
+                // would shift the shape's origin away from the space the
+                // anchors were resolved in — every cutout would land high by
+                // exactly the top inset. One space for resolving and drawing.
                 Spotlight(rect: rect)
                     .fill(Color.black.opacity(0.55), style: FillStyle(eoFill: true))
-                    .ignoresSafeArea()
                     .animation(reduceMotion ? nil : Motion.gentle, value: rect)
                     // The dim is the tap target for "next" — but the card's
                     // buttons are the accessible path.
@@ -136,7 +144,7 @@ struct GuideOverlay: View {
     /// nothing has been pointed at.
     private var invitation: some View {
         ZStack {
-            Color.black.opacity(0.55).ignoresSafeArea()
+            Color.black.opacity(0.55)
             VStack(alignment: .leading, spacing: 10) {
                 Text("Want a quick tour?")
                     .font(.appTitle)
@@ -147,6 +155,7 @@ struct GuideOverlay: View {
                     .fixedSize(horizontal: false, vertical: true)
                 PrimaryButton(title: "Show me around", systemImage: "sparkles") {
                     Haptics.tap()
+                    onTarget?(steps.first?.target ?? .goalCard)
                     withAnimation(reduceMotion ? nil : Motion.gentle) { accepted = true }
                 }
                 .padding(.top, 2)
@@ -224,6 +233,7 @@ struct GuideOverlay: View {
             finish()
         } else {
             Haptics.tap()
+            onTarget?(available[stepIndex + 1].target)
             withAnimation(reduceMotion ? nil : Motion.gentle) { stepIndex += 1 }
         }
     }
