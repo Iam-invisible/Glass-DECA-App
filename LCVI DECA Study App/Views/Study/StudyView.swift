@@ -50,7 +50,7 @@ struct StudyView: View {
                         .appCard()
                         .appearIn(2)
                     } else {
-                        waysToStudy.appearIn(2)
+                        waysToStudy
                         insightCards
                     }
 
@@ -225,6 +225,7 @@ struct StudyView: View {
     private var waysToStudy: some View {
         VStack(spacing: 10) {
             SectionHeader(title: "Ways to study")
+                .appearIn(2)
 
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
                                 GridItem(.flexible(), spacing: 10)],
@@ -233,34 +234,42 @@ struct StudyView: View {
                          tint: Palette.success, count: dash.dueForReview) {
                     startReviewDue()
                 }
+                .appearIn(3, distance: 10)
                 ModeTile(title: "Mistakes", systemImage: "book.closed.fill",
                          tint: Palette.danger, count: dash.openMistakes) {
                     pushMistakes = true
                 }
+                .appearIn(4, distance: 10)
                 ModeTile(title: "Mock Exams", systemImage: "doc.text.fill",
                          tint: Palette.accent) {
                     pushMock = true
                 }
+                .appearIn(5, distance: 10)
                 ModeTile(title: "Roleplay", systemImage: "person.wave.2.fill",
                          tint: Palette.accent) {
                     pushRoleplay = true
                 }
+                .appearIn(6, distance: 10)
                 ModeTile(title: "Quick Think", systemImage: "brain.head.profile",
                          tint: Palette.gold) {
                     showingQuickThink = true
                 }
+                .appearIn(7, distance: 10)
                 ModeTile(title: "Exam Cram", systemImage: "bolt.fill",
                          tint: Palette.gold) {
                     showingCramSetup = true
                 }
+                .appearIn(8, distance: 10)
                 ModeTile(title: "Bookmarks", systemImage: "bookmark.fill",
                          tint: Palette.gold, count: dash.bookmarkedQuestions) {
                     startBookmarked()
                 }
+                .appearIn(9, distance: 10)
                 ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
                          tint: Palette.accent) {
                     pushLibrary = true
                 }
+                .appearIn(10, distance: 10)
             }
         }
     }
