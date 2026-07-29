@@ -422,8 +422,22 @@ struct SessionSummaryView: View {
 
                 nextStep.appearIn(5)
 
-                PrimaryButton(title: "Done", systemImage: "checkmark") { onDone() }
+                // The suggestion used to be prose only — "try a mock exam",
+                // "review your Mistake Notebook" — leaving the student to
+                // find the way themselves. Now the advice is a button: it
+                // dismisses this cover, and the app routes there.
+                if let action = nextStepAction {
+                    PrimaryButton(title: action.title,
+                                  systemImage: action.symbol,
+                                  isProminent: false) {
+                        onDone()
+                        action.perform(store)
+                    }
                     .appearIn(6)
+                }
+
+                PrimaryButton(title: "Done", systemImage: "checkmark") { onDone() }
+                    .appearIn(7)
             }
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 24)
@@ -521,6 +535,30 @@ struct SessionSummaryView: View {
                    title: "Suggested next session",
                    message: nextStepMessage,
                    tint: Palette.accent)
+    }
+
+    private struct NextStepAction {
+        let title: String
+        let symbol: String
+        let perform: (AppStore) -> Void
+    }
+
+    /// The one-tap version of `nextStepMessage`, when the advice has a
+    /// destination in the app. Routing happens through the store's navigation
+    /// intents, so this works no matter which tab presented the session.
+    private var nextStepAction: NextStepAction? {
+        if runner.log.isEmpty { return nil }
+        if runner.accuracy >= 0.9 {
+            return NextStepAction(title: "Set up a mock exam", symbol: "doc.text") {
+                $0.requestedTab = .mock
+            }
+        }
+        if !runner.missedQuestions.isEmpty {
+            return NextStepAction(title: "Open Mistake Notebook", symbol: "book.closed") {
+                $0.openMistakeNotebook()
+            }
+        }
+        return nil
     }
 
     private var nextStepMessage: String {

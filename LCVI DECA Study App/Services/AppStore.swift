@@ -83,6 +83,33 @@ final class AppStore: ObservableObject {
     @Published var fullScreenLayers = 0
     /// Set when the user taps a widget or a shortcut into a specific flow.
     @Published var pendingDeepLink: DeepLink? = nil
+
+    // MARK: Navigation intents
+    //
+    // The app used to *describe* routes — "Settings ▸ Question Bank Manager
+    // has manual entry…" — and leave the student to walk them. These let any
+    // screen hand the walk to the app instead: RootView consumes the tab
+    // switch, and the destination screen consumes its own push. Both are
+    // consumed with a reset-then-act pattern so a stale intent can never
+    // re-fire on a later visit.
+
+    /// A tab some screen wants selected. RootView consumes and clears it.
+    @Published var requestedTab: AppTab? = nil
+    /// Settings should push the Question Bank Manager when it next appears.
+    @Published var wantsQuestionBank = false
+    /// Practice should push the Mistake Notebook when it next appears.
+    @Published var wantsMistakeNotebook = false
+
+    /// One tap from any "no questions yet" state to the place that fixes it.
+    func openQuestionBankManager() {
+        wantsQuestionBank = true
+        requestedTab = .settings
+    }
+
+    func openMistakeNotebook() {
+        wantsMistakeNotebook = true
+        requestedTab = .practice
+    }
     /// Shown on every cold launch. Not persisted — a fresh process means a
     /// fresh reveal, and Settings can re-arm it.
     @Published var showIntro = true

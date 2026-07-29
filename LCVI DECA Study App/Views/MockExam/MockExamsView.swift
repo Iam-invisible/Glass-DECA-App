@@ -30,7 +30,10 @@ struct MockExamsView: View {
                     if bankCount == 0 {
                         EmptyStateView(systemImage: "doc.text",
                                        title: "No questions yet",
-                                       message: "Add or import a question bank to build a mock exam.")
+                                       message: "Add or import a question bank to build a mock exam.",
+                                       actionTitle: "Add questions") {
+                            store.openQuestionBankManager()
+                        }
                             .appCard()
                     } else {
                         setupCard.appearIn(0)

@@ -10,6 +10,7 @@ import SwiftUI
 struct PracticeView: View {
     @EnvironmentObject private var store: AppStore
     @State private var session: SessionPayload?
+    @State private var pushMistakes = false
 
     private var cluster: DECACluster { store.settings.cluster }
     private var dash: DashboardState { store.dashboard }
@@ -29,7 +30,10 @@ struct PracticeView: View {
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
                                        title: "No questions yet",
-                                       message: "Add or import a question bank to start practising. Settings ▸ Question Bank Manager has manual entry, bulk paste, CSV and JSON import.")
+                                       message: "Add or import a question bank to start practising — manual entry, bulk paste, CSV and JSON all work.",
+                                       actionTitle: "Add questions") {
+                            store.openQuestionBankManager()
+                        }
                             .appCard()
                             .appearIn(0)
                     } else {
@@ -43,10 +47,23 @@ struct PracticeView: View {
             }
             .appCanvas()
             .rootScreenChrome()
+            .navigationDestination(isPresented: $pushMistakes) {
+                MistakeNotebookView()
+            }
         }
+        .onAppear(perform: consumeMistakesIntent)
+        .onChange(of: store.wantsMistakeNotebook) { _ in consumeMistakesIntent() }
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload).environmentObject(store)
         }
+    }
+
+    /// Same reset-then-act pattern as Settings' bank intent: local state is
+    /// flipped after mount so the push animates reliably on iOS 16.
+    private func consumeMistakesIntent() {
+        guard store.wantsMistakeNotebook else { return }
+        store.wantsMistakeNotebook = false
+        DispatchQueue.main.async { pushMistakes = true }
     }
 
     // MARK: Quick start

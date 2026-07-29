@@ -17,6 +17,11 @@ struct SettingsView: View {
     @State private var importMessage: String?
     @State private var showingImportAlert = false
     @State private var notificationDenied = false
+    /// Driven by `store.wantsQuestionBank` rather than bound to it: flipping
+    /// local state after the screen is mounted pushes reliably on iOS 16,
+    /// where a navigationDestination that is already true at first render
+    /// does not.
+    @State private var pushQuestionBank = false
 
     private var settings: UserSettings { store.settings }
 
@@ -44,11 +49,16 @@ struct SettingsView: View {
             }
             .appCanvas()
             .rootScreenChrome()
+            .navigationDestination(isPresented: $pushQuestionBank) {
+                QuestionBankManagerView()
+            }
         }
         .onAppear {
+            consumeBankIntent()
             store.ai.refreshAvailability()
             Task { await store.notifications.refreshAuthorization() }
         }
+        .onChange(of: store.wantsQuestionBank) { _ in consumeBankIntent() }
         .sheet(isPresented: $showingShare) {
             if let exportURL {
                 ShareSheet(items: [exportURL])
@@ -397,6 +407,13 @@ struct SettingsView: View {
         guard let url = store.importExport.writeExportFile(bundle) else { return }
         exportURL = url
         showingShare = true
+    }
+
+    private func consumeBankIntent() {
+        guard store.wantsQuestionBank else { return }
+        store.wantsQuestionBank = false
+        // Next runloop: the push animates instead of appearing pre-committed.
+        DispatchQueue.main.async { pushQuestionBank = true }
     }
 
     private func handleRestore(_ result: Result<[URL], Error>) {

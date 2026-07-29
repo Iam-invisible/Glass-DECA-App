@@ -85,6 +85,11 @@ struct RootView: View {
         .animation(reduceMotion ? nil : Motion.gentle, value: store.settings.hasOnboarded)
         .animation(reduceMotion ? nil : Motion.gentle, value: store.showIntro)
         .onAppear { store.onAppear() }
+        .onChange(of: store.requestedTab) { requested in
+            guard let requested else { return }
+            store.requestedTab = nil
+            select(requested)
+        }
         .onChange(of: scenePhase) { phase in
             if phase == .active { store.onForeground() }
         }

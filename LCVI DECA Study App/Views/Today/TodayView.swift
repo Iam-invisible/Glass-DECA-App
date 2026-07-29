@@ -206,8 +206,8 @@ struct TodayView: View {
             EmptyStateView(systemImage: "tray",
                            title: "No questions yet",
                            message: "Add or import a question bank to start practising.",
-                           actionTitle: "Open Question Bank Manager") {
-                switchTab(.settings)
+                           actionTitle: "Add questions") {
+                store.openQuestionBankManager()
             }
             .appCard()
             .appearIn(3)
