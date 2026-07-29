@@ -37,6 +37,21 @@ struct ProgressRing: View {
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
+
+            // The tip of the arc is a point of light. It rides the same
+            // animated state as the trim, so the spring carries both, and it
+            // glows just enough to read as the lit end of a glass tube.
+            if shown > 0.01 {
+                GeometryReader { geo in
+                    let r = (min(geo.size.width, geo.size.height) - lineWidth) / 2
+                    Circle()
+                        .fill(.white)
+                        .frame(width: lineWidth * 0.42, height: lineWidth * 0.42)
+                        .shadow(color: tint.opacity(0.9), radius: 3)
+                        .position(x: geo.size.width / 2, y: geo.size.height / 2 - r)
+                        .rotationEffect(.degrees(360 * shown))
+                }
+            }
         }
         .onAppear { animate(to: clamped) }
         .onChange(of: clamped) { animate(to: $0) }
@@ -61,7 +76,7 @@ struct SectionHeader: View {
         HStack(alignment: .firstTextBaseline) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.appHeadline)
+                    .font(.appSectionTitle)
                     .foregroundStyle(Palette.textPrimary)
                 if let subtitle {
                     Text(subtitle)

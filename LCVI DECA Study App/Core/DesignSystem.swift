@@ -44,6 +44,8 @@ enum Palette {
     static let cardRaised   = Color(lightHex: 0xFFFFFF, darkHex: 0x1D2632)
     static let cardSunken   = Color(lightHex: 0xEDF1F7, darkHex: 0x111823)
     static let stroke       = Color(lightHex: 0xE2E8F0, darkHex: 0x27313F)
+    /// The lighter top edge of a card's border — a pane lit from above.
+    static let strokeGlint  = Color(lightHex: 0xEDF2F9, darkHex: 0x3B4859)
     static let strokeStrong = Color(lightHex: 0xCBD5E1, darkHex: 0x33404F)
 
     // Text
@@ -115,6 +117,11 @@ extension Font {
     static let appLargeTitle = Font.custom(AppType.display, size: 38, relativeTo: .largeTitle)
     static let appTitle      = Font.custom(AppType.display, size: 26, relativeTo: .title2)
 
+    /// Section titles inside screens. With the display serif on section
+    /// headings and Manrope on everything else, the eye can skim a screen by
+    /// serif alone — the hierarchy is legible before anything is read.
+    static let appSectionTitle = Font.custom(AppType.display, size: 22, relativeTo: .title3)
+
     // Text and UI — Manrope
     static let appHeadline    = Font.custom(AppType.semibold, size: 17, relativeTo: .headline)
     static let appBody        = Font.custom(AppType.regular,  size: 17, relativeTo: .body)
@@ -172,8 +179,15 @@ struct CardBackground: ViewModifier {
                     .shadow(color: Palette.shadow.opacity(0.05), radius: 10, x: 0, y: 4)
             )
             .overlay(
+                // A gradient border, lighter at the top: the pane's edge
+                // catching the light field it sits in. Static fill — costs
+                // the same as the flat stroke it replaces.
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .strokeBorder(Palette.stroke, lineWidth: 1)
+                    .strokeBorder(
+                        LinearGradient(colors: [Palette.strokeGlint, Palette.stroke],
+                                       startPoint: .top, endPoint: .bottom),
+                        lineWidth: 1
+                    )
             )
     }
 }
@@ -207,7 +221,9 @@ struct AppCanvas: ViewModifier {
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 Color.clear.frame(height: bottomBarInset)
             }
-            .background(Palette.canvas.ignoresSafeArea())
+            // The intro's light field, app-wide. See AmbientCanvas for the
+            // iPhone 8 performance reasoning.
+            .background(AmbientCanvas())
     }
 }
 

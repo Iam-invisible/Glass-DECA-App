@@ -34,6 +34,9 @@ struct AppearTransition: ViewModifier {
         content
             .opacity(shown ? 1 : 0)
             .offset(y: shown || reduceMotion ? 0 : distance)
+            // A breath of scale under the rise reads as settling *forward*
+            // into the light rather than sliding on a flat plane.
+            .scaleEffect(shown || reduceMotion ? 1 : 0.985)
             .onAppear {
                 guard !shown else { return }
                 if reduceMotion {

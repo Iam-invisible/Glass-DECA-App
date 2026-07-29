@@ -112,6 +112,9 @@ struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(reduceMotion ? 1 : (configuration.isPressed ? scale : 1))
+            // Pressed glass catches the light: a small brightness lift while
+            // the finger is down, in both themes.
+            .brightness(configuration.isPressed && !reduceMotion ? 0.05 : 0)
             .animation(.spring(response: 0.28, dampingFraction: 0.7), value: configuration.isPressed)
             .onChange(of: configuration.isPressed) { pressed in
                 if pressed && haptic { Haptics.tap() }
