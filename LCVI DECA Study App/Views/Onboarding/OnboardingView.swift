@@ -176,6 +176,21 @@ struct OnboardingView: View {
     private var prologueAct: some View {
         VStack {
             Spacer()
+
+            // The picture track. Each line has a scene, drawn from the app's
+            // own vocabulary — the podium, the path, the ring — swapped with
+            // the line it belongs to.
+            ZStack {
+                if prologueLine > 0 {
+                    prologueScene(for: prologueLine - 1)
+                        .id(prologueLine)
+                        .transition(reduceMotion ? .opacity
+                                    : .opacity.combined(with: .scale(scale: 0.92)))
+                }
+            }
+            .frame(height: 150)
+            .animation(reduceMotion ? .easeOut(duration: 0.2) : Motion.gentle, value: prologueLine)
+
             VStack(spacing: 18) {
                 ForEach(Array(Self.prologueLines.enumerated()), id: \.offset) { index, line in
                     if index < prologueLine {
@@ -213,14 +228,25 @@ struct OnboardingView: View {
     private func runPrologue() {
         guard prologueSequence == nil else { return }
         prologueSequence = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 400_000_000)
+            try? await Task.sleep(nanoseconds: 650_000_000)
             while prologueLine < Self.prologueLines.count {
                 guard !Task.isCancelled else { return }
                 prologueLine += 1
-                try? await Task.sleep(nanoseconds: 1_700_000_000)
+                // Long enough for the line's scene to play out underneath it.
+                try? await Task.sleep(nanoseconds: 2_800_000_000)
             }
             guard !Task.isCancelled else { return }
+            try? await Task.sleep(nanoseconds: 500_000_000)
             go(to: .tryIt)
+        }
+    }
+
+    @ViewBuilder
+    private func prologueScene(for index: Int) -> some View {
+        switch index {
+        case 0:  PodiumScene()
+        case 1:  JourneyScene()
+        default: LoopScene()
         }
     }
 
@@ -236,7 +262,7 @@ struct OnboardingView: View {
             if prologueLine >= Self.prologueLines.count {
                 prologueSequence?.cancel()
                 prologueSequence = Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 1_200_000_000)
+                    try? await Task.sleep(nanoseconds: 1_600_000_000)
                     guard !Task.isCancelled else { return }
                     go(to: .tryIt)
                 }
@@ -669,6 +695,127 @@ struct OnboardingView: View {
         store.settings.hasOnboarded = true
         store.refresh()
         Task { await store.syncNotifications() }
+    }
+}
+
+// MARK: - Prologue scenes
+
+/// "You've got a competition coming." — a podium rises, gold in the middle.
+private struct PodiumScene: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var up = false
+
+    var body: some View {
+        HStack(alignment: .bottom, spacing: 12) {
+            step(height: 52, tint: Palette.accent.opacity(0.45), delay: 0.25)
+            step(height: 84, tint: Palette.gold, delay: 0.05, glows: true)
+            step(height: 36, tint: Palette.accent.opacity(0.3), delay: 0.45)
+        }
+        .frame(maxWidth: .infinity)
+        .onAppear {
+            guard !reduceMotion else { up = true; return }
+            withAnimation(Motion.bouncy) { up = true }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private func step(height: CGFloat, tint: Color, delay: Double, glows: Bool = false) -> some View {
+        RoundedRectangle(cornerRadius: 9, style: .continuous)
+            .fill(tint)
+            .frame(width: 40, height: up ? height : 8)
+            .shadow(color: glows ? Palette.gold.opacity(up ? 0.55 : 0) : .clear, radius: 10, y: 2)
+            .animation(reduceMotion ? nil : Motion.bouncy.delay(delay), value: up)
+    }
+}
+
+/// "Between now and that day…" — a path draws itself from here to the flag,
+/// a point of light travelling its length.
+private struct JourneyScene: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var drawn = false
+
+    private struct HLine: Shape {
+        func path(in rect: CGRect) -> Path {
+            var p = Path()
+            p.move(to: CGPoint(x: rect.minX, y: rect.midY))
+            p.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+            return p
+        }
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            ZStack(alignment: .leading) {
+                // Where the student is standing.
+                Circle()
+                    .fill(Palette.accent)
+                    .frame(width: 9, height: 9)
+                    .position(x: 5, y: geo.size.height / 2)
+
+                HLine()
+                    .trim(from: 0, to: drawn ? 1 : 0)
+                    .stroke(
+                        LinearGradient(colors: [Palette.accent, Palette.gold],
+                                       startPoint: .leading, endPoint: .trailing),
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                    )
+
+                // The travelling light — the same motif as the ring's tip.
+                Circle()
+                    .fill(.white)
+                    .frame(width: 7, height: 7)
+                    .shadow(color: Palette.gold.opacity(0.9), radius: 4)
+                    .position(x: drawn ? w - 4 : 5, y: geo.size.height / 2)
+                    .opacity(drawn ? 0 : 1)
+
+                // Competition day.
+                Image(systemName: "flag.fill")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Palette.gold)
+                    .position(x: w - 8, y: geo.size.height / 2 - 17)
+                    .opacity(drawn ? 1 : 0)
+                    .scaleEffect(drawn ? 1 : 0.4, anchor: .bottom)
+                    .animation(reduceMotion ? nil : Motion.bouncy.delay(1.35), value: drawn)
+            }
+        }
+        .frame(width: 230, height: 60)
+        .frame(maxWidth: .infinity)
+        .onAppear {
+            guard !reduceMotion else { drawn = true; return }
+            withAnimation(.easeInOut(duration: 1.5).delay(0.2)) { drawn = true }
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+/// "How you practice." — the goal ring fills to full: the exact gauge the
+/// student meets on the Study home an act later.
+private struct LoopScene: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var filled = false
+
+    var body: some View {
+        ZStack {
+            ProgressRing(progress: filled ? 1 : 0.02,
+                         lineWidth: 9,
+                         tint: Palette.accent)
+                .frame(width: 84, height: 84)
+            Image(systemName: "checkmark")
+                .font(.system(size: 26, weight: .semibold))
+                .foregroundStyle(Palette.success)
+                .opacity(filled ? 1 : 0)
+                .scaleEffect(filled ? 1 : 0.5)
+                .animation(reduceMotion ? nil : Motion.bouncy.delay(1.0), value: filled)
+        }
+        .frame(maxWidth: .infinity)
+        .onAppear {
+            guard !reduceMotion else { filled = true; return }
+            // The ring runs its own spring; this just sets it in motion a
+            // breath after the line lands.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { filled = true }
+        }
+        .accessibilityHidden(true)
     }
 }
 
