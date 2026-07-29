@@ -550,7 +550,7 @@ struct SessionSummaryView: View {
         if runner.log.isEmpty { return nil }
         if runner.accuracy >= 0.9 {
             return NextStepAction(title: "Set up a mock exam", symbol: "doc.text") {
-                $0.requestedTab = .mock
+                $0.openMockExams()
             }
         }
         if !runner.missedQuestions.isEmpty {

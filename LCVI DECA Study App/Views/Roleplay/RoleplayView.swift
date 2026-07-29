@@ -16,8 +16,7 @@ struct RoleplayView: View {
     @State private var showingQuickThink = false
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
                     ScreenHeader(title: "Roleplay",
                                  eyebrow: showAllClusters ? "All clusters"
@@ -75,8 +74,7 @@ struct RoleplayView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .rootScreenChrome()
-        }
+            .toolbar(.visible, for: .navigationBar)
         .onAppear(perform: reload)
         .fullScreenCover(isPresented: $showingQuickThink) {
             QuickThinkView().environmentObject(store)

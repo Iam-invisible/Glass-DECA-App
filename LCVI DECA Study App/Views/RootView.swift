@@ -2,40 +2,35 @@
 //  RootView.swift
 //  LCVI DECA Study App
 //
-//  App shell: onboarding gate, custom six-item tab bar, celebration overlays.
-//  A custom bar is used instead of TabView so all six destinations stay
-//  reachable on an iPhone 8-sized screen without iOS collapsing them into
-//  a "More" list.
+//  App shell: onboarding gate, the three-pane tab bar, celebration overlays.
+//
+//  Three panes — Study, Progress, Settings — because the app has three jobs:
+//  do the work, see how it's going, manage the machine. Mock Exams and
+//  Roleplay kept their entire screens; they are pushed from Study's tiles
+//  rather than owning tabs, which turns six cramped bar targets into three
+//  comfortable ones.
 //
 
 import SwiftUI
 
 enum AppTab: Int, CaseIterable, Identifiable {
-    case today, practice, mock, roleplay, progress, settings
+    case study, progress, settings
 
     var id: Int { rawValue }
 
     var title: String {
         switch self {
-        case .today:    return "Today"
-        case .practice: return "Practice"
-        case .mock:     return "Exams"
-        case .roleplay: return "Roleplay"
+        case .study:    return "Study"
         case .progress: return "Progress"
         case .settings: return "Settings"
         }
     }
 
-    var accessibilityTitle: String {
-        self == .mock ? "Mock Exams" : title
-    }
+    var accessibilityTitle: String { title }
 
     var symbol: String {
         switch self {
-        case .today:    return "sun.max.fill"
-        case .practice: return "list.bullet.rectangle.portrait.fill"
-        case .mock:     return "doc.text.fill"
-        case .roleplay: return "person.wave.2.fill"
+        case .study:    return "book.fill"
         case .progress: return "chart.bar.fill"
         case .settings: return "gearshape.fill"
         }
@@ -47,7 +42,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var tab: AppTab = .today
+    @State private var tab: AppTab = .study
     /// +1 when moving to a tab on the right, -1 to the left. Set before the
     /// tab changes so the transition knows which way to travel.
     @State private var direction: CGFloat = 1
@@ -128,16 +123,8 @@ struct RootView: View {
     @ViewBuilder
     private var content: some View {
         switch tab {
-        case .today:
-            // Routed through `select` so the cards on Today animate the same
-            // way as tapping the bar.
-            TodayView(switchTab: select)
-        case .practice:
-            PracticeView()
-        case .mock:
-            MockExamsView()
-        case .roleplay:
-            RoleplayView()
+        case .study:
+            StudyView()
         case .progress:
             ProgressDashboardView()
         case .settings:

@@ -17,8 +17,7 @@ struct MockExamsView: View {
     @State private var bankCount = 0
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Mock Exams",
                                  eyebrow: summaries.isEmpty ? "No attempts yet"
@@ -46,8 +45,7 @@ struct MockExamsView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .rootScreenChrome()
-        }
+            .toolbar(.visible, for: .navigationBar)
         .onAppear(perform: reload)
         .fullScreenCover(item: $runningExam) { payload in
             MockExamRunView(payload: payload) { attemptID in

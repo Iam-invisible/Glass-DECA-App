@@ -2,24 +2,28 @@
 //  PracticeView.swift
 //  LCVI DECA Study App
 //
-//  The practice hub: every way to start a question session.
+//  The Library: browsing the question bank your own way — by cluster, by
+//  topic, by performance indicator, or fully custom.
+//
+//  This used to be the Practice tab, with its own copy of every launch row.
+//  In the three-pane app, launching lives on Study's tile garden; what stays
+//  here is the part that was always unique to this screen — choosing *what*
+//  to study rather than *how*. Pushed from Study's Library tile.
 //
 
 import SwiftUI
 
-struct PracticeView: View {
+struct LibraryView: View {
     @EnvironmentObject private var store: AppStore
     @State private var session: SessionPayload?
-    @State private var pushMistakes = false
 
     private var cluster: DECACluster { store.settings.cluster }
     private var dash: DashboardState { store.dashboard }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
-                    ScreenHeader("Practice",
+                    ScreenHeader("Library",
                                  eyebrow: store.settings.cluster.displayName,
                                  eyebrowSymbol: store.settings.cluster.symbol,
                                  eyebrowTint: store.settings.cluster.tint,
@@ -37,7 +41,6 @@ struct PracticeView: View {
                             .appCard()
                             .appearIn(0)
                     } else {
-                        quickStart.appearIn(0)
                         browse.appearIn(1)
                     }
                 }
@@ -46,80 +49,9 @@ struct PracticeView: View {
                 .padding(.bottom, 24)
             }
             .appCanvas()
-            .rootScreenChrome()
-            .navigationDestination(isPresented: $pushMistakes) {
-                MistakeNotebookView()
-            }
-        }
-        .onAppear(perform: consumeMistakesIntent)
-        .onChange(of: store.wantsMistakeNotebook) { _ in consumeMistakesIntent() }
+            .toolbar(.visible, for: .navigationBar)
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload).environmentObject(store)
-        }
-    }
-
-    /// Same reset-then-act pattern as Settings' bank intent: local state is
-    /// flipped after mount so the push animates reliably on iOS 16.
-    private func consumeMistakesIntent() {
-        guard store.wantsMistakeNotebook else { return }
-        store.wantsMistakeNotebook = false
-        DispatchQueue.main.async { pushMistakes = true }
-    }
-
-    // MARK: Quick start
-
-    private var quickStart: some View {
-        VStack(spacing: 10) {
-            SectionHeader(title: "Start now", subtitle: cluster.displayName)
-
-            NavigationRowCard(title: "Daily Practice",
-                              subtitle: "A targeted mix of due reviews, past mistakes, weak indicators and new questions.",
-                              systemImage: "sun.max.fill",
-                              tint: Palette.accent,
-                              badge: dash.today.goalMet ? "Done" : "\(dash.today.remaining) left",
-                              badgeTint: dash.today.goalMet ? Palette.success : Palette.accent) {
-                launch(.daily(cluster: cluster, count: max(1, dash.today.goalMet ? store.settings.dailyGoal : dash.today.remaining)))
-            }
-
-            NavigationRowCard(title: "Review Due",
-                              subtitle: dash.dueForReview > 0
-                                ? "Spaced repetition questions ready for another look."
-                                : "Nothing is due right now — answer more questions to build the schedule.",
-                              systemImage: "arrow.triangle.2.circlepath",
-                              tint: Palette.success,
-                              badge: dash.dueForReview > 0 ? "\(dash.dueForReview)" : nil,
-                              badgeTint: Palette.success) {
-                guard dash.dueForReview > 0 else { return }
-                launch(SessionOptions(mode: .reviewDue, cluster: cluster, count: 20))
-            }
-
-            NavigationLink {
-                MistakeNotebookView()
-            } label: {
-                rowLabel(title: "Mistake Notebook",
-                         subtitle: dash.openMistakes > 0
-                            ? "Missed questions stay here until you get them right twice."
-                            : "Mistakes you make during practice will appear here.",
-                         systemImage: "book.closed.fill",
-                         tint: Palette.danger,
-                         badge: dash.openMistakes > 0 ? "\(dash.openMistakes)" : nil,
-                         badgeTint: Palette.danger)
-            }
-            .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
-
-            NavigationRowCard(title: "Bookmarked Questions",
-                              subtitle: dash.bookmarkedQuestions > 0
-                                ? "Review the questions you saved for another look."
-                                : "Tap the bookmark on any question to save it here.",
-                              systemImage: "bookmark.fill",
-                              tint: Palette.gold,
-                              badge: dash.bookmarkedQuestions > 0 ? "\(dash.bookmarkedQuestions)" : nil,
-                              badgeTint: Palette.gold) {
-                guard dash.bookmarkedQuestions > 0 else { return }
-                launch(SessionOptions(mode: .bookmarked,
-                                      cluster: cluster,
-                                      count: min(20, dash.bookmarkedQuestions)))
-            }
         }
     }
 

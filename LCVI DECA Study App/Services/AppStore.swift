@@ -97,8 +97,10 @@ final class AppStore: ObservableObject {
     @Published var requestedTab: AppTab? = nil
     /// Settings should push the Question Bank Manager when it next appears.
     @Published var wantsQuestionBank = false
-    /// Practice should push the Mistake Notebook when it next appears.
+    /// Study should push the Mistake Notebook when it next appears.
     @Published var wantsMistakeNotebook = false
+    /// Study should push Mock Exams when it next appears.
+    @Published var wantsMockExam = false
 
     /// One tap from any "no questions yet" state to the place that fixes it.
     func openQuestionBankManager() {
@@ -108,7 +110,12 @@ final class AppStore: ObservableObject {
 
     func openMistakeNotebook() {
         wantsMistakeNotebook = true
-        requestedTab = .practice
+        requestedTab = .study
+    }
+
+    func openMockExams() {
+        wantsMockExam = true
+        requestedTab = .study
     }
     /// Shown on every cold launch. Not persisted — a fresh process means a
     /// fresh reveal, and Settings can re-arm it.

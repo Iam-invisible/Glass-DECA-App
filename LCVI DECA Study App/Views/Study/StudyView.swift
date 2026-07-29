@@ -1,22 +1,34 @@
 //
-//  TodayView.swift
+//  StudyView.swift
 //  LCVI DECA Study App
 //
-//  The home dashboard: daily goal, streak, and the three ways to start studying.
+//  The home of the three-pane app: Study · Progress · Settings.
+//
+//  This screen absorbs what used to be four tabs. Today, Practice, Mock Exams
+//  and Roleplay were all the same verb — *study* — scattered across the tab
+//  bar with overlapping launch rows. Here the day comes first (greeting, goal
+//  ring, streak), then every way to study sits in one two-column garden of
+//  tinted tiles, each with its live count. Mock Exams and Roleplay keep their
+//  entire screens; they are pushed from their tiles instead of owning tabs.
+//
+//  This is also where the app-level intents land: widget deep links, the
+//  summary screen's "open Mistake Notebook", and "set up a mock exam" all
+//  resolve here, because Study is always the first tab.
 //
 
 import SwiftUI
 
-struct TodayView: View {
+struct StudyView: View {
     @EnvironmentObject private var store: AppStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    var switchTab: (AppTab) -> Void
 
     @State private var session: SessionPayload?
     @State private var showingCramSetup = false
     @State private var showingQuickThink = false
-    @State private var showingMistakes = false
+    @State private var pushMistakes = false
+    @State private var pushMock = false
+    @State private var pushRoleplay = false
+    @State private var pushLibrary = false
 
     private var dash: DashboardState { store.dashboard }
     private var cluster: DECACluster { store.settings.cluster }
@@ -27,8 +39,21 @@ struct TodayView: View {
                 VStack(spacing: Metrics.stackSpacing) {
                     greeting.appearIn(0)
                     goalCard.appearIn(1)
-                    actions.appearIn(2)
-                    secondaryCards
+
+                    if dash.questionBankCount == 0 {
+                        EmptyStateView(systemImage: "tray",
+                                       title: "No questions yet",
+                                       message: "Add or import a question bank to start practising.",
+                                       actionTitle: "Add questions") {
+                            store.openQuestionBankManager()
+                        }
+                        .appCard()
+                        .appearIn(2)
+                    } else {
+                        waysToStudy.appearIn(2)
+                        insightCards
+                    }
+
                     footerNote.appearIn(9)
                 }
                 .padding(.horizontal, Metrics.gutter)
@@ -37,6 +62,10 @@ struct TodayView: View {
             }
             .appCanvas()
             .rootScreenChrome()
+            .navigationDestination(isPresented: $pushMistakes) { MistakeNotebookView() }
+            .navigationDestination(isPresented: $pushMock)     { MockExamsView() }
+            .navigationDestination(isPresented: $pushRoleplay) { RoleplayView() }
+            .navigationDestination(isPresented: $pushLibrary)  { LibraryView() }
         }
         .fullScreenCover(item: $session) { payload in
             PracticeSessionView(payload: payload)
@@ -52,13 +81,15 @@ struct TodayView: View {
         .fullScreenCover(isPresented: $showingQuickThink) {
             QuickThinkView().environmentObject(store)
         }
-        .sheet(isPresented: $showingMistakes) {
-            NavigationStack { MistakeNotebookView() }.environmentObject(store)
-        }
         .onChange(of: store.pendingDeepLink) { _ in consumeDeepLink() }
+        .onChange(of: store.wantsMistakeNotebook) { _ in consumeIntents() }
+        .onChange(of: store.wantsMockExam) { _ in consumeIntents() }
         // A link that arrived before this tab existed (cold launch, or straight
         // out of onboarding) is still waiting here.
-        .onAppear { consumeDeepLink() }
+        .onAppear {
+            consumeDeepLink()
+            consumeIntents()
+        }
     }
 
     // MARK: - Greeting
@@ -100,6 +131,9 @@ struct TodayView: View {
 
     // MARK: - Goal card
 
+    /// The day's hero: ring, streak, freeze progress, and the one primary
+    /// action. The old layout floated "Start Daily Practice" below the card;
+    /// folding it in makes the card the complete answer to "what now?".
     private var goalCard: some View {
         VStack(spacing: 16) {
             HStack(spacing: 18) {
@@ -146,6 +180,11 @@ struct TodayView: View {
             if dash.streak.current > 0 {
                 freezeProgressBar
             }
+
+            PrimaryButton(title: dash.today.goalMet ? "Keep practising" : "Start Daily Practice",
+                          systemImage: "play.fill") {
+                startDaily()
+            }
         }
         .appCard(padding: 18)
         .accessibilityElement(children: .contain)
@@ -179,133 +218,107 @@ struct TodayView: View {
         .accessibilityLabel("Next streak freeze: \(dash.streak.progressToNextFreeze) of 10 days")
     }
 
-    // MARK: - Primary actions
+    // MARK: - Ways to study
 
-    private var actions: some View {
+    /// The whole studying surface, visible at once. Launch tiles carry their
+    /// live count; navigation tiles carry a chevron.
+    private var waysToStudy: some View {
         VStack(spacing: 10) {
-            PrimaryButton(title: dash.today.goalMet ? "Keep practising" : "Start Daily Practice",
-                          systemImage: "play.fill") {
-                startDaily()
-            }
-            HStack(spacing: 10) {
-                SecondaryButton(title: "Exam Cram", systemImage: "bolt.fill") {
-                    showingCramSetup = true
+            SectionHeader(title: "Ways to study")
+
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
+                                GridItem(.flexible(), spacing: 10)],
+                      spacing: 10) {
+                ModeTile(title: "Review Due", systemImage: "arrow.triangle.2.circlepath",
+                         tint: Palette.success, count: dash.dueForReview) {
+                    startReviewDue()
                 }
-                SecondaryButton(title: "Quick Think", systemImage: "brain.head.profile") {
+                ModeTile(title: "Mistakes", systemImage: "book.closed.fill",
+                         tint: Palette.danger, count: dash.openMistakes) {
+                    pushMistakes = true
+                }
+                ModeTile(title: "Mock Exams", systemImage: "doc.text.fill",
+                         tint: Palette.accent) {
+                    pushMock = true
+                }
+                ModeTile(title: "Roleplay", systemImage: "person.wave.2.fill",
+                         tint: Palette.accent) {
+                    pushRoleplay = true
+                }
+                ModeTile(title: "Quick Think", systemImage: "brain.head.profile",
+                         tint: Palette.gold) {
                     showingQuickThink = true
                 }
+                ModeTile(title: "Exam Cram", systemImage: "bolt.fill",
+                         tint: Palette.gold) {
+                    showingCramSetup = true
+                }
+                ModeTile(title: "Bookmarks", systemImage: "bookmark.fill",
+                         tint: Palette.gold, count: dash.bookmarkedQuestions) {
+                    startBookmarked()
+                }
+                ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
+                         tint: Palette.accent) {
+                    pushLibrary = true
+                }
             }
         }
     }
 
-    // MARK: - Secondary cards
+    // MARK: - Insight cards
 
     @ViewBuilder
-    private var secondaryCards: some View {
-        if dash.questionBankCount == 0 {
-            EmptyStateView(systemImage: "tray",
-                           title: "No questions yet",
-                           message: "Add or import a question bank to start practising.",
-                           actionTitle: "Add questions") {
-                store.openQuestionBankManager()
+    private var insightCards: some View {
+        if let weakest = dash.weakestIndicator {
+            Button {
+                Haptics.tap()
+                store.requestedTab = .progress
+            } label: {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "target")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(Palette.gold)
+                        Text("Weakest performance indicator")
+                            .font(.appCaptionBold)
+                            .foregroundStyle(Palette.textSecondary)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Palette.textTertiary)
+                    }
+                    PerformanceIndicatorBar(code: weakest.code,
+                                            text: weakest.text,
+                                            value: weakest.masteryScore,
+                                            detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
+                }
+                .appCard()
+            }
+            .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+            .appearIn(6)
+        }
+
+        if let recent = dash.recentAchievement {
+            HStack(spacing: 13) {
+                AchievementBadge(status: recent, size: 46, showsTitle: false)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Recent achievement")
+                        .font(.appCaptionBold)
+                        .foregroundStyle(Palette.textSecondary)
+                    Text(recent.definition.title)
+                        .font(.appBodyMedium)
+                        .foregroundStyle(Palette.textPrimary)
+                    Text(recent.definition.detail)
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
             }
             .appCard()
-            .appearIn(3)
-        } else {
-            VStack(spacing: 10) {
-                if dash.dueForReview > 0 {
-                    NavigationRowCard(title: "Review due",
-                                      subtitle: "Questions your spaced repetition schedule says are ready.",
-                                      systemImage: "arrow.triangle.2.circlepath",
-                                      tint: Palette.accent,
-                                      badge: "\(dash.dueForReview)") {
-                        startReviewDue()
-                    }
-                    .appearIn(3)
-                }
-
-                if dash.openMistakes > 0 {
-                    NavigationRowCard(title: "Mistake Notebook",
-                                      subtitle: "Questions you've missed, waiting to be mastered.",
-                                      systemImage: "book.closed.fill",
-                                      tint: Palette.danger,
-                                      badge: "\(dash.openMistakes)",
-                                      badgeTint: Palette.danger) {
-                        showingMistakes = true
-                    }
-                    .appearIn(4)
-                }
-
-                NavigationRowCard(title: dash.mockExamCount == 0 ? "Take your first mock exam" : "Next mock exam",
-                                  subtitle: mockSubtitle,
-                                  systemImage: "doc.text.fill",
-                                  tint: Palette.accent) {
-                    switchTab(.mock)
-                }
-                .appearIn(5)
-
-                if let weakest = dash.weakestIndicator {
-                    Button {
-                        Haptics.tap()
-                        switchTab(.progress)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "target")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(Palette.gold)
-                                Text("Weakest performance indicator")
-                                    .font(.appCaptionBold)
-                                    .foregroundStyle(Palette.textSecondary)
-                                Spacer(minLength: 0)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(Palette.textTertiary)
-                            }
-                            PerformanceIndicatorBar(code: weakest.code,
-                                                    text: weakest.text,
-                                                    value: weakest.masteryScore,
-                                                    detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
-                        }
-                        .appCard()
-                    }
-                    .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
-                    .appearIn(6)
-                }
-
-                if let recent = dash.recentAchievement {
-                    HStack(spacing: 13) {
-                        AchievementBadge(status: recent, size: 46, showsTitle: false)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Recent achievement")
-                                .font(.appCaptionBold)
-                                .foregroundStyle(Palette.textSecondary)
-                            Text(recent.definition.title)
-                                .font(.appBodyMedium)
-                                .foregroundStyle(Palette.textPrimary)
-                            Text(recent.definition.detail)
-                                .font(.appCaption)
-                                .foregroundStyle(Palette.textTertiary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                        Spacer(minLength: 0)
-                    }
-                    .appCard()
-                    .appearIn(7)
-                    .accessibilityElement(children: .combine)
-                }
-            }
+            .appearIn(7)
+            .accessibilityElement(children: .combine)
         }
-    }
-
-    private var mockSubtitle: String {
-        if dash.mockExamCount == 0 {
-            return "Take your first mock exam to start tracking scores."
-        }
-        if let last = dash.lastMockScore {
-            return "Last attempt: \(Int(last.rounded()))% · \(dash.mockExamCount) completed"
-        }
-        return "\(dash.mockExamCount) completed"
     }
 
     private var footerNote: some View {
@@ -328,6 +341,19 @@ struct TodayView: View {
         }
     }
 
+    /// Reset-then-act, as everywhere: flipping local state after the screen
+    /// is mounted pushes reliably on iOS 16.
+    private func consumeIntents() {
+        if store.wantsMistakeNotebook {
+            store.wantsMistakeNotebook = false
+            DispatchQueue.main.async { pushMistakes = true }
+        }
+        if store.wantsMockExam {
+            store.wantsMockExam = false
+            DispatchQueue.main.async { pushMock = true }
+        }
+    }
+
     private func startDaily() {
         let remaining = dash.today.goalMet ? store.settings.dailyGoal : max(1, dash.today.remaining)
         let built = store.sessions.build(.daily(cluster: cluster, count: remaining))
@@ -336,9 +362,19 @@ struct TodayView: View {
     }
 
     private func startReviewDue() {
+        guard dash.dueForReview > 0 else { return }
         var options = SessionOptions(mode: .reviewDue, cluster: cluster, count: 20)
         options.cluster = cluster
         let built = store.sessions.build(options)
+        guard !built.questions.isEmpty else { return }
+        session = SessionPayload(session: built)
+    }
+
+    private func startBookmarked() {
+        guard dash.bookmarkedQuestions > 0 else { return }
+        let built = store.sessions.build(SessionOptions(mode: .bookmarked,
+                                                        cluster: cluster,
+                                                        count: min(20, dash.bookmarkedQuestions)))
         guard !built.questions.isEmpty else { return }
         session = SessionPayload(session: built)
     }
