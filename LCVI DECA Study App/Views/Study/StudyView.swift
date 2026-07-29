@@ -38,7 +38,7 @@ struct StudyView: View {
             ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
                     greeting.appearIn(0)
-                    goalCard.appearIn(1)
+                    goalCard.appearIn(1).guideAnchor(.goalCard)
 
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
@@ -50,7 +50,7 @@ struct StudyView: View {
                         .appCard()
                         .appearIn(2)
                     } else {
-                        waysToStudy
+                        waysToStudy.guideAnchor(.waysToStudy)
                         insightCards
                     }
 

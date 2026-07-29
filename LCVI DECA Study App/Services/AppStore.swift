@@ -101,6 +101,9 @@ final class AppStore: ObservableObject {
     @Published var wantsMistakeNotebook = false
     /// Study should push Mock Exams when it next appears.
     @Published var wantsMockExam = false
+    /// The guided tour overlay. Fired automatically the moment onboarding
+    /// hands over, and replayable from Settings.
+    @Published var showGuide = false
 
     /// One tap from any "no questions yet" state to the place that fixes it.
     func openQuestionBankManager() {

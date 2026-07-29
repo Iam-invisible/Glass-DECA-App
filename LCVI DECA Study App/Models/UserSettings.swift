@@ -108,6 +108,7 @@ final class UserSettings: ObservableObject {
         self.aiEnabled = defaults.object(forKey: Keys.aiEnabled) as? Bool ?? true
         self.seededVersion = defaults.integer(forKey: Keys.seededVersion)
         self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.script.rawValue
+        self.hasSeenGuide = defaults.bool(forKey: Keys.hasSeenGuide)
         Haptics.enabled = self.hapticsEnabled
         SoundEffects.enabled = self.soundEnabled
     }
@@ -127,6 +128,7 @@ final class UserSettings: ObservableObject {
         static let aiEnabled = "aiEnabled"
         static let seededVersion = "seededVersion"
         static let introStyle = "introStyle"
+        static let hasSeenGuide = "hasSeenGuide"
     }
 
     @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
@@ -153,6 +155,7 @@ final class UserSettings: ObservableObject {
     @Published var aiEnabled: Bool { didSet { defaults.set(aiEnabled, forKey: Keys.aiEnabled) } }
     @Published var seededVersion: Int { didSet { defaults.set(seededVersion, forKey: Keys.seededVersion) } }
     @Published var introStyleRaw: String { didSet { defaults.set(introStyleRaw, forKey: Keys.introStyle) } }
+    @Published var hasSeenGuide: Bool { didSet { defaults.set(hasSeenGuide, forKey: Keys.hasSeenGuide) } }
 
     var cluster: DECACluster {
         get { DECACluster(rawValue: clusterRaw) ?? .marketing }

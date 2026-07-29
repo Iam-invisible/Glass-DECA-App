@@ -695,6 +695,13 @@ struct OnboardingView: View {
         store.settings.hasOnboarded = true
         store.refresh()
         Task { await store.syncNotifications() }
+        // The guide opens right on top of the home screen the student has
+        // just arrived at — after a beat, so Study's cascade lands first.
+        if !store.settings.hasSeenGuide {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                store.showGuide = true
+            }
+        }
     }
 }
 

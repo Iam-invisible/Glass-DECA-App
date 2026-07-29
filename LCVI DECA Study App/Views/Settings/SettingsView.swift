@@ -538,6 +538,20 @@ struct SettingsView: View {
                                 tint: Palette.accent)
                 }
                 .buttonStyle(.plain)
+
+                Divider().overlay(Palette.stroke)
+
+                Button {
+                    Haptics.tap()
+                    store.showGuide = true
+                    store.requestedTab = .study
+                } label: {
+                    settingsRow(symbol: "questionmark.circle",
+                                title: "Replay app guide",
+                                subtitle: "The quick tour of the home screen and panes.",
+                                tint: Palette.accent)
+                }
+                .buttonStyle(.plain)
             }
         }
     }

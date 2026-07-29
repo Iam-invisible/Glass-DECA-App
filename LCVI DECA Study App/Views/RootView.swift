@@ -103,7 +103,21 @@ struct RootView: View {
             .environment(\.bottomBarInset, AppTabBar.contentHeight)
 
             AppTabBar(selection: tab, onSelect: select)
+                .guideAnchor(.tabBar)
         }
+        // Resolved here rather than inside any screen so the spotlight can
+        // reach the tab bar and the Study content in the same pass.
+        .overlayPreferenceValue(GuideAnchorKey.self) { anchors in
+            GeometryReader { proxy in
+                if store.showGuide {
+                    GuideOverlay(anchors: anchors, proxy: proxy) {
+                        store.showGuide = false
+                        store.settings.hasSeenGuide = true
+                    }
+                }
+            }
+        }
+        .animation(reduceMotion ? nil : Motion.gentle, value: store.showGuide)
     }
 
     private var pageTransition: AnyTransition {
