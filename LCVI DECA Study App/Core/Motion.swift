@@ -27,6 +27,9 @@ enum Motion {
 struct AppearTransition: ViewModifier {
     let index: Int
     var distance: CGFloat = 14
+    /// An authored delay in seconds. When set it replaces the index stagger —
+    /// this is what turns a list entrance into a story beat.
+    var delay: Double? = nil
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var shown = false
 
@@ -42,7 +45,7 @@ struct AppearTransition: ViewModifier {
                 if reduceMotion {
                     shown = true
                 } else {
-                    withAnimation(Motion.gentle.delay(Double(index) * 0.055)) {
+                    withAnimation(Motion.gentle.delay(delay ?? Double(index) * 0.055)) {
                         shown = true
                     }
                 }
@@ -54,6 +57,13 @@ extension View {
     /// Gentle staggered entrance used by dashboard/section cards.
     func appearIn(_ index: Int, distance: CGFloat = 14) -> some View {
         modifier(AppearTransition(index: index, distance: distance))
+    }
+
+    /// A story beat: appears after an authored number of seconds, with a
+    /// slightly longer rise than a list stagger. For choreographed scenes —
+    /// onboarding chapters — where the timing is the point.
+    func appearBeat(_ seconds: Double, distance: CGFloat = 18) -> some View {
+        modifier(AppearTransition(index: 0, distance: distance, delay: seconds))
     }
 }
 

@@ -33,10 +33,14 @@ struct OnboardingView: View {
     // MARK: Acts
 
     private enum Act: Int, CaseIterable {
-        case tryIt, event, pace, coach
+        case prologue, tryIt, event, pace, coach
+
+        /// The four configurable chapters — the prologue is a title
+        /// sequence, not a step, so the progress track ignores it.
+        static let chapters: [Act] = [.tryIt, .event, .pace, .coach]
     }
 
-    @State private var act: Act = .tryIt
+    @State private var act: Act = .prologue
     /// +1 advancing, -1 going back — the transition travels with the story.
     @State private var direction: CGFloat = 1
 
@@ -53,6 +57,16 @@ struct OnboardingView: View {
     // MARK: Act I state
 
     @State private var pickedChoice: Int? = nil
+
+    // MARK: Prologue state
+
+    @State private var prologueLine = 0
+    @State private var prologueSequence: Task<Void, Never>?
+    private static let prologueLines = [
+        "You've got a competition coming.",
+        "Between now and that day, one thing is yours to control.",
+        "How you practice."
+    ]
 
     var body: some View {
         ZStack {
@@ -92,7 +106,7 @@ struct OnboardingView: View {
     /// never hidden — the film is skippable at every frame.
     private var topBar: some View {
         HStack(spacing: 12) {
-            if act != .tryIt {
+            if act.rawValue > Act.tryIt.rawValue {
                 Button {
                     Haptics.tap()
                     go(to: Act(rawValue: act.rawValue - 1) ?? .tryIt)
@@ -108,7 +122,7 @@ struct OnboardingView: View {
             }
 
             HStack(spacing: 5) {
-                ForEach(Act.allCases, id: \.rawValue) { a in
+                ForEach(Act.chapters, id: \.rawValue) { a in
                     Capsule()
                         .fill(a.rawValue <= act.rawValue ? Palette.accent : Palette.cardSunken)
                         .frame(height: 3)
@@ -116,7 +130,7 @@ struct OnboardingView: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Step \(act.rawValue + 1) of \(Act.allCases.count)")
+            .accessibilityLabel("Step \(max(act.rawValue, 1)) of \(Act.chapters.count)")
 
             Button("Skip") {
                 Haptics.tap()
@@ -145,10 +159,88 @@ struct OnboardingView: View {
     @ViewBuilder
     private var actContent: some View {
         switch act {
+        case .prologue: prologueAct
         case .tryIt: tryItAct
         case .event: eventAct
         case .pace:  paceAct
         case .coach: coachAct
+        }
+    }
+
+    // MARK: - Prologue
+
+    /// A title sequence, not a screen: three lines arrive on the light field
+    /// in authored time, earlier lines dimming as the next takes the room.
+    /// A tap advances a beat; the sequence also plays itself, so a student
+    /// who never taps still reaches the first question.
+    private var prologueAct: some View {
+        VStack {
+            Spacer()
+            VStack(spacing: 18) {
+                ForEach(Array(Self.prologueLines.enumerated()), id: \.offset) { index, line in
+                    if index < prologueLine {
+                        Text(line)
+                            .font(.appTitle)
+                            .foregroundStyle(index == prologueLine - 1
+                                             ? Palette.textPrimary : Palette.textTertiary)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .transition(reduceMotion ? .opacity
+                                        : .opacity.combined(with: .move(edge: .bottom)))
+                    }
+                }
+            }
+            .padding(.horizontal, 34)
+            .animation(reduceMotion ? .easeOut(duration: 0.2) : Motion.gentle, value: prologueLine)
+            Spacer()
+            Text("Tap to continue")
+                .font(.appCaption)
+                .foregroundStyle(Palette.textTertiary)
+                .opacity(prologueLine > 0 ? 0.8 : 0)
+                .padding(.bottom, 26)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .contentShape(Rectangle())
+        .onTapGesture { advancePrologue() }
+        .onAppear(perform: runPrologue)
+        .onDisappear { prologueSequence?.cancel() }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Self.prologueLines.joined(separator: " "))
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint("Double tap to continue")
+    }
+
+    private func runPrologue() {
+        guard prologueSequence == nil else { return }
+        prologueSequence = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 400_000_000)
+            while prologueLine < Self.prologueLines.count {
+                guard !Task.isCancelled else { return }
+                prologueLine += 1
+                try? await Task.sleep(nanoseconds: 1_700_000_000)
+            }
+            guard !Task.isCancelled else { return }
+            go(to: .tryIt)
+        }
+    }
+
+    private func advancePrologue() {
+        Haptics.tap()
+        if prologueLine >= Self.prologueLines.count {
+            prologueSequence?.cancel()
+            go(to: .tryIt)
+        } else {
+            // Jump the sequence forward; the running task keeps pacing the
+            // lines that remain.
+            prologueLine += 1
+            if prologueLine >= Self.prologueLines.count {
+                prologueSequence?.cancel()
+                prologueSequence = Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 1_200_000_000)
+                    guard !Task.isCancelled else { return }
+                    go(to: .tryIt)
+                }
+            }
         }
     }
 
@@ -160,19 +252,10 @@ struct OnboardingView: View {
     private var tryItAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Glass")
-                        .font(.appLargeTitle)
-                        .foregroundStyle(Palette.textPrimary)
-                        .appearIn(0)
-                    Text("DECA prep that adapts to you.\nStart with one question.")
-                        .font(.appBody)
-                        .foregroundStyle(Palette.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .appearIn(1)
-                }
+                chapter("CHAPTER I", line: "Start with one question.",
+                        detail: "This is the whole app in one tap.")
 
-                demoCard.appearIn(2)
+                demoCard.appearBeat(1.1)
 
                 if pickedChoice != nil {
                     VStack(alignment: .leading, spacing: 14) {
@@ -304,12 +387,12 @@ struct OnboardingView: View {
     private var eventAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                actHeader(title: "Which event are you preparing for?",
-                          detail: "This decides which questions, roleplays and performance indicators you see first. Watch the room change colour — and switch any time in Settings.")
+                chapter("CHAPTER II", line: "Every competitor has an event.",
+                        detail: "Yours decides the questions, roleplays and indicators you see first. Watch the room take its colour — and switch any time in Settings.")
 
                 VStack(spacing: 8) {
                     ForEach(Array(DECACluster.allCases.enumerated()), id: \.element) { index, item in
-                        clusterRow(item).appearIn(1 + index, distance: 10)
+                        clusterRow(item).appearBeat(0.75 + Double(index) * 0.09, distance: 12)
                     }
                 }
 
@@ -317,6 +400,7 @@ struct OnboardingView: View {
                     go(to: .pace)
                 }
                 .padding(.top, 4)
+                .appearBeat(1.4)
             }
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 18)
@@ -371,8 +455,8 @@ struct OnboardingView: View {
     private var paceAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                actHeader(title: "How many questions a day?",
-                          detail: "Small and daily beats heroic and rare. This ring is your home screen — it fills as you answer, and streaks build one day at a time.")
+                chapter("CHAPTER III", line: "Set your pace.",
+                        detail: "Small and daily beats heroic and rare. This ring is your home screen — it fills as you answer, and streaks build one day at a time.")
 
                 VStack(spacing: 14) {
                     ZStack {
@@ -406,11 +490,13 @@ struct OnboardingView: View {
                     }
                 }
                 .appCard(padding: 17)
+                .appearBeat(0.8)
 
                 PrimaryButton(title: "Continue", systemImage: "arrow.right") {
                     go(to: .coach)
                 }
                 .padding(.top, 4)
+                .appearBeat(1.15)
             }
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 18)
@@ -444,8 +530,8 @@ struct OnboardingView: View {
     private var coachAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                actHeader(title: "Want a nudge?",
-                          detail: "One quiet notification, local to this phone. If you've already hit your goal that day, it stays quiet.")
+                chapter("CHAPTER IV", line: "Your corner crew.",
+                        detail: "A quiet daily nudge if you want one, and coaching that never needs a server. If you've already hit your goal, the reminder stays quiet.")
 
                 VStack(spacing: 13) {
                     Toggle(isOn: $wantsReminders) {
@@ -488,12 +574,15 @@ struct OnboardingView: View {
                 }
                 .appCard(padding: 17)
                 .animation(reduceMotion ? nil : Motion.snappy, value: wantsReminders)
+                .appearBeat(0.8)
 
                 AIStatusCard(availability: store.ai.availability)
+                    .appearBeat(1.0)
 
                 if !store.ai.availability.isUsable {
                     LocalAICoachCard(service: store.localModel)
                         .appCard()
+                        .appearBeat(1.15)
                 }
 
                 VStack(alignment: .leading, spacing: 10) {
@@ -502,12 +591,14 @@ struct OnboardingView: View {
                                detail: "Every question, answer and statistic stays on this phone. The app never needs the internet.")
                 }
                 .appCard(padding: 15)
+                .appearBeat(1.3)
 
                 PrimaryButton(title: "Start studying", systemImage: "checkmark") {
                     Haptics.success()
                     finish()
                 }
                 .padding(.top, 4)
+                .appearBeat(1.5)
             }
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 18)
@@ -541,19 +632,30 @@ struct OnboardingView: View {
 
     // MARK: - Shared act chrome
 
-    private func actHeader(title: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
+    /// A chapter head: numbered kicker, a serif line big enough to carry the
+    /// screen, and its meaning underneath — centred, staged in two beats.
+    private func chapter(_ numeral: String, line: String, detail: String) -> some View {
+        VStack(spacing: 9) {
+            Text(numeral)
+                .font(.appCaptionBold)
+                .tracking(1.8)
+                .foregroundStyle(Palette.textTertiary)
+                .appearBeat(0.15)
+            Text(line)
                 .font(.appTitle)
                 .foregroundStyle(Palette.textPrimary)
+                .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .appearIn(0)
+                .appearBeat(0.3)
             Text(detail)
                 .font(.appFootnote)
                 .foregroundStyle(Palette.textSecondary)
+                .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .appearIn(1)
+                .appearBeat(0.55)
         }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
     }
 
     // MARK: - Completion
