@@ -24,6 +24,11 @@ struct ModeTile: View {
     /// A live count shown in the corner. `nil` shows a chevron instead —
     /// the tile navigates rather than launches.
     var count: Int? = nil
+    /// A full-width tile laid out horizontally rather than a grid square.
+    /// Used for the row that closes the garden: with an odd number of modes
+    /// the last square would sit alone beside a gap, and a banner reads as
+    /// deliberate where a stranded square reads as a mistake.
+    var isWide: Bool = false
     var action: () -> Void
 
     var body: some View {
@@ -31,36 +36,11 @@ struct ModeTile: View {
             Haptics.tap()
             action()
         } label: {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .top) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(tint.opacity(0.16))
-                            .frame(width: 36, height: 36)
-                        Image(systemName: systemImage)
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(tint)
-                    }
-                    Spacer(minLength: 0)
-                    if let count {
-                        Text("\(count)")
-                            .font(.numeric(17, weight: .semibold))
-                            .foregroundStyle(count > 0 ? tint : Palette.textTertiary)
-                    } else {
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Palette.textTertiary)
-                    }
-                }
-                Spacer(minLength: 10)
-                Text(title)
-                    .font(.appSectionTitle)
-                    .foregroundStyle(Palette.textPrimary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.72)
+            Group {
+                if isWide { wideBody } else { squareBody }
             }
             .padding(13)
-            .frame(maxWidth: .infinity, minHeight: 104, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: isWide ? 62 : 104, alignment: .leading)
             .background(
                 // Tinted glass rather than a white card: the tile's colour is
                 // its identity, and the wash stays light enough to read over
@@ -76,5 +56,61 @@ struct ModeTile: View {
         }
         .buttonStyle(PressableButtonStyle(haptic: false))
         .accessibilityLabel(count.map { "\(title), \($0)" } ?? title)
+    }
+
+    /// The grid square: badge up top, title anchored to the bottom.
+    private var squareBody: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
+                icon
+                Spacer(minLength: 0)
+                corner
+            }
+            Spacer(minLength: 10)
+            Text(title)
+                .font(.appSectionTitle)
+                .foregroundStyle(Palette.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.72)
+        }
+    }
+
+    /// The full-width banner: everything on one line, so it reads as a row
+    /// rather than a square that grew.
+    private var wideBody: some View {
+        HStack(spacing: 12) {
+            icon
+            Text(title)
+                .font(.appSectionTitle)
+                .foregroundStyle(Palette.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.72)
+            Spacer(minLength: 0)
+            corner
+        }
+    }
+
+    private var icon: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(tint.opacity(0.16))
+                .frame(width: 36, height: 36)
+            Image(systemName: systemImage)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(tint)
+        }
+    }
+
+    @ViewBuilder
+    private var corner: some View {
+        if let count {
+            Text("\(count)")
+                .font(.numeric(17, weight: .semibold))
+                .foregroundStyle(count > 0 ? tint : Palette.textTertiary)
+        } else {
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Palette.textTertiary)
+        }
     }
 }

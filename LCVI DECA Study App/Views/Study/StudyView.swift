@@ -283,12 +283,16 @@ struct StudyView: View {
                     startBookmarked()
                 }
                 .appearIn(9, distance: 10)
-                ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
-                         tint: Palette.accent) {
-                    pushLibrary = true
-                }
-                .appearIn(10, distance: 10)
             }
+
+            // Six modes make three clean rows; Library then spans the full
+            // width beneath them. Left in the grid it was a seventh square
+            // stranded beside a gap.
+            ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
+                     tint: Palette.accent, isWide: true) {
+                pushLibrary = true
+            }
+            .appearIn(10, distance: 10)
         }
     }
 
