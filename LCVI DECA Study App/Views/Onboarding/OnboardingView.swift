@@ -33,11 +33,11 @@ struct OnboardingView: View {
     // MARK: Acts
 
     private enum Act: Int, CaseIterable {
-        case prologue, tryIt, event, pace, coach
+        case prologue, tryIt, event, specificEvent, pace, coach
 
-        /// The four configurable chapters — the prologue is a title
-        /// sequence, not a step, so the progress track ignores it.
-        static let chapters: [Act] = [.tryIt, .event, .pace, .coach]
+        /// The configurable chapters — the prologue is a title sequence, not
+        /// a step, so the progress track ignores it.
+        static let chapters: [Act] = [.tryIt, .event, .specificEvent, .pace, .coach]
     }
 
     @State private var act: Act = .prologue
@@ -57,6 +57,11 @@ struct OnboardingView: View {
     // MARK: Act I state
 
     @State private var pickedChoice: Int? = nil
+
+    // MARK: Act III state
+
+    @State private var eventCode = ""
+    @State private var quickThinkGoal = 1
 
     // MARK: Prologue state
 
@@ -162,6 +167,7 @@ struct OnboardingView: View {
         case .prologue: prologueAct
         case .tryIt: tryItAct
         case .event: eventAct
+        case .specificEvent: specificEventAct
         case .pace:  paceAct
         case .coach: coachAct
         }
@@ -423,7 +429,7 @@ struct OnboardingView: View {
                 }
 
                 PrimaryButton(title: "Continue", systemImage: "arrow.right") {
-                    go(to: .pace)
+                    go(to: .specificEvent)
                 }
                 .padding(.top, 4)
                 .appearBeat(1.4)
@@ -473,7 +479,39 @@ struct OnboardingView: View {
         .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
     }
 
-    // MARK: - Act III · Your pace
+    // MARK: - Act III · Your event, exactly
+
+    /// The cluster narrows the questions; the event decides what the season
+    /// actually asks of the student. Knowing it lets the app stop pushing
+    /// roleplay work at someone whose event is written-and-presented, and
+    /// lets it say plainly when regionals and provincials differ.
+    private var specificEventAct: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                chapter("CHAPTER III", line: "Which event, exactly?",
+                        detail: "Type your event code — EIP, PMK, HTDM. Some events are an exam and a roleplay; some are a written plan and a presentation; a few change between regionals and provincials. Tell Glass which and it shapes itself around your season.")
+
+                EventPicker(eventCode: $eventCode) { event in
+                    // The event knows its cluster, so choosing one corrects
+                    // the previous answer rather than leaving them at odds.
+                    withAnimation(reduceMotion ? nil : Motion.gentle) { cluster = event.cluster }
+                }
+                .appearBeat(0.8)
+
+                PrimaryButton(title: eventCode.isEmpty ? "Decide later" : "Continue",
+                              systemImage: "arrow.right") {
+                    go(to: .pace)
+                }
+                .padding(.top, 4)
+                .appearBeat(1.2)
+            }
+            .padding(.horizontal, Metrics.gutter)
+            .padding(.top, 18)
+            .padding(.bottom, 30)
+        }
+    }
+
+    // MARK: - Act IV · Your pace
 
     /// The goal is set around the same ring the student will see every day on
     /// Study — the onboarding teaches the app's most important gauge by
@@ -481,7 +519,7 @@ struct OnboardingView: View {
     private var paceAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER III", line: "Set your pace.",
+                chapter("CHAPTER IV", line: "Set your pace.",
                         detail: "Small and daily beats heroic and rare. This ring is your home screen — it fills as you answer, and streaks build one day at a time.")
 
                 VStack(spacing: 14) {
@@ -518,16 +556,58 @@ struct OnboardingView: View {
                 .appCard(padding: 17)
                 .appearBeat(0.8)
 
+                // The second daily goal, offered only when the student's
+                // event actually has a roleplay component.
+                if DECAEvents.event(forCode: eventCode)?.hasAnyRoleplay ?? true {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("And Quick Thinks?")
+                            .font(.appCallout.weight(.medium))
+                            .foregroundStyle(Palette.textPrimary)
+                        Text("Sixty seconds, one scenario, one answer — the fastest way to sharpen roleplay instincts.")
+                            .font(.appCaption)
+                            .foregroundStyle(Palette.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        HStack(spacing: 8) {
+                            ForEach(1...4, id: \.self) { value in
+                                quickThinkChip(value)
+                            }
+                        }
+                    }
+                    .appCard(padding: 17)
+                    .appearBeat(1.0)
+                }
+
                 PrimaryButton(title: "Continue", systemImage: "arrow.right") {
                     go(to: .coach)
                 }
                 .padding(.top, 4)
-                .appearBeat(1.15)
+                .appearBeat(1.35)
             }
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 18)
             .padding(.bottom, 30)
         }
+    }
+
+    private func quickThinkChip(_ value: Int) -> some View {
+        let selected = quickThinkGoal == value
+        return Button {
+            Haptics.select()
+            withAnimation(reduceMotion ? nil : Motion.snappy) { quickThinkGoal = value }
+        } label: {
+            Text("\(value)")
+                .font(.appFootnote.weight(.semibold))
+                .foregroundStyle(selected ? .white : Palette.textPrimary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .background(
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(selected ? Palette.gold : Palette.cardSunken)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(value) Quick Think\(value == 1 ? "" : "s") a day")
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
     }
 
     private func goalChip(_ value: Int) -> some View {
@@ -556,7 +636,7 @@ struct OnboardingView: View {
     private var coachAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER IV", line: "Your corner crew.",
+                chapter("CHAPTER V", line: "Your corner crew.",
                         detail: "A quiet daily nudge if you want one, and coaching that never needs a server. If you've already hit your goal, the reminder stays quiet.")
 
                 VStack(spacing: 13) {
@@ -688,6 +768,8 @@ struct OnboardingView: View {
 
     private func finish() {
         store.settings.cluster = cluster
+        store.settings.eventCode = eventCode
+        store.settings.quickThinkGoal = quickThinkGoal
         store.settings.dailyGoal = goal
         store.settings.remindersEnabled = wantsReminders && permissionGranted
         store.settings.reminderHour = reminderHour

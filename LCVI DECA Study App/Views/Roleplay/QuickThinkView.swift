@@ -314,7 +314,7 @@ struct QuickThinkView: View {
                 feedback = manual
                 usedAI = false
             }
-            store.saveQuickThink(scenario: scenario, response: response,
+            _ = store.saveQuickThink(scenario: scenario, response: response,
                                  feedback: manual, seconds: seconds, usedAI: false)
             return
         }
@@ -329,7 +329,7 @@ struct QuickThinkView: View {
                 feedback = final
                 usedAI = result != nil
             }
-            store.saveQuickThink(scenario: scenario, response: response,
+            _ = store.saveQuickThink(scenario: scenario, response: response,
                                  feedback: final, seconds: seconds, usedAI: result != nil)
         }
     }

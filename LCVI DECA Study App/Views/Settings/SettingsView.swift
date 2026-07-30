@@ -133,6 +133,30 @@ struct SettingsView: View {
 
                 Divider().overlay(Palette.stroke)
 
+                // The competitive event. Editable here because students
+                // commit to one weeks after they start studying — and the
+                // catalogue may be corrected between seasons, so the stored
+                // code is re-resolved every time it is read.
+                VStack(alignment: .leading, spacing: 9) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "trophy.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(Palette.gold)
+                            .frame(width: 24)
+                        Text("Competitive event")
+                            .font(.appCallout)
+                            .foregroundStyle(Palette.textPrimary)
+                        Spacer(minLength: 0)
+                    }
+                    EventPicker(eventCode: Binding(get: { settings.eventCode },
+                                                   set: { settings.eventCode = $0; store.refresh() })) { event in
+                        settings.cluster = event.cluster
+                        store.refresh()
+                    }
+                }
+
+                Divider().overlay(Palette.stroke)
+
                 VStack(alignment: .leading, spacing: 9) {
                     HStack {
                         Image(systemName: "target")

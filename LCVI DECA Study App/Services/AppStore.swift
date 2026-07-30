@@ -42,6 +42,10 @@ struct DashboardState: Equatable {
     var lastMockScore: Double? = nil
     var roleplayCount = 0
     var quickThinkCount = 0
+    /// Quick Thinks completed today — the second daily goal's numerator.
+    var quickThinkToday = 0
+    var quickThinkGoal = 1
+    var quickThinkGoalMet: Bool { quickThinkToday >= max(1, quickThinkGoal) }
     var achievementsUnlocked = 0
     var weakestIndicator: IndicatorStat? = nil
     var recentAchievement: AchievementStatus? = nil
@@ -218,6 +222,8 @@ final class AppStore: ObservableObject {
         state.lastMockScore = mocks.summaries(limit: 1).first?.scorePercent
         state.roleplayCount = context.count(entity: AppModel.entityNames.roleplayResponse)
         state.quickThinkCount = context.count(entity: AppModel.entityNames.quickThink)
+        state.quickThinkToday = quickThinkCountToday()
+        state.quickThinkGoal = settings.quickThinkGoal
         state.achievementsUnlocked = achievements.unlockedCount()
         state.weakestIndicator = indicators.weakest(cluster: settings.cluster, limit: 1).first
         state.recentAchievement = achievements.mostRecent()
@@ -371,6 +377,18 @@ final class AppStore: ObservableObject {
     }
 
     @discardableResult
+    /// Sessions logged since midnight. Counted with a predicate rather than
+    /// a stored daily row: Quick Think has no equivalent of CDDailyProgress,
+    /// and the table is small enough that a date filter is cheaper than a new
+    /// entity and a migration.
+    private func quickThinkCountToday() -> Int {
+        let start = Calendar.current.startOfDay(for: Date())
+        let request = NSFetchRequest<NSNumber>(entityName: AppModel.entityNames.quickThink)
+        request.resultType = .countResultType
+        request.predicate = NSPredicate(format: "date >= %@", start as NSDate)
+        return (try? context.count(for: request)) ?? 0
+    }
+
     func saveQuickThink(scenario: QuickThinkScenario,
                         response: String,
                         feedback: QuickThinkFeedback,

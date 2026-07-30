@@ -39,8 +39,9 @@ struct StudyView: View {
             ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
                     greeting.appearIn(0)
-                    goalCard.appearIn(1).guideAnchor(.goalCard)
+                    goalDials.appearIn(1).guideAnchor(.goalCard)
                         .id(GuideTarget.goalCard)
+                    streakCard.appearIn(2)
 
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
@@ -106,12 +107,20 @@ struct StudyView: View {
 
     // MARK: - Greeting
 
+    /// The eyebrow names the student's event when they have one — "EIP ·
+    /// Entrepreneurship" — and falls back to the cluster when they are still
+    /// undecided.
     private var greeting: some View {
         ScreenHeader(greetingLine,
-                     eyebrow: cluster.displayName,
+                     eyebrow: eyebrowText,
                      eyebrowSymbol: cluster.symbol,
                      eyebrowTint: cluster.tint,
                      subtitle: dayLine)
+    }
+
+    private var eyebrowText: String {
+        guard let event = store.settings.event else { return cluster.displayName }
+        return "\(event.code) · \(cluster.shortName)"
     }
 
     /// The one line on the home screen that changes every day. Streak
@@ -143,64 +152,66 @@ struct StudyView: View {
 
     // MARK: - Goal card
 
-    /// The day's hero: ring, streak, freeze progress, and the one primary
-    /// action. The old layout floated "Start Daily Practice" below the card;
-    /// folding it in makes the card the complete answer to "what now?".
-    private var goalCard: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 18) {
-                ZStack {
-                    ProgressRing(progress: dash.today.fraction,
-                                 lineWidth: 11,
-                                 tint: dash.today.goalMet ? Palette.success : Palette.accent)
-                        .frame(width: 96, height: 96)
-                    VStack(spacing: 0) {
-                        CountingNumber(value: Double(dash.today.answered),
-                                       font: .numeric(28),
-                                       color: Palette.textPrimary)
-                        Text("of \(dash.today.goal)")
-                            .font(.appCaption)
-                            .foregroundStyle(Palette.textSecondary)
-                            .monospacedDigit()
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 9) {
-                    if dash.today.goalMet {
-                        Label("Goal complete", systemImage: "checkmark.circle.fill")
-                            .font(.appBodyMedium)
-                            .foregroundStyle(Palette.success)
-                    } else {
-                        Text("\(dash.today.remaining) question\(dash.today.remaining == 1 ? "" : "s") to go")
-                            .font(.appBodyMedium)
-                            .foregroundStyle(Palette.textPrimary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-
-                    StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes)
-
-                    if dash.streak.current > 0 {
-                        Text("\(dash.streak.daysUntilNextFreeze) more day\(dash.streak.daysUntilNextFreeze == 1 ? "" : "s") to your next freeze")
-                            .font(.appCaption)
-                            .foregroundStyle(Palette.textTertiary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                Spacer(minLength: 0)
+    /// The day's two goals, side by side: questions and Quick Thinks. Each
+    /// dial owns its own ring, its own slider and its own start button, so
+    /// the target can be tuned in the place it is felt rather than buried in
+    /// Settings — and Quick Think finally has a goal at all.
+    ///
+    /// The Quick Think dial is hidden for students whose event has no
+    /// roleplay component: the catalogue knows, so the home screen should
+    /// not push work their competition will never score.
+    private var goalDials: some View {
+        HStack(alignment: .top, spacing: 10) {
+            GoalDial(title: "Questions",
+                     systemImage: "list.bullet",
+                     done: dash.today.answered,
+                     goal: Binding(get: { store.settings.dailyGoal },
+                                   set: { store.settings.dailyGoal = $0; store.refresh() }),
+                     range: 1...50,
+                     tint: Palette.accent,
+                     unit: "a day",
+                     actionTitle: dash.today.goalMet ? "Keep going" : "Practice") {
+                startDaily()
             }
 
+            if store.settings.eventHasRoleplay {
+                GoalDial(title: "Quick Think",
+                         systemImage: "brain.head.profile",
+                         done: dash.quickThinkToday,
+                         goal: Binding(get: { store.settings.quickThinkGoal },
+                                       set: { store.settings.quickThinkGoal = $0; store.refresh() }),
+                         range: 1...5,
+                         tint: Palette.gold,
+                         unit: "a day",
+                         actionTitle: dash.quickThinkGoalMet ? "One more" : "Start") {
+                    showingQuickThink = true
+                }
+            }
+        }
+    }
+
+    /// Streak, freezes and the freeze bar — lifted out of the old goal hero
+    /// so the dials stay about today and this stays about the run.
+    private var streakCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes)
+                Spacer(minLength: 0)
+                if dash.streak.current > 0 {
+                    Text("\(dash.streak.daysUntilNextFreeze) day\(dash.streak.daysUntilNextFreeze == 1 ? "" : "s") to your next freeze")
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textTertiary)
+                        .multilineTextAlignment(.trailing)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
             if dash.streak.current > 0 {
                 freezeProgressBar
             }
-
-            PrimaryButton(title: dash.today.goalMet ? "Keep practising" : "Start Daily Practice",
-                          systemImage: "play.fill") {
-                startDaily()
-            }
         }
-        .appCard(padding: 18)
+        .appCard(padding: 15)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Daily goal: \(dash.today.answered) of \(dash.today.goal) questions answered. \(dash.streak.current) day streak.")
+        .accessibilityLabel("\(dash.streak.current) day streak, \(dash.streak.freezes) freezes")
     }
 
     private var freezeProgressBar: some View {
@@ -262,11 +273,6 @@ struct StudyView: View {
                     pushRoleplay = true
                 }
                 .appearIn(6, distance: 10)
-                ModeTile(title: "Quick Think", systemImage: "brain.head.profile",
-                         tint: Palette.gold) {
-                    showingQuickThink = true
-                }
-                .appearIn(7, distance: 10)
                 ModeTile(title: "Exam Cram", systemImage: "bolt.fill",
                          tint: Palette.gold) {
                     showingCramSetup = true

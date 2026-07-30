@@ -120,6 +120,8 @@ final class UserSettings: ObservableObject {
         self.seededVersion = defaults.integer(forKey: Keys.seededVersion)
         self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.script.rawValue
         self.hasSeenGuide = defaults.bool(forKey: Keys.hasSeenGuide)
+        self.eventCode = defaults.string(forKey: Keys.eventCode) ?? ""
+        self.quickThinkGoal = defaults.object(forKey: Keys.quickThinkGoal) as? Int ?? 1
         Haptics.enabled = self.hapticsEnabled
         SoundEffects.enabled = self.soundEnabled
     }
@@ -140,6 +142,8 @@ final class UserSettings: ObservableObject {
         static let seededVersion = "seededVersion"
         static let introStyle = "introStyle"
         static let hasSeenGuide = "hasSeenGuide"
+        static let eventCode = "eventCode"
+        static let quickThinkGoal = "quickThinkGoal"
     }
 
     @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
@@ -167,6 +171,23 @@ final class UserSettings: ObservableObject {
     @Published var seededVersion: Int { didSet { defaults.set(seededVersion, forKey: Keys.seededVersion) } }
     @Published var introStyleRaw: String { didSet { defaults.set(introStyleRaw, forKey: Keys.introStyle) } }
     @Published var hasSeenGuide: Bool { didSet { defaults.set(hasSeenGuide, forKey: Keys.hasSeenGuide) } }
+    /// The student's competitive event code, or "" while undecided. Stored as
+    /// the code rather than the resolved event so a corrected catalogue takes
+    /// effect immediately instead of freezing last year's format.
+    @Published var eventCode: String { didSet { defaults.set(eventCode, forKey: Keys.eventCode) } }
+    @Published var quickThinkGoal: Int { didSet { defaults.set(quickThinkGoal, forKey: Keys.quickThinkGoal) } }
+
+    /// The resolved event, or nil while undecided. Everything that shapes the
+    /// app around a student's season reads this.
+    var event: DECAEvent? {
+        eventCode.isEmpty ? nil : DECAEvents.event(forCode: eventCode)
+    }
+
+    /// Whether an exam appears anywhere in the student's season. With no event
+    /// chosen the answer is yes — the app should not hide its core feature
+    /// from someone who has not told it anything yet.
+    var eventHasExam: Bool { event?.hasAnyExam ?? true }
+    var eventHasRoleplay: Bool { event?.hasAnyRoleplay ?? true }
 
     var cluster: DECACluster {
         get { DECACluster(rawValue: clusterRaw) ?? .marketing }
