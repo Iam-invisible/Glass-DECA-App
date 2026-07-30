@@ -16,11 +16,22 @@ enum SharedDefaults {
     /// Must match the App Group entitlement on both the app and the widget.
     static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-NewApp"
 
-    /// The App Group suite when the entitlement is present, otherwise the
-    /// standard suite. Widgets simply show placeholder data if the group is
-    /// unavailable — the app itself never depends on it.
+    /// The App Group suite when the entitlement is genuinely present,
+    /// otherwise the standard suite. Widgets simply show placeholder data if
+    /// the group is unavailable — the app itself never depends on it.
+    ///
+    /// The container URL is the probe, not `UserDefaults(suiteName:)`. When a
+    /// process is not entitled for a group, that initialiser does **not**
+    /// return nil — it hands back an object whose backing store failed to
+    /// open, and every read or write against it logs "invalid reuse after
+    /// initialization failure". Asking the file system whether the container
+    /// exists is the only answer that can be trusted, and it costs one call
+    /// at launch.
     nonisolated(unsafe) static let suite: UserDefaults = {
-        UserDefaults(suiteName: appGroupID) ?? .standard
+        guard hasAppGroup, let shared = UserDefaults(suiteName: appGroupID) else {
+            return .standard
+        }
+        return shared
     }()
 
     static var hasAppGroup: Bool {

@@ -36,8 +36,15 @@ enum WidgetStore {
     static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-NewApp"
     static let snapshotKey = "widget.snapshot.v1"
 
+    /// Returns nil — and the widget falls back to sample content — whenever
+    /// the group is unreachable. The container check comes first for the same
+    /// reason as in the app: an unentitled `UserDefaults(suiteName:)` is
+    /// non-nil but broken, and touching it logs an initialisation failure on
+    /// every timeline refresh.
     static func read() -> WidgetSnapshot? {
-        guard let defaults = UserDefaults(suiteName: appGroupID),
+        guard FileManager.default
+                .containerURL(forSecurityApplicationGroupIdentifier: appGroupID) != nil,
+              let defaults = UserDefaults(suiteName: appGroupID),
               let data = defaults.data(forKey: snapshotKey) else { return nil }
         return try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
     }
