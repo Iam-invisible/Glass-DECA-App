@@ -165,11 +165,8 @@ struct StudyView: View {
             GoalDial(title: "Questions",
                      systemImage: "list.bullet",
                      done: dash.today.answered,
-                     goal: Binding(get: { store.settings.dailyGoal },
-                                   set: { store.settings.dailyGoal = $0; store.refresh() }),
-                     range: 1...50,
+                     goal: store.settings.dailyGoal,
                      tint: Palette.accent,
-                     unit: "a day",
                      actionTitle: dash.today.goalMet ? "Keep going" : "Practice") {
                 startDaily()
             }
@@ -178,11 +175,8 @@ struct StudyView: View {
                 GoalDial(title: "Quick Think",
                          systemImage: "brain.head.profile",
                          done: dash.quickThinkToday,
-                         goal: Binding(get: { store.settings.quickThinkGoal },
-                                       set: { store.settings.quickThinkGoal = $0; store.refresh() }),
-                         range: 1...5,
+                         goal: store.settings.quickThinkGoal,
                          tint: Palette.gold,
-                         unit: "a day",
                          actionTitle: dash.quickThinkGoalMet ? "One more" : "Start") {
                     showingQuickThink = true
                 }

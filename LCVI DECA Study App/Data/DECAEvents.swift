@@ -272,14 +272,24 @@ enum DECAEvents {
 
     /// Suggestions while typing: code prefix first (what a student is most
     /// likely typing), then anything whose name contains the text.
-    static func suggestions(for raw: String, limit: Int = 5) -> [DECAEvent] {
+    static func suggestions(for raw: String,
+                            cluster: DECACluster? = nil,
+                            limit: Int = 5) -> [DECAEvent] {
+        let pool = cluster.map { c in all.filter { $0.cluster == c } } ?? all
         let needle = normalise(raw)
-        guard !needle.isEmpty else { return [] }
-        let byCode = all.filter { $0.code.hasPrefix(needle) }
-        let byName = all.filter {
+        // With a cluster in hand an empty field still has something useful to
+        // say: here is everything you could be entering.
+        guard !needle.isEmpty else { return Array(pool.prefix(limit)) }
+        let byCode = pool.filter { $0.code.hasPrefix(needle) }
+        let byName = pool.filter {
             !$0.code.hasPrefix(needle) && $0.name.uppercased().contains(needle)
         }
         return Array((byCode + byName).prefix(limit))
+    }
+
+    /// Every event a given cluster can enter.
+    static func events(in cluster: DECACluster) -> [DECAEvent] {
+        all.filter { $0.cluster == cluster }
     }
 
     static func normalise(_ raw: String) -> String {

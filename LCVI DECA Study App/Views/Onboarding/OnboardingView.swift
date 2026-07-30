@@ -489,12 +489,12 @@ struct OnboardingView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 chapter("CHAPTER III", line: "Which event, exactly?",
-                        detail: "Type your event code — EIP, PMK, HTDM. Some events are an exam and a roleplay; some are a written plan and a presentation; a few change between regionals and provincials. Tell Glass which and it shapes itself around your season.")
+                        detail: "Type your event code, or pick from your cluster's events below. Some are an exam and a roleplay; some a written plan and a presentation; a few change between regionals and provincials. Tell Glass which and it shapes itself around your season.")
 
-                EventPicker(eventCode: $eventCode) { event in
-                    // The event knows its cluster, so choosing one corrects
-                    // the previous answer rather than leaving them at odds.
-                    withAnimation(reduceMotion ? nil : Motion.gentle) { cluster = event.cluster }
+                EventPicker(eventCode: $eventCode, cluster: cluster) { newCluster in
+                    // Only ever on the student's explicit say-so, when they
+                    // typed a code from another cluster and chose to move.
+                    withAnimation(reduceMotion ? nil : Motion.gentle) { cluster = newCluster }
                 }
                 .appearBeat(0.8)
 

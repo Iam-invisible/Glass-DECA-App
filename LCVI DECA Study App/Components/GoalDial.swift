@@ -2,19 +2,17 @@
 //  GoalDial.swift
 //  LCVI DECA Study App
 //
-//  One daily goal: a ring showing today's progress, a button that starts the
-//  work, and a slider that sets the target.
+//  One daily goal: a ring showing today's progress and a button that starts
+//  the work.
 //
 //  The home screen carries two of these side by side — questions and Quick
-//  Thinks — because they are the two things a student does daily and they
-//  were previously buried: the questions goal was only adjustable in
-//  Settings, and Quick Think had no goal at all. Putting the slider on the
-//  card means the target is tuned where it is felt, on the morning a
-//  student decides today is a light day.
+//  Thinks — because they are the two things a student does daily.
 //
-//  The slider is deliberately not a stepper: a goal is a rough intention,
-//  and dragging expresses that better than tapping a plus button eleven
-//  times.
+//  The dial reports; it does not configure. A slider lived here briefly and
+//  was wrong: the home screen is opened many times a day to see where the
+//  day stands, and a goal is set once and then left alone. Mixing the two
+//  put a draggable control under a thumb that was only ever reaching for
+//  the start button. Both targets are adjusted with steppers in Settings.
 //
 
 import SwiftUI
@@ -24,18 +22,15 @@ struct GoalDial: View {
     let systemImage: String
     /// Completed today.
     let done: Int
-    /// Target, bound so the slider can move it.
-    @Binding var goal: Int
-    let range: ClosedRange<Int>
+    /// Today's target, set in Settings.
+    let goal: Int
     let tint: Color
-    /// Label under the ring — "questions", "Quick Thinks".
-    let unit: String
     let actionTitle: String
     let action: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var met: Bool { done >= max(range.lowerBound, goal) }
+    private var met: Bool { done >= max(1, goal) }
     private var fraction: Double {
         let target = max(1, goal)
         return min(1, Double(done) / Double(target))
@@ -69,20 +64,6 @@ struct GoalDial: View {
                         .foregroundStyle(Palette.textSecondary)
                         .monospacedDigit()
                 }
-            }
-
-            // Slider over Stepper on purpose — see the type's note.
-            VStack(spacing: 2) {
-                Slider(value: Binding(get: { Double(goal) },
-                                      set: { goal = Int($0.rounded()) }),
-                       in: Double(range.lowerBound)...Double(range.upperBound),
-                       step: 1)
-                    .tint(tint)
-                    .accessibilityLabel("\(title) target")
-                    .accessibilityValue("\(goal) \(unit)")
-                Text(unit)
-                    .font(.appCaption)
-                    .foregroundStyle(Palette.textTertiary)
             }
 
             PrimaryButton(title: actionTitle,

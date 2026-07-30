@@ -15,22 +15,37 @@
 //  their event weeks after joining. It clears the stored code, and the app
 //  simply behaves as though every component might apply.
 //
+//  The cluster leads. A student who has said "Marketing" is only offered
+//  Marketing events, and typing a Finance code is refused by name rather than
+//  silently reassigning them — but the refusal says which cluster the code
+//  belongs to and offers to move them there, because being told "no" with no
+//  way forward is worse than the mistake.
+//
 
 import SwiftUI
 
 struct EventPicker: View {
     /// The confirmed code, or "" for undecided.
     @Binding var eventCode: String
-    /// Called when a real event is confirmed, so the caller can follow its
-    /// cluster.
-    var onConfirm: ((DECAEvent) -> Void)? = nil
+    /// The cluster the student has already chosen. Only its events are
+    /// offered, and codes from other clusters are refused.
+    let cluster: DECACluster
+    /// Offered when a typed code is real but belongs elsewhere, so the
+    /// student can move clusters deliberately instead of being stuck.
+    var onSwitchCluster: ((DECACluster) -> Void)? = nil
 
     @State private var typed = ""
     @State private var rejected = false
+    /// A valid code from the wrong cluster — held so the refusal can name it.
+    @State private var mismatch: DECAEvent? = nil
     @FocusState private var focused: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var suggestions: [DECAEvent] { DECAEvents.suggestions(for: typed) }
+    /// Scoped to the student's cluster: the picker never offers an event
+    /// they cannot enter.
+    private var suggestions: [DECAEvent] {
+        DECAEvents.suggestions(for: typed, cluster: cluster)
+    }
     private var confirmed: DECAEvent? { DECAEvents.event(forCode: eventCode) }
 
     var body: some View {
@@ -47,8 +62,27 @@ struct EventPicker: View {
                     }
                     .transition(.opacity)
                 }
-                if rejected && suggestions.isEmpty {
-                    Label("That isn't an event code we recognise. Check the spelling, or pick Undecided for now.",
+                if let wrong = mismatch {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("\(wrong.code) is a \(wrong.cluster.shortName) event — you chose \(cluster.shortName).",
+                              systemImage: "exclamationmark.triangle")
+                            .font(.appCaption)
+                            .foregroundStyle(Palette.gold)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Button {
+                            Haptics.select()
+                            onSwitchCluster?(wrong.cluster)
+                            confirm(wrong.code, allowingCluster: wrong.cluster)
+                        } label: {
+                            Text("Switch to \(wrong.cluster.shortName) and use \(wrong.code)")
+                                .font(.appCaption.weight(.semibold))
+                                .foregroundStyle(Palette.accent)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .transition(.opacity)
+                } else if rejected && suggestions.isEmpty {
+                    Label("That isn't a \(cluster.shortName) event code. Check the spelling, or pick Undecided for now.",
                           systemImage: "exclamationmark.triangle")
                         .font(.appCaption)
                         .foregroundStyle(Palette.danger)
@@ -79,6 +113,13 @@ struct EventPicker: View {
         .animation(reduceMotion ? nil : Motion.snappy, value: suggestions.count)
         .animation(reduceMotion ? nil : Motion.snappy, value: eventCode)
         .animation(reduceMotion ? nil : Motion.quick, value: rejected)
+        .animation(reduceMotion ? nil : Motion.quick, value: mismatch)
+        // A cluster change can strand a previously valid code.
+        .onChange(of: cluster) { newCluster in
+            if let current = DECAEvents.event(forCode: eventCode), current.cluster != newCluster {
+                eventCode = ""
+            }
+        }
     }
 
     // MARK: Entry
@@ -92,7 +133,7 @@ struct EventPicker: View {
                 .focused($focused)
                 .submitLabel(.done)
                 .onSubmit { confirm(typed) }
-                .onChange(of: typed) { _ in rejected = false }
+                .onChange(of: typed) { _ in rejected = false; mismatch = nil }
 
             if !typed.isEmpty {
                 Button {
@@ -220,10 +261,18 @@ struct EventPicker: View {
 
     // MARK: Validation
 
-    private func confirm(_ raw: String) {
+    private func confirm(_ raw: String, allowingCluster override: DECACluster? = nil) {
         guard let event = DECAEvents.event(forCode: raw) else {
             Haptics.error()
             rejected = true
+            mismatch = nil
+            return
+        }
+        // Real code, wrong cluster: name it rather than silently reassigning.
+        guard event.cluster == (override ?? cluster) else {
+            Haptics.warning()
+            rejected = false
+            mismatch = event
             return
         }
         Haptics.success()
@@ -231,6 +280,6 @@ struct EventPicker: View {
         eventCode = event.code
         typed = ""
         rejected = false
-        onConfirm?(event)
+        mismatch = nil
     }
 }

@@ -149,8 +149,9 @@ struct SettingsView: View {
                         Spacer(minLength: 0)
                     }
                     EventPicker(eventCode: Binding(get: { settings.eventCode },
-                                                   set: { settings.eventCode = $0; store.refresh() })) { event in
-                        settings.cluster = event.cluster
+                                                   set: { settings.eventCode = $0; store.refresh() }),
+                                cluster: settings.cluster) { newCluster in
+                        settings.cluster = newCluster
                         store.refresh()
                     }
                 }
@@ -178,6 +179,37 @@ struct SettingsView: View {
                         Text("\(settings.dailyGoal) questions per day")
                             .font(.appCaption)
                             .foregroundStyle(Palette.textSecondary)
+                    }
+                }
+
+                Divider().overlay(Palette.stroke)
+
+                // The second daily goal, adjusted the same way as the first.
+                // Hidden for events with no roleplay component — the same
+                // rule that hides the dial on the home screen.
+                if settings.eventHasRoleplay {
+                    VStack(alignment: .leading, spacing: 9) {
+                        HStack {
+                            Image(systemName: "brain.head.profile")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Palette.gold)
+                                .frame(width: 24)
+                            Text("Daily Quick Think goal")
+                                .font(.appCallout)
+                                .foregroundStyle(Palette.textPrimary)
+                            Spacer()
+                            Text("\(settings.quickThinkGoal)")
+                                .font(.appCallout.weight(.semibold))
+                                .foregroundStyle(Palette.gold)
+                                .monospacedDigit()
+                        }
+                        AppStepper(value: Binding(get: { settings.quickThinkGoal },
+                                                  set: { settings.quickThinkGoal = $0; store.refresh() }),
+                                   in: 1...10) {
+                            Text("\(settings.quickThinkGoal) Quick Think\(settings.quickThinkGoal == 1 ? "" : "s") per day")
+                                .font(.appCaption)
+                                .foregroundStyle(Palette.textSecondary)
+                        }
                     }
                 }
             }
