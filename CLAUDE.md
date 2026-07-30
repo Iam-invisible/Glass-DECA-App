@@ -26,8 +26,10 @@ been tried and rejected.
 - Six tabs: **Today, Practice, Mock Exams, Roleplay, Progress, Settings**
 - Feel: premium, calm, adult. Explicitly **not** a children's quiz game. Strong motion, haptics,
   full light/dark, full accessibility.
-- Bundle ID `com.shailpatel.LCVI-DECA-Study-App`, app group
-  `group.com.shailpatel.LCVI-DECA-Study-App`, `PRODUCT_NAME = Glass`, Swift 5.0.
+- Bundle ID `com.shailpatel.LCVI-DECA-Study-NewApp`, app group
+  `group.com.shailpatel.LCVI-DECA-Study-NewApp` (renamed from `…-App` during App
+  Store Connect setup — the entitlements, code constants and portal must all
+  agree on this exact string), `PRODUCT_NAME = Glass`, Swift 5.0.
 - The Xcode project folder is still named "LCVI DECA Study App" — only the product was renamed.
 
 ---

@@ -33,7 +33,7 @@ struct WidgetSnapshot: Codable, Equatable {
 }
 
 enum WidgetStore {
-    static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-App"
+    static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-NewApp"
     static let snapshotKey = "widget.snapshot.v1"
 
     static func read() -> WidgetSnapshot? {

@@ -14,7 +14,7 @@ import SwiftUI
 
 enum SharedDefaults {
     /// Must match the App Group entitlement on both the app and the widget.
-    static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-App"
+    static let appGroupID = "group.com.shailpatel.LCVI-DECA-Study-NewApp"
 
     /// The App Group suite when the entitlement is present, otherwise the
     /// standard suite. Widgets simply show placeholder data if the group is
