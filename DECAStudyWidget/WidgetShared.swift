@@ -63,6 +63,33 @@ enum WidgetPalette {
     static let gold    = dynamic(light: 0xB07407, dark: 0xE8B14A)
 }
 
+// MARK: - Type
+
+/// The app's own faces, bundled with the extension and registered in its
+/// Info.plist. Instrument Serif carries the hero numbers and titles — the
+/// same voice as every screen header — and Manrope carries the reading.
+/// `Font.custom` falls back to the system face if a font ever fails to
+/// register, so the widget degrades rather than breaks.
+enum WidgetType {
+    static func serif(_ size: CGFloat) -> Font {
+        .custom("InstrumentSerif-Regular", fixedSize: size)
+    }
+    static func sans(_ size: CGFloat, weight: Font.Weight = .regular) -> Font {
+        .custom(weight == .regular ? "Manrope-Regular" : "Manrope-SemiBold",
+                fixedSize: size)
+    }
+}
+
+extension View {
+    /// The app's eyebrow voice: small tracked uppercase Manrope.
+    func widgetKicker(_ color: Color) -> some View {
+        font(WidgetType.sans(10, weight: .semibold))
+            .textCase(.uppercase)
+            .tracking(1.1)
+            .foregroundStyle(color)
+    }
+}
+
 // MARK: - Glass
 
 /// Widget glass is a two-part illusion.
@@ -83,10 +110,16 @@ enum WidgetGlass {
             LinearGradient(colors: [Color.white.opacity(0.20), Color.white.opacity(0.02), .clear],
                            startPoint: .topLeading,
                            endPoint: .bottom)
+            // The app's ambient light field, in miniature: an accent pool and
+            // a gold one, the same two colours that drift behind every screen.
             RadialGradient(colors: [WidgetPalette.accent.opacity(0.16), .clear],
                            center: .topTrailing,
                            startRadius: 2,
                            endRadius: 190)
+            RadialGradient(colors: [WidgetPalette.gold.opacity(0.10), .clear],
+                           center: .bottomLeading,
+                           startRadius: 2,
+                           endRadius: 150)
         }
     }
 
@@ -187,6 +220,21 @@ struct WidgetRing: View {
                 )
                 .rotationEffect(.degrees(-90))
                 .shadow(color: tint.opacity(0.35), radius: 3)
+
+            // The point of light at the arc's tip — the same motif as the
+            // in-app ring. Radius is min/2: the stroke centreline, learned
+            // the hard way on the app side.
+            if progress > 0.02 {
+                GeometryReader { geo in
+                    let r = min(geo.size.width, geo.size.height) / 2
+                    Circle()
+                        .fill(.white)
+                        .frame(width: lineWidth * 0.42, height: lineWidth * 0.42)
+                        .position(x: geo.size.width / 2, y: geo.size.height / 2 - r)
+                        .rotationEffect(.degrees(360 * min(max(progress, 0), 1)))
+                        .shadow(color: tint.opacity(0.9), radius: 2.5)
+                }
+            }
         }
     }
 }

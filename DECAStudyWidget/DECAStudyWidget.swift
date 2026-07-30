@@ -80,13 +80,13 @@ struct DailyProgressWidgetView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 4) {
                 Image(systemName: "graduationcap.fill")
-                    .font(.system(size: 10, weight: .bold))
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(WidgetPalette.accent)
                 Text(snapshot.clusterShortName)
-                    .font(.system(size: 11, weight: .semibold))
+                    .widgetKicker(WidgetPalette.accent)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
-            .foregroundStyle(WidgetPalette.accent)
 
             Spacer(minLength: 0)
 
@@ -95,18 +95,18 @@ struct DailyProgressWidgetView: View {
                     WidgetRing(progress: snapshot.fraction, lineWidth: 7, tint: tint)
                         .frame(width: 46, height: 46)
                     Text("\(snapshot.answeredToday)")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .font(WidgetType.serif(19))
                         .foregroundStyle(.primary)
                 }
                 VStack(alignment: .leading, spacing: 3) {
                     Text("of \(snapshot.goal)")
-                        .font(.system(size: 12, weight: .medium))
+                        .font(WidgetType.sans(12))
                         .foregroundStyle(.secondary)
                     if snapshot.streak > 0 {
                         HStack(spacing: 3) {
                             Image(systemName: "flame.fill").font(.system(size: 9, weight: .bold))
                             Text("\(snapshot.streak)")
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .font(WidgetType.sans(11, weight: .semibold))
                         }
                         .foregroundStyle(WidgetPalette.gold)
                         .glassChip(tint: WidgetPalette.gold)
@@ -117,7 +117,7 @@ struct DailyProgressWidgetView: View {
             Spacer(minLength: 0)
 
             Text(statusLine)
-                .font(.system(size: 11, weight: .medium))
+                .font(WidgetType.sans(11))
                 .foregroundStyle(snapshot.goalMet ? WidgetPalette.success : .secondary)
                 .lineLimit(2)
                 .minimumScaleFactor(0.85)
@@ -135,22 +135,21 @@ struct DailyProgressWidgetView: View {
                     .frame(width: 68, height: 68)
                 VStack(spacing: 0) {
                     Text("\(snapshot.answeredToday)")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .font(WidgetType.serif(24))
                         .foregroundStyle(.primary)
                     Text("of \(snapshot.goal)")
-                        .font(.system(size: 10))
+                        .font(WidgetType.sans(10))
                         .foregroundStyle(.secondary)
                 }
             }
 
             VStack(alignment: .leading, spacing: 7) {
                 Text(snapshot.clusterShortName)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(WidgetPalette.accent)
+                    .widgetKicker(WidgetPalette.accent)
                     .lineLimit(1)
 
                 Text(statusLine)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(WidgetType.serif(19))
                     .foregroundStyle(.primary)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
@@ -170,7 +169,7 @@ struct DailyProgressWidgetView: View {
                             .glassChip(tint: WidgetPalette.accent)
                     }
                 }
-                .font(.system(size: 11, weight: .semibold))
+                .font(WidgetType.sans(11, weight: .semibold))
             }
             Spacer(minLength: 0)
         }
@@ -218,23 +217,23 @@ struct StreakWidgetView: View {
             Spacer(minLength: 0)
 
             Text("\(snapshot.streak)")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(WidgetType.serif(46))
                 .foregroundStyle(.primary)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
 
             Text("day streak")
-                .font(.system(size: 12, weight: .medium))
+                .font(WidgetType.sans(12))
                 .foregroundStyle(.secondary)
 
             if snapshot.freezes > 0 {
                 Label("\(snapshot.freezes) freeze\(snapshot.freezes == 1 ? "" : "s")", systemImage: "snowflake")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(WidgetType.sans(11, weight: .semibold))
                     .foregroundStyle(WidgetPalette.gold)
                     .glassChip(tint: WidgetPalette.gold)
             } else {
                 Text("\(max(0, 10 - (snapshot.streak % 10))) days to a freeze")
-                    .font(.system(size: 11))
+                    .font(WidgetType.sans(11))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
@@ -277,7 +276,7 @@ struct RemainingWidgetView: View {
             Spacer(minLength: 0)
 
             Text(snapshot.goalMet ? "Done" : "\(snapshot.remaining)")
-                .font(.system(size: snapshot.goalMet ? 28 : 44, weight: .bold, design: .rounded))
+                .font(WidgetType.serif(snapshot.goalMet ? 30 : 48))
                 .foregroundStyle(.primary)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
@@ -285,14 +284,14 @@ struct RemainingWidgetView: View {
             Text(snapshot.goalMet
                  ? "Goal complete today"
                  : "question\(snapshot.remaining == 1 ? "" : "s") left today")
-                .font(.system(size: 12, weight: .medium))
+                .font(WidgetType.sans(12))
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
                 .minimumScaleFactor(0.85)
 
             if snapshot.dueForReview > 0 {
                 Label("\(snapshot.dueForReview) due", systemImage: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(WidgetType.sans(11, weight: .semibold))
                     .foregroundStyle(WidgetPalette.accent)
                     .glassChip(tint: WidgetPalette.accent)
             }
@@ -327,14 +326,13 @@ struct QuickLaunchWidgetView: View {
         VStack(spacing: 9) {
             HStack {
                 Text(snapshot.clusterShortName)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(WidgetPalette.accent)
+                    .widgetKicker(WidgetPalette.accent)
                     .lineLimit(1)
                 Spacer(minLength: 4)
                 Text(snapshot.goalMet
                      ? "Goal complete"
                      : "\(snapshot.answeredToday)/\(snapshot.goal) today")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(WidgetType.sans(12))
                     .foregroundStyle(snapshot.goalMet ? WidgetPalette.success : .secondary)
             }
 
@@ -362,7 +360,7 @@ struct QuickLaunchWidgetView: View {
             Image(systemName: symbol)
                 .font(.system(size: 17, weight: .semibold))
             Text(title)
-                .font(.system(size: 12, weight: .semibold))
+                .font(WidgetType.serif(15))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
