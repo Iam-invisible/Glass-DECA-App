@@ -54,6 +54,14 @@ struct RootView: View {
             if store.showIntro {
                 IntroView { store.showIntro = false }
                     .transition(.opacity)
+            } else if !store.settings.hasAcceptedCurrentPrivacyPolicy {
+                // After the intro so its choreography is never interrupted,
+                // and before onboarding because onboarding's first act has the
+                // student answering a real question — which is using the app.
+                // A bump to PrivacyPolicy.version brings this back for
+                // everyone, which is how a material change is re-consented.
+                PrivacyConsentView { }
+                    .transition(.opacity)
             } else if store.settings.hasOnboarded {
                 main
             } else {

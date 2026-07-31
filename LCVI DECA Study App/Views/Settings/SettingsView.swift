@@ -565,6 +565,37 @@ struct SettingsView: View {
                 aboutRow("No account, no tracking",
                          "There is no sign-in and no analytics. Your questions, answers and statistics never leave this phone.")
                 Divider().overlay(Palette.stroke)
+
+                // Accepting a notice once is worth nothing if it cannot be
+                // read again afterwards, so it lives here permanently.
+                NavigationLink {
+                    PrivacyPolicyScreen()
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "lock.shield")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(Palette.success)
+                            .frame(width: 24)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Privacy notice")
+                                .font(.appCallout)
+                                .foregroundStyle(Palette.textPrimary)
+                            Text(settings.acceptedPrivacyAt
+                                 .map { "Accepted \($0.formatted(date: .abbreviated, time: .omitted))" }
+                                 ?? "Updated \(PrivacyPolicy.lastUpdated)")
+                                .font(.appCaption)
+                                .foregroundStyle(Palette.textSecondary)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Palette.textTertiary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+
+                Divider().overlay(Palette.stroke)
                 aboutRow("Sample content",
                          "The bundled questions and roleplays are original practice material written for this app. They are not official DECA Ontario or DECA Inc. competition content — always check the current competitive event guidelines for your event.")
                 Divider().overlay(Palette.stroke)

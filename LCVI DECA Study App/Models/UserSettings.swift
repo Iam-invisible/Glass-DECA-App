@@ -120,6 +120,8 @@ final class UserSettings: ObservableObject {
         self.seededVersion = defaults.integer(forKey: Keys.seededVersion)
         self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.script.rawValue
         self.hasSeenGuide = defaults.bool(forKey: Keys.hasSeenGuide)
+        self.acceptedPrivacyVersion = defaults.integer(forKey: Keys.acceptedPrivacyVersion)
+        self.acceptedPrivacyAt = defaults.object(forKey: Keys.acceptedPrivacyAt) as? Date
         self.eventCode = defaults.string(forKey: Keys.eventCode) ?? ""
         self.quickThinkGoal = defaults.object(forKey: Keys.quickThinkGoal) as? Int ?? 1
         Haptics.enabled = self.hapticsEnabled
@@ -142,6 +144,8 @@ final class UserSettings: ObservableObject {
         static let seededVersion = "seededVersion"
         static let introStyle = "introStyle"
         static let hasSeenGuide = "hasSeenGuide"
+        static let acceptedPrivacyVersion = "acceptedPrivacyVersion"
+        static let acceptedPrivacyAt = "acceptedPrivacyAt"
         static let eventCode = "eventCode"
         static let quickThinkGoal = "quickThinkGoal"
     }
@@ -171,6 +175,32 @@ final class UserSettings: ObservableObject {
     @Published var seededVersion: Int { didSet { defaults.set(seededVersion, forKey: Keys.seededVersion) } }
     @Published var introStyleRaw: String { didSet { defaults.set(introStyleRaw, forKey: Keys.introStyle) } }
     @Published var hasSeenGuide: Bool { didSet { defaults.set(hasSeenGuide, forKey: Keys.hasSeenGuide) } }
+
+    /// Which version of the privacy notice the student accepted, or 0 if none.
+    ///
+    /// Stored as a version rather than a flag so a material change to the
+    /// notice can ask again: `PrivacyPolicy.version` is bumped and everyone is
+    /// re-prompted on next launch, without the app having to remember who was
+    /// shown what.
+    @Published var acceptedPrivacyVersion: Int {
+        didSet { defaults.set(acceptedPrivacyVersion, forKey: Keys.acceptedPrivacyVersion) }
+    }
+
+    /// When that acceptance happened. Recorded because "we asked and they
+    /// agreed" is worth being able to show, and it costs one date to keep.
+    @Published var acceptedPrivacyAt: Date? {
+        didSet { defaults.set(acceptedPrivacyAt, forKey: Keys.acceptedPrivacyAt) }
+    }
+
+    /// True when the current notice has been accepted.
+    var hasAcceptedCurrentPrivacyPolicy: Bool {
+        acceptedPrivacyVersion >= PrivacyPolicy.version
+    }
+
+    func acceptPrivacyPolicy() {
+        acceptedPrivacyAt = Date()
+        acceptedPrivacyVersion = PrivacyPolicy.version
+    }
     /// The student's competitive event code, or "" while undecided. Stored as
     /// the code rather than the resolved event so a corrected catalogue takes
     /// effect immediately instead of freezing last year's format.
