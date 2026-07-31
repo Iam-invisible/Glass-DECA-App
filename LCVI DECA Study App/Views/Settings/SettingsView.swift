@@ -637,7 +637,7 @@ struct SettingsView: View {
                 } label: {
                     settingsRow(symbol: "questionmark.circle",
                                 title: "Replay app guide",
-                                subtitle: "The quick tour of the home screen and panes.",
+                                subtitle: "The three-step tour of the Study screen and tabs.",
                                 tint: Palette.accent)
                 }
                 .buttonStyle(.plain)

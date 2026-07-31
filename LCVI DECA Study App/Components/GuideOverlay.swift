@@ -49,14 +49,14 @@ private struct GuideStep {
 
 private let guideSteps: [GuideStep] = [
     GuideStep(target: .goalCard,
-              title: "Your day",
-              body: "The ring fills as you answer questions. Hit the goal and the streak grows — freezes protect it when life happens."),
+              title: "Your daily goal",
+              body: "The ring fills as you answer questions. Reach your goal and your streak goes up by one. Miss a day and a streak freeze covers you, if you have one."),
     GuideStep(target: .waysToStudy,
               title: "Ways to study",
-              body: "Every mode lives here. The numbers are live counts; tiles with a chevron open full screens, like Mock Exams and Roleplay."),
+              body: "Tap any tile to start. A number means how many are waiting for you. An arrow means the tile opens a full screen, like Mock Exams or Roleplay."),
     GuideStep(target: .tabBar,
-              title: "Three panes",
-              body: "Study is home. Progress holds every stat you're building. Settings has your question bank, reminders — and this guide, any time you want it again."),
+              title: "The three tabs",
+              body: "Study is where you practise. Progress shows your accuracy and stats. Settings has your question bank, reminders, and a button to replay this guide."),
 ]
 
 // MARK: - Spotlight shape
@@ -146,14 +146,14 @@ struct GuideOverlay: View {
         ZStack {
             Color.black.opacity(0.55)
             VStack(alignment: .leading, spacing: 10) {
-                Text("Want a quick tour?")
+                Text("Quick tour?")
                     .font(.appTitle)
                     .foregroundStyle(Palette.textPrimary)
-                Text("Thirty seconds — where your day lives, the ways to study, and the three panes. You can replay it any time from Settings.")
+                Text("Three steps, about thirty seconds. It points out your daily goal, the ways to study, and what each tab does. You can replay it any time from Settings.")
                     .font(.appFootnote)
                     .foregroundStyle(Palette.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
-                PrimaryButton(title: "Show me around", systemImage: "sparkles") {
+                PrimaryButton(title: "Start the tour", systemImage: "arrow.right") {
                     Haptics.tap()
                     onTarget?(steps.first?.target ?? .goalCard)
                     withAnimation(reduceMotion ? nil : Motion.gentle) { accepted = true }
