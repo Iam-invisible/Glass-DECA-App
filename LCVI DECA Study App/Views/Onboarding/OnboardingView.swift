@@ -284,21 +284,21 @@ struct OnboardingView: View {
     private var tryItAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                chapter("CHAPTER I", line: "Start with one question.",
-                        detail: "This is the whole app in one tap.")
+                chapter("CHAPTER I", line: "Try a question.",
+                        detail: "Answer one now. This is what practice in Glass looks like.")
 
                 demoCard.appearBeat(1.1)
 
                 if pickedChoice != nil {
                     VStack(alignment: .leading, spacing: 14) {
                         Text(pickedChoice == Self.demoCorrect
-                             ? "That feedback loop — answer, verdict, why — is the whole app. Practice adapts to what you miss, mock exams time you like the real thing, and roleplays coach your delivery."
-                             : "No penalty here — missed questions go to your Mistake Notebook and come back until you own them. That loop is the whole app.")
+                             ? "Every question works this way: you answer, you find out, and you get the reason. Glass also has timed mock exams and roleplay practice."
+                             : "Nothing is lost by getting it wrong. Missed questions go to your Mistake Notebook and come back later until you get them right.")
                             .font(.appFootnote)
                             .foregroundStyle(Palette.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
 
-                        PrimaryButton(title: "Set up my prep", systemImage: "arrow.right") {
+                        PrimaryButton(title: "Set up Glass", systemImage: "arrow.right") {
                             go(to: .event)
                         }
                     }
@@ -419,8 +419,8 @@ struct OnboardingView: View {
     private var eventAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER II", line: "Every competitor has an event.",
-                        detail: "Yours decides the questions, roleplays and indicators you see first. Watch the room take its colour — and switch any time in Settings.")
+                chapter("CHAPTER II", line: "Pick your cluster.",
+                        detail: "This sets which questions, roleplays and performance indicators you get. You can change it later in Settings.")
 
                 VStack(spacing: 8) {
                     ForEach(Array(DECACluster.allCases.enumerated()), id: \.element) { index, item in
@@ -488,8 +488,8 @@ struct OnboardingView: View {
     private var specificEventAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER III", line: "Which event, exactly?",
-                        detail: "Type your event code, or pick from your cluster's events below. Some are an exam and a roleplay; some a written plan and a presentation; a few change between regionals and provincials. Tell Glass which and it shapes itself around your season.")
+                chapter("CHAPTER III", line: "Pick your event.",
+                        detail: "Type your event code or choose one below. Events differ: some are an exam and a roleplay, some a written plan and a presentation, and some change between regionals and provincials. Glass uses this to decide what to show you.")
 
                 EventPicker(eventCode: $eventCode, cluster: cluster) { newCluster in
                     // Only ever on the student's explicit say-so, when they
@@ -519,8 +519,8 @@ struct OnboardingView: View {
     private var paceAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER IV", line: "Set your pace.",
-                        detail: "Small and daily beats heroic and rare. This ring is your home screen — it fills as you answer, and streaks build one day at a time.")
+                chapter("CHAPTER IV", line: "Set a daily goal.",
+                        detail: "Ten questions a day is a good start. This ring appears on your home screen and fills as you answer.")
 
                 VStack(spacing: 14) {
                     ZStack {
@@ -560,10 +560,10 @@ struct OnboardingView: View {
                 // event actually has a roleplay component.
                 if DECAEvents.event(forCode: eventCode)?.hasAnyRoleplay ?? true {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("And Quick Thinks?")
+                        Text("Quick Think goal")
                             .font(.appCallout.weight(.medium))
                             .foregroundStyle(Palette.textPrimary)
-                        Text("Sixty seconds, one scenario, one answer — the fastest way to sharpen roleplay instincts.")
+                        Text("One scenario, sixty seconds to answer. Practice for the roleplay part of your event.")
                             .font(.appCaption)
                             .foregroundStyle(Palette.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -636,8 +636,8 @@ struct OnboardingView: View {
     private var coachAct: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                chapter("CHAPTER V", line: "Your corner crew.",
-                        detail: "A quiet daily nudge if you want one, and coaching that never needs a server. If you've already hit your goal, the reminder stays quiet.")
+                chapter("CHAPTER V", line: "Reminders and AI.",
+                        detail: "Turn on a daily reminder if you want one. It stays quiet on days you have already hit your goal.")
 
                 VStack(spacing: 13) {
                     Toggle(isOn: $wantsReminders) {
