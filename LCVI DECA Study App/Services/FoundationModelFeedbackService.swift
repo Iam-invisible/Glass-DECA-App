@@ -96,18 +96,42 @@ struct QuickThinkFeedback: Equatable {
     var moreProfessional: String
     var strongerAnswer: String
 
+    /// True when this came from `manual()` rather than a model.
+    ///
+    /// The view uses it to relabel every section. Without AI the app has not
+    /// read the answer, so headings like "Strongest part" would be asserting
+    /// something nobody checked — and a student who is told their strongest
+    /// part was committing to a position will believe they committed to a
+    /// position, whether or not they did.
+    var isSelfCheck: Bool = false
+
+    /// General guidance for when no model is available — AI switched off, the
+    /// local coach not downloaded, or a device that cannot run either.
+    ///
+    /// Every line here is either a question the student answers themselves or
+    /// a fact the app actually measured. The word count is measured. Nothing
+    /// else claims to know anything about what was written.
     static func manual(scenario: QuickThinkScenario, response: String) -> QuickThinkFeedback {
         let words = response.split(whereSeparator: { $0.isWhitespace }).count
-        let lengthNote = words < 30
-            ? "Your answer is short — judges expect you to state a recommendation and support it with reasoning."
-            : "You gave a full answer; make sure every sentence adds something a judge can score."
+
+        let lengthNote: String
+        switch words {
+        case 0 ..< 30:
+            lengthNote = "\(words) words. Under about thirty is usually too short to state a recommendation and support it, which leaves a judge with little to score."
+        case 30 ..< 120:
+            lengthNote = "\(words) words — a workable length for sixty seconds. The question is whether every sentence earned its place."
+        default:
+            lengthNote = "\(words) words is more than most people can deliver in sixty seconds. Say it aloud against a timer and cut anything that does not support the recommendation."
+        }
+
         return QuickThinkFeedback(
-            strongest: "You responded to the scenario and committed to a position — that is what judges want first.",
+            strongest: "Did you commit to a recommendation, or only describe the situation? Judges score the decision you made. If your answer could end with \"…so it depends\", it has not landed yet.",
             weakest: lengthNote,
-            conceptUsedWell: "Focus area: \(scenario.focus).",
-            conceptMissing: "Check whether you named a specific business concept, a measurable outcome, and a next step.",
-            moreProfessional: "Open with \"My recommendation is…\" and close with \"…because it improves…\".",
-            strongerAnswer: "Structure to aim for: 1) restate the problem, 2) give your recommendation, 3) give two supporting reasons tied to business concepts, 4) state how you would measure success."
+            conceptUsedWell: "This prompt is about \(scenario.focus). Did you name a specific concept from that area, or stay general?",
+            conceptMissing: "Read your answer back and check for all four: a clear recommendation · at least two supporting reasons · one named business concept · a way to measure whether it worked.",
+            moreProfessional: "Open with \"My recommendation is…\" and close with \"…because it improves…\". Cut \"I think maybe\" and \"stuff like that\" — judges hear hedging as uncertainty.",
+            strongerAnswer: "1) Restate the problem in one sentence. 2) State your recommendation. 3) Give two reasons tied to business concepts. 4) Say how you would measure success.",
+            isSelfCheck: true
         )
     }
 }

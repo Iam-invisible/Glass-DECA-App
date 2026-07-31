@@ -237,12 +237,30 @@ struct QuickThinkView: View {
                         .monospacedDigit()
                 }
 
-                block("Strongest part", feedback.strongest, "hand.thumbsup.fill", Palette.success)
-                block("Weakest part", feedback.weakest, "exclamationmark.triangle.fill", Palette.gold)
-                block("Business concept used well", feedback.conceptUsedWell, "checkmark.seal.fill", Palette.accent)
-                block("Business concept missing", feedback.conceptMissing, "questionmark.circle.fill", Palette.danger)
-                block("Say it more professionally", feedback.moreProfessional, "quote.opening", Palette.accent)
-                block("A stronger answer", feedback.strongerAnswer, "star.fill", Palette.gold)
+                // In self-check mode nothing has read the answer, so every
+                // heading is phrased as something for the student to check
+                // rather than a finding. The AI labels stay untouched.
+                if feedback.isSelfCheck {
+                    Text("No AI coaching on this device, so nothing here is based on reading your answer. Use it as a checklist against what you wrote.")
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    block("Check this first", feedback.strongest, "questionmark.circle.fill", Palette.accent)
+                    block("Length", feedback.weakest, "textformat.size", Palette.gold)
+                    block("Focus area for this prompt", feedback.conceptUsedWell, "target", Palette.accent)
+                    block("Run this checklist", feedback.conceptMissing, "checklist", Palette.accent)
+                    block("Phrasing that scores", feedback.moreProfessional, "quote.opening", Palette.accent)
+                    block("Structure to aim for", feedback.strongerAnswer, "list.number", Palette.gold)
+                } else {
+                    block("Strongest part", feedback.strongest, "hand.thumbsup.fill", Palette.success)
+                    block("Weakest part", feedback.weakest, "exclamationmark.triangle.fill", Palette.gold)
+                    block("Business concept used well", feedback.conceptUsedWell, "checkmark.seal.fill", Palette.accent)
+                    block("Business concept missing", feedback.conceptMissing, "questionmark.circle.fill", Palette.danger)
+                    block("Say it more professionally", feedback.moreProfessional, "quote.opening", Palette.accent)
+                    block("A stronger answer", feedback.strongerAnswer, "star.fill", Palette.gold)
+                }
 
                 VStack(alignment: .leading, spacing: 7) {
                     Label("Your answer", systemImage: "text.quote")
