@@ -365,6 +365,12 @@ struct StudyView: View {
         switch link {
         case .dailyPractice: startDaily()
         case .examCram:      showingCramSetup = true
+        case .reviewDue:     startReviewDue()
+        case .quickThink:    showingQuickThink = true
+        case .mistakes:
+            // Same reset-then-act as consumeIntents: a navigationDestination
+            // already true at first render does not push reliably on iOS 16.
+            DispatchQueue.main.async { pushMistakes = true }
         }
     }
 

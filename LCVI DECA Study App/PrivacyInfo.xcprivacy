@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    PrivacyInfo.xcprivacy — Glass (app target)
+
+    The app collects nothing, so NSPrivacyCollectedDataTypes is empty and
+    NSPrivacyTracking is false. That is not an aspiration: §2 forbids sign-in,
+    accounts, remote APIs and personal data collection, and there is no
+    analytics or attribution SDK in the project to contradict it.
+
+    NSPrivacyTrackingDomains is empty because the app contacts exactly one
+    host — huggingface.co, to fetch the optional model file the student asked
+    for — and that request carries no identifier. It is a file download, not
+    tracking, so it belongs in neither list.
+
+    NSPrivacyAccessedAPITypes lists the required-reason APIs Apple's static
+    check will find in this binary. Only two categories appear anywhere in the
+    tree; there are no file-timestamp, boot-time, keyboard or pasteboard APIs:
+
+    - UserDefaults. Declared with both reasons because SharedDefaults.suite is
+      the app-group suite when the entitlement resolves (1C8F.1, shared with
+      the widget extension) and falls back to .standard when it does not
+      (CA92.1). Both paths ship, so both are declared.
+
+    - Disk space. LocalModelService.hasRoomOnDisk() reads
+      volumeAvailableCapacityForImportantUsage before starting the model
+      download. E174.1 is the "is there room to write this file" reason,
+      which is exactly what that function asks.
+
+    Keep this in step with the code. Adding an SDK, a crash reporter, or any
+    new required-reason API means editing this file in the same change.
+-->
+<plist version="1.0">
+<dict>
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>1C8F.1</string>
+				<string>CA92.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>E174.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

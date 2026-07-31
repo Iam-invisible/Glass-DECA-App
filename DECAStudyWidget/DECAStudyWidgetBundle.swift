@@ -10,6 +10,7 @@ import WidgetKit
 struct DECAStudyWidgetBundle: WidgetBundle {
     var body: some Widget {
         DailyProgressWidget()
+        OverviewWidget()
         StreakWidget()
         RemainingWidget()
         QuickLaunchWidget()

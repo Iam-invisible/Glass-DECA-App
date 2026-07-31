@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    PrivacyInfo.xcprivacy — DECAStudyWidget (extension target)
+
+    An app extension is its own bundle and is scanned as its own binary, so it
+    needs its own manifest rather than relying on the app's.
+
+    The widget reads one thing: the snapshot the app writes into the shared
+    app group (WidgetShared.swift). That is a UserDefaults read against a
+    suite shared between the app and this extension, which is 1C8F.1 exactly.
+    CA92.1 is not declared here — unlike the app, this target never falls back
+    to .standard; when the group is unavailable WidgetStore.read() returns nil
+    and the widget shows its placeholder.
+
+    No network, no collection, no tracking.
+-->
+<plist version="1.0">
+<dict>
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>1C8F.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

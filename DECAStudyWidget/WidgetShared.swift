@@ -10,7 +10,13 @@
 import Foundation
 import SwiftUI
 
+/// Mirror of the app's `WidgetSnapshot` (Services/WidgetDataService.swift).
+/// The extension is its own binary and cannot import the app, so the two are
+/// kept in step by hand. Add a field in one and add it to the other in the
+/// same change, or it decodes away to its default here and no one notices.
 struct WidgetSnapshot: Codable, Equatable {
+
+    // v1 — the daily ring and the streak.
     var clusterShortName: String = "Marketing"
     var answeredToday: Int = 0
     var goal: Int = 10
@@ -19,9 +25,32 @@ struct WidgetSnapshot: Codable, Equatable {
     var dueForReview: Int = 0
     var updatedAt: Date = Date(timeIntervalSince1970: 0)
 
+    // v2 — what the large widget reads.
+    var eventCode: String = ""
+    var quickThinkToday: Int = 0
+    /// Zero means the student's event has no roleplay component, so the Quick
+    /// Think dial is hidden rather than shown permanently complete at 0/0.
+    var quickThinkGoal: Int = 0
+    var openMistakes: Int = 0
+    var accuracy: Double = 0
+    var totalAnswered: Int = 0
+    var bookmarked: Int = 0
+    var achievements: Int = 0
+    var lastMockScore: Int? = nil
+    var weakestCode: String = ""
+    var weakestText: String = ""
+
     var remaining: Int { max(0, goal - answeredToday) }
     var fraction: Double { goal <= 0 ? 1 : min(1, Double(answeredToday) / Double(goal)) }
     var goalMet: Bool { answeredToday >= goal }
+
+    var showsQuickThink: Bool { quickThinkGoal > 0 }
+    var quickThinkFraction: Double {
+        quickThinkGoal <= 0 ? 1 : min(1, Double(quickThinkToday) / Double(quickThinkGoal))
+    }
+    var quickThinkGoalMet: Bool { quickThinkGoal > 0 && quickThinkToday >= quickThinkGoal }
+
+    var accuracyPercent: Int { Int((accuracy * 100).rounded()) }
 
     static let sample = WidgetSnapshot(clusterShortName: "Marketing",
                                        answeredToday: 6,
@@ -29,7 +58,88 @@ struct WidgetSnapshot: Codable, Equatable {
                                        streak: 4,
                                        freezes: 0,
                                        dueForReview: 3,
-                                       updatedAt: Date(timeIntervalSince1970: 0))
+                                       updatedAt: Date(timeIntervalSince1970: 0),
+                                       eventCode: "PMK",
+                                       quickThinkToday: 1,
+                                       quickThinkGoal: 2,
+                                       openMistakes: 5,
+                                       accuracy: 0.78,
+                                       totalAnswered: 214,
+                                       bookmarked: 9,
+                                       achievements: 7,
+                                       lastMockScore: 82,
+                                       weakestCode: "MK:006",
+                                       weakestText: "Explain the concept of market segmentation")
+
+    enum CodingKeys: String, CodingKey {
+        case clusterShortName, answeredToday, goal, streak, freezes, dueForReview, updatedAt
+        case eventCode, quickThinkToday, quickThinkGoal, openMistakes, accuracy
+        case totalAnswered, bookmarked, achievements, lastMockScore, weakestCode, weakestText
+    }
+
+    /// Hand-written so a snapshot left behind by the previous build — which
+    /// has none of the v2 keys — decodes to defaults instead of throwing.
+    /// Throwing here would blank every widget until the app next foregrounded.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        clusterShortName = try c.decodeIfPresent(String.self, forKey: .clusterShortName) ?? "Marketing"
+        answeredToday    = try c.decodeIfPresent(Int.self,    forKey: .answeredToday) ?? 0
+        goal             = try c.decodeIfPresent(Int.self,    forKey: .goal) ?? 10
+        streak           = try c.decodeIfPresent(Int.self,    forKey: .streak) ?? 0
+        freezes          = try c.decodeIfPresent(Int.self,    forKey: .freezes) ?? 0
+        dueForReview     = try c.decodeIfPresent(Int.self,    forKey: .dueForReview) ?? 0
+        updatedAt        = try c.decodeIfPresent(Date.self,   forKey: .updatedAt) ?? Date(timeIntervalSince1970: 0)
+        eventCode        = try c.decodeIfPresent(String.self, forKey: .eventCode) ?? ""
+        quickThinkToday  = try c.decodeIfPresent(Int.self,    forKey: .quickThinkToday) ?? 0
+        quickThinkGoal   = try c.decodeIfPresent(Int.self,    forKey: .quickThinkGoal) ?? 0
+        openMistakes     = try c.decodeIfPresent(Int.self,    forKey: .openMistakes) ?? 0
+        accuracy         = try c.decodeIfPresent(Double.self, forKey: .accuracy) ?? 0
+        totalAnswered    = try c.decodeIfPresent(Int.self,    forKey: .totalAnswered) ?? 0
+        bookmarked       = try c.decodeIfPresent(Int.self,    forKey: .bookmarked) ?? 0
+        achievements     = try c.decodeIfPresent(Int.self,    forKey: .achievements) ?? 0
+        lastMockScore    = try c.decodeIfPresent(Int.self,    forKey: .lastMockScore)
+        weakestCode      = try c.decodeIfPresent(String.self, forKey: .weakestCode) ?? ""
+        weakestText      = try c.decodeIfPresent(String.self, forKey: .weakestText) ?? ""
+    }
+
+    /// Declaring `init(from:)` suppresses the memberwise initialiser.
+    init(clusterShortName: String = "Marketing",
+         answeredToday: Int = 0,
+         goal: Int = 10,
+         streak: Int = 0,
+         freezes: Int = 0,
+         dueForReview: Int = 0,
+         updatedAt: Date = Date(timeIntervalSince1970: 0),
+         eventCode: String = "",
+         quickThinkToday: Int = 0,
+         quickThinkGoal: Int = 0,
+         openMistakes: Int = 0,
+         accuracy: Double = 0,
+         totalAnswered: Int = 0,
+         bookmarked: Int = 0,
+         achievements: Int = 0,
+         lastMockScore: Int? = nil,
+         weakestCode: String = "",
+         weakestText: String = "") {
+        self.clusterShortName = clusterShortName
+        self.answeredToday = answeredToday
+        self.goal = goal
+        self.streak = streak
+        self.freezes = freezes
+        self.dueForReview = dueForReview
+        self.updatedAt = updatedAt
+        self.eventCode = eventCode
+        self.quickThinkToday = quickThinkToday
+        self.quickThinkGoal = quickThinkGoal
+        self.openMistakes = openMistakes
+        self.accuracy = accuracy
+        self.totalAnswered = totalAnswered
+        self.bookmarked = bookmarked
+        self.achievements = achievements
+        self.lastMockScore = lastMockScore
+        self.weakestCode = weakestCode
+        self.weakestText = weakestText
+    }
 }
 
 enum WidgetStore {
@@ -112,18 +222,22 @@ extension View {
 enum WidgetGlass {
 
     /// Highlight and brand wash layered over whatever sits behind.
+    ///
+    /// The light pools are pushed harder than the in-app canvas: a widget is
+    /// two inches wide on a busy wallpaper, so the same opacities that read as
+    /// atmosphere on a full screen read as nothing at all here.
     static var sheen: some View {
         ZStack {
-            LinearGradient(colors: [Color.white.opacity(0.20), Color.white.opacity(0.02), .clear],
+            LinearGradient(colors: [Color.white.opacity(0.28), Color.white.opacity(0.04), .clear],
                            startPoint: .topLeading,
                            endPoint: .bottom)
             // The app's ambient light field, in miniature: an accent pool and
             // a gold one, the same two colours that drift behind every screen.
-            RadialGradient(colors: [WidgetPalette.accent.opacity(0.16), .clear],
+            RadialGradient(colors: [WidgetPalette.accent.opacity(0.26), .clear],
                            center: .topTrailing,
                            startRadius: 2,
                            endRadius: 190)
-            RadialGradient(colors: [WidgetPalette.gold.opacity(0.10), .clear],
+            RadialGradient(colors: [WidgetPalette.gold.opacity(0.16), .clear],
                            center: .bottomLeading,
                            startRadius: 2,
                            endRadius: 150)
@@ -173,6 +287,17 @@ extension View {
             }
     }
 
+    /// A hero numeral. The gradient is what makes a big number read as glass
+    /// rather than as flat text — it is the same top-bright/bottom-dim
+    /// modulation the display serif already has built into its strokes.
+    func heroNumeral(_ tint: Color) -> some View {
+        foregroundStyle(
+            LinearGradient(colors: [Color.primary, Color.primary.opacity(0.72)],
+                           startPoint: .top, endPoint: .bottom)
+        )
+        .shadow(color: tint.opacity(0.28), radius: 5, y: 1)
+    }
+
     /// A frosted tile, used for the quick-launch targets.
     func glassTile(tint: Color, prominent: Bool) -> some View {
         self.background {
@@ -195,9 +320,60 @@ extension View {
 
 // MARK: - Deep links
 
+/// Keep in step with the `onOpenURL` switch in LCVI_DECA_Study_AppApp.swift,
+/// which is the only thing that reads these.
 enum WidgetLink {
     static let dailyPractice = URL(string: "decastudy://practice")!
     static let examCram = URL(string: "decastudy://cram")!
+    static let reviewDue = URL(string: "decastudy://review")!
+    static let mistakes = URL(string: "decastudy://mistakes")!
+    static let quickThink = URL(string: "decastudy://quickthink")!
+}
+
+// MARK: - Stat cell
+
+/// One number and its label, on its own frosted panel. The large widget is a
+/// grid of these; giving each a panel is what stops the extra information
+/// reading as a wall of text.
+struct WidgetStat: View {
+    var value: String
+    var label: String
+    var systemImage: String
+    var tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 4) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 10, weight: .bold))
+                Text(value)
+                    .font(WidgetType.serif(21))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .foregroundStyle(tint)
+
+            Text(label)
+                .font(WidgetType.sans(10))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 9)
+        .padding(.vertical, 8)
+        .background {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(tint.opacity(0.13))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .strokeBorder(Color.white.opacity(0.20), lineWidth: 0.5)
+                )
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label)
+        .accessibilityValue(value)
+    }
 }
 
 // MARK: - Ring

@@ -136,9 +136,14 @@ final class AppStore: ObservableObject {
     /// a preference change and silently fails to redraw.
     private var settingsBridge: AnyCancellable?
 
+    /// Widget entry points. Each one lands on Study, which owns every launcher
+    /// they need, so none of them requires a tab change first.
     enum DeepLink: Equatable {
         case dailyPractice
         case examCram
+        case reviewDue
+        case mistakes
+        case quickThink
     }
 
     init(inMemory: Bool = false) {
@@ -233,6 +238,12 @@ final class AppStore: ObservableObject {
     }
 
     private func publishWidgetSnapshot(_ state: DashboardState) {
+        // The Quick Think goal is published as 0 when the student's event has
+        // no roleplay component, which is how the widget knows to hide that
+        // dial entirely rather than draw a permanently-complete 0/0 ring.
+        // Same predicate the Study screen uses, so the two cannot disagree.
+        let publishesQuickThink = settings.eventHasRoleplay
+
         WidgetDataService.write(WidgetSnapshot(
             clusterShortName: settings.cluster.shortName,
             answeredToday: state.today.answered,
@@ -240,7 +251,18 @@ final class AppStore: ObservableObject {
             streak: state.streak.current,
             freezes: state.streak.freezes,
             dueForReview: state.dueForReview,
-            updatedAt: Date()
+            updatedAt: Date(),
+            eventCode: settings.eventCode,
+            quickThinkToday: state.quickThinkToday,
+            quickThinkGoal: publishesQuickThink ? state.quickThinkGoal : 0,
+            openMistakes: state.openMistakes,
+            accuracy: state.overallAccuracy,
+            totalAnswered: state.totalQuestionsAnswered,
+            bookmarked: state.bookmarkedQuestions,
+            achievements: state.achievementsUnlocked,
+            lastMockScore: state.lastMockScore.map { Int($0.rounded()) },
+            weakestCode: state.weakestIndicator?.code ?? "",
+            weakestText: state.weakestIndicator?.text ?? ""
         ))
     }
 
