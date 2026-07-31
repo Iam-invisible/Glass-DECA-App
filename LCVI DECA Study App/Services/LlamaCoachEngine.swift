@@ -94,7 +94,12 @@ enum CoachEngineFactory {
 /// member would be main-actor isolated and a 1B model would decode on the main
 /// thread — a guaranteed watchdog kill. All work happens on `queue`; all
 /// mutable state is touched only from there.
-nonisolated final class LlamaCoachEngine: LocalCoachEngine {
+/// `@unchecked Sendable` is a claim the compiler cannot verify, so it has to be
+/// earned: every pointer is created, used and freed on `queue` and touched
+/// nowhere else, and the one field read from other threads — `_isReady` — is
+/// behind `readyLock`. Without this the closures below capture a non-Sendable
+/// `self` and warn, and warnings are errors under Swift 6 (§3).
+nonisolated final class LlamaCoachEngine: LocalCoachEngine, @unchecked Sendable {
 
     private let modelURL: URL
     private let queue = DispatchQueue(label: "com.shailpatel.glass.llama", qos: .userInitiated)
@@ -227,7 +232,7 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine {
         }
         guard llama_decode(context, batch) == 0 else { return nil }
 
-        let sampler = makeSampler()
+        guard let sampler = makeSampler() else { return nil }
         defer { llama_sampler_free(sampler) }
 
         var output = ""
@@ -255,10 +260,14 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine {
     /// Deliberately conservative. These prompts want a correct, dull
     /// explanation, not a creative one, and a 1B model drifts off format fast
     /// when it is allowed to wander.
-    private func makeSampler() -> OpaquePointer {
+    ///
+    /// The sampler chain is a typed `llama_sampler` pointer, unlike the model
+    /// and context handles which really are opaque. Mixing the two up is the
+    /// only thing that failed to compile on the first build.
+    private func makeSampler() -> UnsafeMutablePointer<llama_sampler>? {
         var params = llama_sampler_chain_default_params()
         params.no_perf = true
-        let chain = llama_sampler_chain_init(params)
+        guard let chain = llama_sampler_chain_init(params) else { return nil }
         llama_sampler_chain_add(chain, llama_sampler_init_top_k(40))
         llama_sampler_chain_add(chain, llama_sampler_init_top_p(0.9, 1))
         llama_sampler_chain_add(chain, llama_sampler_init_temp(0.3))

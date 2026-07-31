@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46A4A201301C82440070D45F /* LlamaSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 46A4A200301C82440070D45F /* LlamaSwift */; };
 		A1B2C30000000000000001 /* DECAStudyWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000002 /* DECAStudyWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46A4A201301C82440070D45F /* LlamaSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +112,7 @@
 			);
 			name = "LCVI DECA Study App";
 			packageProductDependencies = (
+				46A4A200301C82440070D45F /* LlamaSwift */,
 			);
 			productName = "LCVI DECA Study App";
 			productReference = 46DBA0B43012FFD800E44D4A /* Glass.app */;
@@ -164,6 +167,9 @@
 			);
 			mainGroup = 46DBA0AB3012FFD700E44D4A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				46A4A1FF301C82440070D45F /* XCRemoteSwiftPackageReference "llama" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46DBA0B53012FFD800E44D4A /* Products */;
 			projectDirPath = "";
@@ -498,6 +504,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		46A4A1FF301C82440070D45F /* XCRemoteSwiftPackageReference "llama" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mattt/llama.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.10199.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		46A4A200301C82440070D45F /* LlamaSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46A4A1FF301C82440070D45F /* XCRemoteSwiftPackageReference "llama" */;
+			productName = LlamaSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46DBA0AC3012FFD800E44D4A /* Project object */;
 }
