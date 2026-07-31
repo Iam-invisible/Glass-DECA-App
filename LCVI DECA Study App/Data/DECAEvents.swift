@@ -15,11 +15,24 @@
 //  list precisely so that correcting it is a one-line edit with no other code
 //  to touch.
 //
+//  Checked against deca.ca/v2/competitive-events and DECA Inc's guide in
+//  July 2026. Corrected then: PEN added; QSRM removed (DECA Inc runs it,
+//  Ontario does not list it); the entrepreneurship written block rebuilt (EBP
+//  and ISP were not real codes, IBP was under Independent rather than
+//  International Business Plan, and EIB/EFB/EBG were missing); IMC and the
+//  professional selling events given the regional exam they actually have.
+//
+//  Still unverified, and the thing to ask an advisor about first: whether
+//  Series, Principles and Team Decision Making run their roleplay at regionals
+//  or advance on the exam alone. Ontario's own pages point both ways and it
+//  varies by area, so those events are left as exam + roleplay at both levels —
+//  the safer error, since it over-prepares rather than under-prepares.
+//
 //  Why per-level components exist: some events are not the same competition
-//  twice. EIP has a written plan plus an exam regionally, then a presentation
-//  only at provincials — so a student doing EIP should be pushed toward exam
-//  practice now and toward presentation rehearsal later. Modelling each level
-//  separately is what makes that possible.
+//  twice. An IMC or professional selling competitor advances out of regionals
+//  on a cluster exam and does not present until provincials — so they should be
+//  pushed toward exam practice now and presentation rehearsal later. Modelling
+//  each level separately is what makes that possible.
 //
 
 import Foundation
@@ -90,12 +103,17 @@ enum DECAEvents {
         DECAEvent(code: "PBM", name: "Principles of Business Management and Administration",
                   cluster: .businessManagement,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
+        DECAEvent(code: "PEN", name: "Principles of Entrepreneurship",
+                  cluster: .entrepreneurship,
+                  regional: .examAndRoleplay, provincial: .examAndRoleplay),
         DECAEvent(code: "PFN", name: "Principles of Finance",
                   cluster: .finance,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
         DECAEvent(code: "PHT", name: "Principles of Hospitality and Tourism",
                   cluster: .hospitality,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
+        // Ontario restricts PMK to Grade 9. The catalogue has nowhere to say
+        // that yet; the picker offers it to everyone.
         DECAEvent(code: "PMK", name: "Principles of Marketing",
                   cluster: .marketing,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
@@ -124,8 +142,9 @@ enum DECAEvents {
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
         DECAEvent(code: "MCS", name: "Marketing Communications Series", cluster: .marketing,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
-        DECAEvent(code: "QSRM", name: "Quick Serve Restaurant Management Series", cluster: .hospitality,
-                  regional: .examAndRoleplay, provincial: .examAndRoleplay),
+        // QSRM (Quick Serve Restaurant Management) was removed: DECA Inc runs
+        // it, but it does not appear on Ontario's competitive events list.
+        // If an Ontario region does offer it, restoring it is one line.
         DECAEvent(code: "RFSM", name: "Restaurant and Food Service Management Series", cluster: .hospitality,
                   regional: .examAndRoleplay, provincial: .examAndRoleplay),
         DECAEvent(code: "RMS", name: "Retail Merchandising Series", cluster: .marketing,
@@ -175,16 +194,16 @@ enum DECAEvents {
 
     static let businessOperations: [DECAEvent] = [
         DECAEvent(code: "BOR", name: "Business Operations Research", cluster: .businessManagement,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "BMOR", name: "Buying and Merchandising Operations Research", cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "FOR", name: "Finance Operations Research", cluster: .finance,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "HTOR", name: "Hospitality and Tourism Operations Research", cluster: .hospitality,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "SEOR", name: "Sports and Entertainment Marketing Operations Research",
                   cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
     ]
 
     // MARK: Project management — written project plus presentation.
@@ -192,72 +211,97 @@ enum DECAEvents {
     static let projectManagement: [DECAEvent] = [
         DECAEvent(code: "PMBS", name: "Project Management — Business Solutions",
                   cluster: .businessManagement,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "PMCD", name: "Project Management — Career Development",
                   cluster: .businessManagement,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "PMCA", name: "Project Management — Community Awareness",
                   cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "PMCG", name: "Project Management — Community Giving",
                   cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "PMFL", name: "Project Management — Financial Literacy",
                   cluster: .personalFinancialLiteracy,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
         DECAEvent(code: "PMSP", name: "Project Management — Sales Project",
                   cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
     ]
 
     // MARK: Entrepreneurship written events
     //
-    // EIP is the reason this catalogue models levels separately: a written
-    // plan judged with an exam regionally, then presentation only at
-    // provincials.
+    // Prepared written events: a pitch deck is submitted ahead of the deadline
+    // and presented live. Ontario lists no exam for these, and prepared written
+    // events have no in-person requirement at regionals — which is why the
+    // regional column is empty rather than a presentation.
+    //
+    // This block previously carried two codes that do not exist (EBP, and ISP
+    // duplicating EIP) and had IBP under the wrong name: IBP is *International*
+    // Business Plan, and Independent Business Plan is EIB.
 
     static let entrepreneurshipWritten: [DECAEvent] = [
-        DECAEvent(code: "EIP", name: "Entrepreneurship Innovation Plan",
+        DECAEvent(code: "EIP", name: "Innovation Plan",
                   cluster: .entrepreneurship,
-                  regional: .examAndPresentation, provincial: .presentationOnly),
-        DECAEvent(code: "EBP", name: "Business Plan (Entrepreneurship)",
+                  regional: .none, provincial: .presentationOnly),
+        DECAEvent(code: "ESB", name: "Start-Up Business Plan",
                   cluster: .entrepreneurship,
-                  regional: .presentationOnly, provincial: .presentationOnly),
-        DECAEvent(code: "ESB", name: "Entrepreneurship Start-Up Business Plan",
+                  regional: .none, provincial: .presentationOnly),
+        DECAEvent(code: "EIB", name: "Independent Business Plan",
                   cluster: .entrepreneurship,
-                  regional: .presentationOnly, provincial: .presentationOnly),
-        DECAEvent(code: "IBP", name: "Independent Business Plan",
+                  regional: .none, provincial: .presentationOnly),
+        DECAEvent(code: "IBP", name: "International Business Plan",
                   cluster: .entrepreneurship,
-                  regional: .presentationOnly, provincial: .presentationOnly),
-        DECAEvent(code: "ISP", name: "Innovation Plan",
+                  regional: .none, provincial: .presentationOnly),
+        DECAEvent(code: "EFB", name: "Franchise Business Plan",
                   cluster: .entrepreneurship,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .none, provincial: .presentationOnly),
+        // EBG appears in DECA Inc's guide but not on Ontario's current list.
+        // Kept because an Ontario student may still be entered in it; delete
+        // this line if the advisor confirms Ontario does not run it.
+        DECAEvent(code: "EBG", name: "Business Growth Plan",
+                  cluster: .entrepreneurship,
+                  regional: .none, provincial: .presentationOnly),
     ]
 
-    // MARK: Integrated marketing campaigns — written plus presentation.
+    // MARK: Integrated marketing campaigns — pitch deck plus presentation.
+    //
+    // These now carry an exam at regionals. Ontario advances IMC competitors on
+    // a cluster exam alone, so a student who was told their event had no exam
+    // was being pointed away from the only thing that gets them to provincials.
 
     static let integratedMarketing: [DECAEvent] = [
         DECAEvent(code: "IMCE", name: "Integrated Marketing Campaign — Event", cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .examOnly, provincial: .presentationOnly),
         DECAEvent(code: "IMCP", name: "Integrated Marketing Campaign — Product", cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .examOnly, provincial: .presentationOnly),
         DECAEvent(code: "IMCS", name: "Integrated Marketing Campaign — Service", cluster: .marketing,
-                  regional: .presentationOnly, provincial: .presentationOnly),
+                  regional: .examOnly, provincial: .presentationOnly),
     ]
 
-    // MARK: Professional selling and consulting — roleplay-shaped, no exam.
+    // MARK: Professional selling and consulting
+    //
+    // Same correction as IMC, and a larger one: these were modelled as having
+    // no exam at all. Ontario advances them on a cluster exam at regionals and
+    // has them write a multiple-choice test again at provincials, alongside a
+    // submitted paper and a live presentation.
+    //
+    // `hasRoleplay` stays true at provincials on purpose. The judged
+    // interaction is a sales call performed to a judge in role, so Quick Think
+    // drills are exactly the right practice — and that flag is what keeps the
+    // Quick Think dial on the Study screen for these students.
 
     static let professionalSelling: [DECAEvent] = [
         DECAEvent(code: "PSE", name: "Professional Selling", cluster: .marketing,
-                  regional: EventComponents(hasRoleplay: true),
-                  provincial: EventComponents(hasRoleplay: true)),
+                  regional: .examOnly,
+                  provincial: EventComponents(hasExam: true, hasRoleplay: true, hasPresentation: true)),
         DECAEvent(code: "FCE", name: "Financial Consulting", cluster: .finance,
-                  regional: EventComponents(hasRoleplay: true),
-                  provincial: EventComponents(hasRoleplay: true)),
+                  regional: .examOnly,
+                  provincial: EventComponents(hasExam: true, hasRoleplay: true, hasPresentation: true)),
         DECAEvent(code: "HTPS", name: "Hospitality and Tourism Professional Selling",
                   cluster: .hospitality,
-                  regional: EventComponents(hasRoleplay: true),
-                  provincial: EventComponents(hasRoleplay: true)),
+                  regional: .examOnly,
+                  provincial: EventComponents(hasExam: true, hasRoleplay: true, hasPresentation: true)),
     ]
 
     // MARK: - Lookup
