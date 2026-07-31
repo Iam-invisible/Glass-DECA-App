@@ -68,7 +68,12 @@ struct GoalDial: View {
     }
 
     var body: some View {
-        VStack(spacing: 11) {
+        // Deliberately uneven rhythm rather than one uniform gap. The label
+        // belongs to the top edge, so it sits close to it; the ring is the
+        // subject and needs air on both sides to read as the centre of the
+        // card; the button is a separate act and takes the largest gap. A
+        // single spacing value made all three feel like a list.
+        VStack(spacing: 0) {
             HStack(spacing: 6) {
                 Image(systemName: systemImage)
                     .font(.system(size: 11, weight: .bold))
@@ -80,15 +85,16 @@ struct GoalDial: View {
                     .minimumScaleFactor(0.8)
                 Spacer(minLength: 0)
             }
+            .padding(.bottom, 15)
 
             ZStack {
                 ProgressRing(progress: fraction,
                              lineWidth: 9,
                              tint: met ? Palette.success : tint)
-                    .frame(width: 84, height: 84)
-                VStack(spacing: -1) {
+                    .frame(width: 86, height: 86)
+                VStack(spacing: 1) {
                     CountingNumber(value: Double(done),
-                                   font: .numeric(24),
+                                   font: .numeric(25),
                                    color: Palette.textPrimary)
                     Text("of \(goal)")
                         .font(.appCaption)
@@ -96,10 +102,13 @@ struct GoalDial: View {
                         .monospacedDigit()
                 }
             }
+            .padding(.bottom, 18)
 
             startButton
         }
-        .padding(14)
+        .padding(.horizontal, 14)
+        .padding(.top, 14)
+        .padding(.bottom, 15)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
