@@ -278,6 +278,15 @@ private struct MistakeCard: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
+                    // The notebook already lists the choices above, so this
+                    // adds only the reasoning — the part that turns a repeated
+                    // mistake into a corrected one.
+                    if question.hasChoiceRationales {
+                        Divider().overlay(Palette.stroke)
+                        ChoiceRationaleList(question: question,
+                                            selectedIndex: entry.selectedIndex)
+                    }
+
                     if !question.performanceIndicators.isEmpty {
                         HStack(spacing: 5) {
                             ForEach(question.performanceIndicators, id: \.self) { code in

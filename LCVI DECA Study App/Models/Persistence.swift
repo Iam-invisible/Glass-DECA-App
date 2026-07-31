@@ -55,6 +55,13 @@ final class CDQuestion: NSManagedObject {
     @NSManaged var choiceD: String?
     @NSManaged var correctIndex: Int32
     @NSManaged var explanation: String?
+    /// Why each choice is right or wrong. Four attributes rather than one
+    /// encoded list, for the same reason the choices themselves are four:
+    /// no delimiter to escape, and the shape is visible in the model.
+    @NSManaged var rationaleA: String?
+    @NSManaged var rationaleB: String?
+    @NSManaged var rationaleC: String?
+    @NSManaged var rationaleD: String?
     @NSManaged var cluster: String?
     @NSManaged var examType: String?
     @NSManaged var difficulty: Int32
@@ -251,6 +258,13 @@ enum AppModel {
             attr("choiceD", .stringAttributeType),
             attr("correctIndex", .integer32AttributeType, optional: false, defaultValue: 0),
             attr("explanation", .stringAttributeType),
+            // Added after v1.0 build 1. Optional string attributes are a
+            // textbook lightweight migration, which the store description
+            // already opts into, and the recovery path below covers the rest.
+            attr("rationaleA", .stringAttributeType),
+            attr("rationaleB", .stringAttributeType),
+            attr("rationaleC", .stringAttributeType),
+            attr("rationaleD", .stringAttributeType),
             attr("cluster", .stringAttributeType),
             attr("examType", .stringAttributeType),
             attr("difficulty", .integer32AttributeType, optional: false, defaultValue: 2),

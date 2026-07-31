@@ -14,7 +14,10 @@ final class QuestionBankService {
     private let names = AppModel.entityNames
 
     /// Bump when bundled sample content changes so existing installs pick it up.
-    static let seedVersion = 1
+    ///
+    /// 2 — per-choice rationales, and the corrections that came with writing
+    ///     them. A bump alone is not enough: see `refreshSampleContent()`.
+    static let seedVersion = 2
 
     init(context: NSManagedObjectContext) {
         self.ctx = context
@@ -56,6 +59,41 @@ final class QuestionBankService {
 
         if ctx.hasChanges { try? ctx.save() }
         return inserted
+    }
+
+    /// Re-applies bundled content onto sample rows that already exist.
+    ///
+    /// `seedIfNeeded` only ever inserts, so a question that shipped in an
+    /// earlier build never picks up a corrected explanation or newly written
+    /// rationales — the stable IDs that stop duplicates also stop updates.
+    /// This closes that gap and runs only on a seed-version bump.
+    ///
+    /// It touches rows still flagged `isSample`. Anything the student wrote
+    /// themselves is untouched, and bookmarks survive on the rows it does
+    /// rewrite, because a bookmark belongs to the student rather than to the
+    /// content.
+    func refreshSampleContent() {
+        let seedsByID = Dictionary(SeedQuestions.all.map { ($0.id, $0) },
+                                   uniquingKeysWith: { first, _ in first })
+        for entity in allQuestionEntities() {
+            guard entity.isSample,
+                  let id = entity.id,
+                  let seed = seedsByID[id] else { continue }
+            let bookmarked = entity.isBookmarked
+            entity.apply(seed)
+            entity.isBookmarked = bookmarked
+        }
+
+        let promptsByID = Dictionary(SeedRoleplays.all.map { ($0.id, $0) },
+                                     uniquingKeysWith: { first, _ in first })
+        for entity in allRoleplayEntities() {
+            guard entity.isSample,
+                  let id = entity.id,
+                  let seed = promptsByID[id] else { continue }
+            entity.apply(seed)
+        }
+
+        if ctx.hasChanges { try? ctx.save() }
     }
 
     // MARK: - Queries

@@ -391,6 +391,11 @@ struct MockQuestionRow: View {
                             .foregroundStyle(Palette.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
+                    if question.hasChoiceRationales {
+                        Divider().overlay(Palette.stroke)
+                        ChoiceRationaleList(question: question,
+                                            selectedIndex: outcome.selectedIndex < 0 ? nil : outcome.selectedIndex)
+                    }
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }

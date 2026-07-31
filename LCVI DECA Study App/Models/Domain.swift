@@ -193,6 +193,11 @@ struct QuestionData: Identifiable, Codable, Hashable {
     var choices: [String]          // exactly 4
     var correctIndex: Int
     var explanation: String
+    /// One line per choice saying why it is right or wrong, parallel to
+    /// `choices`. Empty means the question predates the field or was imported
+    /// without it — every reader must treat it as optional, because a student's
+    /// own imported bank will never have it.
+    var choiceRationales: [String] = []
     var cluster: DECACluster
     var examType: String
     var difficulty: Difficulty
@@ -202,7 +207,7 @@ struct QuestionData: Identifiable, Codable, Hashable {
     var isBookmarked: Bool = false
 
     enum CodingKeys: String, CodingKey {
-        case id, text, choices, correctIndex, explanation, cluster, examType
+        case id, text, choices, correctIndex, explanation, choiceRationales, cluster, examType
         case difficulty, tags, performanceIndicators, isSample, isBookmarked
     }
 
@@ -211,6 +216,7 @@ struct QuestionData: Identifiable, Codable, Hashable {
          choices: [String],
          correctIndex: Int,
          explanation: String,
+         choiceRationales: [String] = [],
          cluster: DECACluster,
          examType: String,
          difficulty: Difficulty,
@@ -223,6 +229,7 @@ struct QuestionData: Identifiable, Codable, Hashable {
         self.choices = choices
         self.correctIndex = correctIndex
         self.explanation = explanation
+        self.choiceRationales = choiceRationales
         self.cluster = cluster
         self.examType = examType
         self.difficulty = difficulty
@@ -232,6 +239,17 @@ struct QuestionData: Identifiable, Codable, Hashable {
         self.isBookmarked = isBookmarked
     }
 
+    /// The line for one choice, or nil when this question carries none.
+    func rationale(for index: Int) -> String? {
+        guard choiceRationales.indices.contains(index) else { return nil }
+        let line = choiceRationales[index].trimmingCharacters(in: .whitespacesAndNewlines)
+        return line.isEmpty ? nil : line
+    }
+
+    var hasChoiceRationales: Bool {
+        choiceRationales.contains { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
@@ -239,6 +257,7 @@ struct QuestionData: Identifiable, Codable, Hashable {
         choices = try container.decode([String].self, forKey: .choices)
         correctIndex = try container.decode(Int.self, forKey: .correctIndex)
         explanation = try container.decodeIfPresent(String.self, forKey: .explanation) ?? ""
+        choiceRationales = try container.decodeIfPresent([String].self, forKey: .choiceRationales) ?? []
         cluster = try container.decode(DECACluster.self, forKey: .cluster)
         examType = try container.decodeIfPresent(String.self, forKey: .examType) ?? cluster.examName
         difficulty = try container.decodeIfPresent(Difficulty.self, forKey: .difficulty) ?? .medium

@@ -13,6 +13,13 @@ extension CDQuestion {
         [choiceA ?? "", choiceB ?? "", choiceC ?? "", choiceD ?? ""]
     }
 
+    /// Empty when the question carries no rationales, so callers can test the
+    /// array rather than four separate optionals.
+    var rationalesArray: [String] {
+        let all = [rationaleA ?? "", rationaleB ?? "", rationaleC ?? "", rationaleD ?? ""]
+        return all.contains(where: { !$0.isEmpty }) ? all : []
+    }
+
     var clusterValue: DECACluster { DECACluster.from(cluster) ?? .marketing }
     var difficultyValue: Difficulty { Difficulty(rawValue: Int(difficulty)) ?? .medium }
     var tagList: [String] { ListCodec.decode(tags) }
@@ -25,6 +32,7 @@ extension CDQuestion {
             choices: choicesArray,
             correctIndex: Int(correctIndex),
             explanation: explanation ?? "",
+            choiceRationales: rationalesArray,
             cluster: clusterValue,
             examType: examType ?? clusterValue.examName,
             difficulty: difficultyValue,
@@ -44,6 +52,10 @@ extension CDQuestion {
         choiceD = data.choices.indices.contains(3) ? data.choices[3] : ""
         correctIndex = Int32(data.correctIndex)
         explanation = data.explanation
+        rationaleA = data.choiceRationales.indices.contains(0) ? data.choiceRationales[0] : nil
+        rationaleB = data.choiceRationales.indices.contains(1) ? data.choiceRationales[1] : nil
+        rationaleC = data.choiceRationales.indices.contains(2) ? data.choiceRationales[2] : nil
+        rationaleD = data.choiceRationales.indices.contains(3) ? data.choiceRationales[3] : nil
         cluster = data.cluster.rawValue
         examType = data.examType
         difficulty = Int32(data.difficulty.rawValue)

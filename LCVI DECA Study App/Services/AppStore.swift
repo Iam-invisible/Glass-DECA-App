@@ -180,7 +180,14 @@ final class AppStore: ObservableObject {
         Haptics.enabled = settings.hapticsEnabled
         SoundEffects.enabled = settings.soundEnabled
 
+        let isUpgrade = settings.seededVersion > 0
+            && settings.seededVersion < QuestionBankService.seedVersion
         bank.seedIfNeeded()
+        if isUpgrade {
+            // Only on an upgrade. A first run has just inserted this content,
+            // so rewriting every row it created would be pure work.
+            bank.refreshSampleContent()
+        }
         if settings.seededVersion < QuestionBankService.seedVersion {
             settings.seededVersion = QuestionBankService.seedVersion
         }

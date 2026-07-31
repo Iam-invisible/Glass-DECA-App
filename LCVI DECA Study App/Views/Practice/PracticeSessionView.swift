@@ -284,6 +284,11 @@ struct PracticeSessionView: View {
                 }
             }
 
+            if question.hasChoiceRationales {
+                Divider().overlay(Palette.stroke)
+                ChoiceRationaleList(question: question, selectedIndex: runner.selected)
+            }
+
             if !question.performanceIndicators.isEmpty {
                 Divider().overlay(Palette.stroke)
                 VStack(alignment: .leading, spacing: 5) {

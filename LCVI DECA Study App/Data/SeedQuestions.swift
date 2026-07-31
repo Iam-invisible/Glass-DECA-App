@@ -11,6 +11,9 @@
 
 import Foundation
 
+/// `why` is one line per choice, in A–D order, saying why that option is right
+/// or wrong. It is optional so the questions written before the field existed
+/// still compile; anything added from here on should carry it.
 private func q(_ key: String,
                _ cluster: DECACluster,
                _ difficulty: Difficulty,
@@ -18,6 +21,7 @@ private func q(_ key: String,
                _ a: String, _ b: String, _ c: String, _ d: String,
                correct: Int,
                explanation: String,
+               why: [String] = [],
                tags: [String],
                pis: [String]) -> QuestionData {
     QuestionData(
@@ -26,6 +30,7 @@ private func q(_ key: String,
         choices: [a, b, c, d],
         correctIndex: correct,
         explanation: explanation,
+        choiceRationales: why,
         cluster: cluster,
         examType: cluster.examName,
         difficulty: difficulty,
@@ -48,6 +53,10 @@ enum SeedQuestions {
           "Penetration pricing", "Price skimming", "Loss-leader pricing", "Everyday low pricing",
           correct: 1,
           explanation: "Price skimming sets a high introductory price to capture revenue from early adopters who are least price-sensitive, then lowers it over time to reach broader segments. Penetration pricing does the opposite — it starts low to win market share quickly.",
+          why: ["Penetration pricing is the mirror image of this: launch low to buy market share fast, then raise the price later. This launch started high.",
+                "Correct. A high launch price captures the early adopters who care least about price, then drops to reach everyone else.",
+                "A loss leader is priced below cost to pull shoppers into a store so they buy other things. $329 earbuds are not being sold at a loss.",
+                "Everyday low pricing holds one steady low price instead of moving it. This price moved by $130."],
           tags: ["pricing", "product launch"],
           pis: ["MK:002"]),
 
@@ -56,6 +65,10 @@ enum SeedQuestions {
           "Psychographic", "Geographic", "Demographic", "Behavioural",
           correct: 2,
           explanation: "Age, income, gender, education and family size are demographic variables. Psychographic segmentation uses lifestyle and values, geographic uses location, and behavioural uses purchase patterns such as usage rate or loyalty.",
+          why: ["Psychographic segmentation splits by lifestyle, values and personality — not by a measurable fact like age.",
+                "Geographic segmentation splits by where customers live: country, region, climate, city size.",
+                "Correct. Age is a demographic variable, alongside income, gender, education and family size.",
+                "Behavioural segmentation splits by what customers do — usage rate, loyalty, benefits sought, purchase occasion."],
           tags: ["segmentation", "target market"],
           pis: ["MK:006"]),
 
@@ -64,6 +77,10 @@ enum SeedQuestions {
           "Advertising", "Public relations", "Sales promotion", "Personal selling",
           correct: 1,
           explanation: "Unpaid, third-party coverage that builds goodwill is publicity, which falls under public relations. Advertising is paid and controlled by the business; sales promotion offers a short-term incentive; personal selling is direct one-to-one persuasion.",
+          why: ["Advertising is paid for and controlled by the business. The restaurant paid nothing and controlled nothing here.",
+                "Correct. Unpaid third-party coverage that builds goodwill is publicity, which sits inside public relations.",
+                "Sales promotion is a short-term incentive — a coupon, contest or free sample — designed to trigger a purchase now.",
+                "Personal selling is direct one-to-one persuasion between a salesperson and a buyer."],
           tags: ["promotion", "public relations"],
           pis: ["MK:004"]),
 
@@ -72,6 +89,10 @@ enum SeedQuestions {
           "A new competitor entering the market", "Rising interest rates", "A highly trained sales team", "A change in consumer privacy law",
           correct: 2,
           explanation: "Strengths and weaknesses are internal — they describe resources the business controls, such as staff, brand equity or facilities. Opportunities and threats are external forces like competitors, the economy and regulation.",
+          why: ["A competitor is outside the business's control, which makes it an external threat.",
+                "Interest rates are an economic force the business cannot control — external.",
+                "Correct. Staff are a resource the business owns and develops, so a trained sales team is an internal strength.",
+                "Regulation is external: the business can respond to a privacy law but cannot control it."],
           tags: ["situation analysis", "SWOT", "planning"],
           pis: ["MK:005"]),
 
@@ -80,6 +101,10 @@ enum SeedQuestions {
           "Primary research", "Secondary research", "Experimental research", "Observational research",
           correct: 1,
           explanation: "Secondary research uses data that already exists and was collected by someone else. Primary research is collected first-hand for the current problem through surveys, interviews, observation or experiments.",
+          why: ["Primary research is gathered first-hand for the problem at hand — the marketer would have to collect it themselves.",
+                "Correct. Census data already exists and was collected by someone else for another purpose.",
+                "Experimental research manipulates a variable to measure its effect, such as testing two prices in two matched stores. It is a form of primary research.",
+                "Observational research watches behaviour directly, such as counting foot traffic. It is also primary research."],
           tags: ["marketing research", "data"],
           pis: ["MK:007"]),
 
@@ -88,6 +113,10 @@ enum SeedQuestions {
           "Introduction", "Growth", "Maturity", "Decline",
           correct: 2,
           explanation: "Maturity is marked by flat sales, many competitors, and heavy emphasis on differentiation, promotion and efficiency to defend share. In decline, sales actively fall and firms harvest or discontinue the product.",
+          why: ["In introduction, sales are small and the firm is still building awareness. Competition has not arrived yet.",
+                "In growth, sales climb quickly and competitors appear, but the focus is on expanding share rather than defending it.",
+                "Correct. Flat sales, crowded competition, and a focus on differentiation and cost control all describe maturity.",
+                "In decline, sales actively fall and firms harvest or discontinue the product. Here sales have levelled off, not dropped."],
           tags: ["product life cycle", "product management"],
           pis: ["MK:008"]),
 
@@ -96,6 +125,10 @@ enum SeedQuestions {
           "Exclusive distribution", "Selective distribution", "Intensive distribution", "Direct distribution",
           correct: 2,
           explanation: "Intensive distribution places convenience goods in the maximum number of outlets because customers will not search or substitute effort for them. Exclusive distribution limits sales to one retailer per area and suits luxury or specialty goods.",
+          why: ["Exclusive distribution gives one retailer per area the sole right to sell, which suits luxury and specialty goods.",
+                "Selective distribution uses a limited set of chosen outlets — typical of appliances or mid-range clothing.",
+                "Correct. A convenience good like gum needs maximum coverage, because a customer will buy a rival brand rather than search.",
+                "Direct distribution sells straight from producer to consumer with no retailer in between, which is the opposite of what is wanted here."],
           tags: ["channel management", "distribution"],
           pis: ["MK:003"]),
 
@@ -104,6 +137,10 @@ enum SeedQuestions {
           "39.4%", "65.0%", "60.6%", "35.0%",
           correct: 0,
           explanation: "Markup dollars are $99 − $60 = $39. As a percentage of the selling price: $39 ÷ $99 = 39.4%. Note that markup on cost would be $39 ÷ $60 = 65% — always check which base the question asks for.",
+          why: ["Correct. The markup is $99 − $60 = $39, and $39 ÷ $99 = 39.4% of the selling price.",
+                "This is markup on cost: $39 ÷ $60 = 65%. The question asked for a percentage of the selling price, so the base is $99.",
+                "This is the cost as a percentage of the selling price ($60 ÷ $99 = 60.6%), which is the complement of the answer, not the markup.",
+                "No standard markup calculation produces 35%. If you landed here, check which two numbers you divided and in which order."],
           tags: ["pricing", "markup", "calculation"],
           pis: ["MK:002"]),
 
@@ -112,6 +149,10 @@ enum SeedQuestions {
           "product positioning.", "channel management.", "market segmentation.", "sales promotion.",
           correct: 0,
           explanation: "Positioning is the place a product occupies in the customer's mind relative to competitors. Claiming to be the safest option for families defines that mental space. Segmentation identifies who the customer is; positioning defines how the product is perceived.",
+          why: ["Correct. Positioning is the place a product holds in the customer's mind relative to rivals, and \"safest family SUV\" claims exactly that space.",
+                "Channel management is about how a product physically reaches the customer — wholesalers, retailers, logistics.",
+                "Segmentation identifies who the customer is. Positioning is about how the product is then perceived by them, which is what this claim does.",
+                "Sales promotion is a short-term incentive to buy now, not a lasting claim about how the brand is perceived."],
           tags: ["positioning", "branding"],
           pis: ["MK:008"]),
 
@@ -120,6 +161,10 @@ enum SeedQuestions {
           "New customers always spend less than existing customers.", "Retaining an existing customer usually costs less than acquiring a new one.", "Customer relationship management eliminates the need for advertising.", "Regulations require businesses to track repeat customers.",
           correct: 1,
           explanation: "Acquisition costs — advertising, incentives and sales time — typically exceed the cost of keeping a satisfied customer. Loyal customers also buy more often, are less price-sensitive, and generate referrals, which raises lifetime value.",
+          why: ["\"Always\" is the giveaway. A new customer can spend a great deal; the issue is what it costs to win them, not what they spend.",
+                "Correct. Advertising, incentives and sales time make acquisition expensive, while a satisfied customer costs comparatively little to keep.",
+                "Relationship management reduces how much a business must spend acquiring customers, but it never removes the need to promote.",
+                "No regulation requires businesses to track repeat customers. Customer relationship management is a commercial choice."],
           tags: ["customer relations", "loyalty"],
           pis: ["MK:009"])
     ]
