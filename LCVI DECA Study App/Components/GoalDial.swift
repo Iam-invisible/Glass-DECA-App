@@ -30,6 +30,37 @@ struct GoalDial: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Deliberately smaller than `PrimaryButton`: two of these sit side by
+    /// side, and a pair of full-height primaries dominated the screen above
+    /// the fold. A compact capsule still clears the 44pt touch target once
+    /// its padding is counted, and the ring stays the loudest thing on the
+    /// card — which is the point of the card.
+    private var startButton: some View {
+        Button {
+            Haptics.tap()
+            action()
+        } label: {
+            HStack(spacing: 5) {
+                Image(systemName: met ? "checkmark" : "play.fill")
+                    .font(.system(size: 11, weight: .bold))
+                Text(actionTitle)
+                    .font(.appFootnote.weight(.semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+            }
+            .foregroundStyle(met ? tint : .white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 34)
+            .background(
+                Capsule(style: .continuous)
+                    .fill(met ? tint.opacity(0.14) : tint)
+            )
+            .contentShape(Capsule(style: .continuous))
+        }
+        .buttonStyle(PressableButtonStyle(haptic: false))
+        .accessibilityLabel(actionTitle)
+    }
+
     private var met: Bool { done >= max(1, goal) }
     private var fraction: Double {
         let target = max(1, goal)
@@ -66,12 +97,7 @@ struct GoalDial: View {
                 }
             }
 
-            PrimaryButton(title: actionTitle,
-                          systemImage: met ? "checkmark" : "play.fill",
-                          tint: tint,
-                          isProminent: !met) {
-                action()
-            }
+            startButton
         }
         .padding(14)
         .frame(maxWidth: .infinity)
