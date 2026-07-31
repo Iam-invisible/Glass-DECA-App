@@ -189,9 +189,14 @@ final class QuestionBankService {
     // MARK: - Mutations
 
     @discardableResult
+    /// Every question entering the bank passes through here or `update`, from
+    /// manual entry and from imports alike, which is why sanitising happens at
+    /// this boundary rather than at each call site. Seeded content is already
+    /// clean; running it through costs nothing and means there is exactly one
+    /// rule about what a stored question looks like.
     func add(_ data: QuestionData) -> Bool {
         let obj = ctx.insert(CDQuestion.self, entity: names.question)
-        obj.apply(data)
+        obj.apply(data.sanitized())
         obj.createdAt = Date()
         return save()
     }
@@ -199,7 +204,7 @@ final class QuestionBankService {
     @discardableResult
     func update(_ data: QuestionData) -> Bool {
         guard let obj = entity(for: data.id) else { return add(data) }
-        obj.apply(data)
+        obj.apply(data.sanitized())
         return save()
     }
 

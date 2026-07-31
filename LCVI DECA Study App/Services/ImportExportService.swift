@@ -534,9 +534,15 @@ final class ImportExportService {
 
     /// Restores progress from a backup bundle. Questions are merged by ID.
     func restore(_ bundle: ExportBundle, settings: UserSettings, streakStore: StreakStore) {
+        // `bank.add` sanitises, so nothing stored here can be structurally
+        // dangerous. What it cannot do is invent a question out of one that
+        // arrived empty, so those are skipped rather than turned into a row of
+        // em-dashes the student would have to find and delete by hand.
         let existingIDs = Set(bank.allQuestions().map(\.id))
         for question in bundle.questions where !existingIDs.contains(question.id) {
-            bank.add(question)
+            let cleaned = question.sanitized()
+            guard cleaned.isStructurallyValid else { continue }
+            bank.add(cleaned)
         }
 
         guard let progress = bundle.progress else {
