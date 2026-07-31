@@ -787,6 +787,9 @@ struct AIStatusView: View {
         case .deviceNotSupported:          return "Not supported on this device"
         case .modelDownloading:            return "On"
         case .temporarilyUnavailable:      return "Unknown"
+        // This row is about Apple's model specifically, which is exactly what
+        // is missing when the local coach is the one running.
+        case .localCoachAvailable:         return "Not supported on this device"
         }
     }
 
@@ -797,6 +800,7 @@ struct AIStatusView: View {
         case .deviceNotSupported:          return "Unavailable"
         case .appleIntelligenceNotEnabled: return "Not loaded"
         case .temporarilyUnavailable:      return "Unavailable right now"
+        case .localCoachAvailable:         return "Local coach ready"
         }
     }
 

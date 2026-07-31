@@ -99,6 +99,11 @@ struct RootView: View {
         }
         .onChange(of: scenePhase) { phase in
             if phase == .active { store.onForeground() }
+            // .background rather than .inactive: inactive fires for the app
+            // switcher and for control centre, and dropping a gigabyte of
+            // weights every time someone swipes down would be worse than
+            // holding them.
+            if phase == .background { store.onBackground() }
         }
         .celebrationLayer()
     }

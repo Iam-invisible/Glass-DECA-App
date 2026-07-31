@@ -30,6 +30,10 @@ enum AIAvailability: Equatable {
     case deviceNotSupported
     case modelDownloading
     case temporarilyUnavailable
+    /// Apple's model is out of reach, but the student downloaded the local
+    /// coach and this build has a runtime for it. Added alongside the five
+    /// required strings below rather than replacing any of them (§4).
+    case localCoachAvailable
 
     var title: String {
         switch self {
@@ -38,6 +42,7 @@ enum AIAvailability: Equatable {
         case .deviceNotSupported:         return "This Device Does Not Support AI Feedback"
         case .modelDownloading:           return "Local Model Still Downloading"
         case .temporarilyUnavailable:     return "AI Feedback Temporarily Unavailable"
+        case .localCoachAvailable:        return "Local AI Coach Available"
         }
     }
 
@@ -53,6 +58,8 @@ enum AIAvailability: Equatable {
             return "Apple is still downloading the on-device model. AI coaching will switch on automatically once it finishes."
         case .temporarilyUnavailable:
             return "AI coaching can't run right now — this is usually temporary. The rest of the app is unaffected."
+        case .localCoachAvailable:
+            return "This device can't run Apple's on-device model, so the local coach you downloaded is doing the work instead. It runs entirely on this phone and never uses the network."
         }
     }
 
@@ -63,19 +70,20 @@ enum AIAvailability: Equatable {
         case .deviceNotSupported:          return "iphone.slash"
         case .modelDownloading:            return "arrow.down.circle"
         case .temporarilyUnavailable:      return "exclamationmark.triangle"
+        case .localCoachAvailable:         return "cpu"
         }
     }
 
     var tint: Color {
         switch self {
-        case .available:        return Palette.success
+        case .available, .localCoachAvailable: return Palette.success
         case .modelDownloading: return Palette.accent
         case .deviceNotSupported, .appleIntelligenceNotEnabled: return Palette.textSecondary
         case .temporarilyUnavailable: return Palette.gold
         }
     }
 
-    var isUsable: Bool { self == .available }
+    var isUsable: Bool { self == .available || self == .localCoachAvailable }
 }
 
 // MARK: - Feedback shapes
@@ -133,6 +141,11 @@ final class FoundationModelFeedbackService: ObservableObject {
     private var sessionBox: Any?
     #endif
 
+    /// The downloaded-GGUF fallback, used only where Apple's model is out of
+    /// reach. Nil until `attachLocalCoach` finds both a model file and a build
+    /// with a runtime for it.
+    private var localCoach: LocalCoachEngine?
+
     init() {
         refreshAvailability()
     }
@@ -145,25 +158,55 @@ final class FoundationModelFeedbackService: ObservableObject {
             switch SystemLanguageModel.default.availability {
             case .available:
                 availability = .available
+                return
             case .unavailable(let reason):
                 switch reason {
                 case .deviceNotEligible:
-                    availability = .deviceNotSupported
+                    availability = resolved(fallingBackTo: .deviceNotSupported)
                 case .appleIntelligenceNotEnabled:
-                    availability = .appleIntelligenceNotEnabled
+                    availability = resolved(fallingBackTo: .appleIntelligenceNotEnabled)
                 case .modelNotReady:
                     availability = .modelDownloading
                 @unknown default:
-                    availability = .temporarilyUnavailable
+                    availability = resolved(fallingBackTo: .temporarilyUnavailable)
                 }
             @unknown default:
-                availability = .temporarilyUnavailable
+                availability = resolved(fallingBackTo: .temporarilyUnavailable)
             }
             return
         }
         #endif
-        // iOS 16–25, or a build without the framework: no on-device model.
-        availability = .deviceNotSupported
+        // iOS 16–25, or a build without the framework: no Apple model. The
+        // local coach is the only path left, if there is one.
+        availability = resolved(fallingBackTo: .deviceNotSupported)
+    }
+
+    /// The local coach outranks any "unavailable" status, because from the
+    /// student's side AI coaching genuinely does work. It never outranks
+    /// `.available` — Apple's model is better and costs no storage.
+    private func resolved(fallingBackTo unavailable: AIAvailability) -> AIAvailability {
+        localCoach?.isReady == true ? .localCoachAvailable : unavailable
+    }
+
+    // MARK: Local coach
+
+    /// Called by `AppStore` once the model's state is known. Idempotent.
+    func attachLocalCoach(modelURL: URL) {
+        guard localCoach == nil else { return }
+        localCoach = CoachEngineFactory.makeEngine(modelURL: modelURL)
+        refreshAvailability()
+    }
+
+    func detachLocalCoach() {
+        localCoach?.unload()
+        localCoach = nil
+        refreshAvailability()
+    }
+
+    /// Frees the weights when the app leaves the foreground. Holding ~1 GB
+    /// across a suspend is the fastest way to be jetsammed on a 4 GB phone.
+    func unloadLocalCoach() {
+        localCoach?.unload()
     }
 
     /// Warms the model so the first explanation feels instant.
@@ -217,27 +260,46 @@ final class FoundationModelFeedbackService: ObservableObject {
     private func generate(_ prompt: String) async -> String? {
         guard isUsable else { return nil }
         #if canImport(FoundationModels)
-        guard #available(iOS 26.0, *) else { return nil }
-        guard let session = freshSession() else { return nil }
+        if #available(iOS 26.0, *), let session = freshSession() {
+            isGenerating = true
+            defer { isGenerating = false }
+
+            do {
+                let response = try await session.respond(to: prompt)
+                let text = Self.sanitize(response.content)
+                return text.isEmpty ? nil : text
+            } catch {
+                NSLog("FoundationModels generation failed: \(error.localizedDescription)")
+                // A failure here is almost always transient (guardrails, context
+                // limit, model busy). Surface it as temporarily unavailable but
+                // leave the reported hardware capability alone.
+                refreshAvailability()
+                return nil
+            }
+        }
+        #endif
+        return await generateLocally(prompt)
+    }
+
+    /// The downloaded-model path. Reached only where Apple's model is absent,
+    /// and returns nil on any failure so every caller keeps its written
+    /// fallback — the same contract the Foundation Models path honours.
+    ///
+    /// The cap is deliberate: these prompts want three or four sentences, and
+    /// an unbounded generation on an A13 is a thermal problem rather than a
+    /// quality one.
+    private func generateLocally(_ prompt: String) async -> String? {
+        guard let localCoach else { return nil }
 
         isGenerating = true
         defer { isGenerating = false }
 
-        do {
-            let response = try await session.respond(to: prompt)
-            let text = Self.sanitize(response.content)
-            return text.isEmpty ? nil : text
-        } catch {
-            NSLog("FoundationModels generation failed: \(error.localizedDescription)")
-            // A failure here is almost always transient (guardrails, context
-            // limit, model busy). Surface it as temporarily unavailable but
-            // leave the reported hardware capability alone.
-            refreshAvailability()
-            return nil
-        }
-        #else
-        return nil
-        #endif
+        let raw = await localCoach.respond(instructions: Self.systemInstructions,
+                                           prompt: prompt,
+                                           maxTokens: 320)
+        guard let raw else { return nil }
+        let text = Self.sanitize(raw)
+        return text.isEmpty ? nil : text
     }
 
     /// The model still reaches for markdown emphasis now and then. Strip it so

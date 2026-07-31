@@ -196,6 +196,7 @@ final class AppStore: ObservableObject {
 
     func onAppear() {
         ai.userEnabled = settings.aiEnabled
+        syncLocalCoach()
         ai.refreshAvailability()
         streaks.reconcile()
         refresh()
@@ -207,7 +208,27 @@ final class AppStore: ObservableObject {
     func onForeground() {
         streaks.reconcile()
         refresh()
+        syncLocalCoach()
         ai.refreshAvailability()
+    }
+
+    /// Frees the local model's weights. ~1 GB held across a suspend is the
+    /// fastest way to be jetsammed on a 4 GB phone, and the engine reloads
+    /// lazily on the next request anyway.
+    func onBackground() {
+        ai.unloadLocalCoach()
+    }
+
+    /// Hands the downloaded model to the AI service, or takes it away again if
+    /// the student deleted it. This is what makes the download produce
+    /// behaviour — before it, `LocalCoachEngine` had no constructor anywhere in
+    /// the app and the 808 MB did nothing at all.
+    private func syncLocalCoach() {
+        if LocalModelService.isModelPresent {
+            ai.attachLocalCoach(modelURL: LocalModelService.modelURL)
+        } else {
+            ai.detachLocalCoach()
+        }
     }
 
     // MARK: - Derived state
