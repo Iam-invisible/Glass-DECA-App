@@ -121,8 +121,28 @@ final class LocalModelService: NSObject, ObservableObject {
         ProcessInfo.processInfo.physicalMemory >= minimumPhysicalMemory
     }
 
+    /// Whether the download is offered at all.
+    ///
+    /// Tied to whether this build can actually *run* a GGUF rather than to a
+    /// hand-maintained flag. Without a llama runtime linked in,
+    /// `CoachEngineFactory` returns nil, so a student who accepted would spend
+    /// 808 MB of someone's Wi-Fi, see the coach install, and get back exactly
+    /// the written fallbacks they already had. That is a feature that does not
+    /// function, which is both a poor experience and a plausible App Review
+    /// rejection.
+    ///
+    /// Because it reads `canRunLocalModel`, adding the package (§9.1) switches
+    /// the offer back on by itself. There is nothing to remember to flip.
+    static var isOffered: Bool { CoachEngineFactory.canRunLocalModel }
+
     override init() {
         super.init()
+        // The card is the only route to `deleteModel()`, so hiding it without
+        // this would strand 808 MB on a phone that accepted the offer in an
+        // earlier build, with nothing in the UI left to reclaim it.
+        if !Self.isOffered {
+            try? FileManager.default.removeItem(at: Self.modelDirectory)
+        }
         refreshState()
     }
 

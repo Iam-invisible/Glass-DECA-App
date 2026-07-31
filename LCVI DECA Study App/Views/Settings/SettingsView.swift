@@ -331,7 +331,7 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.plain)
 
-                if !store.ai.availability.isUsable {
+                if LocalModelService.isOffered, !store.ai.availability.isUsable {
                     Divider().overlay(Palette.stroke)
                     LocalAICoachCard(service: store.localModel, showsIntroCopy: false)
                 }

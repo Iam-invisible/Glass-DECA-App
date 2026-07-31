@@ -15,6 +15,11 @@
 			</array>
 		</dict>
 	</array>
+	<!-- The app's only cryptography is SHA-256 hashing of the downloaded model
+	     and TLS provided by the OS, both of which are exempt. Declaring this
+	     here means App Store Connect stops asking on every single upload. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Manrope-Regular.ttf</string>

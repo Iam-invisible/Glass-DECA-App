@@ -56,7 +56,11 @@ struct EventComponents: Equatable, Codable {
         if hasExam { parts.append("exam") }
         if hasRoleplay { parts.append("roleplay") }
         if hasPresentation { parts.append("presentation") }
-        return parts.isEmpty ? "no scored components" : parts.joined(separator: " + ")
+        // Prepared written events submit ahead of the deadline and present at
+        // provincials, so their regional column is genuinely empty. "No scored
+        // components" read like something had gone wrong; this says what is
+        // actually true.
+        return parts.isEmpty ? "nothing to compete" : parts.joined(separator: " + ")
     }
 }
 
