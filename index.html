@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy Notice — Glass: DECA Study App</title>
+<meta name="description" content="Privacy notice for Glass, an offline-first DECA Ontario study app. We collect no personal information.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Deliberately self-contained rather than linking /web/app.css. That file is
+     the interactive preview's stylesheet and will change as the preview does;
+     a privacy notice is a document Apple and users may load years from now and
+     it should not be able to break. Tokens below are copied from
+     Core/DesignSystem.swift, same as the preview's. -->
+<style>
+  :root {
+    --canvas:#F4F6FA; --card:#FFFFFF; --stroke:#E2E8F0;
+    --text-primary:#0F1B2D; --text-secondary:#53627A; --text-tertiary:#8A97AB;
+    --accent:#2563EB; --success:#12855C; --success-soft:#DDF5EC;
+    --display:'Instrument Serif',Didot,'Bodoni 72',Georgia,serif;
+    --text:'Manrope',-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --canvas:#0D1219; --card:#161E29; --stroke:#27313F;
+      --text-primary:#F2F5F9; --text-secondary:#9AA8BC; --text-tertiary:#6C7A8D;
+      --accent:#5B8DEF; --success:#34C793; --success-soft:#11312A;
+    }
+  }
+  *,*::before,*::after { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    margin:0; background:var(--canvas); color:var(--text-secondary);
+    font-family:var(--text); font-size:16px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:44rem; margin:0 auto; padding:56px 22px 96px; }
+
+  .eyebrow {
+    font-size:.75rem; font-weight:600; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--accent); margin:0 0 10px;
+  }
+  h1 {
+    font-family:var(--display); font-weight:400; font-size:clamp(2.2rem,6vw,3rem);
+    line-height:1.1; color:var(--text-primary); margin:0 0 8px; letter-spacing:.01em;
+  }
+  .updated { font-size:.9rem; color:var(--text-tertiary); margin:0 0 34px; }
+
+  h2 {
+    font-family:var(--display); font-weight:400; font-size:1.55rem; line-height:1.25;
+    color:var(--text-primary); margin:46px 0 12px; letter-spacing:.01em;
+  }
+  h3 {
+    font-size:1rem; font-weight:600; color:var(--text-primary); margin:26px 0 8px;
+  }
+  p { margin:0 0 15px; }
+  a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; word-break:break-word; }
+
+  ul { margin:0 0 15px; padding-left:1.15rem; }
+  li { margin:0 0 7px; }
+
+  .short {
+    background:var(--success-soft); border:1px solid color-mix(in srgb,var(--success) 26%,transparent);
+    border-radius:18px; padding:20px 22px; margin:0 0 40px;
+  }
+  .short h2 { margin:0 0 12px; font-size:1.2rem; }
+  .short ul { list-style:none; padding:0; margin:0; }
+  .short li { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; color:var(--text-primary); }
+  .short li::before { content:"✓"; color:var(--success); font-weight:700; flex:none; line-height:1.6; }
+  .short li:last-child { margin-bottom:0; }
+
+  .lede { font-size:1.06rem; color:var(--text-primary); }
+  .inshort {
+    font-weight:600; color:var(--text-primary);
+    border-left:3px solid var(--accent); padding-left:12px; margin:0 0 15px;
+  }
+
+  table { width:100%; border-collapse:collapse; margin:14px 0 20px; font-size:.9rem; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--stroke); vertical-align:top; }
+  th { color:var(--text-primary); font-weight:600; }
+  td.no { color:var(--success); font-weight:600; white-space:nowrap; }
+
+  footer {
+    margin-top:56px; padding-top:22px; border-top:1px solid var(--stroke);
+    font-size:.85rem; color:var(--text-tertiary);
+  }
+  @media print { body { background:#fff; } .wrap { padding:0; max-width:none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <p class="eyebrow">Glass: DECA Study App</p>
+  <h1>Privacy Notice</h1>
+  <p class="updated">Last updated 31 July 2026</p>
+
+  <div class="short">
+    <h2>The short version</h2>
+    <ul>
+      <li>Everything you do in Glass stays on your phone. Your answers, progress, notes and settings are never sent anywhere.</li>
+      <li>There is no account, no sign-in, and no way for us to identify you. We collect nothing.</li>
+      <li>There are no analytics, no advertising and no tracking of any kind in this app.</li>
+      <li>AI coaching, where your device supports it, runs entirely on your device. Your writing is never uploaded.</li>
+    </ul>
+  </div>
+
+  <p class="lede">This Privacy Notice for <strong>[INSERT YOUR LEGAL OR TRADING NAME]</strong> (“we”, “us”, or “our”) describes how and why we might access, collect, store, use, and/or share (“process”) your information when you use our services (“Services”), including when you download and use Glass: DECA Study App, or engage with us in any other related way.</p>
+
+  <p>In summary: we do not collect any personal information from you at all. Glass is an offline-first study application for high-school students preparing for DECA Ontario competitive events. It is a self-contained mobile app. There is no accompanying website, no user account, no sign-in, and no server operating behind it. Everything the app stores remains on your own device.</p>
+
+  <p><strong>Questions or concerns?</strong> Reading this Privacy Notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you have any questions, contact us at <a href="mailto:invisibledeveloper0@gmail.com">invisibledeveloper0@gmail.com</a>.</p>
+
+  <h2>1. What information do we collect?</h2>
+  <p class="inshort">In Short: We collect no personal information.</p>
+  <h3>Personal information you disclose to us</h3>
+  <p>We collect no personal information that you disclose to us, because the app provides no means of disclosing any to us. There is no registration, no account, no sign-in, no contact form, and no server to receive information.</p>
+  <p>Specifically, we do not collect names, email addresses, phone numbers, mailing or billing addresses, usernames, passwords, authentication data, job titles, contact preferences, or payment card details.</p>
+  <h3>Information stored on your device</h3>
+  <p>The app stores the following locally on your own device so that it can function. This information is not transmitted to us and we have no ability to access it:</p>
+  <ul>
+    <li>Your selected career cluster and competitive event</li>
+    <li>Your daily goals, reminder preferences, and reminder times</li>
+    <li>Your answers, practice history, mistakes, streaks, and progress statistics</li>
+    <li>Any study material you write, import, or export yourself</li>
+    <li>Display and accessibility preferences such as theme, sound, and haptics</li>
+  </ul>
+  <h3>Information automatically collected</h3>
+  <p>We do not automatically collect any information. The app contains no analytics software, no advertising software, no crash-reporting service, and no tracking technologies. We do not collect IP addresses, device identifiers, advertising identifiers, device characteristics, usage data, or location data. The app sets no cookies.</p>
+  <h3>Sensitive information</h3>
+  <p>We do not process sensitive information.</p>
+  <h3>Information collected from other sources</h3>
+  <p>We do not collect any information about you from third parties, public databases, data brokers, marketing partners, or social media platforms.</p>
+
+  <h2>2. How do we process your information?</h2>
+  <p class="inshort">In Short: We do not process your information, because we never receive it.</p>
+  <p>Because we collect no personal information, there is no processing by us for any purpose. We do not process information to deliver services to you, to communicate with you, for marketing, for analytics, for security or fraud prevention, or for any other purpose.</p>
+  <p>The data listed in Section 1 is used by the application, on your own device, solely to perform the functions you have asked it to perform: recording your progress, scheduling reminders you have set, and displaying your statistics. This activity takes place entirely on your device and is not visible to us.</p>
+
+  <h2>3. What legal bases do we rely on?</h2>
+  <p class="inshort">In Short: None, because we carry out no processing of personal information.</p>
+  <h3>If you are located in the EU or UK</h3>
+  <p>The General Data Protection Regulation (GDPR) and UK GDPR require us to explain the valid legal bases we rely on in order to process your personal information. As we do not collect or process any personal information, no legal basis is engaged. We do not rely on consent, contractual necessity, legal obligation, vital interests, or legitimate interests, because there is no processing to justify.</p>
+  <p>If we were ever required by law to disclose personal information about a user, we would have none to disclose.</p>
+  <h3>If you are located in Canada</h3>
+  <p>Canadian privacy law, including PIPEDA, is founded on consent to the collection, use, and disclosure of personal information. As we collect, use, and disclose no personal information, no consent — express or implied — is sought or required, and there is no consent for you to withdraw.</p>
+
+  <h2>4. When and with whom do we share your personal information?</h2>
+  <p class="inshort">In Short: We never share your personal information, because we never hold any.</p>
+  <p>We do not share, disclose, sell, rent, or transfer personal information in any situation. In particular:</p>
+  <ul>
+    <li>We use no third-party service providers, processors, or sub-processors.</li>
+    <li>We use no analytics, advertising, attribution, or crash-reporting providers.</li>
+    <li>We share nothing with affiliates, business partners, or marketing partners.</li>
+    <li>In the event of a merger, acquisition, financing, or sale of assets, there would be no user personal information capable of being transferred, because none exists.</li>
+    <li>We would have no personal information to produce in response to a legal request, subpoena, warrant, or court order.</li>
+  </ul>
+
+  <h2>5. Do we offer artificial intelligence-based products?</h2>
+  <p class="inshort">In Short: Yes. All AI features run entirely on your own device and nothing you write is uploaded.</p>
+  <p>As part of our Services, we offer features powered by artificial intelligence and machine learning (“AI Products”). Where your device supports them, these generate written coaching, explanations, and feedback on your practice work.</p>
+  <h3>Our AI Products</h3>
+  <p>Our AI Products are designed for the following function:</p>
+  <ul><li><strong>Text analysis</strong> — generating written study feedback on answers, roleplay transcripts, and practice responses.</li></ul>
+  <h3>How we process your data using AI</h3>
+  <p>All AI processing takes place locally on your own device. Your questions, answers, roleplay transcripts, and notes are never transmitted to us, to any artificial intelligence provider, or to any other third party. No third-party AI service receives your input, and there is no agreement with any AI vendor covering your data, because no vendor ever receives it.</p>
+  <p>Your content is never used to train, fine-tune, or improve any artificial intelligence model, whether ours or anyone else’s.</p>
+  <p>These features are optional and may be switched off at any time in the app’s settings. Where a device is not capable of running them, the app provides written guidance instead and remains fully usable.</p>
+  <p>AI-generated feedback is provided for study practice and may contain errors. Correct answers displayed in the app always come from the app’s own study material and are never determined by an AI model.</p>
+
+  <h2>6. How long do we keep your information?</h2>
+  <p class="inshort">In Short: We keep nothing, because we receive nothing.</p>
+  <p>We retain no personal information about you for any period, and we maintain no databases, server logs, or backup archives containing user personal information.</p>
+  <p>Information stored on your device by the app remains there for as long as you keep the app installed. You may erase your progress at any time from within the app’s settings, and deleting the app removes all of it from your device permanently.</p>
+
+  <h2>7. What are your privacy rights?</h2>
+  <p class="inshort">In Short: You retain complete and direct control over everything stored on your device. We hold nothing about you.</p>
+  <p>In some regions, such as the European Economic Area (EEA), the United Kingdom (UK), Switzerland, and Canada, you have certain rights under applicable data protection laws. These may include the right (i) to request access to and obtain a copy of your personal information, (ii) to request rectification or erasure, (iii) to restrict the processing of your personal information, (iv) where applicable, to data portability, and (v) not to be subject to automated decision-making. In certain circumstances you may also have the right to object to processing.</p>
+  <p>Because we hold no personal information about you, there is nothing for us to access, correct, erase, restrict, port, or object to. We make no automated decisions about you.</p>
+  <p>You may exercise equivalent control directly and immediately: everything the app stores is on your device, and you can review it, change it, export it as a file, or delete it entirely from within the app, at any time, without contacting us and without our knowledge.</p>
+  <h3>Complaints</h3>
+  <p>If you are located in the UK and are unhappy with how we have handled your privacy, you may contact us at <a href="mailto:invisibledeveloper0@gmail.com">invisibledeveloper0@gmail.com</a>. We will acknowledge your complaint within 30 days of receiving it, investigate without unjustifiable delay, keep you informed of progress, and explain the outcome.</p>
+  <p>This is in addition to the rights you have under the UK General Data Protection Regulation and the Data Protection Act 2018. If you are not satisfied with our final response, you may refer your complaint to the Information Commissioner’s Office:</p>
+  <ul>
+    <li>Website: <a href="https://ico.org.uk/make-a-complaint" rel="noopener">ico.org.uk/make-a-complaint</a></li>
+    <li>Helpline: 0303 123 1113</li>
+    <li>Post: Information Commissioner’s Office, Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF, United Kingdom</li>
+  </ul>
+  <p>If you are located in the EEA or the UK and you believe we are unlawfully processing your personal information, you also have the right to complain to your <a href="https://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm" rel="noopener">Member State data protection authority</a> or the <a href="https://ico.org.uk/make-a-complaint/data-protection-complaints/" rel="noopener">UK data protection authority</a>. If you are located in Switzerland, you may contact the <a href="https://www.edoeb.admin.ch/edoeb/en/home.html" rel="noopener">Federal Data Protection and Information Commissioner</a>.</p>
+  <h3>Withdrawing your consent</h3>
+  <p>We do not rely on your consent to process personal information, because we carry out no such processing. There is accordingly no consent for you to withdraw. Where the app asks you to permit device features — for example, permission to display reminder notifications — you may revoke that permission at any time in your device settings.</p>
+
+  <h2>8. Controls for do-not-track features</h2>
+  <p class="inshort">In Short: We do not track you, so there is nothing for a Do-Not-Track signal to disable.</p>
+  <p>Most web browsers, and some mobile operating systems and applications, include a Do-Not-Track (“DNT”) feature you can activate to signal your preference not to have your online browsing activities monitored and collected.</p>
+  <p>This application does not monitor, collect, or share information about your activity over time or across third-party websites or applications, and contains no technology capable of doing so. There is therefore no tracking for a DNT signal to affect. California law requires us to state how we respond to browser DNT signals: because we do not track users at all, no response is applicable.</p>
+
+  <h2>9. Do United States residents have specific privacy rights?</h2>
+  <p class="inshort">In Short: You may have rights over personal information a company holds about you. We hold none, in any category.</p>
+  <p>If you are a resident of California, Colorado, Connecticut, Delaware, Florida, Indiana, Iowa, Kentucky, Maryland, Minnesota, Montana, Nebraska, New Hampshire, New Jersey, Oregon, Rhode Island, Tennessee, Texas, Utah, or Virginia, you may have the right to request access to and receive details about the personal information we maintain about you and how we have processed it, to correct inaccuracies, to obtain a copy of it, or to delete it. You may also have the right to withdraw consent to our processing.</p>
+  <p>We maintain no personal information about any user, so each of these requests would return nothing.</p>
+  <h3>Categories of personal information we collect</h3>
+  <p>The table below shows the categories of personal information described by the California Consumer Privacy Act, and whether we have collected any in the preceding twelve (12) months.</p>
+  <table>
+    <thead><tr><th>Category</th><th>Examples</th><th>Collected</th></tr></thead>
+    <tbody>
+      <tr><td>A. Identifiers</td><td>Name, alias, postal address, telephone number, unique personal identifier, online identifier, IP address, email address, account name</td><td class="no">NO</td></tr>
+      <tr><td>B. Personal information as defined in the California Customer Records statute</td><td>Name, contact information, education, employment, financial information</td><td class="no">NO</td></tr>
+      <tr><td>C. Protected classification characteristics under state or federal law</td><td>Gender, age, date of birth, race and ethnicity, national origin, marital status</td><td class="no">NO</td></tr>
+      <tr><td>D. Commercial information</td><td>Transaction information, purchase history, financial details, payment information</td><td class="no">NO</td></tr>
+      <tr><td>E. Biometric information</td><td>Fingerprints and voiceprints</td><td class="no">NO</td></tr>
+      <tr><td>F. Internet or other similar network activity</td><td>Browsing history, search history, online behaviour, interactions with advertisements</td><td class="no">NO</td></tr>
+      <tr><td>G. Geolocation data</td><td>Device location</td><td class="no">NO</td></tr>
+      <tr><td>H. Audio, electronic, sensory, or similar information</td><td>Images and audio, video or call recordings</td><td class="no">NO</td></tr>
+      <tr><td>I. Professional or employment-related information</td><td>Business contact details, job title, work history</td><td class="no">NO</td></tr>
+      <tr><td>J. Education information</td><td>Student records and directory information</td><td class="no">NO</td></tr>
+      <tr><td>K. Inferences drawn from collected personal information</td><td>Profiles reflecting preferences and characteristics</td><td class="no">NO</td></tr>
+      <tr><td>L. Sensitive personal information</td><td>As defined by applicable state law</td><td class="no">NO</td></tr>
+    </tbody>
+  </table>
+  <p>We collect no personal information in any category listed above, and no other personal information through any other interaction.</p>
+  <h3>Sources of personal information</h3>
+  <p>Not applicable. We obtain no personal information from any source.</p>
+  <h3>How we use and share personal information</h3>
+  <p>We have not disclosed, sold, or shared any personal information to or with third parties for a business or commercial purpose in the preceding twelve (12) months. We will not sell or share personal information belonging to users or other consumers in the future. We do not process personal information for targeted advertising or for profiling in furtherance of decisions producing legal or similarly significant effects.</p>
+  <h3>Your rights</h3>
+  <p>You have rights under certain US state data protection laws. These rights include:</p>
+  <ul>
+    <li>Right to know whether or not we are processing your personal data</li>
+    <li>Right to access your personal data</li>
+    <li>Right to correct inaccuracies in your personal data</li>
+    <li>Right to request the deletion of your personal data</li>
+    <li>Right to obtain a copy of the personal data you previously shared with us</li>
+    <li>Right to non-discrimination for exercising your rights</li>
+    <li>Right to opt out of the processing of your personal data if it is used for targeted advertising, the sale of personal data, or profiling</li>
+    <li>Right to access the categories of personal data being processed</li>
+    <li>Right to obtain a list of the categories of third parties to which we have disclosed personal data</li>
+    <li>Right to obtain a list of specific third parties to which we have disclosed personal data</li>
+    <li>Right to review, understand, question, and correct how personal data has been profiled</li>
+    <li>Right to limit the use and disclosure of sensitive personal data</li>
+  </ul>
+  <p>We honour each of these rights. Because we hold no personal data, process none, disclose none to any third party, and carry out no profiling, a request under any of them will return a confirmation that we hold nothing about you.</p>
+  <h3>How to exercise your rights</h3>
+  <p>To exercise these rights, email us at <a href="mailto:invisibledeveloper0@gmail.com">invisibledeveloper0@gmail.com</a>. You may also designate an authorised agent to make a request on your behalf, in accordance with applicable law.</p>
+  <h3>Request verification</h3>
+  <p>Ordinarily we would need to verify your identity before responding to a request. Because we hold no information about you, we have nothing against which to verify an identity and nothing that could be disclosed to the wrong person. We will not ask you to provide personal information in order to make a privacy request.</p>
+  <h3>Appeals</h3>
+  <p>If we decline to take action regarding your request, you may appeal by emailing us at <a href="mailto:invisibledeveloper0@gmail.com">invisibledeveloper0@gmail.com</a>. We will respond in writing with our decision and the reasons for it. If your appeal is denied, you may submit a complaint to your state attorney general.</p>
+
+  <h2>10. Do we make updates to this notice?</h2>
+  <p class="inshort">In Short: Yes, we will update this notice as necessary to stay accurate and compliant with relevant laws.</p>
+  <p>We may update this Privacy Notice from time to time. The updated version will be indicated by an updated “Last updated” date at the top of this Privacy Notice. If we make material changes, the application will ask you to review and accept the updated notice the next time you open it. We encourage you to review this notice periodically.</p>
+
+  <h2>11. How can you contact us about this notice?</h2>
+  <p>If you have questions or comments about this notice, you may email us at <a href="mailto:invisibledeveloper0@gmail.com">invisibledeveloper0@gmail.com</a>.</p>
+  <p>Please note that because we hold no information about you, we cannot look up an account or identify you from your message. Please describe your question directly.</p>
+
+  <h2>12. How can you review, update, or delete the data we collect from you?</h2>
+  <p>We collect no data from you, so there is no data held by us for you to review, update, or delete.</p>
+  <p>All information the application stores is on your own device and under your sole control. You can review it, change it, export it as a file, or delete it at any time from within the app’s settings. Uninstalling the application permanently removes all of it. None of these actions requires you to contact us, and we are not notified when you take them.</p>
+
+  <h2>13. Independence from DECA</h2>
+  <p>Glass: DECA Study App is an independent study aid. It is not affiliated with, endorsed by, or sponsored by DECA Inc. or DECA Ontario.</p>
+  <p>All practice questions, roleplay scenarios, and competitive event information contained in the application are original material created for study purposes. They are not official DECA examination content. Event formats and requirements are provided in good faith and should be confirmed against the current DECA Ontario competitive event guidelines.</p>
+
+  <footer>
+    <p>Glass: DECA Study App — Privacy Notice — Last updated 31 July 2026.<br>
+    This notice is also included in full inside the app, under Settings ▸ About ▸ Privacy notice.</p>
+  </footer>
+
+</main>
+</body>
+</html>
