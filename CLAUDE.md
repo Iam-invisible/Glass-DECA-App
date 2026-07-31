@@ -107,7 +107,16 @@ been tried and rejected.
   `FoundationModelFeedbackService.swift`): "AI Feedback Available", "Apple Intelligence Not
   Enabled", "This Device Does Not Support AI Feedback", "Local Model Still Downloading", "AI
   Feedback Temporarily Unavailable".
-- **Seed content**: 60 sample questions, 12 roleplays, 53 performance indicators, six clusters.
+- **Seed content**: 600 sample questions (100 per cluster, each carrying a rationale for
+  *every* option), 71 roleplays, 90 Quick Think prompts, 53 performance indicators, six
+  clusters. One file per cluster under `Data/Questions/` and `Data/Roleplays/`; the parent
+  `SeedQuestions.swift` / `SeedRoleplays.swift` hold only the aggregate and the builder.
+  Both builders are **internal, not private** — the cluster files are extensions in their
+  own files, and a `private` helper is invisible to them.
+- **`refreshSampleContent()`** exists because `seedIfNeeded` only ever *inserts*: the stable
+  IDs that stop duplicates also stop updates, so a corrected explanation would never reach
+  an existing install. It runs on a seed-version bump, rewrites rows still flagged
+  `isSample`, and preserves bookmarks.
 - **Widget** (`DECAStudyWidget/`) reads a snapshot written by `WidgetDataService` through the
   shared app group, and bundles its own copies of the app's fonts.
 
@@ -204,12 +213,13 @@ AI). Skip present on every frame; acts travel directionally.
 with an animated cutout that travels between three stops, scrolling each into view first.
 Views opt in with `.guideAnchor(_:)`; anchors resolve at the app root. Replayable from Settings.
 
-**Competitive events** — `Data/DECAEvents.swift`. ~45 events keyed by the code students say out
+**Competitive events** — `Data/DECAEvents.swift`. 50 events keyed by the code students say out
 loud, each modelling `regional` and `provincial` components **separately**, because some events
-are not the same competition twice (EIP: exam + presentation regionally, presentation only at
-provincials). The cluster **leads** — the picker only offers that cluster's events and refuses
-others by name, offering an explicit switch. "Undecided" is a first-class answer. The catalogue
-already shapes the app: the Quick Think dial and goal are hidden for events with no roleplay.
+are not the same competition twice (Integrated Marketing Campaign and the professional selling
+events advance out of regionals on a cluster exam and do not present until provincials). The
+cluster **leads** — the picker only offers that cluster's events and refuses others by name,
+offering an explicit switch. "Undecided" is a first-class answer. The catalogue already shapes
+the app: the Quick Think dial and goal are hidden for events with no roleplay.
 
 **Also**: practice with spaced repetition, custom practice builder, mistake notebook, timed mock
 exams with review, roleplay scenarios with rubric + optional AI coaching, Quick Think drills,
@@ -281,40 +291,49 @@ behaviour. Running a GGUF needs llama.cpp added as a Swift package, which requir
 
 ## 9. Pre-submission punch list — the live work
 
-**Blockers**
+**Still open — and all four are things only you can do**
 
-1. **The 808 MB download does nothing.** `LocalCoachEngine` is never instantiated. Either wire
-   llama.cpp (`File ▸ Add Package Dependencies… ▸ https://github.com/ggml-org/llama.cpp`, add to
-   the app target, replace `StubCoachEngine`) or **hide the offer for v1** — two call sites,
-   `SettingsView` and onboarding Chapter V. Recommendation: hide it.
-2. **App Group entitlement is missing from the built binary.** `codesign -d --entitlements` shows
-   an empty dict, so widgets display sample data forever. Tick **App Groups** on both targets in
-   Signing & Capabilities and confirm the group exists in the developer account.
-3. **No `PrivacyInfo.xcprivacy`.** Apple requires a privacy manifest and `UserDefaults` is a
-   required-reason API. The app collects nothing, so this is a small file — but it is mechanical
-   and blocking.
-4. **The event catalogue is unverified.** Built in good faith; formats change yearly and the data
-   now *changes what students see*. Check against current DECA Ontario guidelines. Flat list, one
-   line per fix.
-
-**Should do**
-
-5. **Run the whole app end to end on device.** Everything from the three-pane restructure onward
-   is build-verified only. Riskiest: first-launch flow, guide spotlight geometry, back-navigation
-   from the newly-pushed Mock Exams / Roleplay / Library.
-6. **Check App Store metadata for DECA trademark exposure** — the in-app disclaimer is solid, the
+1. **llama.cpp is not in the project.** `File ▸ Add Package Dependencies… ▸
+   https://github.com/ggml-org/llama.cpp`, add the `llama` library product to the app target.
+   Everything else is written: `LlamaCoachEngine` sits behind `#if canImport(llama)`,
+   `CoachEngineFactory` picks it up automatically, and the AI service already falls through to
+   it. **The raw `llama_*` calls have never been compiled** — that C API renames things between
+   revisions, so expect to fix call sites on the first build and **pin an exact revision, not a
+   branch.**
+2. **Run the whole app end to end on device.** Nothing since `v5-immersive` has run on hardware
+   and a great deal has changed. Riskiest: first-launch flow, guide spotlight geometry,
+   back-navigation from the pushed Mock Exams / Roleplay / Library, and the Core Data lightweight
+   migration that adds the four `rationale*` attributes.
+3. **Check App Store metadata for DECA trademark exposure** — the in-app disclaimer is solid, the
    store listing is a separate surface.
+4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
+   roleplay *at regionals* or advance on the exam alone. Ontario's own pages point both ways and
+   it varies by area, so they are left as exam + roleplay at both levels — the error that
+   over-prepares. Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
 
-**Product gap worth weighing**
+**Closed since v7-events**
 
-7. **60 questions.** A student on a 10/day goal exhausts the bank in six days, and the app is
-   built around streaks and spaced repetition — a retention curve the content can't support.
-   Import tooling is excellent but "bring your own" is a big first-run ask.
+- **Privacy manifests** shipped for both targets, `plutil`-verified in a Release build. Only two
+  required-reason categories exist anywhere in the tree: `UserDefaults` and one disk-space call.
+- **App Group was a false alarm.** `CODE_SIGN_ENTITLEMENTS` was already set for both targets in
+  both configurations. An empty entitlement dict is what a *simulator* build always shows.
+  Confirmed working on the user's own device — the widgets update.
+- **The 808 MB download now has something to run it.** `LocalCoachEngine` had no constructor
+  anywhere in the app, which is why the download could never have produced behaviour. See item 1
+  for the only remaining step.
+- **Event catalogue corrected** against Ontario's published list. `EBP` and `ISP` were not real
+  codes; `IBP` was filed under Independent rather than *International* Business Plan; `EIB`,
+  `EFB`, `EBG` and `PEN` were missing; `QSRM` is not offered in Ontario. Most importantly, IMC
+  and the professional selling events were modelled as having **no exam anywhere** when a cluster
+  exam is the only thing that advances them out of regionals.
+- **Content is no longer the gap.** 600 questions, 71 roleplays, 90 Quick Think prompts. At a
+  10/day goal the bundled bank now lasts two months rather than six days.
 
 **Candidate for removal**
 
-8. The **intro style toggle** exists because two intros were built, not because users need the
-   choice. Picking one and deleting the setting removes a row and a test surface.
+- The **intro style toggle** exists because two intros were built, not because users need the
+  choice. Picking one and deleting the setting removes a row and a test surface. The user has
+  said explicitly not to remove the intros — this refers to the *toggle*, not either intro.
 
 ---
 
@@ -330,6 +349,7 @@ The user relies on tags to roll back and asks for saves explicitly. Never skip a
 | `v4-buttons` | + every dead-end instruction became a one-tap route |
 | `v5-immersive` | + ambient light field, glass panes, serif hierarchy, ring tip light. **Last device-confirmed version.** |
 | `v7-events` | + three panes, cinematic onboarding, app guide, widget restyle, events + dual goals |
+| `v8-content` | + 600 questions with per-option reasoning, 71 roleplays, 90 Quick Thinks, privacy manifests, large widget, corrected event catalogue, local coach wired |
 
 Branch `rebrand-glass-edge` parks an abandoned cyan rebrand the user rejected — do not
 resurrect it without asking. Current work is on `v7-events-goals`.
@@ -348,13 +368,41 @@ xcodebuild -project "LCVI DECA Study App.xcodeproj" -scheme "LCVI DECA Study App
 Run **both** Debug and Release, always with `clean`, always grepping warnings. Filter out
 `AppIntents` metadata noise; it's expected. **Build only. Do not launch the simulator** (§3).
 
+**Also run the content validators.** They catch what a compiler cannot, and at this volume that
+matters more than it sounds:
+
+```bash
+python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py
+```
+
+`check_questions.py` fails on a duplicate stable key (a collision silently *drops* a question at
+seed time), a `why` array that isn't exactly four entries, a `correctIndex` out of range, and —
+the one that earns its keep — a `"Correct."` rationale sitting at a different index than
+`correctIndex`, which compiles perfectly and teaches the wrong answer. `check_roleplays.py` fails
+if a cluster collapses back to a single event format, which is the regression the roleplay
+rebuild existed to fix.
+
 ---
 
 ## 12. Current state
 
 Three panes, cinematic onboarding with a scored prologue, a spotlight app guide, a competitive
-event catalogue that shapes the UI, dual daily goals, restyled widgets, and an ambient light field
-behind every screen. Debug and Release both build clean with zero warnings.
+event catalogue that shapes the UI, dual daily goals, an ambient light field behind every screen —
+and, as of `v8-content`, a bank that can actually sustain the retention curve the app was built
+around: 600 questions where every option is explained, not just the correct one.
 
-Nothing since `v5-immersive` has been run on a physical device. §9 is what stands between this and
-the App Store.
+Debug and Release both build clean with zero warnings, and both content validators pass.
+
+**Nothing since `v5-immersive` has been run on a physical device.** That is now the largest
+unverified surface in the project by a wide margin, and it is §9 item 2 for a reason.
+
+Two things worth knowing before touching this again:
+
+- **Distractors are the teaching surface.** The rationales name the *specific* error — "65% is
+  markup on cost, not on selling price", "$9,000 is subtracting 10% where present value requires
+  dividing by 1.10". Anything added to the bank should hold that bar; filler distractors would
+  quietly undo the reason the bank was rewritten.
+- **Content selection is cluster-keyed, never event-keyed.** Ontario's 50 events map onto 6
+  clusters, so authoring per event produces near-duplicates rather than variety. Roleplays are
+  written per cluster × event *format* instead, which is what gives a student Principles, Series,
+  Team Decision Making and Professional Selling shapes rather than the same case repeatedly.
