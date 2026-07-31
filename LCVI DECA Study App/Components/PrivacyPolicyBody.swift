@@ -56,10 +56,26 @@ struct PrivacyPolicyBody: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Text("Last updated \(PrivacyPolicy.lastUpdated).")
-                .font(.appCaption)
-                .foregroundStyle(Palette.textTertiary)
-                .padding(.top, 4)
+            VStack(alignment: .leading, spacing: 7) {
+                Text("Last updated \(PrivacyPolicy.lastUpdated).")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
+
+                // The notice above is the whole thing, so this is a way to
+                // share it rather than a way to read it — a student showing a
+                // parent or an advisor what the app does with their work.
+                Link(destination: PrivacyPolicy.hostedURL) {
+                    HStack(spacing: 5) {
+                        Text("Read this online")
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.accent)
+                }
+                .accessibilityHint("Opens the same notice in your browser, where it can be shared")
+            }
+            .padding(.top, 4)
         }
     }
 

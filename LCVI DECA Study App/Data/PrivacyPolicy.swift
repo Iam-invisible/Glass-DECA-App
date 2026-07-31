@@ -36,6 +36,16 @@ enum PrivacyPolicy {
     static let lastUpdated = "31 July 2026"
     static let contactEmail = "invisibledeveloper0@gmail.com"
 
+    /// The public copy, served by GitHub Pages from the `web-only` branch and
+    /// the same URL given to App Store Connect.
+    ///
+    /// The full notice is embedded in the app, so this is an alternative
+    /// rather than a dependency — nothing breaks offline, which matters for an
+    /// app whose whole promise is that it works without a network. It is here
+    /// so a student can send the policy to a parent or a teacher without
+    /// asking them to install anything.
+    static let hostedURL = URL(string: "https://iam-invisible.github.io/Glass-DECA-App/privacy.html")!
+
     /// The one-screen summary shown above the full notice on the consent gate.
     /// Written to be the part a student actually reads.
     static let summary: [String] = [
