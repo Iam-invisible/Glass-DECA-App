@@ -7,17 +7,25 @@
 //
 //  Why this file compiles today without llama.cpp
 //  ----------------------------------------------
-//  Everything below the factory is inside `#if canImport(llama)`. §4 forbids
+//  Everything below the factory is inside `#if canImport(...)`. §4 forbids
 //  hand-editing project.pbxproj to add dependencies, so the package has to be
 //  added from Xcode:
 //
-//      File ▸ Add Package Dependencies… ▸ https://github.com/ggml-org/llama.cpp
-//      ▸ add the `llama` library product to the "LCVI DECA Study App" target
+//      File ▸ Add Package Dependencies… ▸ https://github.com/mattt/llama.swift
+//      ▸ Up to Next Major ▸ add the `LlamaSwift` product to the app target
 //
-//  Until that happens `canImport(llama)` is false, `CoachEngineFactory` hands
-//  back `StubCoachEngine`, and the app behaves exactly as it does on a device
-//  with no Apple Intelligence. After it happens the same factory hands back a
-//  real engine and nothing else in the app changes.
+//  NOT https://github.com/ggml-org/llama.cpp — that repository has no
+//  Package.swift and Xcode will refuse it. llama.swift wraps the *official*
+//  precompiled XCFramework from llama.cpp's own releases, so nothing is
+//  compiled from source and the C API is upstream's, unmodified.
+//
+//  Both module names are accepted below: `LlamaSwift` for that package, and
+//  `llama` for a direct XCFramework drop-in, which llama.cpp also publishes.
+//  Either route lights this file up; neither requires touching anything else.
+//
+//  Until one of them happens the imports resolve to nothing,
+//  `CoachEngineFactory` hands back `StubCoachEngine`, and the app behaves
+//  exactly as it does on a device with no Apple Intelligence.
 //
 //  READ THIS BEFORE TRUSTING THE C CALLS
 //  -------------------------------------
@@ -34,7 +42,12 @@
 
 import Foundation
 
-#if canImport(llama)
+// `LlamaSwift` is the product mattt/llama.swift vends; `llama` is the module
+// name you get from adding llama.cpp's XCFramework directly. Supporting both
+// means the choice of route is not baked into the source.
+#if canImport(LlamaSwift)
+import LlamaSwift
+#elseif canImport(llama)
 import llama
 #endif
 
@@ -50,7 +63,7 @@ enum CoachEngineFactory {
 
     /// True when this build can actually run a GGUF.
     static var canRunLocalModel: Bool {
-        #if canImport(llama)
+        #if canImport(LlamaSwift) || canImport(llama)
         return true
         #else
         return false
@@ -62,7 +75,7 @@ enum CoachEngineFactory {
     /// the weights.
     static func makeEngine(modelURL: URL) -> LocalCoachEngine? {
         guard FileManager.default.fileExists(atPath: modelURL.path) else { return nil }
-        #if canImport(llama)
+        #if canImport(LlamaSwift) || canImport(llama)
         return LlamaCoachEngine(modelURL: modelURL)
         #else
         return nil
@@ -70,7 +83,7 @@ enum CoachEngineFactory {
     }
 }
 
-#if canImport(llama)
+#if canImport(LlamaSwift) || canImport(llama)
 
 // MARK: - Engine
 

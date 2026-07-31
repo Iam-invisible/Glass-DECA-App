@@ -237,9 +237,21 @@ browser viewing, deployed from the `web-only` branch. Not part of the iOS target
 Wi-Fi enforced at the socket, SHA-256 pinned, excluded from backup, deletable. It is offered
 **only** where Apple Intelligence is unavailable.
 
-**`LocalCoachEngine` is a stub and nothing instantiates it.** The download currently produces no
-behaviour. Running a GGUF needs llama.cpp added as a Swift package, which requires editing
-`project.pbxproj` in Xcode — §4 forbids doing that from outside. See §9 item 1.
+**The consumption side is now wired.** `CoachEngineFactory` builds the engine, `AppStore`
+attaches it whenever the model file is present, and `FoundationModelFeedbackService.generate()`
+falls through to it when Apple's model is out of reach — so explanations, roleplay coaching and
+Quick Think feedback all reach it through the funnel they already used. Weights are freed on
+`.background`, not `.inactive`, because dropping a gigabyte every time someone opens Control
+Centre would cost more than holding it.
+
+`AIAvailability` gained a sixth case, `.localCoachAvailable`, so Settings can say the local coach
+is running instead of reporting the device unsupported while AI visibly works. The five required
+status strings (§4) are untouched.
+
+**What is still missing is the runtime.** `LlamaCoachEngine` is written but has never been
+compiled — no llama package is in the project, so `canImport` is false and the factory returns
+`StubCoachEngine`. See §9 item 1 for the correct package URL, and note that the one this brief
+carried for months was wrong.
 
 ---
 
@@ -293,12 +305,21 @@ behaviour. Running a GGUF needs llama.cpp added as a Swift package, which requir
 
 **Still open — and all four are things only you can do**
 
-1. **llama.cpp is not in the project.** `File ▸ Add Package Dependencies… ▸
-   https://github.com/ggml-org/llama.cpp`, add the `llama` library product to the app target.
-   Everything else is written: `LlamaCoachEngine` sits behind `#if canImport(llama)`,
+1. **No llama runtime in the project.** `File ▸ Add Package Dependencies… ▸
+   `https://github.com/mattt/llama.swift`, add the **`LlamaSwift`** product to the app target.
+
+   **Do not use `https://github.com/ggml-org/llama.cpp`** — it has no `Package.swift` and Xcode
+   refuses it. That URL was in this brief for months and is wrong. `llama.swift` wraps the
+   *official* precompiled XCFramework from llama.cpp's own releases, so nothing builds from
+   source and the C API is upstream's, unmodified. Its versions track upstream builds
+   (`2.10199.0` ≙ llama.cpp `b10199`). Adding llama.cpp's XCFramework directly also works and
+   needs no third party.
+
+   Everything else is written: `LlamaCoachEngine` sits behind
+   `#if canImport(LlamaSwift) || canImport(llama)` so either route lights it up,
    `CoachEngineFactory` picks it up automatically, and the AI service already falls through to
    it. **The raw `llama_*` calls have never been compiled** — that C API renames things between
-   revisions, so expect to fix call sites on the first build and **pin an exact revision, not a
+   revisions, so expect to fix call sites on the first build and **pin an exact version, not a
    branch.**
 2. **Run the whole app end to end on device.** Nothing since `v5-immersive` has run on hardware
    and a great deal has changed. Riskiest: first-launch flow, guide spotlight geometry,
@@ -356,6 +377,17 @@ resurrect it without asking. Current work is on `v7-events-goals`.
 
 **Note:** the version branches in the archive repo share names with these tags, which makes bare
 refs ambiguous — push with fully-qualified refspecs (`refs/heads/v5-immersive:refs/heads/…`).
+
+**Second, separate trap when the milestone exists only as a tag** (v7-events onward — the earlier
+ones have local branches of the same name, which is why they were never hit by this). An
+annotated tag is a *tag object* wrapping a commit, and a branch must point at a commit, so
+`refs/tags/X:refs/heads/X` sends the wrong object type. GitHub rejects it with an unexplained
+`! [remote rejected] (failed)` and **`git push --dry-run` does not catch it**, because the
+validation is server-side. Dereference with `^{}`, quoted so zsh leaves the braces alone:
+
+```bash
+git push versions 'v8-content^{}:refs/heads/v8-content'
+```
 
 ---
 
