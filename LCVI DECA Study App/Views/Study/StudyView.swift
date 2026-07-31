@@ -38,6 +38,7 @@ struct StudyView: View {
             ScrollViewReader { scroller in
             ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
+                    ScrollOffsetProbe()
                     greeting.appearIn(0)
                     goalDials.appearIn(1).guideAnchor(.goalCard)
                         .id(GuideTarget.goalCard)
@@ -64,6 +65,7 @@ struct StudyView: View {
                 .padding(.top, 6)
                 .padding(.bottom, 24)
             }
+            .reportsScrollOffset()
             .appCanvas()
             .rootScreenChrome()
             .navigationDestination(isPresented: $pushMistakes) { MistakeNotebookView() }

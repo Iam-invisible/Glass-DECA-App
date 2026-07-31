@@ -29,6 +29,7 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScrollOffsetProbe()
                     ScreenHeader("Settings",
                                  eyebrow: "On this phone only",
                                  eyebrowSymbol: "lock.shield",
@@ -47,6 +48,7 @@ struct SettingsView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 24)
             }
+            .reportsScrollOffset()
             .appCanvas()
             .rootScreenChrome()
             .navigationDestination(isPresented: $pushQuestionBank) {

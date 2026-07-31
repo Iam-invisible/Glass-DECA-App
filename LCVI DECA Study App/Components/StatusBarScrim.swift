@@ -20,12 +20,63 @@
 //  It ends fully transparent, so nothing is hidden — content is still visible
 //  through it as it scrolls away, which is the point.
 //
+//  It also earns its place: at rest there is nothing under the status bar to
+//  protect, so the scrim is invisible and the screen reads as one uninterrupted
+//  surface. It fades in the moment content starts passing beneath. Detecting
+//  that on iOS 16 means a preference probe — `onScrollGeometryChange` is
+//  iOS 18 — so scrolling screens drop a zero-height `ScrollOffsetProbe` at the
+//  top of their content and name their coordinate space with
+//  `.reportsScrollOffset()`. Preferences travel up the tree, so the app root
+//  hears it no matter which screen is showing.
+//
 
 import SwiftUI
+
+// MARK: - Scroll reporting
+
+enum ScrollOffsetKey: PreferenceKey {
+    /// The name every scrolling screen gives its coordinate space.
+    static let space = "app.scroll"
+    /// Distance the content has travelled up. 0 at rest, negative scrolling.
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        // Screens publish one probe each, but a pushed screen can briefly
+        // overlap its parent mid-transition. The smaller value is the one
+        // that has scrolled further, which is the one worth protecting.
+        value = min(value, nextValue())
+    }
+}
+
+/// Drop this as the first item inside a scrolling stack.
+struct ScrollOffsetProbe: View {
+    var body: some View {
+        GeometryReader { geo in
+            Color.clear.preference(
+                key: ScrollOffsetKey.self,
+                value: geo.frame(in: .named(ScrollOffsetKey.space)).minY
+            )
+        }
+        .frame(height: 0)
+        .accessibilityHidden(true)
+    }
+}
+
+extension View {
+    /// Names a `ScrollView`'s coordinate space so probes inside it resolve.
+    func reportsScrollOffset() -> some View {
+        coordinateSpace(name: ScrollOffsetKey.space)
+    }
+}
+
+// MARK: - Scrim
 
 struct StatusBarScrim: View {
     /// How far past the status bar the fade runs before it reaches nothing.
     var falloff: CGFloat = 16
+    /// Fades in once content is actually passing underneath.
+    var isActive: Bool = true
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { geo in
@@ -45,6 +96,8 @@ struct StatusBarScrim: View {
             .frame(height: inset + falloff)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
+            .opacity(isActive ? 1 : 0)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.22), value: isActive)
         }
         // Purely decorative: it must never eat a tap meant for the content
         // underneath, and VoiceOver has no reason to know it exists.

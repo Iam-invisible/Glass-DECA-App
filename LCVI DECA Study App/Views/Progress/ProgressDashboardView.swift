@@ -30,6 +30,7 @@ struct ProgressDashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
+                    ScrollOffsetProbe()
                     ScreenHeader("Progress",
                                  eyebrow: store.settings.cluster.displayName,
                                  eyebrowSymbol: store.settings.cluster.symbol,
@@ -52,6 +53,7 @@ struct ProgressDashboardView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 24)
             }
+            .reportsScrollOffset()
             .appCanvas()
             .rootScreenChrome()
         }

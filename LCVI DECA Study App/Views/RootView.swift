@@ -46,6 +46,8 @@ struct RootView: View {
     /// +1 when moving to a tab on the right, -1 to the left. Set before the
     /// tab changes so the transition knows which way to travel.
     @State private var direction: CGFloat = 1
+    /// True once any screen's content has moved under the status bar.
+    @State private var scrolled = false
 
     var body: some View {
         Group {
@@ -65,8 +67,18 @@ struct RootView: View {
         // is exempt: it is a full-bleed scene with nothing scrolling under the
         // clock, and a bar across it would break the reveal.
         .overlay(alignment: .top) {
-            if !store.showIntro { StatusBarScrim() }
+            if !store.showIntro { StatusBarScrim(isActive: scrolled) }
         }
+        .onPreferenceChange(ScrollOffsetKey.self) { offset in
+            // A couple of points of slack: rubber-banding and rounding both
+            // wobble the offset at rest, and a scrim that flickers on a
+            // stationary screen is worse than one that is always on.
+            let now = offset < -3
+            if now != scrolled { scrolled = now }
+        }
+        // A new tab starts at the top, so the scrim should not linger from
+        // wherever the last one was left.
+        .onChange(of: tab) { _ in scrolled = false }
         // This is a native app, not a web page — no scroll position bars.
         // `scrollIndicators` is environment-based, so one call covers every
         // descendant scroll view, including pushed and presented screens.
