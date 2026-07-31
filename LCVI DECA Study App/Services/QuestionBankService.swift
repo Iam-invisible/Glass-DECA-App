@@ -17,7 +17,11 @@ final class QuestionBankService {
     ///
     /// 2 — per-choice rationales, and the corrections that came with writing
     ///     them. A bump alone is not enough: see `refreshSampleContent()`.
-    static let seedVersion = 2
+    /// 3 — 600 questions, and roleplays rebuilt around cluster × event format.
+    ///     The existing twelve scenarios kept their stable IDs but changed
+    ///     event type and timings, so they need the refresh rather than just
+    ///     the insert.
+    static let seedVersion = 3
 
     init(context: NSManagedObjectContext) {
         self.ctx = context
