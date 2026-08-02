@@ -134,37 +134,50 @@ struct DailyProgressWidgetView: View {
         .accessibilityValue(accessibilityValue)
     }
 
-    /// The medium used to be a ring plus a left-hugging column, which left the
-    /// right third of the widget empty. The stat rail fills it with the three
-    /// numbers a student actually glances for.
+    /// Ring on the left, the day's line on the right, the whole pair centred in
+    /// both axes.
+    ///
+    /// The growth is deliberately all in the ring and the numeral. The status
+    /// line is already at its ceiling: "5 questions to go" needs 178pt of a
+    /// 196pt column here, and an iPhone SE's medium widget is narrower again,
+    /// so a bigger type size buys one line on a large phone and a wrap on a
+    /// small one. The ring has the slack instead — 88pt still leaves room
+    /// under the shortest medium widget — so that is where the space goes.
     private var medium: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: 16) {
             ZStack {
-                WidgetRing(progress: snapshot.fraction, lineWidth: 9, tint: tint)
-                    .frame(width: 74, height: 74)
+                WidgetRing(progress: snapshot.fraction, lineWidth: 11, tint: tint)
+                    .frame(width: 88, height: 88)
                 VStack(spacing: -2) {
                     Text("\(snapshot.answeredToday)")
-                        .font(WidgetType.display(26))
+                        .font(WidgetType.display(30))
                         .heroNumeral(tint)
+                        // Michroma's digits are 0.951 em, so three of them at
+                        // this size would touch the ring's inner edge.
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                     Text("of \(snapshot.goal)")
-                        .font(WidgetType.sans(10))
+                        .font(WidgetType.sans(11))
                         .foregroundStyle(.secondary)
                 }
+                .padding(.horizontal, 6)
             }
 
-            VStack(alignment: .leading, spacing: 7) {
+            VStack(alignment: .center, spacing: 9) {
                 Text(snapshot.clusterShortName)
                     .widgetKicker(WidgetPalette.accent)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.8)
 
                 Text(statusLine)
                     .font(WidgetType.display(20))
                     .foregroundStyle(.primary)
+                    .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.75)
                     .fixedSize(horizontal: false, vertical: true)
 
-                HStack(spacing: 6) {
+                HStack(spacing: 7) {
                     Label("\(snapshot.streak)", systemImage: "flame.fill")
                         .foregroundStyle(WidgetPalette.gold)
                         .glassChip(tint: WidgetPalette.gold)
@@ -179,12 +192,12 @@ struct DailyProgressWidgetView: View {
                             .glassChip(tint: WidgetPalette.accent)
                     }
                 }
-                .font(WidgetType.sans(11, weight: .semibold))
+                .font(WidgetType.sans(12, weight: .semibold))
             }
             // Greedy, so the column takes the width the old layout wasted.
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Glass daily goal")
         .accessibilityValue(accessibilityValue)
