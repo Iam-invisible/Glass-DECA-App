@@ -189,11 +189,32 @@ struct RootView: View {
 /// to a translucent material in the same capsule, so the layout is identical.
 struct AppTabBar: View {
     private static let capsuleHeight: CGFloat = 56
-    private static let floatGap: CGFloat = 10
 
-    /// Height scrollable screens must reserve: the capsule plus the gap it
-    /// floats above the safe-area bottom.
-    static let contentHeight: CGFloat = capsuleHeight + floatGap
+    /// Clearance measured from the **physical** bottom edge, not from the safe
+    /// area — which is why the bar ignores the bottom inset below.
+    ///
+    /// It used to float 10pt above the safe-area bottom. On a home-indicator
+    /// phone that inset is 34pt, so the bar actually sat 44pt off the edge with
+    /// a band of dead space underneath it that no content could use. Measuring
+    /// from the edge instead drops it to 16pt there. On a device with no
+    /// indicator — iPhone 8 — the inset is 0, so the bar moves *up* by 6pt
+    /// rather than down; that is the cost of one constant serving both, and
+    /// 16pt is a normal resting place for a floating bar either way.
+    ///
+    /// 16 is a floor, not a preference. The home indicator occupies roughly the
+    /// lowest 11pt and the system draws it over app content, so anything under
+    /// about 14 puts the indicator line across the capsule.
+    private static let bottomClearance: CGFloat = 16
+
+    /// Height scrollable screens reserve, still measured from the safe-area
+    /// bottom. Deliberately left at the old value: content is *meant* to flow
+    /// under the translucent capsule, so this only has to keep the last row
+    /// reachable, and it is now conservative on indicator phones rather than
+    /// tight. Re-deriving it per device would mean reading the safe-area inset,
+    /// which would put a second GeometryReader around `main` — exactly the
+    /// coordinate-space mix-up that put the guide's spotlight in the wrong
+    /// place once already.
+    static let contentHeight: CGFloat = capsuleHeight + 10
 
     let selection: AppTab
     let onSelect: (AppTab) -> Void
@@ -204,7 +225,8 @@ struct AppTabBar: View {
         bar
             .shadow(color: Palette.shadow.opacity(0.18), radius: 16, y: 6)
             .padding(.horizontal, 14)
-            .padding(.bottom, Self.floatGap)
+            .padding(.bottom, Self.bottomClearance)
+            .ignoresSafeArea(.container, edges: .bottom)
     }
 
     @ViewBuilder
