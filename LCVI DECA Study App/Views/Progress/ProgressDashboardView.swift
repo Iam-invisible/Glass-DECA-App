@@ -42,12 +42,11 @@ struct ProgressDashboardView: View {
                     headlineStats.appearIn(1)
                     weekSection.appearIn(2)
                     if !clusterAccuracy.isEmpty { clusterSection.appearIn(3) }
-                    if !indicatorStats.isEmpty { heatmapSection.appearIn(4) }
-                    indicatorSection.appearIn(5)
-                    if !tagAccuracy.isEmpty { topicSection.appearIn(6) }
-                    if !mockSummaries.isEmpty { mockSection.appearIn(7) }
-                    if store.ai.isUsable { adviceSection.appearIn(8) }
-                    achievementSection.appearIn(9)
+                    indicatorSection.appearIn(4)
+                    if !tagAccuracy.isEmpty { topicSection.appearIn(5) }
+                    if !mockSummaries.isEmpty { mockSection.appearIn(6) }
+                    if store.ai.isUsable { adviceSection.appearIn(7) }
+                    achievementSection.appearIn(8)
                 }
                 .padding(.horizontal, Metrics.gutter)
                 .padding(.top, 8)
@@ -184,72 +183,6 @@ struct ProgressDashboardView: View {
         }
     }
 
-    // MARK: Heatmap
-
-    private var heatmapSection: some View {
-        VStack(alignment: .leading, spacing: Metrics.headerGap) {
-            SectionHeader(title: "PI heatmap",
-                          subtitle: "Tap a tile to drill")
-
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 8)],
-                      alignment: .leading,
-                      spacing: 8) {
-                ForEach(indicatorStats) { stat in
-                    let available = availableIndicatorCodes.contains(stat.code)
-                    Button {
-                        guard available else { return }
-                        startIndicatorDrill(stat)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 7) {
-                            HStack(spacing: 4) {
-                                Text(stat.code)
-                                    .font(.appCaptionBold)
-                                    .foregroundStyle(available ? Palette.textPrimary : Palette.textTertiary)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.75)
-                                Spacer(minLength: 0)
-                                if stat.roleplayCount > 0 {
-                                    Image(systemName: "person.wave.2.fill")
-                                        .font(.system(size: 9, weight: .semibold))
-                                        .foregroundStyle(tileTint(for: stat))
-                                }
-                            }
-
-                            Text("\(Int((stat.masteryScore * 100).rounded()))%")
-                                .font(.numeric(18, weight: .semibold))
-                                .foregroundStyle(tileTint(for: stat))
-                                .monospacedDigit()
-
-                            Text(stat.band.title)
-                                .font(.appSans(10, weight: .medium))
-                                .foregroundStyle(Palette.textTertiary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                        }
-                        .padding(10)
-                        .frame(maxWidth: .infinity, minHeight: 82, alignment: .leading)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(tileTint(for: stat).opacity(available ? 0.13 : 0.06))
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .strokeBorder(tileTint(for: stat).opacity(available ? 0.35 : 0.12), lineWidth: 0.8)
-                        )
-                        .opacity(available ? 1 : 0.52)
-                    }
-                    .buttonStyle(PressableButtonStyle(scale: 0.98, haptic: false))
-                    .disabled(!available)
-                    .accessibilityLabel("\(stat.code), \(stat.band.title), \(Int((stat.masteryScore * 100).rounded())) percent mastery")
-                }
-            }
-        }
-    }
-
-    private func tileTint(for stat: IndicatorStat) -> Color {
-        stat.band == .untouched ? Palette.textTertiary : stat.band.color
-    }
-
     private func startIndicatorDrill(_ stat: IndicatorStat) {
         Haptics.tap()
         var options = SessionOptions(mode: .indicator, cluster: nil, count: 12)
@@ -264,7 +197,7 @@ struct ProgressDashboardView: View {
     private var indicatorSection: some View {
         VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Performance indicators",
-                          subtitle: store.settings.cluster.shortName,
+                          subtitle: "\(store.settings.cluster.shortName) · tap one to practise it",
                           actionTitle: showAllIndicators ? "Show less" : "Show all") {
                 withAnimation(Motion.snappy) { showAllIndicators.toggle() }
             }
@@ -277,10 +210,7 @@ struct ProgressDashboardView: View {
             } else {
                 VStack(spacing: 14) {
                     ForEach(displayedIndicators) { stat in
-                        PerformanceIndicatorBar(code: stat.code,
-                                                text: stat.text,
-                                                value: stat.masteryScore,
-                                                detail: detail(for: stat))
+                        indicatorRow(stat)
                     }
                 }
                 .appCard()
@@ -309,6 +239,35 @@ struct ProgressDashboardView: View {
                 }
             }
         }
+    }
+
+    /// One indicator, and the only thing the PI heatmap did that this list did
+    /// not: tapping builds a 12-question drill on that code.
+    ///
+    /// The heatmap was a second rendering of the same 53 stats — same mastery
+    /// score, same band — differing only in that it was a grid and it was
+    /// tappable. Its roleplay marker is already in `detail(for:)` as a count,
+    /// so folding the tap in here left nothing behind worth a section.
+    ///
+    /// A code with no questions in the bank dims and stops responding rather
+    /// than opening an empty session; that gating came from the heatmap too.
+    @ViewBuilder
+    private func indicatorRow(_ stat: IndicatorStat) -> some View {
+        let available = availableIndicatorCodes.contains(stat.code)
+        Button {
+            startIndicatorDrill(stat)
+        } label: {
+            PerformanceIndicatorBar(code: stat.code,
+                                    text: stat.text,
+                                    value: stat.masteryScore,
+                                    detail: detail(for: stat))
+                .opacity(available ? 1 : 0.5)
+        }
+        .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+        .disabled(!available)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(stat.code), \(stat.text), \(Int((stat.masteryScore * 100).rounded())) percent mastery")
+        .accessibilityHint(available ? "Practise this indicator" : "No questions available for this indicator")
     }
 
     private var displayedIndicators: [IndicatorStat] {
