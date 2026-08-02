@@ -201,10 +201,21 @@ struct AppTabBar: View {
     /// rather than down; that is the cost of one constant serving both, and
     /// 16pt is a normal resting place for a floating bar either way.
     ///
-    /// 16 is a floor, not a preference. The home indicator occupies roughly the
-    /// lowest 11pt and the system draws it over app content, so anything under
-    /// about 14 puts the indicator line across the capsule.
-    private static let bottomClearance: CGFloat = 16
+    /// The home indicator is the thing this number is negotiating with. It is a
+    /// 5pt bar sitting about 8pt off the bottom, so it occupies roughly 8–13pt,
+    /// and the system draws it *over* app content rather than under it:
+    ///
+    ///   20  clear gap above the indicator
+    ///   16  3pt gap — where this sat before
+    ///   14  the last value that clears it at all
+    ///   10  indicator's top ~3pt crosses the capsule's bottom edge
+    ///    8  indicator sits inside the capsule's lower edge
+    ///
+    /// 10 is chosen deliberately over 14: 14 buys 2pt, which is not a visible
+    /// change, and the bar reading as too high is the actual complaint. The
+    /// cost is that the indicator grazes the capsule instead of floating below
+    /// it — worth an eye on device, and one number to move either way.
+    private static let bottomClearance: CGFloat = 10
 
     /// Height scrollable screens reserve, still measured from the safe-area
     /// bottom. Deliberately left at the old value: content is *meant* to flow

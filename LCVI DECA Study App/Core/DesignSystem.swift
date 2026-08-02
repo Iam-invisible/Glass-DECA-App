@@ -72,12 +72,20 @@ enum Palette {
 /// Three vertical gaps, and they are a hierarchy rather than three numbers:
 /// `headerGap` (10) binds a `SectionHeader` to the content it names,
 /// `stackSpacing` (14) separates peers inside one group, and `sectionSpacing`
-/// (24) separates groups from each other.
+/// (32) separates groups from each other.
 ///
 /// A screen that uses one gap everywhere is the failure mode — the eye has
 /// nothing to group by, so a heading floats as far from its own content as
 /// from the section above it and every screen reads as one long list. Keep
 /// header < peer < section on any new screen.
+///
+/// `sectionSpacing` went 24 → 32 because grouping was still not doing enough
+/// work on Study and Progress, the two densest screens. It is raised here
+/// rather than overridden on those two: seventeen screens read this value,
+/// and a Study screen spaced differently from Settings looks like a bug
+/// rather than a decision. What matters is the ratio — at 14 against 24 the
+/// section break was under twice the peer gap, which is inside the range the
+/// eye reads as "slightly further apart" rather than as "new thing".
 enum Metrics {
     static let gutter: CGFloat = 18
     static let cardRadius: CGFloat = 18
@@ -85,7 +93,7 @@ enum Metrics {
     static let rowMinHeight: CGFloat = 52
     static let headerGap: CGFloat = 10
     static let stackSpacing: CGFloat = 14
-    static let sectionSpacing: CGFloat = 24
+    static let sectionSpacing: CGFloat = 32
 }
 
 // MARK: - Typography
