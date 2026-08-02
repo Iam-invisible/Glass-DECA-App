@@ -188,13 +188,20 @@ enum WidgetPalette {
 // MARK: - Type
 
 /// The app's own faces, bundled with the extension and registered in its
-/// Info.plist. Instrument Serif carries the hero numbers and titles — the
-/// same voice as every screen header — and Manrope carries the reading.
+/// Info.plist. Michroma carries the hero numbers and titles — the same voice
+/// as every screen header — and Manrope carries the reading.
 /// `Font.custom` falls back to the system face if a font ever fails to
 /// register, so the widget degrades rather than breaks.
 enum WidgetType {
-    static func serif(_ size: CGFloat) -> Font {
-        .custom("InstrumentSerif-Regular", fixedSize: size)
+    /// Michroma's digits are 0.951 em against Instrument Serif's 0.460, so a
+    /// three-digit hero number at the old sizes ran past the small widget's
+    /// edge — "100" at 48pt wanted 137pt of about 130pt available. The
+    /// correction lives here rather than at the nine call sites so those keep
+    /// expressing intent ("the hero number is 48"), and so a future face swap
+    /// is one number. Michroma's taller x-height means 0.8 costs little
+    /// apparent size.
+    static func display(_ size: CGFloat) -> Font {
+        .custom("Michroma-Regular", fixedSize: size * 0.8)
     }
     static func sans(_ size: CGFloat, weight: Font.Weight = .regular) -> Font {
         .custom(weight == .regular ? "Manrope-Regular" : "Manrope-SemiBold",
@@ -352,7 +359,7 @@ struct WidgetStat: View {
                 Image(systemName: systemImage)
                     .font(.system(size: 10, weight: .bold))
                 Text(value)
-                    .font(WidgetType.serif(21))
+                    .font(WidgetType.display(21))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
             }

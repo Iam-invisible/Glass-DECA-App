@@ -101,7 +101,7 @@ struct DailyProgressWidgetView: View {
                     WidgetRing(progress: snapshot.fraction, lineWidth: 7, tint: tint)
                         .frame(width: 48, height: 48)
                     Text("\(snapshot.answeredToday)")
-                        .font(WidgetType.serif(20))
+                        .font(WidgetType.display(20))
                         .heroNumeral(tint)
                 }
                 VStack(alignment: .leading, spacing: 3) {
@@ -144,7 +144,7 @@ struct DailyProgressWidgetView: View {
                     .frame(width: 74, height: 74)
                 VStack(spacing: -2) {
                     Text("\(snapshot.answeredToday)")
-                        .font(WidgetType.serif(26))
+                        .font(WidgetType.display(26))
                         .heroNumeral(tint)
                     Text("of \(snapshot.goal)")
                         .font(WidgetType.sans(10))
@@ -158,7 +158,7 @@ struct DailyProgressWidgetView: View {
                     .lineLimit(1)
 
                 Text(statusLine)
-                    .font(WidgetType.serif(20))
+                    .font(WidgetType.display(20))
                     .foregroundStyle(.primary)
                     .lineLimit(2)
                     .minimumScaleFactor(0.75)
@@ -228,7 +228,7 @@ struct StreakWidgetView: View {
             Spacer(minLength: 0)
 
             Text("\(snapshot.streak)")
-                .font(WidgetType.serif(46))
+                .font(WidgetType.display(46))
                 .heroNumeral(WidgetPalette.gold)
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
@@ -287,7 +287,7 @@ struct RemainingWidgetView: View {
             Spacer(minLength: 0)
 
             Text(snapshot.goalMet ? "Done" : "\(snapshot.remaining)")
-                .font(WidgetType.serif(snapshot.goalMet ? 30 : 48))
+                .font(WidgetType.display(snapshot.goalMet ? 30 : 48))
                 .heroNumeral(tint)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
@@ -373,7 +373,7 @@ struct QuickLaunchWidgetView: View {
             Image(systemName: symbol)
                 .font(.system(size: 17, weight: .semibold))
             Text(title)
-                .font(WidgetType.serif(15))
+                .font(WidgetType.display(15))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
@@ -499,7 +499,7 @@ struct OverviewWidgetView: View {
                     .frame(width: 62, height: 62)
                 VStack(spacing: -2) {
                     Text(value)
-                        .font(WidgetType.serif(23))
+                        .font(WidgetType.display(23))
                         .heroNumeral(tint)
                     Text(of)
                         .font(WidgetType.sans(9))
@@ -628,7 +628,7 @@ struct OverviewWidgetView: View {
             Image(systemName: symbol)
                 .font(.system(size: 12, weight: .semibold))
             Text(title)
-                .font(WidgetType.serif(15))
+                .font(WidgetType.display(15))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
         }

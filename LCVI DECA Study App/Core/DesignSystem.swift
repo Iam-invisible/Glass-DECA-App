@@ -94,12 +94,24 @@ enum Metrics {
 
 // MARK: - Typography
 
-/// Instrument Serif for display, Manrope for text and UI.
+/// Michroma for display, Manrope for text and UI.
 ///
-/// Instrument Serif is a high-contrast display serif — the thick-to-thin
-/// modulation is the point, since the app is called Glass and that contrast is
-/// what light through glass looks like. It has one weight by design; display
-/// roles are headline contexts where a second weight would only dilute it.
+/// Michroma is an extended geometric display face. It replaced Instrument
+/// Serif because a serif at 22pt reads as body text set larger, and the
+/// heading level had stopped announcing itself; Michroma's wide, architectural
+/// letterforms cannot be mistaken for the Manrope underneath them at any size.
+/// It has one weight, which is the right number for a face used only at
+/// headline sizes.
+///
+/// **Its width is the constraint that shapes every display size below.**
+/// Michroma averages 0.719 em per lowercase letter against Instrument Serif's
+/// 0.392 — 1.87× — so the previous 38/26/22 ladder overflowed. "Good
+/// afternoon" needed 380pt of an iPhone 8's 339pt. The sizes were cut ~15%
+/// rather than left to `minimumScaleFactor`, because a greeting that silently
+/// shrinks while every other screen title stays full size reads as a bug.
+/// Apparent size barely moved: Michroma's x-height is 0.562 against 0.510, so
+/// 32pt here looks about as tall as 38pt did. Any future display face needs
+/// this ladder re-derived from its own width, not inherited.
 ///
 /// Manrope carries the reading. It was chosen on measurements rather than
 /// taste: of fourteen candidates it has the largest x-height relative to em
@@ -117,7 +129,7 @@ enum Metrics {
 /// caches, so it silently stops responding to the reader's text-size setting.
 /// `Font.custom` is resolved at render time and keeps Dynamic Type working.
 enum AppType {
-    static let display  = "InstrumentSerif-Regular"
+    static let display  = "Michroma-Regular"
     /// Intro wordmark only — a monoline script whose letters can be written
     /// out along a pen path. Not a UI face; nothing else should set text in it.
     static let script   = "Sacramento-Regular"
@@ -127,14 +139,16 @@ enum AppType {
 }
 
 extension Font {
-    // Display — Instrument Serif
-    static let appLargeTitle = Font.custom(AppType.display, size: 38, relativeTo: .largeTitle)
-    static let appTitle      = Font.custom(AppType.display, size: 26, relativeTo: .title2)
+    // Display — Michroma. Sizes are ~15% below the old serif ladder to pay for
+    // Michroma's width; see the note on `AppType` before changing them.
+    static let appLargeTitle = Font.custom(AppType.display, size: 32, relativeTo: .largeTitle)
+    static let appTitle      = Font.custom(AppType.display, size: 22, relativeTo: .title2)
 
-    /// Section titles inside screens. With the display serif on section
-    /// headings and Manrope on everything else, the eye can skim a screen by
-    /// serif alone — the hierarchy is legible before anything is read.
-    static let appSectionTitle = Font.custom(AppType.display, size: 22, relativeTo: .title3)
+    /// Section titles inside screens. With the display face on section headings
+    /// and Manrope on everything else, the eye can skim a screen by shape
+    /// alone — the hierarchy is legible before anything is read. 19pt is also
+    /// what keeps "Mock Exams" clear of `ModeTile`'s 0.72 scale floor.
+    static let appSectionTitle = Font.custom(AppType.display, size: 19, relativeTo: .title3)
 
     // Text and UI — Manrope
     static let appHeadline    = Font.custom(AppType.semibold, size: 17, relativeTo: .headline)
