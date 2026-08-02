@@ -141,14 +141,22 @@ enum AppType {
 extension Font {
     // Display — Michroma. Sizes are ~15% below the old serif ladder to pay for
     // Michroma's width; see the note on `AppType` before changing them.
-    static let appLargeTitle = Font.custom(AppType.display, size: 32, relativeTo: .largeTitle)
-    static let appTitle      = Font.custom(AppType.display, size: 22, relativeTo: .title2)
+    //
+    // `.weight(.bold)` is synthetic. Michroma ships one cut at usWeightClass
+    // 400 with no variable axis and no bold file upstream, so CoreText strokes
+    // the outline in place rather than swapping to a drawn bold. That is
+    // usually a thing to avoid, but Michroma is monoline — even stroke weight
+    // all the way round — so emboldening thickens it evenly instead of
+    // clotting the joints the way it would on a modulated face. Advances are
+    // unchanged, so the width budget above still holds.
+    static let appLargeTitle = Font.custom(AppType.display, size: 32, relativeTo: .largeTitle).weight(.bold)
+    static let appTitle      = Font.custom(AppType.display, size: 22, relativeTo: .title2).weight(.bold)
 
     /// Section titles inside screens. With the display face on section headings
     /// and Manrope on everything else, the eye can skim a screen by shape
     /// alone — the hierarchy is legible before anything is read. 19pt is also
     /// what keeps "Mock Exams" clear of `ModeTile`'s 0.72 scale floor.
-    static let appSectionTitle = Font.custom(AppType.display, size: 19, relativeTo: .title3)
+    static let appSectionTitle = Font.custom(AppType.display, size: 19, relativeTo: .title3).weight(.bold)
 
     // Text and UI — Manrope
     static let appHeadline    = Font.custom(AppType.semibold, size: 17, relativeTo: .headline)
