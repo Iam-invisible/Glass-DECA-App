@@ -170,6 +170,16 @@ extension Font {
     /// what keeps "Mock Exams" clear of `ModeTile`'s 0.72 scale floor.
     static let appSectionTitle = Font.custom(AppType.displayBold, size: 19, relativeTo: .title3)
 
+    /// Titles inside a `ModeTile`. Smaller than a section title because a tile
+    /// is not a section — and because 16 is the largest size at which every
+    /// label in the garden fits an iPhone SE tile's 138pt text box without
+    /// `minimumScaleFactor` firing. At 19 it fired on "Review Due", "Mock
+    /// Exams" and "Exam Cram" but not on "Roleplay" or "Mistakes", so the
+    /// labels rendered at four different sizes across one grid and looked
+    /// like a rendering fault rather than a scale. Michroma is wide: "Mock
+    /// Exams" is 158pt at 19 and 133pt at 16.
+    static let appTileTitle = Font.custom(AppType.displayBold, size: 16, relativeTo: .callout)
+
     // Text and UI — Manrope
     static let appHeadline    = Font.custom(AppType.semibold, size: 17, relativeTo: .headline)
     static let appBody        = Font.custom(AppType.regular,  size: 17, relativeTo: .body)

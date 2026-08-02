@@ -68,7 +68,7 @@ struct ModeTile: View {
             }
             Spacer(minLength: 10)
             Text(title)
-                .font(.appSectionTitle)
+                .font(.appTileTitle)
                 .foregroundStyle(Palette.textPrimary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
@@ -81,7 +81,7 @@ struct ModeTile: View {
         HStack(spacing: 12) {
             icon
             Text(title)
-                .font(.appSectionTitle)
+                .font(.appTileTitle)
                 .foregroundStyle(Palette.textPrimary)
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
