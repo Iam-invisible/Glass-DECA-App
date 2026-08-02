@@ -48,7 +48,6 @@ struct DashboardState: Equatable {
     var quickThinkGoalMet: Bool { quickThinkToday >= max(1, quickThinkGoal) }
     var achievementsUnlocked = 0
     var weakestIndicator: IndicatorStat? = nil
-    var recentAchievement: AchievementStatus? = nil
 }
 
 @MainActor
@@ -259,7 +258,6 @@ final class AppStore: ObservableObject {
         state.quickThinkGoal = settings.quickThinkGoal
         state.achievementsUnlocked = achievements.unlockedCount()
         state.weakestIndicator = indicators.weakest(cluster: settings.cluster, limit: 1).first
-        state.recentAchievement = achievements.mostRecent()
         dashboard = state
 
         publishWidgetSnapshot(state)

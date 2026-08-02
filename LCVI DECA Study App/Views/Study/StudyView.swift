@@ -306,68 +306,41 @@ struct StudyView: View {
         }
     }
 
-    // MARK: - Insight cards
+    // MARK: - Insight card
 
-    /// Wrapped in an `if` that tests both cases before building the stack, not
-    /// just wrapped. A `VStack` holding two failed `if`s is still a container:
-    /// it lays out at zero height and the parent puts a section gap on both
-    /// sides of it, so a student with no insights yet would get 48pt of empty
-    /// column between the tiles and the footer.
+    /// The weakest performance indicator, and a route to the screen that
+    /// explains it. A bare `if let` rather than a stack: one conditional child
+    /// emits nothing at all when it fails, where a wrapper would lay out at
+    /// zero height and still collect a section gap on each side.
     @ViewBuilder
     private var insightCards: some View {
-        if dash.weakestIndicator != nil || dash.recentAchievement != nil {
-            VStack(spacing: Metrics.stackSpacing) {
-                if let weakest = dash.weakestIndicator {
-                    Button {
-                        Haptics.tap()
-                        store.requestedTab = .progress
-                    } label: {
-                        VStack(alignment: .leading, spacing: 10) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "target")
-                                    .font(.system(size: 12, weight: .bold))
-                                    .foregroundStyle(Palette.gold)
-                                Text("Weakest performance indicator")
-                                    .font(.appCaptionBold)
-                                    .foregroundStyle(Palette.textSecondary)
-                                Spacer(minLength: 0)
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundStyle(Palette.textTertiary)
-                            }
-                            PerformanceIndicatorBar(code: weakest.code,
-                                                    text: weakest.text,
-                                                    value: weakest.masteryScore,
-                                                    detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
-                        }
-                        .appCard()
-                    }
-                    .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
-                    .appearIn(6)
-                }
-
-                if let recent = dash.recentAchievement {
-                    HStack(spacing: 13) {
-                        AchievementBadge(status: recent, size: 46, showsTitle: false)
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Recent achievement")
-                                .font(.appCaptionBold)
-                                .foregroundStyle(Palette.textSecondary)
-                            Text(recent.definition.title)
-                                .font(.appBodyMedium)
-                                .foregroundStyle(Palette.textPrimary)
-                            Text(recent.definition.detail)
-                                .font(.appCaption)
-                                .foregroundStyle(Palette.textTertiary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+        if let weakest = dash.weakestIndicator {
+            Button {
+                Haptics.tap()
+                store.requestedTab = .progress
+            } label: {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "target")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(Palette.gold)
+                        Text("Weakest performance indicator")
+                            .font(.appCaptionBold)
+                            .foregroundStyle(Palette.textSecondary)
                         Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Palette.textTertiary)
                     }
-                    .appCard()
-                    .appearIn(7)
-                    .accessibilityElement(children: .combine)
+                    PerformanceIndicatorBar(code: weakest.code,
+                                            text: weakest.text,
+                                            value: weakest.masteryScore,
+                                            detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
                 }
+                .appCard()
             }
+            .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+            .appearIn(6)
         }
     }
 
