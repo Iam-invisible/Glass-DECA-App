@@ -84,24 +84,14 @@ enum DECACluster: String, CaseIterable, Codable, Identifiable, Hashable {
 
     /// Every cluster uses the same accent family — colour carries meaning,
     /// not category — but a subtle tint helps scanning long lists.
-    /// The cluster's colour, used for the Study screen's light field, the
-    /// onboarding retint and the cluster chips.
-    ///
-    /// Muted ink tones rather than screen colours, because they now sit on warm
-    /// paper. Each one is deliberately clear of the four semantic accents in
-    /// `Palette` — the previous set was not, and three collisions were real
-    /// bugs: marketing *was* the accent colour, personal finance was three per
-    /// cent from the correct-answer green, and in dark mode hospitality and the
-    /// streak gold were the same value. A student could not tell their cluster
-    /// from a button, a right answer, or a streak.
     var tint: Color {
         switch self {
-        case .marketing:                 return Color(lightHex: 0x7C3F66, darkHex: 0xC98BB0)
-        case .finance:                   return Color(lightHex: 0x1F6B63, darkHex: 0x5FBAAD)
-        case .hospitality:               return Color(lightHex: 0x8A5A4A, darkHex: 0xC79A87)
-        case .businessManagement:        return Color(lightHex: 0x45508C, darkHex: 0x8D97D8)
-        case .entrepreneurship:          return Color(lightHex: 0xA8455E, darkHex: 0xE28CA0)
-        case .personalFinancialLiteracy: return Color(lightHex: 0x5F7038, darkHex: 0xA8BE73)
+        case .marketing:                 return Color(lightHex: 0x2563EB, darkHex: 0x5B8DEF)
+        case .finance:                   return Color(lightHex: 0x0F766E, darkHex: 0x2DD4BF)
+        case .hospitality:               return Color(lightHex: 0xB45309, darkHex: 0xE8B14A)
+        case .businessManagement:        return Color(lightHex: 0x4F46E5, darkHex: 0x8B87F5)
+        case .entrepreneurship:          return Color(lightHex: 0xB91C6B, darkHex: 0xF07AB0)
+        case .personalFinancialLiteracy: return Color(lightHex: 0x15803D, darkHex: 0x4ADE80)
         }
     }
 

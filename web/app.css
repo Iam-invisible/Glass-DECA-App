@@ -3,14 +3,14 @@
    comparable. If the app's palette changes, change it here and nowhere else. */
 
 :root {
-  --canvas:#FAF7F2; --card:#FFFDF9; --card-raised:#FFFFFF; --card-sunken:#F1ECE3;
-  --stroke:#E6DFD3; --stroke-strong:#D4CABA;
-  --text-primary:#231F1A; --text-secondary:#5C5348; --text-tertiary:#8C8175;
-  --accent:#175C7A; --accent-soft:#E2EDF2;
-  --success:#3D7A4E; --success-soft:#E5EFE5;
-  --danger:#B33A2B; --danger-soft:#F8E5E1;
-  --gold:#A87422; --gold-soft:#F6EBD7;
-  --inactive:#B8AFA2; --shadow:42,33,24;
+  --canvas:#F4F6FA; --card:#FFFFFF; --card-raised:#FFFFFF; --card-sunken:#EDF1F7;
+  --stroke:#E2E8F0; --stroke-strong:#CBD5E1;
+  --text-primary:#0F1B2D; --text-secondary:#53627A; --text-tertiary:#8A97AB;
+  --accent:#2563EB; --accent-soft:#E4EDFF;
+  --success:#12855C; --success-soft:#DDF5EC;
+  --danger:#C8342F; --danger-soft:#FCE6E5;
+  --gold:#B07407; --gold-soft:#FBF0DA;
+  --inactive:#B4BECC; --shadow:15,27,45;
 
   --gutter:18px; --card-radius:18px; --control-radius:14px;
   --stack:14px; --section:24px;
@@ -25,14 +25,14 @@
   --quick:180ms cubic-bezier(.2,0,0,1);
 }
 [data-theme=dark] {
-  --canvas:#14110D; --card:#1F1A14; --card-raised:#2A241C; --card-sunken:#19150F;
-  --stroke:#372F25; --stroke-strong:#473D31;
-  --text-primary:#F5F0E7; --text-secondary:#B6A994; --text-tertiary:#86796A;
-  --accent:#6FAECB; --accent-soft:#182A33;
-  --success:#6FB985; --success-soft:#17281B;
-  --danger:#E8776A; --danger-soft:#351A15;
-  --gold:#DDA945; --gold-soft:#33270F;
-  --inactive:#4B4238; --shadow:0,0,0;
+  --canvas:#0D1219; --card:#161E29; --card-raised:#1D2632; --card-sunken:#111823;
+  --stroke:#27313F; --stroke-strong:#33404F;
+  --text-primary:#F2F5F9; --text-secondary:#9AA8BC; --text-tertiary:#6C7A8D;
+  --accent:#5B8DEF; --accent-soft:#1B2942;
+  --success:#34C793; --success-soft:#11312A;
+  --danger:#F2645F; --danger-soft:#3A1B1C;
+  --gold:#E8B14A; --gold-soft:#33270F;
+  --inactive:#3C4757; --shadow:0,0,0;
 }
 
 *,*::before,*::after { box-sizing:border-box; }
@@ -284,7 +284,7 @@ body.gated .chrome, body.gated .stage { opacity:0; pointer-events:none; }
               line-height:1.05; color:#f2f5f9; margin:0 0 14px; }
 .gate-sub { font-size:15px; line-height:1.6; color:#9aa4b4; margin:0 0 30px; }
 .gate-btn {
-  font:inherit; font-size:16px; font-weight:600; color:#fff; background:#175C7A;
+  font:inherit; font-size:16px; font-weight:600; color:#fff; background:#2563EB;
   border:0; border-radius:999px; padding:15px 46px; cursor:pointer;
   transition:transform var(--quick), background var(--quick);
 }

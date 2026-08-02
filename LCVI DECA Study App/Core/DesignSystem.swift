@@ -35,50 +35,36 @@ extension UIColor {
 // MARK: - Palette
 
 /// Refined academic / business palette.
-/// Warm paper.
-///
-/// Surfaces sit on a warm off-white rather than the blue-grey every dashboard
-/// uses, and the ink is a warm near-black rather than navy. The point is that
-/// the app reads as a printed study book, which is also what the display serif
-/// has been asking for since it was chosen.
-///
-/// Dark mode is a *warm* dark — brown-black, not blue-black. A cool dark under
-/// a warm light theme reads as two different apps.
-///
-/// Accent colours still carry meaning only — blue = progress, green = correct,
-/// red = wrong, gold = streaks and achievements, grey = inactive. Warm paper
-/// leaves less room in the warm half of the wheel, so the cluster tints in
-/// `DECACluster.tint` were pulled apart deliberately to stay clear of these
-/// four. Before adding any new colour, check it against both sets.
+/// Accent colours carry meaning only — blue = progress, green = correct,
+/// red = wrong, gold = streaks & achievements, gray = inactive.
 enum Palette {
-    // Surfaces — warm paper, with cards lifting slightly off the page.
-    static let canvas       = Color(lightHex: 0xFAF7F2, darkHex: 0x14110D)
-    static let card         = Color(lightHex: 0xFFFDF9, darkHex: 0x1F1A14)
-    static let cardRaised   = Color(lightHex: 0xFFFFFF, darkHex: 0x2A241C)
-    static let cardSunken   = Color(lightHex: 0xF1ECE3, darkHex: 0x19150F)
-    static let stroke       = Color(lightHex: 0xE6DFD3, darkHex: 0x372F25)
+    // Surfaces
+    static let canvas       = Color(lightHex: 0xF4F6FA, darkHex: 0x0D1219)
+    static let card         = Color(lightHex: 0xFFFFFF, darkHex: 0x161E29)
+    static let cardRaised   = Color(lightHex: 0xFFFFFF, darkHex: 0x1D2632)
+    static let cardSunken   = Color(lightHex: 0xEDF1F7, darkHex: 0x111823)
+    static let stroke       = Color(lightHex: 0xE2E8F0, darkHex: 0x27313F)
     /// The lighter top edge of a card's border — a pane lit from above.
-    static let strokeGlint  = Color(lightHex: 0xFBF8F2, darkHex: 0x4B4133)
-    static let strokeStrong = Color(lightHex: 0xD4CABA, darkHex: 0x473D31)
+    static let strokeGlint  = Color(lightHex: 0xEDF2F9, darkHex: 0x3B4859)
+    static let strokeStrong = Color(lightHex: 0xCBD5E1, darkHex: 0x33404F)
 
-    // Text — warm ink rather than black, so it belongs on the paper.
-    static let textPrimary   = Color(lightHex: 0x231F1A, darkHex: 0xF5F0E7)
-    static let textSecondary = Color(lightHex: 0x5C5348, darkHex: 0xB6A994)
-    static let textTertiary  = Color(lightHex: 0x8C8175, darkHex: 0x86796A)
+    // Text
+    static let textPrimary   = Color(lightHex: 0x0F1B2D, darkHex: 0xF2F5F9)
+    static let textSecondary = Color(lightHex: 0x53627A, darkHex: 0x9AA8BC)
+    static let textTertiary  = Color(lightHex: 0x8A97AB, darkHex: 0x6C7A8D)
 
-    // Meaningful accents — deepened so they read as ink on paper rather than
-    // as the bright screen colours a white background can carry.
-    static let accent      = Color(lightHex: 0x175C7A, darkHex: 0x6FAECB)
-    static let accentSoft  = Color(lightHex: 0xE2EDF2, darkHex: 0x182A33)
-    static let success     = Color(lightHex: 0x3D7A4E, darkHex: 0x6FB985)
-    static let successSoft = Color(lightHex: 0xE5EFE5, darkHex: 0x17281B)
-    static let danger      = Color(lightHex: 0xB33A2B, darkHex: 0xE8776A)
-    static let dangerSoft  = Color(lightHex: 0xF8E5E1, darkHex: 0x351A15)
-    static let gold        = Color(lightHex: 0xA87422, darkHex: 0xDDA945)
-    static let goldSoft    = Color(lightHex: 0xF6EBD7, darkHex: 0x33270F)
-    static let inactive    = Color(lightHex: 0xB8AFA2, darkHex: 0x4B4238)
+    // Meaningful accents
+    static let accent      = Color(lightHex: 0x2563EB, darkHex: 0x5B8DEF)
+    static let accentSoft  = Color(lightHex: 0xE4EDFF, darkHex: 0x1B2942)
+    static let success     = Color(lightHex: 0x12855C, darkHex: 0x34C793)
+    static let successSoft = Color(lightHex: 0xDDF5EC, darkHex: 0x11312A)
+    static let danger      = Color(lightHex: 0xC8342F, darkHex: 0xF2645F)
+    static let dangerSoft  = Color(lightHex: 0xFCE6E5, darkHex: 0x3A1B1C)
+    static let gold        = Color(lightHex: 0xB07407, darkHex: 0xE8B14A)
+    static let goldSoft    = Color(lightHex: 0xFBF0DA, darkHex: 0x33270F)
+    static let inactive    = Color(lightHex: 0xB4BECC, darkHex: 0x3C4757)
 
-    static let shadow = Color(lightHex: 0x2A2118, darkHex: 0x000000)
+    static let shadow = Color(lightHex: 0x0F1B2D, darkHex: 0x000000)
 }
 
 // MARK: - Spacing / radius
