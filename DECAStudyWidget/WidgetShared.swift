@@ -173,11 +173,16 @@ enum WidgetPalette {
         })
     }
 
+    /// Warm paper, matching Core/DesignSystem.swift. The extension is its own
+    /// binary and cannot import the app, so these are kept in step by hand —
+    /// change one and change the other, or the widget stops looking like the
+    /// app it belongs to.
+    ///
     /// Opaque base, used only on systems with no Liquid Glass of their own.
-    static let canvas  = dynamic(light: 0xF7F9FC, dark: 0x141B25)
-    static let accent  = dynamic(light: 0x2563EB, dark: 0x5B8DEF)
-    static let success = dynamic(light: 0x12855C, dark: 0x34C793)
-    static let gold    = dynamic(light: 0xB07407, dark: 0xE8B14A)
+    static let canvas  = dynamic(light: 0xFAF7F2, dark: 0x14110D)
+    static let accent  = dynamic(light: 0x175C7A, dark: 0x6FAECB)
+    static let success = dynamic(light: 0x3D7A4E, dark: 0x6FB985)
+    static let gold    = dynamic(light: 0xA87422, dark: 0xDDA945)
 }
 
 // MARK: - Type

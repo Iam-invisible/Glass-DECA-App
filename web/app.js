@@ -6,13 +6,16 @@ const $ = (s, r = document) => r.querySelector(s);
 const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Tints copied from DECACluster.tint in Models/Domain.swift. These were both
+// stale and colliding: finance used the app's correct-answer green and
+// entrepreneurship used its wrong-answer red.
 const CLUSTERS = [
-  { id:'marketing',               name:'Marketing',                                  short:'Marketing',        tint:'#2563EB' },
-  { id:'finance',                 name:'Finance',                                    short:'Finance',          tint:'#12855C' },
-  { id:'hospitality',             name:'Hospitality and Tourism',                    short:'Hospitality',      tint:'#B07407' },
-  { id:'businessManagement',      name:'Business Management and Administration',     short:'Business Mgmt',    tint:'#6D4AC4' },
-  { id:'entrepreneurship',        name:'Entrepreneurship and Small Business',        short:'Entrepreneurship', tint:'#C8342F' },
-  { id:'personalFinancialLiteracy', name:'Personal Financial Literacy',              short:'Personal Finance', tint:'#0E7490' }
+  { id:'marketing',               name:'Marketing',                                  short:'Marketing',        tint:'#7C3F66' },
+  { id:'finance',                 name:'Finance',                                    short:'Finance',          tint:'#1F6B63' },
+  { id:'hospitality',             name:'Hospitality and Tourism',                    short:'Hospitality',      tint:'#8A5A4A' },
+  { id:'businessManagement',      name:'Business Management and Administration',     short:'Business Mgmt',    tint:'#45508C' },
+  { id:'entrepreneurship',        name:'Entrepreneurship and Small Business',        short:'Entrepreneurship', tint:'#A8455E' },
+  { id:'personalFinancialLiteracy', name:'Personal Financial Literacy',              short:'Personal Finance', tint:'#5F7038' }
 ];
 const clusterOf = id => CLUSTERS.find(c => c.id === id) || CLUSTERS[0];
 
