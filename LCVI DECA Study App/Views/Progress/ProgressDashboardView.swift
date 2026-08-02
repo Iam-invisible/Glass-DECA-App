@@ -127,7 +127,7 @@ struct ProgressDashboardView: View {
     // MARK: Week
 
     private var weekSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Last 7 days")
             HStack(alignment: .bottom, spacing: 7) {
                 ForEach(weekHistory, id: \.dayKey) { day in
@@ -169,7 +169,7 @@ struct ProgressDashboardView: View {
     // MARK: Clusters
 
     private var clusterSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Accuracy by cluster")
             VStack(spacing: 13) {
                 ForEach(DECACluster.allCases.filter { clusterAccuracy[$0] != nil }) { cluster in
@@ -187,7 +187,7 @@ struct ProgressDashboardView: View {
     // MARK: Heatmap
 
     private var heatmapSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "PI heatmap",
                           subtitle: "Tap a tile to drill")
 
@@ -262,7 +262,7 @@ struct ProgressDashboardView: View {
     // MARK: Indicators
 
     private var indicatorSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Performance indicators",
                           subtitle: store.settings.cluster.shortName,
                           actionTitle: showAllIndicators ? "Show less" : "Show all") {
@@ -331,7 +331,7 @@ struct ProgressDashboardView: View {
     // MARK: Topics
 
     private var topicSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Accuracy by topic")
             VStack(spacing: 13) {
                 ForEach(tagAccuracy.prefix(6), id: \.tag) { row in
@@ -356,7 +356,7 @@ struct ProgressDashboardView: View {
     // MARK: Mock exams
 
     private var mockSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Mock exam scores",
                           subtitle: "\(mockSummaries.count) attempt\(mockSummaries.count == 1 ? "" : "s")")
             ScoreTrendChart(summaries: mockSummaries.reversed())
@@ -367,7 +367,7 @@ struct ProgressDashboardView: View {
     // MARK: AI advice
 
     private var adviceSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Study advice")
             VStack(alignment: .leading, spacing: 10) {
                 Label("On-device coaching", systemImage: "sparkles")
@@ -424,7 +424,7 @@ struct ProgressDashboardView: View {
     // MARK: Achievements
 
     private var achievementSection: some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Achievements",
                           subtitle: "\(achievements.filter(\.isUnlocked).count) of \(achievements.count) unlocked")
             NavigationLink {
@@ -487,7 +487,7 @@ struct AchievementsView: View {
     private var locked: [AchievementStatus] { statuses.filter { !$0.isUnlocked } }
 
     private func section(title: String, items: [AchievementStatus]) -> some View {
-        VStack(alignment: .leading, spacing: 11) {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: title,
                           subtitle: items.first?.isUnlocked == true
                             ? "\(items.count) · tap to replay"

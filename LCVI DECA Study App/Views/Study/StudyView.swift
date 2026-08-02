@@ -37,12 +37,22 @@ struct StudyView: View {
         NavigationStack {
             ScrollViewReader { scroller in
             ScrollView {
-                VStack(spacing: Metrics.stackSpacing) {
+                // Groups, not a flat list. Everything here used to sit at one
+                // gap, so "Ways to study" was exactly as far from its own
+                // tiles as from the streak card above it and the screen read
+                // as one undifferentiated column. See `Metrics`.
+                VStack(spacing: Metrics.sectionSpacing) {
                     ScrollOffsetProbe()
                     greeting.appearIn(0)
-                    goalDials.appearIn(1).guideAnchor(.goalCard)
-                        .id(GuideTarget.goalCard)
-                    streakCard.appearIn(2)
+
+                    // Today: the dials and the streak are one thought — what
+                    // the day looks like — so they group tighter than the gap
+                    // that separates them from what to actually do next.
+                    VStack(spacing: Metrics.stackSpacing) {
+                        goalDials.appearIn(1).guideAnchor(.goalCard)
+                            .id(GuideTarget.goalCard)
+                        streakCard.appearIn(2)
+                    }
 
                     if dash.questionBankCount == 0 {
                         EmptyStateView(systemImage: "tray",
@@ -242,109 +252,122 @@ struct StudyView: View {
     /// The whole studying surface, visible at once. Launch tiles carry their
     /// live count; navigation tiles carry a chevron.
     private var waysToStudy: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: Metrics.headerGap) {
             SectionHeader(title: "Ways to study")
                 .appearIn(2)
 
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
-                                GridItem(.flexible(), spacing: 10)],
-                      spacing: 10) {
-                ModeTile(title: "Review Due", systemImage: "arrow.triangle.2.circlepath",
-                         tint: Palette.success, count: dash.dueForReview) {
-                    startReviewDue()
+            // The tiles and the Library banner are one field, held together
+            // below the heading rather than each floating at header distance.
+            VStack(spacing: 10) {
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10),
+                                    GridItem(.flexible(), spacing: 10)],
+                          spacing: 10) {
+                    ModeTile(title: "Review Due", systemImage: "arrow.triangle.2.circlepath",
+                             tint: Palette.success, count: dash.dueForReview) {
+                        startReviewDue()
+                    }
+                    .appearIn(3, distance: 10)
+                    ModeTile(title: "Mistakes", systemImage: "book.closed.fill",
+                             tint: Palette.danger, count: dash.openMistakes) {
+                        pushMistakes = true
+                    }
+                    .appearIn(4, distance: 10)
+                    ModeTile(title: "Mock Exams", systemImage: "doc.text.fill",
+                             tint: Palette.accent) {
+                        pushMock = true
+                    }
+                    .appearIn(5, distance: 10)
+                    ModeTile(title: "Roleplay", systemImage: "person.wave.2.fill",
+                             tint: Palette.accent) {
+                        pushRoleplay = true
+                    }
+                    .appearIn(6, distance: 10)
+                    ModeTile(title: "Exam Cram", systemImage: "bolt.fill",
+                             tint: Palette.gold) {
+                        showingCramSetup = true
+                    }
+                    .appearIn(8, distance: 10)
+                    ModeTile(title: "Bookmarks", systemImage: "bookmark.fill",
+                             tint: Palette.gold, count: dash.bookmarkedQuestions) {
+                        startBookmarked()
+                    }
+                    .appearIn(9, distance: 10)
                 }
-                .appearIn(3, distance: 10)
-                ModeTile(title: "Mistakes", systemImage: "book.closed.fill",
-                         tint: Palette.danger, count: dash.openMistakes) {
-                    pushMistakes = true
-                }
-                .appearIn(4, distance: 10)
-                ModeTile(title: "Mock Exams", systemImage: "doc.text.fill",
-                         tint: Palette.accent) {
-                    pushMock = true
-                }
-                .appearIn(5, distance: 10)
-                ModeTile(title: "Roleplay", systemImage: "person.wave.2.fill",
-                         tint: Palette.accent) {
-                    pushRoleplay = true
-                }
-                .appearIn(6, distance: 10)
-                ModeTile(title: "Exam Cram", systemImage: "bolt.fill",
-                         tint: Palette.gold) {
-                    showingCramSetup = true
-                }
-                .appearIn(8, distance: 10)
-                ModeTile(title: "Bookmarks", systemImage: "bookmark.fill",
-                         tint: Palette.gold, count: dash.bookmarkedQuestions) {
-                    startBookmarked()
-                }
-                .appearIn(9, distance: 10)
-            }
 
-            // Six modes make three clean rows; Library then spans the full
-            // width beneath them. Left in the grid it was a seventh square
-            // stranded beside a gap.
-            ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
-                     tint: Palette.accent, isWide: true) {
-                pushLibrary = true
+                // Six modes make three clean rows; Library then spans the full
+                // width beneath them. Left in the grid it was a seventh square
+                // stranded beside a gap.
+                ModeTile(title: "Library", systemImage: "square.grid.2x2.fill",
+                         tint: Palette.accent, isWide: true) {
+                    pushLibrary = true
+                }
+                .appearIn(10, distance: 10)
             }
-            .appearIn(10, distance: 10)
         }
     }
 
     // MARK: - Insight cards
 
+    /// Wrapped in an `if` that tests both cases before building the stack, not
+    /// just wrapped. A `VStack` holding two failed `if`s is still a container:
+    /// it lays out at zero height and the parent puts a section gap on both
+    /// sides of it, so a student with no insights yet would get 48pt of empty
+    /// column between the tiles and the footer.
     @ViewBuilder
     private var insightCards: some View {
-        if let weakest = dash.weakestIndicator {
-            Button {
-                Haptics.tap()
-                store.requestedTab = .progress
-            } label: {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "target")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(Palette.gold)
-                        Text("Weakest performance indicator")
-                            .font(.appCaptionBold)
-                            .foregroundStyle(Palette.textSecondary)
-                        Spacer(minLength: 0)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(Palette.textTertiary)
+        if dash.weakestIndicator != nil || dash.recentAchievement != nil {
+            VStack(spacing: Metrics.stackSpacing) {
+                if let weakest = dash.weakestIndicator {
+                    Button {
+                        Haptics.tap()
+                        store.requestedTab = .progress
+                    } label: {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "target")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundStyle(Palette.gold)
+                                Text("Weakest performance indicator")
+                                    .font(.appCaptionBold)
+                                    .foregroundStyle(Palette.textSecondary)
+                                Spacer(minLength: 0)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(Palette.textTertiary)
+                            }
+                            PerformanceIndicatorBar(code: weakest.code,
+                                                    text: weakest.text,
+                                                    value: weakest.masteryScore,
+                                                    detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
+                        }
+                        .appCard()
                     }
-                    PerformanceIndicatorBar(code: weakest.code,
-                                            text: weakest.text,
-                                            value: weakest.masteryScore,
-                                            detail: "\(weakest.timesCorrect) of \(weakest.timesAnswered) correct so far")
+                    .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+                    .appearIn(6)
                 }
-                .appCard()
-            }
-            .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
-            .appearIn(6)
-        }
 
-        if let recent = dash.recentAchievement {
-            HStack(spacing: 13) {
-                AchievementBadge(status: recent, size: 46, showsTitle: false)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Recent achievement")
-                        .font(.appCaptionBold)
-                        .foregroundStyle(Palette.textSecondary)
-                    Text(recent.definition.title)
-                        .font(.appBodyMedium)
-                        .foregroundStyle(Palette.textPrimary)
-                    Text(recent.definition.detail)
-                        .font(.appCaption)
-                        .foregroundStyle(Palette.textTertiary)
-                        .fixedSize(horizontal: false, vertical: true)
+                if let recent = dash.recentAchievement {
+                    HStack(spacing: 13) {
+                        AchievementBadge(status: recent, size: 46, showsTitle: false)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Recent achievement")
+                                .font(.appCaptionBold)
+                                .foregroundStyle(Palette.textSecondary)
+                            Text(recent.definition.title)
+                                .font(.appBodyMedium)
+                                .foregroundStyle(Palette.textPrimary)
+                            Text(recent.definition.detail)
+                                .font(.appCaption)
+                                .foregroundStyle(Palette.textTertiary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .appCard()
+                    .appearIn(7)
+                    .accessibilityElement(children: .combine)
                 }
-                Spacer(minLength: 0)
             }
-            .appCard()
-            .appearIn(7)
-            .accessibilityElement(children: .combine)
         }
     }
 

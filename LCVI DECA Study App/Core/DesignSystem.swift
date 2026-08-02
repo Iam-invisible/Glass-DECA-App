@@ -69,11 +69,21 @@ enum Palette {
 
 // MARK: - Spacing / radius
 
+/// Three vertical gaps, and they are a hierarchy rather than three numbers:
+/// `headerGap` (10) binds a `SectionHeader` to the content it names,
+/// `stackSpacing` (14) separates peers inside one group, and `sectionSpacing`
+/// (24) separates groups from each other.
+///
+/// A screen that uses one gap everywhere is the failure mode — the eye has
+/// nothing to group by, so a heading floats as far from its own content as
+/// from the section above it and every screen reads as one long list. Keep
+/// header < peer < section on any new screen.
 enum Metrics {
     static let gutter: CGFloat = 18
     static let cardRadius: CGFloat = 18
     static let controlRadius: CGFloat = 14
     static let rowMinHeight: CGFloat = 52
+    static let headerGap: CGFloat = 10
     static let stackSpacing: CGFloat = 14
     static let sectionSpacing: CGFloat = 24
 }
