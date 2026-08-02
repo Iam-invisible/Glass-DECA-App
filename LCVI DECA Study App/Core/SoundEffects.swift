@@ -79,9 +79,25 @@ enum SoundEffects {
 
     /// Used when a celebration is dismissed early, so the jingle doesn't carry
     /// on over the screen underneath.
-    static func stop(_ effect: Effect) {
-        players[effect]?.stop()
-        players[effect]?.currentTime = 0
+    ///
+    /// `fadeDuration` exists because stopping a sustained tone dead truncates
+    /// the waveform at whatever amplitude it happened to be at, which is
+    /// audible as a click. Short cues can stop hard; the intro's swell fades.
+    /// The volume is restored afterwards so the next play isn't silent.
+    static func stop(_ effect: Effect, fadeDuration: TimeInterval = 0) {
+        guard let player = players[effect] else { return }
+        guard fadeDuration > 0, player.isPlaying else {
+            player.stop()
+            player.currentTime = 0
+            player.volume = effect.volume
+            return
+        }
+        player.setVolume(0, fadeDuration: fadeDuration)
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeDuration) {
+            player.stop()
+            player.currentTime = 0
+            player.volume = effect.volume
+        }
     }
 
     static func play(_ effect: Effect) {

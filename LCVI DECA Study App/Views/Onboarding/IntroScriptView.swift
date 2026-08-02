@@ -124,14 +124,14 @@ struct IntroScriptView: View {
         }
         .opacity(leaving ? 0 : 1)
         .contentShape(Rectangle())
-        .onTapGesture { finish() }
+        .onTapGesture { finish(skipped: true) }
         .onAppear(perform: run)
         .onDisappear { sequence?.cancel() }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Glass")
         .accessibilityAddTraits(.isButton)
         .accessibilityHint("Double tap to skip")
-        .accessibilityAction { finish() }
+        .accessibilityAction { finish(skipped: true) }
     }
 
     // MARK: Wordmark
@@ -314,13 +314,20 @@ struct IntroScriptView: View {
         try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
     }
 
-    private func finish() {
+    private func finish(skipped: Bool = false) {
         guard !finished else { return }
         finished = true
         sequence?.cancel()
-        // The reveal track is deliberately *not* stopped — see the classic
-        // intro for why: the player lives on `SoundEffects`, not on this view,
-        // so the swell resolves under whatever comes next.
+        // A finished intro still lets the track resolve under whatever comes
+        // next: the reveal is 6.7s against 2.6s of choreography, and that
+        // overhang is the point — the player lives on `SoundEffects`, not on
+        // this view. Tapping away is the opposite intent, so a skip takes the
+        // audio with it. The fade matches the departure animation so picture
+        // and sound leave together; Reduce Motion has no departure to match,
+        // so it gets a short one rather than a tail over the next screen.
+        if skipped {
+            SoundEffects.stop(.intro, fadeDuration: reduceMotion ? 0.2 : 0.45)
+        }
 
         guard !reduceMotion else { onFinish(); return }
         withAnimation(.easeIn(duration: 0.45)) {
