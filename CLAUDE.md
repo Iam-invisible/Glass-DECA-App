@@ -20,6 +20,16 @@ been tried and rejected.
 
 **Start here:** §9 is the pre-submission punch list. That is the live work.
 
+**First three commands of any session**, before proposing anything:
+
+```bash
+git status --short && git log --oneline -8
+python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py
+xcodebuild -project "LCVI DECA Study App.xcodeproj" -scheme "LCVI DECA Study App" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug clean build 2>&1 | grep -E "error:|warning:|BUILD" | grep -viE "AppIntents|metadata extraction"
+```
+
+Branches may be ahead of their remotes; §10 has the inventory and what each branch is for.
+
 ---
 
 ## 1. What the app is
@@ -451,6 +461,21 @@ The user relies on tags to roll back and asks for saves explicitly. Never skip a
 
 Branch `rebrand-glass-edge` parks an abandoned cyan rebrand the user rejected — do not
 resurrect it without asking. Current work is on `v7-events-goals`.
+
+**Branches, and what each is for.** Three of these are deployment branches rather than code, and
+being "behind" the app is correct for them, not staleness:
+
+| Branch | Purpose |
+|---|---|
+| `v7-events-goals` | **Current work.** Everything below is downstream of it. |
+| `main` | 54+ commits behind. Has no `index.html` and no `web/` — the preview never lived here. |
+| `gh-pages` | **Orphan, no shared history.** Serves the privacy notice and nothing else, so the published URL cannot land on a stale app preview. `index.html` is canonical; `privacy.html` redirects to it; `.nojekyll` skips Jekyll. |
+| `web-only` | The interactive preview, deployed separately. Older than the app — it will not show the 600 questions or the warm palette. Refresh before linking it publicly as a demo. |
+| `rebrand-glass-edge` | Abandoned. Do not resurrect without asking. |
+
+GitHub Pages serves **`gh-pages` at root** → `https://iam-invisible.github.io/Glass-DECA-App/`,
+which is the URL compiled into `PrivacyPolicy.hostedURL` and given to App Store Connect. Pointing
+Pages at `web-only` instead puts the preview at the privacy URL — that was tried and reverted.
 
 **Note:** the version branches in the archive repo share names with these tags, which makes bare
 refs ambiguous — push with fully-qualified refspecs (`refs/heads/v5-immersive:refs/heads/…`).
