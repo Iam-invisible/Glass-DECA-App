@@ -26,7 +26,9 @@ been tried and rejected.
 
 **Glass** — an offline-first DECA Ontario study app for high-school students.
 
-- Swift + SwiftUI, iOS 16.0 deployment target (must run on iPhone 8)
+- Swift + SwiftUI, **iOS 16.4** deployment target. It was 16.0; llama.cpp's XCFramework is
+  built for 16.4 and binds at launch, so a 16.0 target would have failed to start on 16.0–16.3.
+  The iPhone 8 requirement survives — that device runs iOS 16.7.
 - **Three panes: Study · Progress · Settings** (this was six tabs until recently — see §4)
 - Feel: premium, calm, adult. Explicitly **not** a children's quiz game. Strong motion, haptics,
   full light/dark, full accessibility.
@@ -77,6 +79,12 @@ been tried and rejected.
 - **Commit at every good stopping point** and say what was verified and what wasn't. The user
   relies on tags to roll back — see §10.
 - The user cannot see your reasoning. Report outcomes plainly.
+- **Write UI copy plainly. No poetry.** This was asked for explicitly after the onboarding and
+  the walkthrough drifted into a register that sounded good and told a student nothing —
+  "Your corner crew" for a reminder toggle, "freezes protect it when life happens" for a rule
+  the student then had to work out themselves. Headings name the action; body text says what
+  the control does and what changes as a result. The one exception is the intro prologue's
+  three lines, which are a title sequence and were kept deliberately.
 
 ---
 
@@ -94,6 +102,10 @@ been tried and rejected.
   re-seeding never duplicates rows.
 - **`AppStore`** (`Services/AppStore.swift`) is the single coordination point injected as
   `@EnvironmentObject`. Services are plain types it owns.
+- **Launch flow** in `RootView`, in order: `IntroView` → **privacy consent gate** (shown while
+  `!settings.hasAcceptedCurrentPrivacyPolicy`) → `OnboardingView` → `main`. The gate sits after
+  the intro so its choreography is never interrupted, and before onboarding because onboarding's
+  first act has the student answering a real question, which is using the app.
 - **Navigation intents** live on `AppStore`: `requestedTab`, `wantsQuestionBank`,
   `wantsMistakeNotebook`, `wantsMockExam`, `showGuide`, `guideFocus`. Consumed with a
   **reset-then-act** pattern — flip local state *after* mount, because a `navigationDestination`
@@ -118,7 +130,17 @@ been tried and rejected.
   an existing install. It runs on a seed-version bump, rewrites rows still flagged
   `isSample`, and preserves bookmarks.
 - **Widget** (`DECAStudyWidget/`) reads a snapshot written by `WidgetDataService` through the
-  shared app group, and bundles its own copies of the app's fonts.
+  shared app group, and bundles its own copies of the app's fonts. `WidgetSnapshot` is
+  **duplicated verbatim** in both targets — the extension cannot import the app. Its decoder is
+  hand-written with `decodeIfPresent` so a payload from an older build still decodes rather than
+  throwing and blanking every widget.
+- **Deep links** are `decastudy://` and the switch in `LCVI_DECA_Study_AppApp.swift` is the only
+  reader: `practice`, `cram`, `review`, `mistakes`, `quickthink`. Keep in step with `WidgetLink`.
+- **Files worth knowing about**: `Models/InputSanitizer.swift` (§8.26),
+  `Data/PrivacyPolicy.swift` (notice as structured data, plus `version` and `hostedURL`),
+  `Components/PrivacyPolicyBody.swift` (shared by the gate and Settings so the two cannot
+  disagree), `Services/LlamaCoachEngine.swift`, and `Scripts/check_questions.py` /
+  `Scripts/check_roleplays.py` (§11).
 
 ---
 
@@ -139,9 +161,29 @@ been tried and rejected.
 - **The hierarchy rule: serif is always a heading, Manrope is always content.**
 - OFL licences ship alongside every font. Keep them.
 
-**Colour** — `Palette`. Light/dark pairs. Accents carry meaning only: blue = progress,
-green = correct, red = wrong, gold = streaks and achievements, grey = inactive. `strokeGlint` is
-the lighter top edge of a card's gradient border.
+**Colour — warm paper** (`Palette`, `Core/DesignSystem.swift`). Light/dark pairs.
+
+Surfaces are a warm off-white (`#FAF7F2`) with warm ink (`#231F1A`) rather than the blue-grey
+and navy every dashboard uses, so the app reads as a printed study book — which is what the
+display serif had been asking for. **Dark mode is a warm dark** (`#14110D`), not blue-black; a
+cool dark under a warm light theme reads as two different apps.
+
+Accents carry meaning only: blue = progress, green = correct, red = wrong, gold = streaks and
+achievements, grey = inactive. They are deepened relative to the old palette because bright
+screen colours look wrong on paper.
+
+**`DECACluster.tint` must stay clear of all four.** The previous set did not, and three of the
+collisions were bugs rather than taste: marketing's tint *was* the accent colour, personal
+finance sat three per cent from the correct-answer green, and in dark mode hospitality and the
+streak gold were byte-identical. Clusters are now muted ink tones — plum, teal, clay, indigo,
+rose, olive. Check any new colour against both sets.
+
+The palette is duplicated in three more places that do not import the app and must be changed
+in the same commit: `DECAStudyWidget/WidgetShared.swift`, `web/app.css` plus the `CLUSTERS` list
+in `web/app.js`, and the hosted privacy page on `gh-pages`. `AmbientCanvas` needs nothing — it
+derives from `Palette`.
+
+`strokeGlint` is the lighter top edge of a card's gradient border.
 
 **Spacing** — `Metrics`: gutter 18, cardRadius 18, controlRadius 14, rowMinHeight 52,
 stackSpacing 14, sectionSpacing 24.
@@ -237,21 +279,36 @@ browser viewing, deployed from the `web-only` branch. Not part of the iOS target
 Wi-Fi enforced at the socket, SHA-256 pinned, excluded from backup, deletable. It is offered
 **only** where Apple Intelligence is unavailable.
 
-**The consumption side is now wired.** `CoachEngineFactory` builds the engine, `AppStore`
-attaches it whenever the model file is present, and `FoundationModelFeedbackService.generate()`
-falls through to it when Apple's model is out of reach — so explanations, roleplay coaching and
-Quick Think feedback all reach it through the funnel they already used. Weights are freed on
-`.background`, not `.inactive`, because dropping a gigabyte every time someone opens Control
-Centre would cost more than holding it.
+**Both tiers now work.** `CoachEngineFactory` builds the engine, `AppStore` attaches it whenever
+the model file is present, and `FoundationModelFeedbackService.generate()` falls through to it
+when Apple's model is out of reach — so explanations, roleplay coaching and Quick Think feedback
+all reach it through the funnel they already used. Weights are freed on `.background`, not
+`.inactive`, because dropping a gigabyte every time someone opens Control Centre would cost more
+than holding it.
 
 `AIAvailability` gained a sixth case, `.localCoachAvailable`, so Settings can say the local coach
 is running instead of reporting the device unsupported while AI visibly works. The five required
 status strings (§4) are untouched.
 
-**What is still missing is the runtime.** `LlamaCoachEngine` is written but has never been
-compiled — no llama package is in the project, so `canImport` is false and the factory returns
-`StubCoachEngine`. See §9 item 1 for the correct package URL, and note that the one this brief
-carried for months was wrong.
+**The runtime is in and compiling.** `mattt/llama.swift`, pinned at exactly `2.10199.0`, product
+`LlamaSwift`, added to the app target. **Not `ggml-org/llama.cpp`** — that repo has no
+`Package.swift` and Xcode refuses it; that wrong URL sat in this brief for months. llama.swift
+wraps llama.cpp's own precompiled XCFramework, so nothing builds from source and the C API is
+upstream's. Its minor version *is* llama.cpp's build number (`2.10199.0` ≙ `b10199`), which is
+why the pin is exact — "up to next major" would accept any future llama.cpp build.
+
+`LlamaCoachEngine` is guarded by `#if canImport(LlamaSwift) || canImport(llama)`, so a direct
+XCFramework drop-in also works.
+
+**The offer is gated on `CoachEngineFactory.canRunLocalModel`**, not on a hand-set flag. No
+runtime linked means no offer, because a student who downloaded 808 MB and got nothing back is a
+feature that does not function — a plausible App Review rejection. Adding the package switches
+the offer back on by itself, and a model stranded by an earlier build is deleted on launch.
+
+**Never executed on hardware.** It compiles and the Swift wiring is sound, but no `llama_*` call
+has ever run. Device testing has to answer four things: does the GGUF load, is a 1B model's
+output actually usable, is first-token latency short enough that a student waits, and does the
+app survive ~1 GB resident on a 4 GB phone.
 
 ---
 
@@ -298,35 +355,43 @@ carried for months was wrong.
     Constants read from `nonisolated` delegate callbacks or `Task.detached` need `nonisolated`.
 22. **`getBBox()` on SVG `<text>` returns the font's layout box, not tight ink bounds** — fitting
     to it scaled the web wordmark unevenly. Bake the glyph outline instead. (Web preview only.)
+23. **`.kicker()` and `.appKicker` do not exist.** §5 of this brief listed them as design-system
+    roles for years and they were never in the code. Eyebrow text is `.appCaptionBold`.
+24. **llama's sampler chain is `UnsafeMutablePointer<llama_sampler>?`, not `OpaquePointer`.**
+    The model and context handles really are opaque; the sampler is typed *and* optional.
+    Mixing them up was the only thing that failed to compile on the first llama build.
+25. **An annotated tag is a tag object wrapping a commit, and a branch must point at a commit.**
+    `git push versions refs/tags/X:refs/heads/X` therefore sends the wrong object type. GitHub
+    rejects it with an unexplained `! [remote rejected] (failed)` and **`--dry-run` does not
+    catch it**, because the check is server-side. Dereference with `^{}` — see §10.
+26. **`bank.add`/`bank.update` sanitise; nothing else may write a question.** An imported
+    `correctIndex` of 5, or three choices instead of four, decodes happily and then indexes out
+    of bounds in `explainAnswer` — tapping "Explain with AI" crashed the app. `InputSanitizer`
+    fixes this at that one boundary, which is why all four write paths must keep going through
+    those two methods.
 
 ---
 
 ## 9. Pre-submission punch list — the live work
 
-**Still open — and all four are things only you can do**
+**Still open**
 
-1. **No llama runtime in the project.** `File ▸ Add Package Dependencies… ▸
-   `https://github.com/mattt/llama.swift`, add the **`LlamaSwift`** product to the app target.
-
-   **Do not use `https://github.com/ggml-org/llama.cpp`** — it has no `Package.swift` and Xcode
-   refuses it. That URL was in this brief for months and is wrong. `llama.swift` wraps the
-   *official* precompiled XCFramework from llama.cpp's own releases, so nothing builds from
-   source and the C API is upstream's, unmodified. Its versions track upstream builds
-   (`2.10199.0` ≙ llama.cpp `b10199`). Adding llama.cpp's XCFramework directly also works and
-   needs no third party.
-
-   Everything else is written: `LlamaCoachEngine` sits behind
-   `#if canImport(LlamaSwift) || canImport(llama)` so either route lights it up,
-   `CoachEngineFactory` picks it up automatically, and the AI service already falls through to
-   it. **The raw `llama_*` calls have never been compiled** — that C API renames things between
-   revisions, so expect to fix call sites on the first build and **pin an exact version, not a
-   branch.**
+1. **Fill in `[INSERT YOUR LEGAL OR TRADING NAME]`.** It appears in the hosted privacy notice
+   (`gh-pages/index.html`) and in `~/Desktop/Glass-Privacy-Notice.pdf`, and the hosted one is
+   **publicly visible right now**. The in-app copy does not carry it. Should match the seller
+   name in App Store Connect.
 2. **Run the whole app end to end on device.** Nothing since `v5-immersive` has run on hardware
-   and a great deal has changed. Riskiest: first-launch flow, guide spotlight geometry,
-   back-navigation from the pushed Mock Exams / Roleplay / Library, and the Core Data lightweight
-   migration that adds the four `rationale*` attributes.
+   and a great deal has changed. In rough order of risk:
+   - **Does the local model actually work?** See §7. Loading, output quality, latency, jetsam.
+   - **The warm paper palette on a real panel.** Colour is the one thing a simulator cannot
+     settle. If `#FAF7F2` reads as dirty white rather than paper, pull it toward `#FBF9F5`.
+   - **The Core Data lightweight migration** adding four `rationale*` attributes. Install the
+     old build, then this one over it, and confirm progress survives. There is a
+     rebuild-on-failure fallback; you want to know it did not fire.
+   - First-launch flow, now: intro → privacy gate → onboarding.
+   - Guide spotlight geometry, and back-navigation from pushed Mock Exams / Roleplay / Library.
 3. **Check App Store metadata for DECA trademark exposure** — the in-app disclaimer is solid, the
-   store listing is a separate surface.
+   store listing is a separate surface. Avoid "DECA" leading the app name, subtitle or keywords.
 4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
    roleplay *at regionals* or advance on the exam alone. Ontario's own pages point both ways and
    it varies by area, so they are left as exam + roleplay at both levels — the error that
@@ -349,6 +414,18 @@ carried for months was wrong.
   exam is the only thing that advances them out of regionals.
 - **Content is no longer the gap.** 600 questions, 71 roleplays, 90 Quick Think prompts. At a
   10/day goal the bundled bank now lasts two months rather than six days.
+- **llama.cpp is wired and compiling** (§7), and the deployment floor moved to 16.4 for it.
+- **Privacy is done end to end.** A consent gate between the intro and onboarding, the full
+  notice embedded and readable forever from Settings ▸ About, a hosted copy on the `gh-pages`
+  branch for App Store Connect, and a PDF. All three say the same thing. Acceptance is stored
+  as a *version* (`PrivacyPolicy.version`), so bumping it re-prompts everyone.
+- **`ITSAppUsesNonExemptEncryption = false`** declared, so App Store Connect stops asking on
+  every upload. Only SHA-256 hashing and OS TLS are used, both exempt.
+- **Input sanitisation** (§8.26). Also fixed a real crash reachable from any imported bank.
+- **The Quick Think fallback stopped lying.** Without AI it used to tell every student their
+  "strongest part" was committing to a position — the same praise regardless of what they wrote.
+  It now makes no claim it has not measured, and the headings change to match.
+- **UI copy rewritten plainly** across onboarding and the walkthrough (§3).
 
 **Candidate for removal**
 
@@ -419,16 +496,21 @@ rebuild existed to fix.
 ## 12. Current state
 
 Three panes, cinematic onboarding with a scored prologue, a spotlight app guide, a competitive
-event catalogue that shapes the UI, dual daily goals, an ambient light field behind every screen —
-and, as of `v8-content`, a bank that can actually sustain the retention curve the app was built
-around: 600 questions where every option is explained, not just the correct one.
+event catalogue that shapes the UI, dual daily goals, an ambient light field behind every screen,
+600 questions where every option is explained, and — since `v8-content` — both AI tiers wired,
+a warm paper palette, and privacy handled end to end.
 
 Debug and Release both build clean with zero warnings, and both content validators pass.
+Uncommitted work: none. Unpushed: check `git status` and both remotes (§10).
 
 **Nothing since `v5-immersive` has been run on a physical device.** That is now the largest
-unverified surface in the project by a wide margin, and it is §9 item 2 for a reason.
+unverified surface in the project by a wide margin, and it is §9 item 2 for a reason. Two things
+in particular have *never* executed: any `llama_*` call, and the warm paper palette on a real
+panel.
 
-Two things worth knowing before touching this again:
+Three things worth knowing before touching this again:
+
+- **Copy is plain now, deliberately.** See §3. Do not let it drift back.
 
 - **Distractors are the teaching surface.** The rationales name the *specific* error — "65% is
   markup on cost, not on selling price", "$9,000 is subtracting 10% where present value requires
