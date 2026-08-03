@@ -194,6 +194,7 @@ struct ShopView: View {
                 withAnimation(reduceMotion ? nil : Motion.snappy) { settings.toggleEquip(item) }
             } else if settings.buy(item) {
                 SoundEffects.celebration()
+                store.react(.purchase)
             } else {
                 flashDenied(item.id)
             }
@@ -296,6 +297,9 @@ struct ShopView: View {
             } else if settings.buy(item) {
                 SoundEffects.celebration()
                 if item.kind == .icon { applyIcon(item) }
+                // Reacts to its own purchase too, which is the first thing a
+                // student will try after buying it.
+                store.react(.purchase)
             } else {
                 flashDenied(item.id)
             }
@@ -367,6 +371,7 @@ struct ShopView: View {
     /// the header.
     private func flashDenied(_ id: String) {
         Haptics.warning()
+        store.react(.cantAfford)
         guard !reduceMotion else { return }
         // Drive the effect linearly and let the decay curve inside it do the
         // shaping — easing this would fight the damping.

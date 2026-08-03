@@ -331,6 +331,9 @@ final class UserSettings: ObservableObject {
 
     func isSelected(_ item: AppCosmeticItem) -> Bool {
         switch item.kind {
+        // Owning the companion is the whole state — there is nothing to
+        // select between, so owned means on.
+        case .companion: return ownedAppItemIDs.contains(item.id)
         case .icon:  return appIconID == item.id
         case .theme: return themeID == item.id
         case .sound: return soundPackID == item.id
@@ -384,6 +387,7 @@ final class UserSettings: ObservableObject {
     func select(_ item: AppCosmeticItem) {
         guard owns(item) else { return }
         switch item.kind {
+        case .companion: break
         case .icon:  appIconID = item.id
         case .theme: themeID = item.id
         case .sound: soundPackID = item.id

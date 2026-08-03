@@ -130,6 +130,23 @@ final class AppStore: ObservableObject {
     /// fresh reveal, and Settings can re-arm it.
     @Published var showIntro = true
 
+    // MARK: Bunny companion
+
+    /// The last thing worth a reaction, and a counter that changes on every
+    /// one. The counter exists because the same event twice in a row must
+    /// still re-fire the sprite — two correct answers should not leave the
+    /// face stuck on the first one.
+    @Published private(set) var bunnyEvent: BunnyEvent?
+    @Published private(set) var bunnyToken: Int = 0
+
+    /// Cheap and safe to call from anywhere: it does nothing at all unless the
+    /// companion has been bought, so call sites do not each have to check.
+    func react(_ event: BunnyEvent) {
+        guard settings.ownedAppItemIDs.contains(BunnyCompanion.itemID) else { return }
+        bunnyEvent = event
+        bunnyToken &+= 1
+    }
+
     /// `UserSettings` publishes its own changes. Without forwarding them,
     /// anything observing `AppStore` (which is every screen) never hears about
     /// a preference change and silently fails to redraw.
@@ -327,6 +344,7 @@ final class AppStore: ObservableObject {
         // question from paying nothing; 2 more for correct keeps guessing from
         // paying the same as knowing.
         settings.award(isCorrect ? CoinRate.correctAnswer : CoinRate.answer)
+        react(isCorrect ? .correctAnswer : .wrongAnswer)
 
         if countsTowardDailyGoal {
             let outcome = streaks.recordAnswers(count: 1,
@@ -351,17 +369,26 @@ final class AppStore: ObservableObject {
                                    correctCount: correctCount,
                                    seconds: seconds)
         }
+        // Same ordering rule as `finishMockExam`: the commoner event first so
+        // an achievement unlocked by this session overwrites it.
+        react(.sessionFinished)
         evaluateAchievements()
         refresh()
     }
 
+    /// A greeting when the app comes forward, so the corner is not static the
+    /// moment you open it.
+    func greetBunny() { react(.opened) }
+
     func handle(_ outcome: StreakOutcome) {
         if outcome.goalJustCompleted {
             settings.award(CoinRate.dailyGoal)
+            react(.goalMet)
             enqueue(.goalCompleted(streak: outcome.newStreak))
         }
         if outcome.freezeEarned {
             settings.award(CoinRate.streakMilestone)
+            react(.streakMilestone)
             enqueue(.freezeEarned(total: streakStore.state.freezes))
         }
     }
@@ -381,6 +408,7 @@ final class AppStore: ObservableObject {
 
         for definition in achievements.evaluate(context) {
             settings.award(CoinRate.achievement)
+            react(.achievement)
             enqueue(.achievement(definition))
         }
     }
@@ -508,6 +536,10 @@ final class AppStore: ObservableObject {
                                                 goal: settings.dailyGoal)
             handle(outcome)
         }
+        // Before achievements, so a mock that also unlocked one leaves the
+        // achievement's face up rather than this one. Reactions overwrite, so
+        // the rarer event has to fire last.
+        react(.mockFinished)
         evaluateAchievements()
         refresh()
         return attemptID

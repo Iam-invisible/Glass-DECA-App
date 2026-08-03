@@ -159,11 +159,12 @@ enum CosmeticCatalogue {
 /// real setting, so buying one has to actually change the app — a shop row
 /// that unlocks nothing is worse than no row.
 enum AppCosmeticKind: String, CaseIterable, Identifiable {
-    case icon, theme, intro, sound
+    case companion, icon, theme, intro, sound
     var id: String { rawValue }
 
     var title: String {
         switch self {
+        case .companion: return "Companion"
         case .icon:  return "App icons"
         case .theme: return "Themes"
         case .intro: return "Intros"
@@ -173,6 +174,7 @@ enum AppCosmeticKind: String, CaseIterable, Identifiable {
 
     var symbol: String {
         switch self {
+        case .companion: return "hare.fill"
         case .icon:  return "app.badge"
         case .theme: return "paintpalette.fill"
         case .intro: return "sparkles"
@@ -194,7 +196,15 @@ struct AppCosmeticItem: Identifiable, Hashable {
 }
 
 enum AppCosmeticCatalogue {
-    static let all: [AppCosmeticItem] = icons + themes + intros + sounds
+    static let all: [AppCosmeticItem] = companions + icons + themes + intros + sounds
+
+    /// The only item with no free default: there is no companion until one is
+    /// bought, and "None" as a purchasable row would be a joke.
+    static let companions: [AppCosmeticItem] = [
+        .init(id: BunnyCompanion.itemID, name: "Bunny",
+              detail: "Reacts to how you're doing",
+              kind: .companion, price: BunnyCompanion.price, previewHex: 0xE8B14A),
+    ]
 
     /// `id` doubles as the value written to `UIApplication.setAlternateIconName`,
     /// except for the default, which passes nil. The names must match the keys

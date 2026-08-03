@@ -120,7 +120,10 @@ struct RootView: View {
             select(requested)
         }
         .onChange(of: scenePhase) { phase in
-            if phase == .active { store.onForeground() }
+            if phase == .active {
+                store.onForeground()
+                store.greetBunny()
+            }
             // .background rather than .inactive: inactive fires for the app
             // switcher and for control centre, and dropping a gigabyte of
             // weights every time someone swipes down would be worse than
@@ -153,10 +156,15 @@ struct RootView: View {
         // following you into the preferences screen reads as a nag.
         .overlay(alignment: .topTrailing) {
             if tab != .settings {
-                CoinBadge(coins: store.settings.coins)
-                    .padding(.trailing, Metrics.gutter)
-                    .padding(.top, 2)
-                    .transition(.opacity)
+                HStack(spacing: 8) {
+                    if store.settings.ownedAppItemIDs.contains(BunnyCompanion.itemID) {
+                        BunnyCompanionView(event: store.bunnyEvent, token: store.bunnyToken)
+                    }
+                    CoinBadge(coins: store.settings.coins)
+                }
+                .padding(.trailing, Metrics.gutter)
+                .padding(.top, 2)
+                .transition(.opacity)
             }
         }
         // Resolved here rather than inside any screen so the spotlight can
