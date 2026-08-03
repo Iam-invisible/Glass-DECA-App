@@ -57,17 +57,23 @@ struct TodayPanel: View {
     private var allMet: Bool { questionsMet && (!showsQuickThink || quickThinkMet) }
 
     var body: some View {
-        VStack(spacing: 12) {
+        // The rings lead, centred and large, with everything else reading as
+        // support beneath them. Side by side they were merely one of three
+        // things in a row of equals; the page is called Study and this is the
+        // state of the study, so it gets the hero position and the height to
+        // hold it.
+        VStack(spacing: 16) {
+            rings
+                .frame(maxWidth: .infinity)
             goals
             streakRow
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
         .accessibilityElement(children: .contain)
     }
 
     private var goals: some View {
-        HStack(spacing: 20) {
-            rings
+        Group {
             VStack(spacing: 10) {
                 goalRow(title: "Questions",
                         symbol: "list.bullet",
@@ -157,21 +163,33 @@ struct TodayPanel: View {
 
     private var rings: some View {
         ZStack {
+            // A soft wash under the rings. Without a card there is nothing
+            // saying "this is the important part", and a bloom does that
+            // without drawing a box — the same trick the app icon uses.
+            Circle()
+                .fill(
+                    RadialGradient(colors: [(questionsMet ? Palette.success : Palette.accent).opacity(0.16),
+                                            .clear],
+                                   center: .center, startRadius: 2, endRadius: 122)
+                )
+                .frame(width: 244, height: 244)
+                .blur(radius: 12)
+
             ProgressRing(progress: questionsFraction,
-                         lineWidth: 11,
+                         lineWidth: 14,
                          tint: questionsMet ? Palette.success : Palette.accent)
-                .frame(width: 132, height: 132)
+                .frame(width: 176, height: 176)
 
             if showsQuickThink {
                 ProgressRing(progress: quickThinkFraction,
-                             lineWidth: 10,
+                             lineWidth: 12,
                              tint: quickThinkMet ? Palette.success : Palette.gold)
-                    .frame(width: 96, height: 96)
+                    .frame(width: 130, height: 130)
             }
 
             centre
         }
-        .frame(width: 132, height: 132)
+        .frame(width: 176, height: 176)
         .accessibilityHidden(true)
     }
 
@@ -183,10 +201,10 @@ struct TodayPanel: View {
         if allMet {
             VStack(spacing: 2) {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 38, weight: .bold))
                     .foregroundStyle(Palette.success)
                 Text("Done")
-                    .font(.appCaption)
+                    .font(.appCallout)
                     .foregroundStyle(Palette.textSecondary)
             }
         } else {
@@ -196,12 +214,12 @@ struct TodayPanel: View {
                 : max(0, quickThinkGoal - quickThinkDone)
             VStack(spacing: 0) {
                 CountingNumber(value: Double(remaining),
-                               font: .numeric(30),
+                               font: .numeric(46),
                                color: onQuestionsStill ? Palette.accent : Palette.gold)
                 Text(onQuestionsStill
                      ? "question\(remaining == 1 ? "" : "s") left"
                      : "quick think\(remaining == 1 ? "" : "s") left")
-                    .font(.appSans(10, weight: .medium))
+                    .font(.appSans(12, weight: .medium))
                     .foregroundStyle(Palette.textTertiary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
