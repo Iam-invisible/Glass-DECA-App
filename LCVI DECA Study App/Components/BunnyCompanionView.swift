@@ -35,7 +35,7 @@ struct BunnyCompanionView: View {
     private let size = CGSize(width: 46, height: 34)
 
     var body: some View {
-        Image(mood.imageName)
+        sprite
             .resizable()
             .scaledToFit()
             .frame(width: size.width, height: size.height)
@@ -48,6 +48,16 @@ struct BunnyCompanionView: View {
             .onChange(of: token) { _ in respond() }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Bunny companion, \(mood.rawValue)")
+    }
+
+    /// Resolved through `UIImage(named:)` rather than `Image(_:)` so a missing
+    /// file is visible instead of silent. The sprites are loose PNGs at the
+    /// bundle root, not asset-catalog entries, and a name that fails to
+    /// resolve draws nothing at all — which looks identical to the companion
+    /// not being owned, and would send you looking in the wrong place.
+    private var sprite: Image {
+        if let ui = UIImage(named: mood.imageName) { return Image(uiImage: ui) }
+        return Image(systemName: "questionmark.square.dashed")
     }
 
     private func respond() {

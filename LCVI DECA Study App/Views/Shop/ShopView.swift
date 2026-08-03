@@ -310,9 +310,21 @@ struct ShopView: View {
             }
         } label: {
             HStack(spacing: 13) {
+                // The companion shows itself. Every other category is a colour
+                // — an icon, a theme, a sound — but a swatch standing in for a
+                // character means buying it sight unseen.
                 RoundedRectangle(cornerRadius: 11, style: .continuous)
-                    .fill(Color(hex: item.previewHex))
+                    .fill(item.kind == .companion ? Palette.cardSunken
+                                                  : Color(hex: item.previewHex))
                     .frame(width: 46, height: 46)
+                    .overlay {
+                        if item.kind == .companion, let ui = UIImage(named: BunnyMood.happy.imageName) {
+                            Image(uiImage: ui)
+                                .resizable()
+                                .scaledToFit()
+                                .padding(4)
+                        }
+                    }
                     .overlay(
                         RoundedRectangle(cornerRadius: 11, style: .continuous)
                             .strokeBorder(.white.opacity(0.25), lineWidth: 0.5)
