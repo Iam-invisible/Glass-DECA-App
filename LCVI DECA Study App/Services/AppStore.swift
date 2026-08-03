@@ -322,6 +322,12 @@ final class AppStore: ObservableObject {
                                   seconds: seconds)
         }
 
+        // Coins are minted here and nowhere else that a student can reach, so
+        // the only way to earn is to answer. 1 for the attempt keeps a hard
+        // question from paying nothing; 2 more for correct keeps guessing from
+        // paying the same as knowing.
+        settings.award(isCorrect ? CoinRate.correctAnswer : CoinRate.answer)
+
         if countsTowardDailyGoal {
             let outcome = streaks.recordAnswers(count: 1,
                                                 correct: isCorrect ? 1 : 0,
@@ -351,9 +357,11 @@ final class AppStore: ObservableObject {
 
     func handle(_ outcome: StreakOutcome) {
         if outcome.goalJustCompleted {
+            settings.award(CoinRate.dailyGoal)
             enqueue(.goalCompleted(streak: outcome.newStreak))
         }
         if outcome.freezeEarned {
+            settings.award(CoinRate.streakMilestone)
             enqueue(.freezeEarned(total: streakStore.state.freezes))
         }
     }
@@ -372,6 +380,7 @@ final class AppStore: ObservableObject {
         context.bestIndicatorMastery = indicators.stats().map(\.masteryScore).max() ?? 0
 
         for definition in achievements.evaluate(context) {
+            settings.award(CoinRate.achievement)
             enqueue(.achievement(definition))
         }
     }

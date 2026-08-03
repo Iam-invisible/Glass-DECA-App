@@ -54,8 +54,19 @@ enum Palette {
     static let textTertiary  = Color(lightHex: 0x8A97AB, darkHex: 0x6C7A8D)
 
     // Meaningful accents
-    static let accent      = Color(lightHex: 0x2563EB, darkHex: 0x5B8DEF)
-    static let accentSoft  = Color(lightHex: 0xE4EDFF, darkHex: 0x1B2942)
+    /// The accent is the one colour a student can change, from the customise
+    /// shop. It is a `var` rather than a `let` for that reason, set once at
+    /// launch from settings and again whenever a theme is selected.
+    ///
+    /// Only the accent moves. Green for correct, red for wrong and gold for
+    /// streaks carry meaning, so they stay fixed — a student able to repaint
+    /// "correct" as red would be buying a legibility bug. The widget keeps its
+    /// own accent and does not follow the theme: it cannot import the app, and
+    /// a themed widget would need the value plumbed through the shared
+    /// snapshot.
+    static var accentTheme: AccentTheme = .blue
+    static var accent: Color { accentTheme.accent }
+    static var accentSoft: Color { accentTheme.accentSoft }
     static let success     = Color(lightHex: 0x12855C, darkHex: 0x34C793)
     static let successSoft = Color(lightHex: 0xDDF5EC, darkHex: 0x11312A)
     static let danger      = Color(lightHex: 0xC8342F, darkHex: 0xF2645F)

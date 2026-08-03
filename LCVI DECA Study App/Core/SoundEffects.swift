@@ -56,6 +56,26 @@ enum SoundEffects {
     /// Toggled from Settings, alongside haptics.
     static var enabled: Bool = true
 
+    /// The selected sound pack, from the customise shop. Changing it drops the
+    /// cached players so the next cue reloads from the new files.
+    ///
+    /// A pack is a filename suffix, and `prepare()` falls back to the base file
+    /// whenever a pack is missing one. That means a half-populated pack
+    /// degrades to the default tone rather than to silence, which is the
+    /// failure mode you want for something bought in a shop.
+    static var pack: String = "sound.default" {
+        didSet {
+            guard pack != oldValue else { return }
+            players.removeAll()
+        }
+    }
+
+    private static func candidates(for effect: Effect) -> [String] {
+        guard pack != "sound.default" else { return [effect.fileName] }
+        let suffix = pack.replacingOccurrences(of: "sound.", with: "")
+        return ["\(effect.fileName)-\(suffix)", effect.fileName]
+    }
+
     private static var players: [Effect: AVAudioPlayer] = [:]
     private static var sessionConfigured = false
 
@@ -63,9 +83,11 @@ enum SoundEffects {
     static func prepare() {
         configureSession()
         for effect in Effect.allCases where players[effect] == nil {
-            guard let url = Bundle.main.url(forResource: effect.fileName,
-                                            withExtension: effect.fileExtension),
-                  let player = try? AVAudioPlayer(contentsOf: url) else { continue }
+            let url = candidates(for: effect).lazy.compactMap {
+                Bundle.main.url(forResource: $0, withExtension: effect.fileExtension)
+                    ?? Bundle.main.url(forResource: $0, withExtension: "wav")
+            }.first
+            guard let url, let player = try? AVAudioPlayer(contentsOf: url) else { continue }
             player.volume = effect.volume
             player.prepareToPlay()
             players[effect] = player

@@ -124,8 +124,17 @@ final class UserSettings: ObservableObject {
         self.acceptedPrivacyAt = defaults.object(forKey: Keys.acceptedPrivacyAt) as? Date
         self.eventCode = defaults.string(forKey: Keys.eventCode) ?? ""
         self.quickThinkGoal = defaults.object(forKey: Keys.quickThinkGoal) as? Int ?? 1
+        self.coins = defaults.integer(forKey: Keys.coins)
+        self.ownedCosmeticIDs = Set(defaults.stringArray(forKey: Keys.ownedCosmetics) ?? [])
+        self.equippedCosmeticIDs = (defaults.dictionary(forKey: Keys.equippedCosmetics) as? [String: String]) ?? [:]
+        self.ownedAppItemIDs = Set(defaults.stringArray(forKey: Keys.ownedAppItems) ?? [])
+        self.appIconID = defaults.string(forKey: Keys.appIcon) ?? "icon.default"
+        self.themeID = defaults.string(forKey: Keys.theme) ?? "theme.blue"
+        self.soundPackID = defaults.string(forKey: Keys.soundPack) ?? "sound.default"
         Haptics.enabled = self.hapticsEnabled
         SoundEffects.enabled = self.soundEnabled
+        Palette.accentTheme = AccentTheme(itemID: self.themeID)
+        SoundEffects.pack = self.soundPackID
     }
 
     private enum Keys {
@@ -148,6 +157,13 @@ final class UserSettings: ObservableObject {
         static let acceptedPrivacyAt = "acceptedPrivacyAt"
         static let eventCode = "eventCode"
         static let quickThinkGoal = "quickThinkGoal"
+        static let coins = "coins"
+        static let ownedCosmetics = "ownedCosmetics"
+        static let equippedCosmetics = "equippedCosmetics"
+        static let ownedAppItems = "ownedAppItems"
+        static let appIcon = "appIcon"
+        static let theme = "appTheme"
+        static let soundPack = "soundPack"
     }
 
     @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
@@ -232,6 +248,127 @@ final class UserSettings: ObservableObject {
     var introStyle: IntroStyle {
         get { IntroStyle(rawValue: introStyleRaw) ?? .script }
         set { introStyleRaw = newValue.rawValue }
+    }
+
+    // MARK: - Wallet and customisation
+
+    /// Coins are earned by studying and spent in the customise shop. They are
+    /// never purchasable with money: that would need StoreKit, receipts and a
+    /// restore path, and restore needs an account — which the app does not
+    /// have and is not going to grow.
+    @Published var coins: Int { didSet { defaults.set(coins, forKey: Keys.coins) } }
+
+    @Published var ownedCosmeticIDs: Set<String> {
+        didSet { defaults.set(Array(ownedCosmeticIDs), forKey: Keys.ownedCosmetics) }
+    }
+
+    /// Slot raw value → item id. A slot missing from the dictionary is bare,
+    /// which is how "take it off" works without a null item in the catalogue.
+    @Published var equippedCosmeticIDs: [String: String] {
+        didSet { defaults.set(equippedCosmeticIDs, forKey: Keys.equippedCosmetics) }
+    }
+
+    @Published var ownedAppItemIDs: Set<String> {
+        didSet { defaults.set(Array(ownedAppItemIDs), forKey: Keys.ownedAppItems) }
+    }
+
+    @Published var appIconID: String { didSet { defaults.set(appIconID, forKey: Keys.appIcon) } }
+
+    @Published var themeID: String {
+        didSet {
+            defaults.set(themeID, forKey: Keys.theme)
+            Palette.accentTheme = AccentTheme(itemID: themeID)
+        }
+    }
+
+    @Published var soundPackID: String {
+        didSet {
+            defaults.set(soundPackID, forKey: Keys.soundPack)
+            SoundEffects.pack = soundPackID
+        }
+    }
+
+    // MARK: Queries
+
+    func owns(_ item: CosmeticItem) -> Bool { ownedCosmeticIDs.contains(item.id) }
+
+    func owns(_ item: AppCosmeticItem) -> Bool {
+        item.isDefault || ownedAppItemIDs.contains(item.id)
+    }
+
+    func equipped(_ slot: CosmeticSlot) -> CosmeticItem? {
+        equippedCosmeticIDs[slot.rawValue].flatMap(CosmeticCatalogue.item(id:))
+    }
+
+    var equippedCosmetics: [CosmeticSlot: CosmeticItem] {
+        var out: [CosmeticSlot: CosmeticItem] = [:]
+        for slot in CosmeticSlot.allCases {
+            if let item = equipped(slot) { out[slot] = item }
+        }
+        return out
+    }
+
+    func isSelected(_ item: AppCosmeticItem) -> Bool {
+        switch item.kind {
+        case .icon:  return appIconID == item.id
+        case .theme: return themeID == item.id
+        case .sound: return soundPackID == item.id
+        case .intro: return introStyleRaw == (item.id == "intro.classic" ? IntroStyle.classic.rawValue
+                                                                        : IntroStyle.script.rawValue)
+        }
+    }
+
+    // MARK: Mutations
+
+    func award(_ amount: Int) {
+        guard amount > 0 else { return }
+        coins += amount
+    }
+
+    /// Returns false when the balance will not cover it, so the caller can say
+    /// so rather than silently doing nothing.
+    @discardableResult
+    func buy(_ item: CosmeticItem) -> Bool {
+        guard !owns(item), coins >= item.price else { return false }
+        coins -= item.price
+        ownedCosmeticIDs.insert(item.id)
+        equip(item)
+        return true
+    }
+
+    @discardableResult
+    func buy(_ item: AppCosmeticItem) -> Bool {
+        guard !owns(item), coins >= item.price else { return false }
+        coins -= item.price
+        ownedAppItemIDs.insert(item.id)
+        select(item)
+        return true
+    }
+
+    func equip(_ item: CosmeticItem) {
+        guard owns(item) else { return }
+        equippedCosmeticIDs[item.slot.rawValue] = item.id
+    }
+
+    func unequip(_ slot: CosmeticSlot) {
+        equippedCosmeticIDs.removeValue(forKey: slot.rawValue)
+    }
+
+    /// Toggles: tapping an equipped item takes it off, which is what a student
+    /// expects and saves a separate remove control per slot.
+    func toggleEquip(_ item: CosmeticItem) {
+        if equipped(item.slot)?.id == item.id { unequip(item.slot) } else { equip(item) }
+    }
+
+    func select(_ item: AppCosmeticItem) {
+        guard owns(item) else { return }
+        switch item.kind {
+        case .icon:  appIconID = item.id
+        case .theme: themeID = item.id
+        case .sound: soundPackID = item.id
+        case .intro: introStyleRaw = (item.id == "intro.classic" ? IntroStyle.classic.rawValue
+                                                                : IntroStyle.script.rawValue)
+        }
     }
 
     var appearance: AppearanceMode {
