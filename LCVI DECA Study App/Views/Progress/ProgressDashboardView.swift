@@ -92,7 +92,10 @@ struct ProgressDashboardView: View {
             }
             Spacer(minLength: 0)
         }
-        .appCard(padding: 17)
+        // No card. This is the screen's opening line — a ring and three facts
+        // — and boxing it put a border between the header and the first thing
+        // the header describes.
+        .padding(.vertical, 2)
         .accessibilityElement(children: .combine)
     }
 
@@ -149,7 +152,9 @@ struct ProgressDashboardView: View {
                     .accessibilityLabel("\(weekdayLabel(day.dayKey)): \(day.answered) questions")
                 }
             }
-            .appCard(padding: 15)
+            // The bars are their own shape against the canvas; a panel behind
+            // them was a second rectangle around seven rectangles.
+            .padding(.vertical, 6)
         }
     }
 

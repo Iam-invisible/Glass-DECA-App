@@ -173,7 +173,9 @@ struct StudyView: View {
     /// roleplay component: the catalogue knows, so the home screen should
     /// not push work their competition will never score.
     private var goalDials: some View {
-        HStack(alignment: .top, spacing: 10) {
+        // Wider than the 10pt the cards used: with no borders, whitespace is
+        // the only thing separating the two columns.
+        HStack(alignment: .top, spacing: 20) {
             GoalDial(title: "Questions",
                      systemImage: "list.bullet",
                      done: dash.today.answered,

@@ -106,24 +106,13 @@ struct GoalDial: View {
 
             startButton
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 14)
-        .padding(.bottom, 15)
+        // No card. The ring is already a strong closed shape and the start
+        // button is a filled capsule, so both read as objects without a panel
+        // behind them — the border was outlining things that had their own
+        // outline. The horizontal inset went with it: with no card edge to
+        // clear, it was only making the button narrower than its column.
+        .padding(.vertical, 4)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
-                .fill(Palette.card)
-                .shadow(color: Palette.shadow.opacity(0.05), radius: 10, x: 0, y: 4)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
-                .strokeBorder(
-                    LinearGradient(colors: [met ? Palette.success.opacity(0.45) : Palette.strokeGlint,
-                                            Palette.stroke],
-                                   startPoint: .top, endPoint: .bottom),
-                    lineWidth: 1
-                )
-        )
         .animation(reduceMotion ? nil : Motion.gentle, value: met)
         .accessibilityElement(children: .contain)
     }

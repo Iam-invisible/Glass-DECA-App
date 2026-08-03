@@ -39,25 +39,27 @@ struct StreakBadge: View {
                     .foregroundStyle(Palette.textSecondary)
             }
 
-            if freezes > 0 {
-                HStack(spacing: 3) {
-                    Image(systemName: "snowflake")
-                        .font(.system(size: 11, weight: .bold))
-                    Text("\(freezes)")
-                        .font(.appCaptionBold)
-                        .monospacedDigit()
-                }
-                .foregroundStyle(Palette.gold)
-                .padding(.horizontal, 7)
-                .padding(.vertical, 4)
-                .background(Capsule().fill(Palette.goldSoft))
+            // Always shown, including at zero. Hiding it until you had one
+            // meant the capsule appeared out of nowhere on day ten and there
+            // was nowhere to look up how many you were holding — a count that
+            // only exists when it is non-zero cannot be checked.
+            HStack(spacing: 3) {
+                Image(systemName: "snowflake")
+                    .font(.system(size: 11, weight: .bold))
+                Text("\(freezes)/\(StreakRules.maxFreezes)")
+                    .font(.appCaptionBold)
+                    .monospacedDigit()
             }
+            .foregroundStyle(freezes > 0 ? Palette.gold : Palette.textTertiary)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(freezes > 0 ? Palette.goldSoft : Palette.cardSunken))
         }
         .onAppear { animate() }
         .onChange(of: streak) { _ in animate() }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(streak) day streak")
-        .accessibilityValue(freezes > 0 ? "\(freezes) streak freezes available" : "")
+        .accessibilityValue("\(freezes) of \(StreakRules.maxFreezes) streak freezes")
     }
 
     private func animate() {
