@@ -118,7 +118,7 @@ final class UserSettings: ObservableObject {
         self.aiAutoExplain = defaults.object(forKey: Keys.aiAutoExplain) as? Bool ?? true
         self.aiEnabled = defaults.object(forKey: Keys.aiEnabled) as? Bool ?? true
         self.seededVersion = defaults.integer(forKey: Keys.seededVersion)
-        self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.script.rawValue
+        self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.classic.rawValue
         self.hasSeenGuide = defaults.bool(forKey: Keys.hasSeenGuide)
         self.acceptedPrivacyVersion = defaults.integer(forKey: Keys.acceptedPrivacyVersion)
         self.acceptedPrivacyAt = defaults.object(forKey: Keys.acceptedPrivacyAt) as? Date
@@ -135,6 +135,15 @@ final class UserSettings: ObservableObject {
         SoundEffects.enabled = self.soundEnabled
         Palette.accentTheme = AccentTheme(itemID: self.themeID)
         SoundEffects.pack = self.soundPackID
+
+        // Script used to be the default and is now bought. Anyone carrying the
+        // old value forward has not paid for it, so a stored "script" without
+        // ownership is a locked item left selected — reset it rather than
+        // honour it, or the shop's only intro row would already be in effect.
+        if self.introStyleRaw == IntroStyle.script.rawValue,
+           !self.ownedAppItemIDs.contains("intro.script") {
+            self.introStyleRaw = IntroStyle.classic.rawValue
+        }
     }
 
     private enum Keys {
@@ -245,9 +254,21 @@ final class UserSettings: ObservableObject {
         set { reminderStyleRaw = newValue.rawValue }
     }
 
+    /// Etched is the default and always available. Script is bought from the
+    /// customise shop, so setting it without owning it is refused here rather
+    /// than only in the UI — a settings screen is not the only caller.
     var introStyle: IntroStyle {
-        get { IntroStyle(rawValue: introStyleRaw) ?? .script }
-        set { introStyleRaw = newValue.rawValue }
+        get { IntroStyle(rawValue: introStyleRaw) ?? .classic }
+        set {
+            guard newValue != .script || ownsScriptIntro else { return }
+            introStyleRaw = newValue.rawValue
+        }
+    }
+
+    var ownsScriptIntro: Bool { ownedAppItemIDs.contains("intro.script") }
+
+    func ownsIntro(_ style: IntroStyle) -> Bool {
+        style == .classic || ownsScriptIntro
     }
 
     // MARK: - Wallet and customisation
@@ -313,8 +334,8 @@ final class UserSettings: ObservableObject {
         case .icon:  return appIconID == item.id
         case .theme: return themeID == item.id
         case .sound: return soundPackID == item.id
-        case .intro: return introStyleRaw == (item.id == "intro.classic" ? IntroStyle.classic.rawValue
-                                                                        : IntroStyle.script.rawValue)
+        case .intro: return introStyleRaw == (item.id == "intro.script" ? IntroStyle.script.rawValue
+                                                                       : IntroStyle.classic.rawValue)
         }
     }
 
@@ -366,8 +387,8 @@ final class UserSettings: ObservableObject {
         case .icon:  appIconID = item.id
         case .theme: themeID = item.id
         case .sound: soundPackID = item.id
-        case .intro: introStyleRaw = (item.id == "intro.classic" ? IntroStyle.classic.rawValue
-                                                                : IntroStyle.script.rawValue)
+        case .intro: introStyleRaw = (item.id == "intro.script" ? IntroStyle.script.rawValue
+                                                               : IntroStyle.classic.rawValue)
         }
     }
 

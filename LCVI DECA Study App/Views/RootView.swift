@@ -29,12 +29,24 @@ enum AppTab: Int, CaseIterable, Identifiable {
 
     var accessibilityTitle: String { title }
 
+    /// Filled, for the selected tab.
     var symbol: String {
         switch self {
         case .study:     return "book.fill"
         case .progress:  return "chart.bar.fill"
         case .customize: return "face.smiling.inverse"
         case .settings:  return "gearshape.fill"
+        }
+    }
+
+    /// Hollow, for every other tab. Weight alone is not enough of a signal
+    /// once the labels are gone — outline against solid is.
+    var outlineSymbol: String {
+        switch self {
+        case .study:     return "book"
+        case .progress:  return "chart.bar"
+        case .customize: return "face.smiling"
+        case .settings:  return "gearshape"
         }
     }
 }
@@ -131,6 +143,21 @@ struct RootView: View {
 
             AppTabBar(selection: tab, onSelect: select)
                 .guideAnchor(.tabBar)
+        }
+        // Pinned here rather than inside each screen so it does not scroll
+        // away — the point of a HUD is that the number is always there. It
+        // clears the screen titles because every root header puts a short
+        // eyebrow on the first line and the long title on the second.
+        //
+        // Settings is excluded: nothing there earns coins, and a balance
+        // following you into the preferences screen reads as a nag.
+        .overlay(alignment: .topTrailing) {
+            if tab != .settings {
+                CoinBadge(coins: store.settings.coins)
+                    .padding(.trailing, Metrics.gutter)
+                    .padding(.top, 2)
+                    .transition(.opacity)
+            }
         }
         // Resolved here rather than inside any screen so the spotlight can
         // reach the tab bar and the Study content in the same pass.
@@ -274,16 +301,13 @@ struct AppTabBar: View {
         Button {
             onSelect(item)
         } label: {
-            VStack(spacing: 3) {
-                Image(systemName: item.symbol)
-                    .font(.system(size: 17, weight: .semibold))
-                    .scaleEffect(selection == item && !reduceMotion ? 1.06 : 1)
-                Text(item.title)
-                    .font(.appSans(10, weight: selection == item ? .semibold : .medium))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            .foregroundStyle(selection == item ? Palette.accent : Palette.textTertiary)
+            // Icon only. The label is carried by the symbol's fill state and
+            // the highlight; VoiceOver still gets the title below, so nothing
+            // is lost to anyone who needs it read out.
+            Image(systemName: selection == item ? item.symbol : item.outlineSymbol)
+                .font(.system(size: 20, weight: selection == item ? .semibold : .regular))
+                .scaleEffect(selection == item && !reduceMotion ? 1.06 : 1)
+                .foregroundStyle(selection == item ? Palette.accent : Palette.textTertiary)
             .frame(maxWidth: .infinity)
             .frame(height: 46)
             .background {

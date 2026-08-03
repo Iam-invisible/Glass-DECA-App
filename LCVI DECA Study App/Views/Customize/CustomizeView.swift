@@ -23,6 +23,7 @@ struct CustomizeView: View {
     @State private var slot: CosmeticSlot = .hair
     @State private var appKind: AppCosmeticKind = .icon
     @State private var deniedItem: String?
+    @State private var shake: CGFloat = 0
 
     private var settings: UserSettings { store.settings }
 
@@ -60,10 +61,10 @@ struct CustomizeView: View {
 
     private var header: some View {
         ScreenHeader("Customize",
-                     eyebrow: "\(settings.coins) coins",
-                     eyebrowSymbol: "circle.hexagongrid.fill",
-                     eyebrowTint: Palette.gold,
-                     subtitle: "Earned by studying. Nothing here costs money.")
+                     eyebrow: "Your hamster",
+                     eyebrowSymbol: "face.smiling",
+                     eyebrowTint: Palette.accent,
+                     subtitle: "Coins are earned by studying. Nothing here costs money.")
     }
 
     // MARK: - Stage
@@ -221,7 +222,7 @@ struct CustomizeView: View {
                                   lineWidth: equipped ? 1.5 : 1)
             )
             .opacity(owned || affordable ? 1 : 0.55)
-            .offset(x: denied ? 6 : 0)
+            .modifier(RefusalShake(progress: denied ? shake : 0))
         }
         .buttonStyle(PressableButtonStyle(scale: 0.97, haptic: false))
         .accessibilityLabel(accessibilityLabel(item, owned: owned, equipped: equipped))
@@ -330,7 +331,7 @@ struct CustomizeView: View {
                                   lineWidth: selected ? 1.5 : 1)
             )
             .opacity(owned || affordable ? 1 : 0.55)
-            .offset(x: denied ? 6 : 0)
+            .modifier(RefusalShake(progress: denied ? shake : 0))
         }
         .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
     }
@@ -362,9 +363,14 @@ struct CustomizeView: View {
     /// the header.
     private func flashDenied(_ id: String) {
         Haptics.warning()
-        withAnimation(reduceMotion ? nil : .default) { deniedItem = id }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.28) {
-            withAnimation(reduceMotion ? nil : .default) { deniedItem = nil }
+        guard !reduceMotion else { return }
+        // Drive the effect linearly and let the decay curve inside it do the
+        // shaping — easing this would fight the damping.
+        deniedItem = id
+        shake = 0
+        withAnimation(.linear(duration: 0.55)) { shake = 1 }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+            if deniedItem == id { deniedItem = nil }
         }
     }
 

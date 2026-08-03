@@ -606,13 +606,39 @@ struct SettingsView: View {
                     Text("Intro style")
                         .font(.appCallout)
                         .foregroundStyle(Palette.textPrimary)
+                    // The picker still offers both, and the setter refuses the
+                    // locked one, so tapping it does nothing and would look
+                    // broken. The line underneath says why and where to go —
+                    // a disabled control that explains itself, rather than one
+                    // that silently ignores you.
                     AppSegmentedPicker("Intro style",
                                        selection: Binding(get: { settings.introStyle },
                                                           set: { settings.introStyle = $0 }),
-                                       options: IntroStyle.allCases) { $0.title }
-                    Text(settings.introStyle.detail)
-                        .font(.appFootnote)
-                        .foregroundStyle(Palette.textSecondary)
+                                       options: IntroStyle.allCases) { style in
+                        settings.ownsIntro(style) ? style.title : "\(style.title) 🔒"
+                    }
+                    if settings.ownsScriptIntro {
+                        Text(settings.introStyle.detail)
+                            .font(.appFootnote)
+                            .foregroundStyle(Palette.textSecondary)
+                    } else {
+                        Button {
+                            Haptics.tap()
+                            store.requestedTab = .customize
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "lock.fill")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Script is locked. Unlock it in Customize.")
+                                    .font(.appFootnote)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 10, weight: .semibold))
+                            }
+                            .foregroundStyle(Palette.accent)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+                    }
                 }
 
                 Divider().overlay(Palette.stroke)

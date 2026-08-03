@@ -214,8 +214,8 @@ enum AppCosmeticCatalogue {
     ]
 
     static let intros: [AppCosmeticItem] = [
-        .init(id: "intro.script",  name: "Script",  detail: "Handwritten glass",  kind: .intro, price: 0,   previewHex: 0x2563EB, isDefault: true),
-        .init(id: "intro.classic", name: "Etched",  detail: "Traced and filled",  kind: .intro, price: 300, previewHex: 0x53627A),
+        .init(id: "intro.classic", name: "Etched",  detail: "Traced and filled",  kind: .intro, price: 0,   previewHex: 0x53627A, isDefault: true),
+        .init(id: "intro.script",  name: "Script",  detail: "Handwritten glass",  kind: .intro, price: 300, previewHex: 0x2563EB),
     ]
 
     static let sounds: [AppCosmeticItem] = [
