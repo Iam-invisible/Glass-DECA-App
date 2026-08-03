@@ -173,29 +173,13 @@ struct StudyView: View {
     /// roleplay component: the catalogue knows, so the home screen should
     /// not push work their competition will never score.
     private var goalDials: some View {
-        // Wider than the 10pt the cards used: with no borders, whitespace is
-        // the only thing separating the two columns.
-        HStack(alignment: .top, spacing: 20) {
-            GoalDial(title: "Questions",
-                     systemImage: "list.bullet",
-                     done: dash.today.answered,
-                     goal: store.settings.dailyGoal,
-                     tint: Palette.accent,
-                     actionTitle: dash.today.goalMet ? "Keep going" : "Practice") {
-                startDaily()
-            }
-
-            if store.settings.eventHasRoleplay {
-                GoalDial(title: "Quick Think",
-                         systemImage: "brain.head.profile",
-                         done: dash.quickThinkToday,
-                         goal: store.settings.quickThinkGoal,
-                         tint: Palette.gold,
-                         actionTitle: dash.quickThinkGoalMet ? "One more" : "Start") {
-                    showingQuickThink = true
-                }
-            }
-        }
+        DailyGoalsPanel(questionsDone: dash.today.answered,
+                        questionsGoal: store.settings.dailyGoal,
+                        quickThinkDone: dash.quickThinkToday,
+                        quickThinkGoal: store.settings.quickThinkGoal,
+                        showsQuickThink: store.settings.eventHasRoleplay,
+                        onQuestions: { startDaily() },
+                        onQuickThink: { showingQuickThink = true })
     }
 
     /// Streak, freezes and the freeze bar — lifted out of the old goal hero
