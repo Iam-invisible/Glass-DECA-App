@@ -210,7 +210,8 @@ enum AppCosmeticCatalogue {
     /// except for the default, which passes nil. The names must match the keys
     /// in `CFBundleAlternateIcons`.
     static let icons: [AppCosmeticItem] = [
-        .init(id: "icon.default", name: "Glass",    detail: "The original",       kind: .icon, price: 0,   previewHex: 0x2563EB, isDefault: true),
+        .init(id: "icon.default",     name: "Glass",    detail: "The wordmark, in glass", kind: .icon, price: 0,   previewHex: 0x000000, isDefault: true),
+        .init(id: "AppIconOriginal",  name: "Original", detail: "The first icon",         kind: .icon, price: 250, previewHex: 0x4FA3E3),
         .init(id: "AppIconInk",   name: "Ink",      detail: "Warm dark",          kind: .icon, price: 450, previewHex: 0x231F1A),
         .init(id: "AppIconGold",  name: "Gold",     detail: "Streak gold",        kind: .icon, price: 500, previewHex: 0xB07407),
         .init(id: "AppIconMint",  name: "Mint",     detail: "Cool green",         kind: .icon, price: 500, previewHex: 0x12855C),
