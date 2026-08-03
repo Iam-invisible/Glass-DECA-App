@@ -13,6 +13,10 @@ struct StreakBadge: View {
     let streak: Int
     let freezes: Int
     var compact: Bool = false
+    /// Pushes the freeze capsule to the trailing edge instead of letting it
+    /// sit against the streak text. For a badge given a full-width column,
+    /// where hugging its content leaves the rest of the row empty.
+    var spread: Bool = false
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var displayed: Double = 0
@@ -38,6 +42,8 @@ struct StreakBadge: View {
                     .font(.appCaption)
                     .foregroundStyle(Palette.textSecondary)
             }
+
+            if spread { Spacer(minLength: 10) }
 
             // Always shown, including at zero. Hiding it until you had one
             // meant the capsule appeared out of nowhere on day ten and there

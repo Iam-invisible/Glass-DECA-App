@@ -64,33 +64,53 @@ struct ProgressDashboardView: View {
 
     // MARK: Today
 
+    /// Ring on the left, three rows filling everything to its right.
+    ///
+    /// A trailing `Spacer` used to pin the whole block against the leading
+    /// edge, so the right third of the screen was empty and the content read
+    /// as squashed into a corner. The column is greedy now and each row
+    /// carries its value at the far edge, which is what actually uses the
+    /// width rather than merely being allowed to.
     private var todaySection: some View {
         HStack(spacing: 18) {
             ZStack {
                 ProgressRing(progress: dash.today.fraction,
-                             lineWidth: 10,
+                             lineWidth: 11,
                              tint: dash.today.goalMet ? Palette.success : Palette.accent)
-                    .frame(width: 84, height: 84)
+                    .frame(width: 96, height: 96)
                 VStack(spacing: 0) {
-                    Text("\(dash.today.answered)")
-                        .font(.numeric(24))
-                        .foregroundStyle(Palette.textPrimary)
+                    CountingNumber(value: Double(dash.today.answered),
+                                   font: .numeric(28),
+                                   color: Palette.textPrimary)
                     Text("/ \(dash.today.goal)")
                         .font(.appCaption)
                         .foregroundStyle(Palette.textSecondary)
                         .monospacedDigit()
                 }
             }
-            VStack(alignment: .leading, spacing: 8) {
+
+            VStack(alignment: .leading, spacing: 9) {
                 Text("Daily goal")
                     .font(.appCaptionBold)
                     .foregroundStyle(Palette.textSecondary)
-                StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes, compact: true)
-                Text("Longest streak: \(dash.streak.longest) day\(dash.streak.longest == 1 ? "" : "s")")
-                    .font(.appCaption)
-                    .foregroundStyle(Palette.textTertiary)
+
+                StreakBadge(streak: dash.streak.current,
+                            freezes: dash.streak.freezes,
+                            compact: true,
+                            spread: true)
+
+                HStack(spacing: 8) {
+                    Text("Longest streak")
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textTertiary)
+                    Spacer(minLength: 8)
+                    Text("\(dash.streak.longest) day\(dash.streak.longest == 1 ? "" : "s")")
+                        .font(.appCaptionBold)
+                        .foregroundStyle(Palette.textSecondary)
+                        .monospacedDigit()
+                }
             }
-            Spacer(minLength: 0)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         // No card. This is the screen's opening line — a ring and three facts
         // — and boxing it put a border between the header and the first thing
