@@ -133,7 +133,6 @@ struct RootView: View {
             if phase == .background { store.onBackground() }
         }
         .celebrationLayer()
-        .bunnyLayer()
     }
 
     private var main: some View {
@@ -201,6 +200,12 @@ struct RootView: View {
             .ignoresSafeArea()
         }
         .animation(reduceMotion ? nil : Motion.gentle, value: store.showGuide)
+        // Hosted by `main` rather than by the outer Group on purpose: the
+        // Group also contains the intro, the privacy gate and onboarding, and
+        // a companion has no business sitting on a launch reveal or on a legal
+        // consent screen. An owner sees the intro on every cold launch, so
+        // this is not a first-run-only concern.
+        .bunnyLayer()
     }
 
     private var pageTransition: AnyTransition {

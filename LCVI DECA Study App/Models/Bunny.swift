@@ -23,11 +23,11 @@ import SwiftUI
 /// silently drawing the wrong face.
 enum BunnyMood: String, CaseIterable {
     case happy, content, calm, neutral, blank
-    case starstruck, love, affection, pleased, yes
+    case starstruck, yes
     case sad, disappointed, no, nervous, confused, curious
     case shocked, dizzy, dead
     case angry, furious, meh, unamused
-    case sleepy, thinking, silly
+    case sleepy, thinking
 
     var imageName: String { "bunny-\(rawValue)" }
 }
@@ -52,16 +52,23 @@ enum BunnyEvent {
     /// Candidates to pick from. Ordered loosely by how often each should come
     /// up — `randomElement` is uniform, so a mood that should dominate appears
     /// more than once rather than being weighted separately.
+    /// Cutting the four heart-and-drool faces took the celebratory register
+    /// from six down to three — happy, yes, starstruck — so the big moments
+    /// necessarily overlap now. They are separated by *proportion* instead:
+    /// an achievement is almost always starstruck, a goal is usually happy.
     var moods: [BunnyMood] {
         switch self {
-        case .correctAnswer:   return [.happy, .happy, .yes, .starstruck, .pleased, .content]
+        case .correctAnswer:   return [.happy, .happy, .yes, .starstruck, .content]
         case .wrongAnswer:     return [.no, .disappointed, .confused, .nervous, .sad]
-        case .goalMet:         return [.starstruck, .happy, .yes, .content]
-        case .streakMilestone: return [.love, .starstruck, .happy]
-        case .achievement:     return [.starstruck, .starstruck, .love, .affection]
-        case .purchase:        return [.love, .affection, .pleased, .starstruck]
+        case .goalMet:         return [.happy, .happy, .starstruck, .yes, .content]
+        case .streakMilestone: return [.starstruck, .starstruck, .happy, .yes]
+        // Shocked earns its place here: an achievement arrives unannounced,
+        // and surprise is the honest reaction to something you did not know
+        // you were about to unlock.
+        case .achievement:     return [.starstruck, .starstruck, .starstruck, .shocked, .yes]
+        case .purchase:        return [.starstruck, .happy, .yes, .content]
         case .cantAfford:      return [.no, .meh, .unamused, .nervous]
-        case .sessionFinished: return [.content, .calm, .happy, .pleased]
+        case .sessionFinished: return [.content, .calm, .happy]
         case .mockFinished:    return [.shocked, .content, .starstruck, .dizzy]
         case .opened:          return [.happy, .content, .curious, .calm]
         // Moving around the app is not an achievement, so this stays in the
