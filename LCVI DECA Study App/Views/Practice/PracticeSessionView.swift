@@ -43,6 +43,7 @@ struct PracticeSessionView: View {
             runner.start(store: store)
         }
         .celebrationLayer(isFullScreen: true)
+        .bunnyLayer(isFullScreen: true)
         .interactiveDismissDisabled(true)
         .confirmationDialog("End this session?",
                             isPresented: $showingExitConfirm,

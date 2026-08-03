@@ -2,12 +2,18 @@
 //  BunnyCompanionView.swift
 //  LCVI DECA Study App
 //
-//  The bunny, sitting in the HUD beside the coin balance.
+//  The bunny, in the bottom-right corner of every screen.
 //
-//  It lives next to the coins rather than floating loose because the two are
-//  the same kind of thing — persistent, non-interactive, always-there — and a
-//  character wandering over content would be in the way on a screen whose job
-//  is reading questions.
+//  Hosting works the same way `CelebrationLayer` does, and for the same
+//  reason: a `fullScreenCover` draws above anything the root view can, so an
+//  overlay attached to the root is invisible during a practice session or a
+//  mock — which is precisely when right and wrong answers fire. Each
+//  full-screen flow claims the layer while it is up and the root stands down,
+//  so there is exactly one bunny on screen at any moment.
+//
+//  It never takes a touch. A decorative companion that swallows a tap on the
+//  control underneath it is a bug, so the layer is `allowsHitTesting(false)`
+//  and overlapping something is merely cosmetic.
 //
 
 import SwiftUI
@@ -29,10 +35,11 @@ struct BunnyCompanionView: View {
     @State private var idleBob = false
     @State private var lastHandled: Int = -1
 
-    /// Sized to the widest sprite's aspect (the ones carrying a speech bubble
-    /// are ~1.35:1) so a narrow face does not shift the coin badge beside it
-    /// when the mood changes.
-    private let size = CGSize(width: 46, height: 34)
+    /// Sized to the widest sprite's aspect — the ones carrying a speech bubble
+    /// are ~1.35:1 — so a mood change never resizes the frame. Larger than it
+    /// was in the HUD: free-floating in a corner it has room, and the faces
+    /// carry more detail than a 34pt box could show.
+    private let size = CGSize(width: 64, height: 47)
 
     var body: some View {
         sprite
@@ -97,5 +104,51 @@ struct BunnyCompanionView: View {
         withAnimation(.easeInOut(duration: 1.9).repeatForever(autoreverses: true)) {
             idleBob = true
         }
+    }
+}
+
+
+// MARK: - Hosting
+
+/// Puts the bunny in the bottom-right of whatever is currently on top.
+///
+/// `isFullScreen` mirrors `CelebrationLayer`: anything presented in a
+/// `fullScreenCover` passes true, claims the layer for as long as it is up,
+/// and the root suppresses its own copy so there are never two.
+struct BunnyLayer: ViewModifier {
+    @EnvironmentObject private var store: AppStore
+    let isFullScreen: Bool
+
+    private var hosts: Bool {
+        isFullScreen ? true : store.fullScreenLayers == 0
+    }
+
+    private var owned: Bool {
+        store.settings.ownedAppItemIDs.contains(BunnyCompanion.itemID)
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(alignment: .bottomTrailing) {
+                if hosts, owned {
+                    BunnyCompanionView(event: store.bunnyEvent, token: store.bunnyToken)
+                        .padding(.trailing, Metrics.gutter)
+                        // Clears the floating tab bar at the root; a full-screen
+                        // flow has no tab bar but does have its own controls
+                        // down there, so it keeps a smaller berth.
+                        .padding(.bottom, isFullScreen ? 22 : AppTabBar.contentHeight + 12)
+                        .allowsHitTesting(false)
+                        .transition(.opacity)
+                        .zIndex(9)
+                }
+            }
+    }
+}
+
+extension View {
+    /// Marks this view as the host for the bunny. Pass `isFullScreen: true`
+    /// from anything presented in a `fullScreenCover`.
+    func bunnyLayer(isFullScreen: Bool = false) -> some View {
+        modifier(BunnyLayer(isFullScreen: isFullScreen))
     }
 }

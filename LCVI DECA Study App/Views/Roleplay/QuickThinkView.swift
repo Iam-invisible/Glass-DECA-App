@@ -72,6 +72,7 @@ struct QuickThinkView: View {
             }
         }
         .celebrationLayer(isFullScreen: true)
+        .bunnyLayer(isFullScreen: true)
         .onAppear {
             if scenario == nil { newScenario() }
         }

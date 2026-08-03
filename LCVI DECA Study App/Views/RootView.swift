@@ -133,6 +133,7 @@ struct RootView: View {
             if phase == .background { store.onBackground() }
         }
         .celebrationLayer()
+        .bunnyLayer()
     }
 
     private var main: some View {
@@ -158,19 +159,14 @@ struct RootView: View {
         // following you into the preferences screen reads as a nag.
         .overlay(alignment: .topTrailing) {
             if tab != .settings {
-                HStack(spacing: 8) {
-                    if store.settings.ownedAppItemIDs.contains(BunnyCompanion.itemID) {
-                        BunnyCompanionView(event: store.bunnyEvent, token: store.bunnyToken)
-                    }
-                    Button {
+                Button {
                         Haptics.tap()
                         showCoinGuide = true
                     } label: {
                         CoinBadge(coins: store.settings.coins)
                     }
-                    .buttonStyle(PressableButtonStyle(scale: 0.94, haptic: false))
-                    .accessibilityHint("Shows how coins are earned")
-                }
+                .buttonStyle(PressableButtonStyle(scale: 0.94, haptic: false))
+                .accessibilityHint("Shows how coins are earned")
                 .padding(.trailing, Metrics.gutter)
                 .padding(.top, 2)
                 .transition(.opacity)
@@ -216,6 +212,7 @@ struct RootView: View {
         guard item != tab else { return }
         Haptics.select()
         direction = item.rawValue > tab.rawValue ? 1 : -1
+        store.react(.tabChanged)
         withAnimation(reduceMotion ? .easeOut(duration: 0.16) : Motion.page) {
             tab = item
         }

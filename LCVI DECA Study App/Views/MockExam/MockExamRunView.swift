@@ -141,6 +141,7 @@ struct MockExamRunView: View {
         .background(Palette.canvas.ignoresSafeArea())
         .onAppear { runner.begin() }
         .celebrationLayer(isFullScreen: true)
+        .bunnyLayer(isFullScreen: true)
         .interactiveDismissDisabled(true)
         .sheet(isPresented: $showingNavigator) { navigator }
         .confirmationDialog("Submit this exam?",

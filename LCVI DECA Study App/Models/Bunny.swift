@@ -46,6 +46,7 @@ enum BunnyEvent {
     case sessionFinished
     case mockFinished
     case opened
+    case tabChanged
     case idle
 
     /// Candidates to pick from. Ordered loosely by how often each should come
@@ -63,6 +64,9 @@ enum BunnyEvent {
         case .sessionFinished: return [.content, .calm, .happy, .pleased]
         case .mockFinished:    return [.shocked, .content, .starstruck, .dizzy]
         case .opened:          return [.happy, .content, .curious, .calm]
+        // Moving around the app is not an achievement, so this stays in the
+        // register of a glance rather than a cheer.
+        case .tabChanged:      return [.curious, .thinking, .content, .neutral, .blank]
         case .idle:            return [.neutral, .blank, .thinking, .calm, .sleepy, .unamused, .curious]
         }
     }
@@ -72,6 +76,7 @@ enum BunnyEvent {
         switch self {
         case .achievement, .streakMilestone, .goalMet, .purchase: return 3.0
         case .mockFinished, .sessionFinished:                     return 2.6
+        case .tabChanged:                                         return 1.1
         case .idle:                                               return 0
         default:                                                  return 1.8
         }

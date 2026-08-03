@@ -57,6 +57,7 @@ struct MockExamReviewView: View {
         }
         .onAppear(perform: load)
         .celebrationLayer(isFullScreen: true)
+        .bunnyLayer(isFullScreen: true)
         .fullScreenCover(item: $retrySession) { payload in
             PracticeSessionView(payload: payload).environmentObject(store)
         }
