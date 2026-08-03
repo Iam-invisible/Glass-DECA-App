@@ -272,3 +272,14 @@ enum AccentTheme: String, CaseIterable {
         }
     }
 }
+
+// MARK: - Feature gate
+
+/// The hamster is built and works, but the app ships without artwork for it,
+/// so it is parked rather than removed: `HamsterAvatar` and the hamster half of
+/// the catalogue above still compile and are still correct. Flipping this to
+/// true restores the avatar, the worn-items row and the two-tab shop with no
+/// other change.
+enum ShopFeatures {
+    static let hamsterEnabled = false
+}

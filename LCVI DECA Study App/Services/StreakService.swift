@@ -10,6 +10,15 @@
 import CoreData
 import Foundation
 
+/// Streak tuning in one place.
+enum StreakRules {
+    /// How many freezes a student can hold at once. Two is enough to survive a
+    /// bad week without making a streak unbreakable.
+    static let maxFreezes = 2
+    /// Consecutive days between earned freezes.
+    static let daysPerFreeze = 10
+}
+
 struct DailyProgressSnapshot: Equatable {
     var dayKey: String
     var answered: Int
@@ -148,7 +157,11 @@ final class StreakService {
             s.longest = max(s.longest, s.current)
             didIncrease = true
 
-            if s.current > 0 && s.current % 10 == 0 {
+            // Capped at two. Freezes exist to survive a bad day, not to make a
+            // streak unbreakable — banking ten would mean the number stopped
+            // meaning anything. At the cap the milestone simply passes: no
+            // freeze, so no celebration and no coins for one either.
+            if s.current > 0 && s.current % 10 == 0 && s.freezes < StreakRules.maxFreezes {
                 s.freezes += 1
                 s.freezesEarnedTotal += 1
                 didEarnFreeze = true

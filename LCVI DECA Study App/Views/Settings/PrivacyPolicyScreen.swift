@@ -16,7 +16,6 @@ struct PrivacyPolicyScreen: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Metrics.sectionSpacing) {
-                ScrollOffsetProbe()
                 ScreenHeader("Privacy notice",
                              eyebrow: "On this phone only",
                              eyebrowSymbol: "lock.shield",
@@ -31,6 +30,7 @@ struct PrivacyPolicyScreen: View {
 
                 PrivacyPolicyBody(showsSummary: false)
             }
+            .scrollOffsetProbe()
             .padding(.horizontal, Metrics.gutter)
             .padding(.top, 8)
             .padding(.bottom, 28)

@@ -30,7 +30,6 @@ struct ProgressDashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
-                    ScrollOffsetProbe()
                     ScreenHeader("Progress",
                                  eyebrow: store.settings.cluster.displayName,
                                  eyebrowSymbol: store.settings.cluster.symbol,
@@ -48,6 +47,7 @@ struct ProgressDashboardView: View {
                     if store.ai.isUsable { adviceSection.appearIn(7) }
                     achievementSection.appearIn(8)
                 }
+                .scrollOffsetProbe()
                 .padding(.horizontal, Metrics.gutter)
                 .padding(.top, 8)
                 .padding(.bottom, 24)

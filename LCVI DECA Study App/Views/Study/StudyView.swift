@@ -42,7 +42,6 @@ struct StudyView: View {
                 // tiles as from the streak card above it and the screen read
                 // as one undifferentiated column. See `Metrics`.
                 VStack(spacing: Metrics.sectionSpacing) {
-                    ScrollOffsetProbe()
                     greeting.appearIn(0)
 
                     // Today: the dials and the streak are one thought — what
@@ -71,6 +70,7 @@ struct StudyView: View {
 
                     footerNote.appearIn(9)
                 }
+                .scrollOffsetProbe()
                 .padding(.horizontal, Metrics.gutter)
                 .padding(.top, 6)
                 .padding(.bottom, 24)
@@ -199,52 +199,30 @@ struct StudyView: View {
     /// Streak, freezes and the freeze bar — lifted out of the old goal hero
     /// so the dials stay about today and this stays about the run.
     private var streakCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 10) {
-                StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes)
-                Spacer(minLength: 0)
-                if dash.streak.current > 0 {
-                    Text("\(dash.streak.daysUntilNextFreeze) day\(dash.streak.daysUntilNextFreeze == 1 ? "" : "s") to your next freeze")
-                        .font(.appCaption)
-                        .foregroundStyle(Palette.textTertiary)
-                        .multilineTextAlignment(.trailing)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            if dash.streak.current > 0 {
-                freezeProgressBar
+        HStack(spacing: 10) {
+            // StreakBadge already carries the freeze count as a capsule beside
+            // the flame, which is the whole story now that freezes cap at two.
+            // The progress bar that used to sit underneath — "next freeze
+            // 3/10" — went with the cap: a meter toward a thing you may
+            // already be holding the maximum of is noise, and it made a
+            // one-line fact into a two-row block.
+            StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes)
+            Spacer(minLength: 0)
+            if dash.streak.current > 0, dash.streak.freezes < StreakRules.maxFreezes {
+                Text("\(dash.streak.daysUntilNextFreeze) day\(dash.streak.daysUntilNextFreeze == 1 ? "" : "s") to your next freeze")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
+                    .multilineTextAlignment(.trailing)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if dash.streak.freezes >= StreakRules.maxFreezes {
+                Text("Freezes full")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
             }
         }
         .appCard(padding: 15)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(dash.streak.current) day streak, \(dash.streak.freezes) freezes")
-    }
-
-    private var freezeProgressBar: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("Next streak freeze")
-                    .font(.appCaption)
-                    .foregroundStyle(Palette.textSecondary)
-                Spacer()
-                Text("\(dash.streak.progressToNextFreeze)/10")
-                    .font(.appCaptionBold)
-                    .foregroundStyle(Palette.gold)
-                    .monospacedDigit()
-            }
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Palette.cardSunken)
-                    Capsule()
-                        .fill(Palette.gold)
-                        .frame(width: max(4, geo.size.width * Double(dash.streak.progressToNextFreeze) / 10))
-                        .animation(reduceMotion ? nil : Motion.gentle, value: dash.streak.progressToNextFreeze)
-                }
-            }
-            .frame(height: 6)
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Next streak freeze: \(dash.streak.progressToNextFreeze) of 10 days")
     }
 
     // MARK: - Ways to study

@@ -14,7 +14,7 @@
 import SwiftUI
 
 enum AppTab: Int, CaseIterable, Identifiable {
-    case study, progress, customize, settings
+    case study, progress, shop, settings
 
     var id: Int { rawValue }
 
@@ -22,7 +22,7 @@ enum AppTab: Int, CaseIterable, Identifiable {
         switch self {
         case .study:     return "Study"
         case .progress:  return "Progress"
-        case .customize: return "Customize"
+        case .shop:      return "Shop"
         case .settings:  return "Settings"
         }
     }
@@ -34,7 +34,7 @@ enum AppTab: Int, CaseIterable, Identifiable {
         switch self {
         case .study:     return "book.fill"
         case .progress:  return "chart.bar.fill"
-        case .customize: return "face.smiling.inverse"
+        case .shop:      return "bag.fill"
         case .settings:  return "gearshape.fill"
         }
     }
@@ -45,7 +45,7 @@ enum AppTab: Int, CaseIterable, Identifiable {
         switch self {
         case .study:     return "book"
         case .progress:  return "chart.bar"
-        case .customize: return "face.smiling"
+        case .shop:      return "bag"
         case .settings:  return "gearshape"
         }
     }
@@ -202,8 +202,8 @@ struct RootView: View {
             StudyView()
         case .progress:
             ProgressDashboardView()
-        case .customize:
-            CustomizeView()
+        case .shop:
+            ShopView()
         case .settings:
             SettingsView()
         }

@@ -29,7 +29,6 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
-                    ScrollOffsetProbe()
                     ScreenHeader("Settings",
                                  eyebrow: "On this phone only",
                                  eyebrowSymbol: "lock.shield",
@@ -44,6 +43,7 @@ struct SettingsView: View {
                     appearanceSection.appearIn(5)
                     aboutSection.appearIn(6)
                 }
+                .scrollOffsetProbe()
                 .padding(.horizontal, Metrics.gutter)
                 .padding(.top, 8)
                 .padding(.bottom, 24)
@@ -624,12 +624,12 @@ struct SettingsView: View {
                     } else {
                         Button {
                             Haptics.tap()
-                            store.requestedTab = .customize
+                            store.requestedTab = .shop
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "lock.fill")
                                     .font(.system(size: 11, weight: .bold))
-                                Text("Script is locked. Unlock it in Customize.")
+                                Text("Script is locked. Unlock it in the Shop.")
                                     .font(.appFootnote)
                                 Image(systemName: "chevron.right")
                                     .font(.system(size: 10, weight: .semibold))

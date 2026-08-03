@@ -1,21 +1,22 @@
 //
-//  CustomizeView.swift
+//  ShopView.swift
 //  LCVI DECA Study App
 //
-//  The hamster, and the shop underneath it.
-//
-//  The hamster occupies the first screenful on its own and the shop begins
-//  below the fold, so opening the tab shows you what you have rather than what
-//  you could buy. That ordering is deliberate: a shop that greets you is a
-//  storefront, and this is meant to be a reward for studying.
+//  What coins buy.
 //
 //  Coins are only ever earned — see `Cosmetics.swift` for the rates and for
 //  why nothing here is purchasable with money.
 //
+//  The hamster is parked, not deleted. `ShopFeatures.hamsterEnabled` gates the
+//  avatar, the worn-items row and the whole hamster half of the catalogue;
+//  `HamsterAvatar` and `CosmeticCatalogue` still compile untouched, so turning
+//  the flag back on restores the character with no other change. It is off
+//  because the app ships without hamster artwork.
+//
 
 import SwiftUI
 
-struct CustomizeView: View {
+struct ShopView: View {
     @EnvironmentObject private var store: AppStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -42,11 +43,11 @@ struct CustomizeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
-                    ScrollOffsetProbe()
                     header.appearIn(0)
-                    stage.appearIn(1)
+                    if ShopFeatures.hamsterEnabled { stage.appearIn(1) }
                     shop.appearIn(2)
                 }
+                .scrollOffsetProbe()
                 .padding(.horizontal, Metrics.gutter)
                 .padding(.top, 6)
                 .padding(.bottom, 24)
@@ -60,11 +61,11 @@ struct CustomizeView: View {
     // MARK: - Header
 
     private var header: some View {
-        ScreenHeader("Customize",
-                     eyebrow: "Your hamster",
-                     eyebrowSymbol: "face.smiling",
-                     eyebrowTint: Palette.accent,
-                     subtitle: "Coins are earned by studying. Nothing here costs money.")
+        ScreenHeader("Shop",
+                     eyebrow: "Earned, not bought",
+                     eyebrowSymbol: "circle.hexagongrid.fill",
+                     eyebrowTint: Palette.gold,
+                     subtitle: "Coins come from studying. Nothing here costs money.")
     }
 
     // MARK: - Stage
@@ -121,20 +122,23 @@ struct CustomizeView: View {
 
     // MARK: - Shop
 
+    /// With the hamster parked there is only one catalogue, so the two-tab
+    /// picker would be a control with nothing to switch between.
+    @ViewBuilder
     private var shop: some View {
-        VStack(alignment: .leading, spacing: Metrics.headerGap) {
-            SectionHeader(title: "Shop",
-                          subtitle: "Tap to buy. Tap again to take it off.")
-
-            AppSegmentedPicker("Shop section",
-                               selection: $shopTab,
-                               options: ShopTab.allCases,
-                               label: \.title)
-
-            switch shopTab {
-            case .hamster: hamsterShop
-            case .app:     appShop
+        if ShopFeatures.hamsterEnabled {
+            VStack(alignment: .leading, spacing: Metrics.headerGap) {
+                AppSegmentedPicker("Shop section",
+                                   selection: $shopTab,
+                                   options: ShopTab.allCases,
+                                   label: \.title)
+                switch shopTab {
+                case .hamster: hamsterShop
+                case .app:     appShop
+                }
             }
+        } else {
+            appShop
         }
     }
 

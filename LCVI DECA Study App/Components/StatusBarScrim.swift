@@ -47,7 +47,13 @@ enum ScrollOffsetKey: PreferenceKey {
     }
 }
 
-/// Drop this as the first item inside a scrolling stack.
+/// Reports where the content sits inside its scroll view.
+///
+/// Attach it with `.scrollOffsetProbe()` rather than dropping it into the
+/// stack. It is zero-height, but a zero-height *child* still collects the
+/// stack's spacing on both sides — as the first item in a
+/// `VStack(spacing: 32)` it was pushing every screen's header down by a full
+/// section gap, which is where the dead band under the status bar came from.
 struct ScrollOffsetProbe: View {
     var body: some View {
         GeometryReader { geo in
@@ -65,6 +71,13 @@ extension View {
     /// Names a `ScrollView`'s coordinate space so probes inside it resolve.
     func reportsScrollOffset() -> some View {
         coordinateSpace(name: ScrollOffsetKey.space)
+    }
+
+    /// Measures this stack's position without joining its layout. Apply to the
+    /// content stack *before* its padding, so the probe sits exactly where a
+    /// first child would have.
+    func scrollOffsetProbe() -> some View {
+        overlay(alignment: .top) { ScrollOffsetProbe() }
     }
 }
 
