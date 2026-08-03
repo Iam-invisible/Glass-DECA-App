@@ -50,7 +50,7 @@ struct StudyView: View {
                     VStack(spacing: Metrics.stackSpacing) {
                         goalDials.appearIn(1).guideAnchor(.goalCard)
                             .id(GuideTarget.goalCard)
-                        streakCard.appearIn(2)
+                        streakRow.appearIn(2)
                     }
 
                     if dash.questionBankCount == 0 {
@@ -198,14 +198,20 @@ struct StudyView: View {
 
     /// Streak, freezes and the freeze bar — lifted out of the old goal hero
     /// so the dials stay about today and this stays about the run.
-    private var streakCard: some View {
+    /// The streak, floating on the canvas rather than in a card.
+    ///
+    /// It sits where the card did, directly under the dials. A card is a
+    /// container for a group of things, and this is one line — the border and
+    /// fill were drawing a box around a sentence. Without them it aligns to the
+    /// gutter with the screen title and the section headings instead of being
+    /// inset inside a panel, which is what a status line should do.
+    ///
+    /// `StreakBadge` carries the freeze count as a capsule beside the flame,
+    /// which is the whole story now that freezes cap at two. The progress bar
+    /// that used to sit underneath — "next freeze 3/10" — went with the cap: a
+    /// meter toward a thing you may already be holding the maximum of is noise.
+    private var streakRow: some View {
         HStack(spacing: 10) {
-            // StreakBadge already carries the freeze count as a capsule beside
-            // the flame, which is the whole story now that freezes cap at two.
-            // The progress bar that used to sit underneath — "next freeze
-            // 3/10" — went with the cap: a meter toward a thing you may
-            // already be holding the maximum of is noise, and it made a
-            // one-line fact into a two-row block.
             StreakBadge(streak: dash.streak.current, freezes: dash.streak.freezes)
             Spacer(minLength: 0)
             if dash.streak.current > 0, dash.streak.freezes < StreakRules.maxFreezes {
@@ -220,7 +226,9 @@ struct StudyView: View {
                     .foregroundStyle(Palette.textTertiary)
             }
         }
-        .appCard(padding: 15)
+        // Keeps the row off the dials above without a card's inset — the
+        // horizontal gutter is already applied by the screen's content stack.
+        .padding(.vertical, 2)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(dash.streak.current) day streak, \(dash.streak.freezes) freezes")
     }
