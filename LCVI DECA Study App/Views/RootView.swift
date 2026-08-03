@@ -62,6 +62,8 @@ struct RootView: View {
     @State private var direction: CGFloat = 1
     /// True once any screen's content has moved under the status bar.
     @State private var scrolled = false
+    /// The coin guide, opened by tapping the balance.
+    @State private var showCoinGuide = false
 
     var body: some View {
         Group {
@@ -160,13 +162,29 @@ struct RootView: View {
                     if store.settings.ownedAppItemIDs.contains(BunnyCompanion.itemID) {
                         BunnyCompanionView(event: store.bunnyEvent, token: store.bunnyToken)
                     }
-                    CoinBadge(coins: store.settings.coins)
+                    Button {
+                        Haptics.tap()
+                        showCoinGuide = true
+                    } label: {
+                        CoinBadge(coins: store.settings.coins)
+                    }
+                    .buttonStyle(PressableButtonStyle(scale: 0.94, haptic: false))
+                    .accessibilityHint("Shows how coins are earned")
                 }
                 .padding(.trailing, Metrics.gutter)
                 .padding(.top, 2)
                 .transition(.opacity)
             }
         }
+        // Above the HUD and the tab bar, so the panel covers the whole app
+        // rather than appearing beside the thing that opened it.
+        .overlay {
+            if showCoinGuide {
+                CoinGuideOverlay(coins: store.settings.coins) { showCoinGuide = false }
+                    .transition(.opacity)
+            }
+        }
+        .animation(reduceMotion ? nil : Motion.quick, value: showCoinGuide)
         // Resolved here rather than inside any screen so the spotlight can
         // reach the tab bar and the Study content in the same pass.
         .overlayPreferenceValue(GuideAnchorKey.self) { anchors in

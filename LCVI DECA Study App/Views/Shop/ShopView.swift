@@ -25,6 +25,10 @@ struct ShopView: View {
     @State private var appKind: AppCosmeticKind = .icon
     @State private var deniedItem: String?
     @State private var shake: CGFloat = 0
+    @State private var promoEntry = ""
+    @State private var promoResult: String?
+    @State private var promoFailed = false
+    @FocusState private var promoFocused: Bool
 
     private var settings: UserSettings { store.settings }
 
@@ -46,6 +50,7 @@ struct ShopView: View {
                     header.appearIn(0)
                     if ShopFeatures.hamsterEnabled { stage.appearIn(1) }
                     shop.appearIn(2)
+                    promoSection.appearIn(3)
                 }
                 .scrollOffsetProbe()
                 .padding(.horizontal, Metrics.gutter)
@@ -342,6 +347,79 @@ struct ShopView: View {
             .modifier(RefusalShake(progress: denied ? shake : 0))
         }
         .buttonStyle(PressableButtonStyle(scale: 0.99, haptic: false))
+    }
+
+    // MARK: - Promo code
+
+    private var promoSection: some View {
+        VStack(alignment: .leading, spacing: Metrics.headerGap) {
+            SectionHeader(title: "Promo code")
+
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    TextField("Enter a code", text: $promoEntry)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .submitLabel(.go)
+                        .focused($promoFocused)
+                        .onSubmit(redeem)
+                        .font(.appBody)
+                        .foregroundStyle(Palette.textPrimary)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 11)
+                        .background(
+                            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                                .fill(Palette.cardSunken)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                                .strokeBorder(promoFailed ? Palette.danger.opacity(0.6)
+                                                          : Palette.stroke, lineWidth: 1)
+                        )
+                        .modifier(RefusalShake(progress: promoFailed ? shake : 0))
+
+                    Button(action: redeem) {
+                        Text("Redeem")
+                            .font(.appHeadline)
+                            .foregroundStyle(promoEntry.isEmpty ? Palette.textTertiary : Palette.card)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(
+                                Capsule().fill(promoEntry.isEmpty ? Palette.cardSunken : Palette.accent)
+                            )
+                    }
+                    .buttonStyle(PressableButtonStyle(haptic: false))
+                    .disabled(promoEntry.isEmpty)
+                }
+
+                if let promoResult {
+                    Label(promoResult, systemImage: promoFailed ? "xmark.circle" : "checkmark.circle")
+                        .font(.appFootnote)
+                        .foregroundStyle(promoFailed ? Palette.danger : Palette.success)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .appCard(padding: 14)
+        }
+    }
+
+    private func redeem() {
+        promoFocused = false
+        if let code = settings.redeem(promoEntry) {
+            promoFailed = false
+            promoResult = code.confirmation
+            promoEntry = ""
+            Haptics.success()
+            SoundEffects.celebration()
+            store.react(.purchase)
+        } else {
+            promoFailed = true
+            promoResult = "That code is not recognised."
+            Haptics.warning()
+            guard !reduceMotion else { return }
+            shake = 0
+            withAnimation(.linear(duration: 0.55)) { shake = 1 }
+        }
     }
 
     // MARK: - Shared bits

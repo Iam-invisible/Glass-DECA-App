@@ -384,6 +384,32 @@ final class UserSettings: ObservableObject {
         if equipped(item.slot)?.id == item.id { unequip(item.slot) } else { equip(item) }
     }
 
+    /// Applies a promo code. Returns nil when the entry matches nothing, so
+    /// the caller can say so rather than silently doing nothing.
+    @discardableResult
+    func redeem(_ entry: String) -> PromoCode? {
+        guard let code = PromoCode(entry: entry) else { return nil }
+        switch code {
+        case .unlockEverything:
+            ownedAppItemIDs = Set(AppCosmeticCatalogue.all.map(\.id))
+            ownedCosmeticIDs = Set(CosmeticCatalogue.all.map(\.id))
+            coins = max(coins, PromoCode.unlockGrant)
+        case .resetEverything:
+            ownedAppItemIDs = []
+            ownedCosmeticIDs = []
+            equippedCosmeticIDs = [:]
+            coins = 0
+            // Selections have to come back to their defaults too, or a reset
+            // leaves a locked item still in effect — the same trap the intro
+            // migration in `init` exists to close.
+            appIconID = "icon.default"
+            themeID = "theme.blue"
+            soundPackID = "sound.default"
+            introStyleRaw = IntroStyle.classic.rawValue
+        }
+        return code
+    }
+
     func select(_ item: AppCosmeticItem) {
         guard owns(item) else { return }
         switch item.kind {
