@@ -139,6 +139,12 @@ final class AppStore: ObservableObject {
     @Published private(set) var bunnyEvent: BunnyEvent?
     @Published private(set) var bunnyToken: Int = 0
 
+    /// Consecutive answers of the same kind: positive for correct, negative
+    /// for wrong, reset by the other outcome. Not persisted — a run is a thing
+    /// that is happening now, and one that survived a relaunch would have the
+    /// companion reacting to a session the student has forgotten.
+    private var answerRun = 0
+
     /// Cheap and safe to call from anywhere: it does nothing at all unless the
     /// companion has been bought, so call sites do not each have to check.
     func react(_ event: BunnyEvent) {
@@ -344,7 +350,10 @@ final class AppStore: ObservableObject {
         // question from paying nothing; 2 more for correct keeps guessing from
         // paying the same as knowing.
         settings.award(isCorrect ? CoinRate.correctAnswer : CoinRate.answer)
-        react(isCorrect ? .correctAnswer : .wrongAnswer)
+
+        answerRun = isCorrect ? max(0, answerRun) + 1 : min(0, answerRun) - 1
+        react(isCorrect ? .correctAnswer(run: answerRun)
+                        : .wrongAnswer(run: -answerRun))
 
         if countsTowardDailyGoal {
             let outcome = streaks.recordAnswers(count: 1,
@@ -539,7 +548,9 @@ final class AppStore: ObservableObject {
         // Before achievements, so a mock that also unlocked one leaves the
         // achievement's face up rather than this one. Reactions overwrite, so
         // the rarer event has to fire last.
-        react(.mockFinished)
+        react(.mockFinished(percent: answered > 0
+                            ? Int((Double(correct) / Double(answered) * 100).rounded())
+                            : 0))
         evaluateAchievements()
         refresh()
         return attemptID

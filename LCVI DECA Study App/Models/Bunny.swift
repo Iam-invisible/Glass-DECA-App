@@ -35,45 +35,74 @@ enum BunnyMood: String, CaseIterable {
 // MARK: - Events
 
 /// Something the student did that is worth a face.
+///
+/// Three cases carry what actually happened rather than just that it happened.
+/// Without that, one right answer drew the same face as unlocking an
+/// achievement, and a mock scored 12% drew the same face as one scored 95% —
+/// which makes the companion feel like it is not watching.
 enum BunnyEvent {
-    case correctAnswer
-    case wrongAnswer
+    /// `run` is how many correct in a row, this one included.
+    case correctAnswer(run: Int)
+    /// `run` is how many wrong in a row, this one included.
+    case wrongAnswer(run: Int)
     case goalMet
     case streakMilestone
     case achievement
     case purchase
     case cantAfford
     case sessionFinished
-    case mockFinished
+    case mockFinished(percent: Int)
     case opened
     case tabChanged
     case idle
 
-    /// Candidates to pick from. Ordered loosely by how often each should come
-    /// up — `randomElement` is uniform, so a mood that should dominate appears
-    /// more than once rather than being weighted separately.
-    /// Cutting the four heart-and-drool faces took the celebratory register
-    /// from six down to three — happy, yes, starstruck — so the big moments
-    /// necessarily overlap now. They are separated by *proportion* instead:
-    /// an achievement is almost always starstruck, a goal is usually happy.
+    /// Candidates to pick from. `randomElement` is uniform, so a face that
+    /// should dominate is listed more than once rather than weighted.
+    ///
+    /// The registers are deliberate. Celebration climbs with the size of the
+    /// thing — `starstruck` is reserved for a run, a milestone or an unlock,
+    /// so a single right answer cannot produce the app's biggest face. And
+    /// nothing aimed at the student is ever harsher than concern: a wrong
+    /// answer gets confusion, then disappointment *in the question*, never
+    /// blame.
     var moods: [BunnyMood] {
         switch self {
-        case .correctAnswer:   return [.happy, .happy, .yes, .starstruck, .content]
-        case .wrongAnswer:     return [.no, .disappointed, .confused, .nervous, .sad]
-        case .goalMet:         return [.happy, .happy, .starstruck, .yes, .content]
+        case .correctAnswer(let run):
+            // A run earns the big face; one right answer does not.
+            if run >= 5 { return [.starstruck, .starstruck, .yes] }
+            if run >= 3 { return [.starstruck, .happy, .yes] }
+            return [.happy, .happy, .yes, .content]
+
+        case .wrongAnswer(let run):
+            // Climbing concern, not climbing blame. The exasperation at the
+            // top is at the questions, shared with the student — it is rare
+            // enough (five wrong in a row) to read as sympathy.
+            if run >= 5 { return [.furious, .angry, .nervous] }
+            if run >= 3 { return [.nervous, .sad, .disappointed] }
+            if run == 2 { return [.disappointed, .confused, .no] }
+            return [.confused, .no, .curious]
+
+        case .mockFinished(let percent):
+            // A mock is the one place a bad result should read as dazed rather
+            // than as a shrug — it is an hour of work, and `content` after 12%
+            // would be the companion not paying attention.
+            if percent >= 80 { return [.starstruck, .shocked, .yes] }
+            if percent >= 50 { return [.happy, .content, .yes] }
+            return [.dizzy, .dead, .nervous]
+
+        case .goalMet:         return [.happy, .happy, .starstruck, .yes]
         case .streakMilestone: return [.starstruck, .starstruck, .happy, .yes]
-        // Shocked earns its place here: an achievement arrives unannounced,
-        // and surprise is the honest reaction to something you did not know
-        // you were about to unlock.
-        case .achievement:     return [.starstruck, .starstruck, .starstruck, .shocked, .yes]
+        // Surprise is the honest reaction to an unlock you did not see coming.
+        case .achievement:     return [.starstruck, .starstruck, .shocked, .yes]
         case .purchase:        return [.starstruck, .happy, .yes, .content]
-        case .cantAfford:      return [.no, .meh, .unamused, .nervous]
+        // Aimed at the price, not at the person.
+        case .cantAfford:      return [.no, .meh, .unamused]
         case .sessionFinished: return [.content, .calm, .happy]
-        case .mockFinished:    return [.shocked, .content, .starstruck, .dizzy]
         case .opened:          return [.happy, .content, .curious, .calm]
-        // Moving around the app is not an achievement, so this stays in the
-        // register of a glance rather than a cheer.
-        case .tabChanged:      return [.curious, .thinking, .content, .neutral, .blank]
+        // A tap is not news. `neutral` and `blank` were in here and meant the
+        // bunny could answer a deliberate interaction by going expressionless,
+        // which reads as broken rather than as calm.
+        case .tabChanged:      return [.curious, .thinking]
         case .idle:            return [.neutral, .blank, .thinking, .calm, .sleepy, .unamused, .curious]
         }
     }
