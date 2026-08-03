@@ -1,8 +1,8 @@
 //
-//  DailyGoalsPanel.swift
+//  TodayPanel.swift
 //  LCVI DECA Study App
 //
-//  The day's two goals as one object.
+//  The day — both goals and the streak — as one object.
 //
 //  They used to be two separate dials sitting side by side, each with its own
 //  ring and its own full-width button. Once the cards came off, that read as
@@ -20,10 +20,17 @@
 //  beside it, so repeating it in the middle would waste the one piece of
 //  prominent space on the screen.
 //
+//  The streak sits inside this panel rather than under it. Left outside it was
+//  a bare line in a different visual language directly beneath a composed
+//  panel, which read as something that had fallen off. It is the third fact
+//  about today, so it belongs in the thing that states today — but full width
+//  under the rings rather than a third item in the legend column, because the
+//  two rows up there start something and this one does not.
+//
 
 import SwiftUI
 
-struct DailyGoalsPanel: View {
+struct TodayPanel: View {
     let questionsDone: Int
     let questionsGoal: Int
     let quickThinkDone: Int
@@ -31,6 +38,9 @@ struct DailyGoalsPanel: View {
     /// False for events with no roleplay component — then this is a single
     /// ring and a single row, not a hollowed-out version of the pair.
     let showsQuickThink: Bool
+    let streak: Int
+    let freezes: Int
+    let daysUntilNextFreeze: Int
     let onQuestions: () -> Void
     let onQuickThink: () -> Void
 
@@ -47,6 +57,15 @@ struct DailyGoalsPanel: View {
     private var allMet: Bool { questionsMet && (!showsQuickThink || quickThinkMet) }
 
     var body: some View {
+        VStack(spacing: 12) {
+            goals
+            streakRow
+        }
+        .padding(.vertical, 4)
+        .accessibilityElement(children: .contain)
+    }
+
+    private var goals: some View {
         HStack(spacing: 20) {
             rings
             VStack(spacing: 10) {
@@ -69,8 +88,69 @@ struct DailyGoalsPanel: View {
                 }
             }
         }
-        .padding(.vertical, 4)
-        .accessibilityElement(children: .contain)
+    }
+
+    // MARK: Streak
+
+    /// The same row vocabulary as the goals — tinted glyph, title, sub-line,
+    /// soft tinted plate — so it reads as a sibling rather than as leftovers.
+    /// It is deliberately not a button: nothing here starts anything, and the
+    /// full-width shape against the two column-width rows above is what says
+    /// so without an affordance that lies.
+    private var streakRow: some View {
+        HStack(spacing: 11) {
+            ZStack {
+                Circle().fill(Palette.gold.opacity(0.18))
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Palette.gold)
+            }
+            .frame(width: 36, height: 36)
+
+            VStack(alignment: .leading, spacing: 1) {
+                Text(streak == 1 ? "1 day streak" : "\(streak) day streak")
+                    .font(.appBodyMedium)
+                    .foregroundStyle(Palette.textPrimary)
+                    .monospacedDigit()
+                Text(streakDetail)
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+
+            Spacer(minLength: 8)
+
+            HStack(spacing: 3) {
+                Image(systemName: "snowflake")
+                    .font(.system(size: 11, weight: .bold))
+                Text("\(freezes)/\(StreakRules.maxFreezes)")
+                    .font(.appCaptionBold)
+                    .monospacedDigit()
+            }
+            .foregroundStyle(freezes > 0 ? Palette.gold : Palette.textTertiary)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(freezes > 0 ? Palette.goldSoft : Palette.cardSunken))
+        }
+        .padding(.vertical, 7)
+        .padding(.horizontal, 9)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                .fill(Palette.gold.opacity(0.07))
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(streak) day streak, \(freezes) of \(StreakRules.maxFreezes) freezes")
+        .accessibilityValue(streakDetail)
+    }
+
+    private var streakDetail: String {
+        if streak == 0 { return "Answer today to start one" }
+        if freezes >= StreakRules.maxFreezes { return "Freezes full" }
+        return daysUntilNextFreeze == 1
+            ? "1 day to your next freeze"
+            : "\(daysUntilNextFreeze) days to your next freeze"
     }
 
     // MARK: Rings
