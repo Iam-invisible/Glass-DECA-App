@@ -39,7 +39,7 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
 - Swift + SwiftUI, **iOS 16.4** deployment target. It was 16.0; llama.cpp's XCFramework is
   built for 16.4 and binds at launch, so a 16.0 target would have failed to start on 16.0–16.3.
   The iPhone 8 requirement survives — that device runs iOS 16.7.
-- **Three panes: Study · Progress · Settings** (this was six tabs until recently — see §4)
+- **Four panes: Study · Progress · Shop · Settings** (six tabs → three → four; see §4 and §6)
 - Feel: premium, calm, adult. Explicitly **not** a children's quiz game. Strong motion, haptics,
   full light/dark, full accessibility.
 - Bundle ID `com.shailpatel.LCVI-DECA-Study-NewApp`, app group
@@ -120,9 +120,16 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   `wantsMistakeNotebook`, `wantsMockExam`, `showGuide`, `guideFocus`. Consumed with a
   **reset-then-act** pattern — flip local state *after* mount, because a `navigationDestination`
   already true at first render does not push reliably on iOS 16.
-- **Three panes.** `Study` absorbed the old Today + Practice launchers. Mock Exams, Roleplay and
+- **Four panes.** `Study` absorbed the old Today + Practice launchers. Mock Exams, Roleplay and
   the Library (the old Practice tab's browse section) keep their entire screens and are **pushed
-  from Study's tiles**. Nothing was deleted in that restructure — the map was redrawn.
+  from Study's tiles**. `Shop` was added later (§6a). Nothing was deleted in either restructure —
+  the map was redrawn.
+- **Two overlay layers use the same host-claiming trick**, and they must stay in step.
+  `CelebrationLayer` and `BunnyLayer` both exist because a `fullScreenCover` draws above anything
+  the root can (§8.4): each full-screen flow calls `.celebrationLayer(isFullScreen: true)` **and**
+  `.bunnyLayer(isFullScreen: true)`, and the root stands down while `store.fullScreenLayers > 0`.
+  The host sets are currently identical — four flows — and a new full-screen flow should claim
+  both or neither.
 - **Foundation Models** is gated by `#if canImport(FoundationModels)` **and**
   `if #available(iOS 26.0, *)`.
 - **Five required AI status strings** shown in Settings (exact text, in
@@ -160,33 +167,49 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
 `UIAppFonts` in `Config/App-Info.plist`. The widget bundles its own copies in
 `DECAStudyWidget/Fonts/` registered in `Config/DECAStudyWidget-Info.plist`.
 
-- **Display: Instrument Serif** — high-contrast serif; the thick-to-thin modulation is the point,
-  because the app is called Glass. One weight by design.
+- **Display: Michroma** — extended geometric, replacing Instrument Serif. A serif at 19–22pt read
+  as body text set larger and the heading level stopped announcing itself; Michroma's wide
+  letterforms cannot be confused with the Manrope beneath them.
+  **Its width governs every display size.** Michroma averages 0.719 em per lowercase letter
+  against Instrument Serif's 0.392 — 1.87× — so the old 38/26/22 ladder overflowed. Any future
+  display face needs the ladder re-derived from its own width, never inherited.
+- **Michroma Bold is generated, not shipped by the foundry.** Michroma has one cut and no variable
+  axis, so `Michroma-Bold.ttf` was produced by stroking every outline 95/2048 em with a round join
+  and unioning it back — stem 0.094 em → 0.141 em. Advances are untouched, so it drops in without
+  moving layout. Michroma declares no Reserved Font Name, so the OFL permits it. **Do not try to
+  get bold with `.weight(.bold)`** — see §8.27.
 - **Text: Manrope** (Regular / Medium / SemiBold) — chosen on measurement, not taste: largest
   x-height of 14 candidates (0.540) and second most compact, and it ships `tnum`.
 - **Script: Sacramento** — intro wordmark only. Never set UI text in it.
-- Roles: `.appLargeTitle` (38), `.appTitle` (26), `.appSectionTitle` (22), `.appHeadline`,
-  `.appBody`, `.appCallout`, `.appFootnote`, `.appCaption`, `.appCaptionBold`, `.appQuestion`,
-  `.appKicker` + `.kicker()`, plus `appSans(_:weight:)` and `numeric(_:weight:)`.
+- Roles: `.appLargeTitle` (32), `.appTitle` (22), `.appSectionTitle` (19) and `.appTileTitle` (16)
+  — all four Michroma **Bold** — plus `.appHeadline`, `.appBody`, `.appBodyMedium`, `.appCallout`,
+  `.appFootnote`, `.appCaption`, `.appCaptionBold`, `.appQuestion`, `appSans(_:weight:)` and
+  `numeric(_:weight:)` in Manrope.
+  `appTileTitle` exists because `ModeTile` borrowed `appSectionTitle` and Michroma is wide enough
+  that "Mock Exams" overflowed an iPhone SE tile: three of six tiles were being shrunk by
+  `minimumScaleFactor` and three were not, so one grid rendered its labels at four sizes. 16 is the
+  largest that clears the box outright.
 - **The hierarchy rule: serif is always a heading, Manrope is always content.**
 - OFL licences ship alongside every font. Keep them.
 
-**Colour — warm paper** (`Palette`, `Core/DesignSystem.swift`). Light/dark pairs.
+**Colour — blue-grey** (`Palette`, `Core/DesignSystem.swift`). Light/dark pairs.
 
-Surfaces are a warm off-white (`#FAF7F2`) with warm ink (`#231F1A`) rather than the blue-grey
-and navy every dashboard uses, so the app reads as a printed study book — which is what the
-display serif had been asking for. **Dark mode is a warm dark** (`#14110D`), not blue-black; a
-cool dark under a warm light theme reads as two different apps.
+A warm-paper palette (`#FAF7F2` surfaces, warm dark `#14110D`) was built and then **reverted on
+request** — the original blue-grey is what ships. `git show 2d9d758` is the warm version if it is
+ever wanted back.
 
-Accents carry meaning only: blue = progress, green = correct, red = wrong, gold = streaks and
-achievements, grey = inactive. They are deepened relative to the old palette because bright
-screen colours look wrong on paper.
+Reverting restored three cluster-tint collisions that the warm palette had fixed, and they are
+worth knowing rather than rediscovering. Measured as RGB distance over the 0–441 range:
+marketing's tint **is** the accent, byte-identical in both schemes; hospitality's dark tint **is**
+the streak gold, byte-identical; personal finance sits 7.1% from the correct-answer green.
+Accents carry meaning here — blue = progress, green = correct, red = wrong, gold = streaks — so
+those two zeros are a legibility bug, not a taste one. Left in place because the revert was the
+request; the six tints can be nudged off the accents without touching the surfaces.
 
-**`DECACluster.tint` must stay clear of all four.** The previous set did not, and three of the
-collisions were bugs rather than taste: marketing's tint *was* the accent colour, personal
-finance sat three per cent from the correct-answer green, and in dark mode hospitality and the
-streak gold were byte-identical. Clusters are now muted ink tones — plum, teal, clay, indigo,
-rose, olive. Check any new colour against both sets.
+The accent — and only the accent — is themeable from the Shop. `Palette.accentTheme` is a `var`
+set at launch from settings, and `accent`/`accentSoft` are computed from it. The meaning colours
+stay fixed: a student able to repaint "correct" as red would be buying a legibility bug. The
+widget keeps its own accent and does not follow the theme.
 
 The palette is duplicated in three more places that do not import the app and must be changed
 in the same commit: `DECAStudyWidget/WidgetShared.swift`, `web/app.css` plus the `CLUSTERS` list
@@ -196,7 +219,15 @@ derives from `Palette`.
 `strokeGlint` is the lighter top edge of a card's gradient border.
 
 **Spacing** — `Metrics`: gutter 18, cardRadius 18, controlRadius 14, rowMinHeight 52,
-stackSpacing 14, sectionSpacing 24.
+**headerGap 10, stackSpacing 14, sectionSpacing 32**.
+
+The last three are a hierarchy, not three numbers: `headerGap` binds a `SectionHeader` to what it
+names, `stackSpacing` separates peers inside a group, `sectionSpacing` separates groups. **Keep
+header < peer < section.** A screen that uses one gap everywhere is the failure mode — the eye has
+nothing to group by and a heading floats as far from its own content as from the section above.
+
+**Cards group lists; single figures float.** Study's today panel, Progress's today block and the
+week chart are all off their cards; the sections that are lists of rows kept theirs.
 
 **Motion** — `Core/Motion.swift`: `Motion.page/.snappy/.gentle/.bouncy/.quick/.reveal`,
 `PageShift`, `AnyTransition.page(direction:)`, `CountingNumber`, `AppearTransition`,
@@ -242,18 +273,24 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 
 ## 6. Feature inventory
 
-**Study (home)** — greeting with the student's event code; two `GoalDial`s side by side
-(Questions and Quick Think) showing today's ring and a compact start button; a slim streak card;
-a `ModeTile` garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram,
-Bookmarks) plus a full-width **Library** banner; insight cards. Tile affordance rule: **a count
-means it launches, a chevron means it navigates.** Dials report only — both targets are set with
-steppers in Settings.
+**Study (home)** — a greeting (no eyebrow — see §8.28 for why the greeting lost the word "Good"),
+then **`TodayPanel`**: one large segmented ring, then a row per goal, then the streak. The ring is
+cut into a section per item — questions clockwise from twelve, then Quick Think — because a smooth
+arc says how far through you are and sections say what one question is worth. Its centre shows
+what is **left**, not what is done, tinted to whichever goal is still open. Below that a `ModeTile`
+garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bookmarks) plus a
+full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
+launches, a chevron means it navigates.** Both goal targets are still set with steppers in
+Settings. `GoalDial` was deleted; `TodayPanel` + `SegmentedGoalRing` replaced it.
 
 **Progress** — the analytics pane: accuracy, PI mastery, cluster breakdowns, achievements.
 
+**Shop** — what coins buy. See §6a.
+
 **Settings** — cluster, competitive event (`EventPicker`), both daily goal steppers, reminders,
-AI status + local coach, question bank manager, import/export, appearance, intro style, replay
-guide.
+AI status + local coach, question bank manager, import/export, appearance, intro style (the locked
+one carries a padlock and routes to the Shop), replay guide, and **Erase everything** — which now
+also deletes the 808 MB model and resets the wallet, and says so.
 
 **Onboarding** — a prologue title sequence (three lines, each with its own animated scene: a
 podium rising, a path drawing itself to a flag, the goal ring filling) then five chapters: Try it
@@ -277,6 +314,50 @@ the app: the Quick Think dial and goal are hidden for events with no roleplay.
 exams with review, roleplay scenarios with rubric + optional AI coaching, Quick Think drills,
 streaks and achievement badges with a celebration animation, question bank manager with bulk
 import/export, home screen widgets, local notifications.
+
+---
+
+## 6a. Coins, the Shop, and the bunny
+
+**Coins are minted in exactly four places**, all in `AppStore`, and never bought with money —
+that would mean StoreKit, receipts and a restore path, and restore needs an account the app does
+not have. Rates live in `CoinRate` beside the prices they have to be read against: **1** per
+answer, **3** for a correct one, **15** a daily goal, **50** a ten-day streak mark, **25** an
+achievement. About **39 a day** at a 10-question goal and ~70% accuracy. Tapping the balance opens
+`CoinGuideOverlay`, which reads every figure from `CoinRate` rather than repeating it.
+
+**The coin badge is a HUD** pinned in `RootView` on Study, Progress and Shop — not Settings,
+where a balance reads as a nag.
+
+**The Shop sells only cosmetics.** The moment a purchase changes what questions you get or how
+they are marked, it stops being a reward and becomes a tax on learning. Five categories:
+companion, icons, themes, intros, sounds.
+
+- **Icons** — one free glass **G** on solid black, plus two *packs* and a standalone. A pack is an
+  item with `unlocks`, bought once, granting its members; members are priced 0 and hidden behind
+  `packMember` until their pack is owned, and the pack itself disappears from the list once bought.
+  Pastel pack 700 (Rose/Mint/Lilac), Glow pack 900 (Cyan/Magenta/Amber/Violet), Rainbow 1200 —
+  white glass with a Google-arc halo. All generated by `Scripts`-adjacent Python in the scratchpad;
+  the letter spans `G_WIDTH = 0.60` of the canvas, one constant so the family cannot drift.
+- **Themes** recolour the accent only. **Intros** drive `introStyleRaw`; Etched is the free default
+  and Script is bought. **Sounds** are a filename suffix with per-file fallback, so a half-populated
+  pack degrades to the default tone rather than to silence.
+- **Every shop row opens `ShopPreviewOverlay` before it can be bought** — the real icon masked at
+  Apple's 22.37% corner, the theme on a real ring and button, the intro's own lettering, the sound
+  played out loud. Buying happens in that card. Tapping a swatch and being charged was the thing
+  this replaced.
+- **Promo codes** in `PromoCode`: `GLASSUNLOCK` owns everything and tops up, `GLASSRESET` puts it
+  all back. Not a security boundary — see §8.30.
+
+**The bunny** (`Bunny.swift`, `BunnyCompanionView`) is a 600-coin companion in the bottom-right of
+every screen. 22 sprites in `Resources/Bunny/`. Three events carry *what happened* rather than just
+that it happened — `correctAnswer(run:)`, `wrongAnswer(run:)`, `mockFinished(percent:)` — so a run
+of three earns the big face and one right answer does not, and a mock scored 12% does not draw the
+same face as one scored 95%. Two rules it must keep: **celebration climbs with the size of the
+thing**, and **nothing aimed at the student is ever harsher than concern**. It never appears on the
+intro, the privacy gate or onboarding, and never takes a touch.
+
+---
 
 **Web preview** — `index.html` + `web/` at the repo root: a static recreation of the app for
 browser viewing, deployed from the `web-only` branch. Not part of the iOS target.
@@ -379,6 +460,36 @@ app survive ~1 GB resident on a 4 GB phone.
     of bounds in `explainAnswer` — tapping "Explain with AI" crashed the app. `InputSanitizer`
     fixes this at that one boundary, which is why all four write paths must keep going through
     those two methods.
+27. **`Font.custom(...).weight(.bold)` does nothing on a single-weight family.** Weight resolves
+    *within* a family, and a family of one resolves back to itself — no synthesis, no warning, no
+    changed pixels. It compiled and looked deliberate for a whole commit. Michroma Bold had to be
+    generated (§5).
+28. **A zero-height view is still a stack child and collects spacing on both sides.** Cost twice:
+    `ScrollOffsetProbe` as the first item of a `VStack(spacing: 32)` pushed every screen's header
+    down by a full section gap (now applied as `.scrollOffsetProbe()`, an overlay), and a `VStack`
+    wrapping two failed `if`s would have left 48pt of empty column. Guard the *contents* before
+    building the container, not after.
+29. **`Path.intersection` is iOS 17.** The floor is 16.4, so half-ellipses are built from a
+    transformed unit arc instead (`HalfEllipse` in `HamsterAvatar`).
+30. **Swift stores string literals of ≤15 UTF-8 bytes inline, not in `__TEXT,__cstring`.** So
+    `strings` will not print `GLASSUNLOCK`, but that is an accident of length rather than
+    protection — a 16-byte code *would* be plain text, and either way a debugger finds it in
+    minutes. Verified against the Release binary. Never gate anything behind a promo code that
+    would matter if bypassed.
+31. **`isReady` must mean "loaded *or loadable*".** `LlamaCoachEngine` reported only "loaded", and
+    since `isUsable` gates `generate()`, `generate()` is the only caller of `loadIfNeeded()`, and
+    `loadIfNeeded()` was the only thing that set the flag, it could never become true on any
+    device. A student downloaded 808 MB and Quick Think still offered the self-check. A failed load
+    latches so a corrupt model reports unavailable rather than promising AI and returning nothing.
+32. **Xcode `pngcrush`es loose alternate-icon PNGs into Apple's CgBI variant.** iOS reads it
+    natively; PIL and most tools cannot. A bundled alternate icon that looks corrupt is not.
+33. **`actool` merges its primary icon into a hand-written `CFBundleIcons` dict.** With a manual
+    `CFBundleAlternateIcons` present, `CFBundleIconName` lands *nested* under `CFBundlePrimaryIcon`
+    rather than at the top level. Check the nested path before concluding the primary icon is
+    missing.
+34. **A local `AVAudioPlayer` is deallocated the moment the function returns** and never makes a
+    sound. `SoundEffects.preview` holds its own player in a property — its own, so auditioning a
+    pack in the Shop cannot evict the cached cues or leave the wrong pack loaded.
 
 ---
 
@@ -386,62 +497,44 @@ app survive ~1 GB resident on a 4 GB phone.
 
 **Still open**
 
-1. **Fill in `[INSERT YOUR LEGAL OR TRADING NAME]`.** It appears in the hosted privacy notice
-   (`gh-pages/index.html`) and in `~/Desktop/Glass-Privacy-Notice.pdf`, and the hosted one is
-   **publicly visible right now**. The in-app copy does not carry it. Should match the seller
-   name in App Store Connect.
-2. **Run the whole app end to end on device.** Nothing since `v5-immersive` has run on hardware
-   and a great deal has changed. In rough order of risk:
-   - **Does the local model actually work?** See §7. Loading, output quality, latency, jetsam.
-   - **The warm paper palette on a real panel.** Colour is the one thing a simulator cannot
-     settle. If `#FAF7F2` reads as dirty white rather than paper, pull it toward `#FBF9F5`.
-   - **The Core Data lightweight migration** adding four `rationale*` attributes. Install the
-     old build, then this one over it, and confirm progress survives. There is a
-     rebuild-on-failure fallback; you want to know it did not fire.
-   - First-launch flow, now: intro → privacy gate → onboarding.
-   - Guide spotlight geometry, and back-navigation from pushed Mock Exams / Roleplay / Library.
-3. **Check App Store metadata for DECA trademark exposure** — the in-app disclaimer is solid, the
+1. **Fill in `[INSERT YOUR LEGAL OR TRADING NAME]`.** Still live and **publicly visible** on
+   `gh-pages` at `index.html:110`, and in `~/Desktop/Glass-Privacy-Notice.pdf`. The in-app copy
+   does not carry it. Should match the seller name in App Store Connect.
+2. **The local AI coach has been run on hardware exactly once, and it failed.** Two bugs were
+   found and fixed from that one report (§8.31, plus the engine only being attached at launch or
+   on foreground). **It has not been re-tested since.** The three questions §7 has always asked are
+   still open: does the GGUF load, is first-token latency short enough that a student waits, and
+   does a 4 GB phone survive ~1 GB resident. An iPhone 12 is the device it failed on.
+3. **Everything added since `v9-pre-michroma` is unverified on device** — roughly forty commits,
+   including a whole fourth tab. Highest risk first:
+   - The Shop end to end: buy, preview, apply an alternate icon, redeem a promo code.
+   - Michroma at every size, and the generated bold, on a real panel.
+   - The tab bar at 10pt clearance, which deliberately lets the home indicator graze the capsule.
+   - The coin HUD clearing every screen title.
+   - The Core Data lightweight migration adding four `rationale*` attributes — still never
+     exercised old-build-over-new.
+4. **Check App Store metadata for DECA trademark exposure.** The in-app disclaimer is solid; the
    store listing is a separate surface. Avoid "DECA" leading the app name, subtitle or keywords.
-4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
-   roleplay *at regionals* or advance on the exam alone. Ontario's own pages point both ways and
-   it varies by area, so they are left as exam + roleplay at both levels — the error that
-   over-prepares. Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
+5. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
+   roleplay *at regionals*. Left as exam + roleplay at both levels — the error that over-prepares.
+   Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
 
-**Closed since v7-events**
+**Closed since `v9-pre-michroma`**
 
-- **Privacy manifests** shipped for both targets, `plutil`-verified in a Release build. Only two
-  required-reason categories exist anywhere in the tree: `UserDefaults` and one disk-space call.
-- **App Group was a false alarm.** `CODE_SIGN_ENTITLEMENTS` was already set for both targets in
-  both configurations. An empty entitlement dict is what a *simulator* build always shows.
-  Confirmed working on the user's own device — the widgets update.
-- **The 808 MB download now has something to run it.** `LocalCoachEngine` had no constructor
-  anywhere in the app, which is why the download could never have produced behaviour. See item 1
-  for the only remaining step.
-- **Event catalogue corrected** against Ontario's published list. `EBP` and `ISP` were not real
-  codes; `IBP` was filed under Independent rather than *International* Business Plan; `EIB`,
-  `EFB`, `EBG` and `PEN` were missing; `QSRM` is not offered in Ontario. Most importantly, IMC
-  and the professional selling events were modelled as having **no exam anywhere** when a cluster
-  exam is the only thing that advances them out of regionals.
-- **Content is no longer the gap.** 600 questions, 71 roleplays, 90 Quick Think prompts. At a
-  10/day goal the bundled bank now lasts two months rather than six days.
-- **llama.cpp is wired and compiling** (§7), and the deployment floor moved to 16.4 for it.
-- **Privacy is done end to end.** A consent gate between the intro and onboarding, the full
-  notice embedded and readable forever from Settings ▸ About, a hosted copy on the `gh-pages`
-  branch for App Store Connect, and a PDF. All three say the same thing. Acceptance is stored
-  as a *version* (`PrivacyPolicy.version`), so bumping it re-prompts everyone.
-- **`ITSAppUsesNonExemptEncryption = false`** declared, so App Store Connect stops asking on
-  every upload. Only SHA-256 hashing and OS TLS are used, both exempt.
-- **Input sanitisation** (§8.26). Also fixed a real crash reachable from any imported bank.
-- **The Quick Think fallback stopped lying.** Without AI it used to tell every student their
-  "strongest part" was committing to a position — the same praise regardless of what they wrote.
-  It now makes no claim it has not measured, and the headings change to match.
-- **UI copy rewritten plainly** across onboarding and the walkthrough (§3).
+- Instrument Serif → Michroma, with a generated bold and a width-derived size ladder.
+- The warm paper palette, reverted on request.
+- A spacing hierarchy (`headerGap`/`stackSpacing`/`sectionSpacing`) and a de-carding pass.
+- The PI heatmap folded into the indicator list; the recent-achievement card removed.
+- Coins, the Shop, packs, promo codes, previews, and the bunny companion.
+- The app icon rebuilt as the glass G, with two packs and a rainbow.
+- Intro audio now stops when the intro is skipped; freezes cap at two.
+- "Erase everything" now erases the model and the wallet, and says so.
+- The local coach's two activation bugs.
 
 **Candidate for removal**
 
-- The **intro style toggle** exists because two intros were built, not because users need the
-  choice. Picking one and deleting the setting removes a row and a test surface. The user has
-  said explicitly not to remove the intros — this refers to the *toggle*, not either intro.
+- The **intro style toggle** is now a shop item rather than a free setting, which gives the second
+  intro a reason to exist. This is closed unless the shop item is dropped.
 
 ---
 
@@ -458,6 +551,7 @@ The user relies on tags to roll back and asks for saves explicitly. Never skip a
 | `v5-immersive` | + ambient light field, glass panes, serif hierarchy, ring tip light. **Last device-confirmed version.** |
 | `v7-events` | + three panes, cinematic onboarding, app guide, widget restyle, events + dual goals |
 | `v8-content` | + 600 questions with per-option reasoning, 71 roleplays, 90 Quick Thinks, privacy manifests, large widget, corrected event catalogue, local coach wired |
+| `v9-pre-michroma` | The last build with Instrument Serif and the warm paper palette. **Local only — not yet pushed to either remote.** |
 
 Branch `rebrand-glass-edge` parks an abandoned cyan rebrand the user rejected — do not
 resurrect it without asking. Current work is on `v7-events-goals`.
@@ -520,28 +614,28 @@ rebuild existed to fix.
 
 ## 12. Current state
 
-Three panes, cinematic onboarding with a scored prologue, a spotlight app guide, a competitive
-event catalogue that shapes the UI, dual daily goals, an ambient light field behind every screen,
-600 questions where every option is explained, and — since `v8-content` — both AI tiers wired,
-a warm paper palette, and privacy handled end to end.
+Four panes, Michroma throughout with a generated bold, the blue-grey palette, a spacing hierarchy,
+a coin economy with a Shop that previews before it charges, a reacting companion, and an app icon
+family built from the same letterform.
 
 Debug and Release both build clean with zero warnings, and both content validators pass.
-Uncommitted work: none. Unpushed: check `git status` and both remotes (§10).
+Uncommitted work: none. Unpushed: check `git status` and both remotes (§10) — `v9-pre-michroma`
+in particular is local only.
 
-**Nothing since `v5-immersive` has been run on a physical device.** That is now the largest
-unverified surface in the project by a wide margin, and it is §9 item 2 for a reason. Two things
-in particular have *never* executed: any `llama_*` call, and the warm paper palette on a real
-panel.
+**Nothing since `v5-immersive` has had a full device pass**, and about forty commits have landed
+since `v9-pre-michroma` alone. The single hardware report so far — an iPhone 12 — found two real
+bugs in the local AI coach, which is a fair indication of what a proper pass would turn up.
 
-Three things worth knowing before touching this again:
+Five things worth knowing before touching this again:
 
-- **Copy is plain now, deliberately.** See §3. Do not let it drift back.
-
+- **Copy is plain, deliberately.** See §3. Do not let it drift back.
 - **Distractors are the teaching surface.** The rationales name the *specific* error — "65% is
-  markup on cost, not on selling price", "$9,000 is subtracting 10% where present value requires
-  dividing by 1.10". Anything added to the bank should hold that bar; filler distractors would
-  quietly undo the reason the bank was rewritten.
+  markup on cost, not on selling price". Anything added to the bank should hold that bar.
 - **Content selection is cluster-keyed, never event-keyed.** Ontario's 50 events map onto 6
-  clusters, so authoring per event produces near-duplicates rather than variety. Roleplays are
-  written per cluster × event *format* instead, which is what gives a student Principles, Series,
-  Team Decision Making and Professional Selling shapes rather than the same case repeatedly.
+  clusters; authoring per event produces near-duplicates rather than variety.
+- **The shop must stay cosmetic**, and the bunny must never be harsher than concern (§6a). Both
+  are one bad commit away from making a study app feel like it is judging the student.
+- **The hamster is parked, not deleted.** `ShopFeatures.hamsterEnabled = false` gates a complete,
+  working vector avatar with 24 cosmetics across five slots. Flipping it back on restores the
+  character; it is off only because the app ships without artwork for it. A prompt for generating
+  that artwork, matching the existing anchor coordinates, was written and is worth reusing.
