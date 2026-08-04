@@ -31,7 +31,9 @@ struct ProgressDashboardView: View {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Progress",
-                                 subtitle: "Everything you've answered, and what it says about exam day.")
+                                 subtitle: "Everything you've answered, and what it says about exam day.",
+                                 event: EventTag(event: store.settings.event,
+                                                 cluster: store.settings.cluster))
                         .appearIn(0)
 
                     todaySection.appearIn(0)

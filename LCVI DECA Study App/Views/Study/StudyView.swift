@@ -116,7 +116,10 @@ struct StudyView: View {
     // MARK: - Greeting
 
     private var greeting: some View {
-        ScreenHeader(greetingLine, subtitle: dayLine)
+        ScreenHeader(greetingLine,
+                     subtitle: dayLine,
+                     event: EventTag(event: store.settings.event,
+                                     cluster: store.settings.cluster))
     }
 
     /// The one line on the home screen that changes every day. Streak
@@ -137,12 +140,15 @@ struct StudyView: View {
             : "\(left) to go today."
     }
 
-    /// Without "Good". The eyebrow used to be the header's first line, so the
-    /// title sat below the floating coin badge and could be any width. Now the
-    /// title *is* the first line, and "Good afternoon" is 320pt of the 265pt
-    /// an iPhone 8 leaves beside the badge — it would have run underneath it
-    /// for a third of every day. Dropping the word clears the badge by 54pt on
-    /// the narrowest phone without shrinking the type or reserving a band.
+    /// Without "Good". For a while this header had no eyebrow, so the title
+    /// was its first line and sat beside the floating coin badge: "Good
+    /// afternoon" is 320pt of the 265pt an iPhone 8 leaves there, and it would
+    /// have run underneath the badge for a third of every day.
+    ///
+    /// The event tag now takes that first line back, so the width is no longer
+    /// forced. Kept short anyway — nothing was lost when the word went, and
+    /// re-lengthening it would only put the title back within reach of the
+    /// badge on the narrowest phone the app supports.
     private var greetingLine: String {
         switch Calendar.current.component(.hour, from: Date()) {
         case 0..<5:   return "Still up"

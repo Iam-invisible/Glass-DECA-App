@@ -279,8 +279,8 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 
 ## 6. Feature inventory
 
-**Study (home)** — a greeting (no eyebrow — see §8.28 for why the greeting lost the word "Good"),
-then **`TodayPanel`**: one large segmented ring, then a row per goal, then the streak. The ring is
+**Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
+loud, "EIP") above the greeting, then **`TodayPanel`**: one large segmented ring, then a row per goal, then the streak. The ring is
 cut into a section per item — questions clockwise from twelve, then Quick Think — because a smooth
 arc says how far through you are and sections say what one question is worth. Its centre shows
 what is **left**, not what is done, tinted to whichever goal is still open. Below that a `ModeTile`
@@ -289,7 +289,15 @@ full-width **Library** banner, then one insight card. Tile affordance rule: **a 
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in
 Settings. `GoalDial` was deleted; `TodayPanel` + `SegmentedGoalRing` replaced it.
 
-**Progress** — the analytics pane: accuracy, PI mastery, cluster breakdowns, achievements.
+**Progress** — the analytics pane: accuracy, PI mastery, cluster breakdowns, achievements. Carries
+the same `EventTag` above its title.
+
+`EventTag` is the *only* thing that may sit above a `ScreenHeader` title. The eyebrow that used to
+live there carried scope — the cluster filter, "All clusters", an attempt count — and was removed
+everywhere as chrome. The event is different: it is what the student is training for, and these
+are the two screens about how that is going. Undecided falls back to the cluster name, which reads
+as plainly not an event code. Measured against the coin HUD on an iPhone 8: 246.5pt of clear
+space, the widest tag is 149.9pt, and it still clears at the largest Dynamic Type caption step.
 
 **Shop** — what coins buy. See §6a.
 

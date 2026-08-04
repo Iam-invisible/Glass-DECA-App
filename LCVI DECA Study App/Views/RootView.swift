@@ -150,9 +150,13 @@ struct RootView: View {
                 .guideAnchor(.tabBar)
         }
         // Pinned here rather than inside each screen so it does not scroll
-        // away — the point of a HUD is that the number is always there. It
-        // clears the screen titles because every root header puts a short
-        // eyebrow on the first line and the long title on the second.
+        // away — the point of a HUD is that the number is always there.
+        //
+        // It clears the screen titles on all three: Study and Progress open on
+        // a short event tag and put the long title beneath it, and Shop's title
+        // is one word. This comment used to claim every root header carried an
+        // eyebrow, which stopped being true when they were removed and is true
+        // again for a different reason.
         //
         // Settings is excluded: nothing there earns coins, and a balance
         // following you into the preferences screen reads as a nag.

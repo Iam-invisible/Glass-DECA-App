@@ -21,6 +21,12 @@
 //  third line of chrome above the thing you actually came to read, and none of
 //  it was information a student needed on arrival.
 //
+//  `event` is the one exception, and it is a different thing wearing the same
+//  slot. Scope described the screen; the event is what the student is training
+//  for, and Study and Progress are the two screens that exist to answer "how
+//  am I doing at it". Nothing else passes it — a shop or a settings screen has
+//  no more claim on that line than it had on the old one.
+//
 
 import SwiftUI
 
@@ -29,11 +35,22 @@ struct ScreenHeader<Accessory: View>: View {
 
     var subtitle: String? = nil
 
+    /// The student's competitive event, shown above the title. Study and
+    /// Progress only — see the note at the top of this file.
+    var event: EventTag? = nil
+
     @ViewBuilder var accessory: () -> Accessory
 
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 12) {
             VStack(alignment: .leading, spacing: 5) {
+                // Guarded here rather than wrapped in a container that is
+                // always built, so a header without an event does not collect
+                // the stack's spacing on both sides of nothing (§8.28).
+                if let event {
+                    event.padding(.bottom, 1)
+                }
+
                 Text(title)
                     .font(.appLargeTitle)
                     .foregroundStyle(Palette.textPrimary)
@@ -60,8 +77,8 @@ struct ScreenHeader<Accessory: View>: View {
 }
 
 extension ScreenHeader where Accessory == EmptyView {
-    init(_ title: String, subtitle: String? = nil) {
-        self.init(title: title, subtitle: subtitle) { EmptyView() }
+    init(_ title: String, subtitle: String? = nil, event: EventTag? = nil) {
+        self.init(title: title, subtitle: subtitle, event: event) { EmptyView() }
     }
 }
 
