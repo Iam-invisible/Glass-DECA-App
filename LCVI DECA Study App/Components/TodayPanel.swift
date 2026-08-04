@@ -27,6 +27,20 @@
 //  under the rings rather than a third item in the legend column, because the
 //  two rows up there start something and this one does not.
 //
+//  The two goal rows carry the app's card treatment — opaque fill, gradient
+//  border, shape shadow — tinted rather than plain. They used to be a flat
+//  wash of tint with no edge, which is not a surface the rest of the app uses
+//  anywhere: everything else that groups content has a border catching the
+//  light field. They read as untreated rather than as deliberately quiet.
+//
+//  The streak is the one card here that is not a control and not about today,
+//  so it stops borrowing the goal rows' vocabulary and gets its own: the wider
+//  card radius, a gold gradient rather than a flat tint, a bloom behind the
+//  flame, the count set as a figure instead of a sentence, and a ten-segment
+//  track for the freeze it is working toward. That last one is the reason the
+//  card earns its extra height — "3 days to your next freeze" is a sentence
+//  you have to read, and seven of ten lit is a fact you can see.
+//
 
 import SwiftUI
 
@@ -41,10 +55,26 @@ struct TodayPanel: View {
     let streak: Int
     let freezes: Int
     let daysUntilNextFreeze: Int
+    /// Non-nil when a streak the student just earned is waiting to be shown.
+    /// Study only passes it through once nothing is covering the screen.
+    var pendingCelebration: Int? = nil
+    var onCelebrated: () -> Void = {}
     let onQuestions: () -> Void
     let onQuickThink: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Drives the collect animation.
+    ///
+    /// Two values rather than one, because they have to end differently. The
+    /// flame and the border swell and settle back, so they animate in both
+    /// directions. The ripple only ever travels outwards — running one value
+    /// back down to zero would have played it in reverse, contracting and
+    /// brightening, so it is torn down instead of animated home.
+    @State private var collectPhase: Double = 0
+    @State private var ripplePhase: Double = 0
+    @State private var showsRipple = false
+    @State private var isCollecting = false
 
     private var questionsFraction: Double {
         min(1, Double(questionsDone) / Double(max(1, questionsGoal)))
@@ -69,10 +99,57 @@ struct TodayPanel: View {
             rings
                 .frame(maxWidth: .infinity)
             goals
-            streakRow
+            streakCard
         }
         .padding(.vertical, 6)
         .accessibilityElement(children: .contain)
+        .onChange(of: pendingCelebration) { new in
+            if new != nil { collect() }
+        }
+        .onAppear {
+            // Covers the cold case: the app was killed between earning the
+            // streak and coming back to look at it.
+            if pendingCelebration != nil { collect() }
+        }
+    }
+
+    /// Plays the collect animation once, then hands the pending value back so
+    /// it cannot fire twice for the same streak.
+    private func collect() {
+        guard !isCollecting else { return }
+        isCollecting = true
+
+        guard !reduceMotion else {
+            // Nothing to watch, so nothing to wait for.
+            isCollecting = false
+            onCelebrated()
+            return
+        }
+
+        collectPhase = 0
+        ripplePhase = 0
+        showsRipple = true
+
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.55)) {
+            collectPhase = 1
+        }
+        withAnimation(.easeOut(duration: 0.9)) {
+            ripplePhase = 1
+        }
+
+        // The ripple is fully transparent by the time it is pulled, so this
+        // removes nothing the eye can see.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
+            showsRipple = false
+            ripplePhase = 0
+        }
+        // Clearing the pending value is what ends the animation, so it has to
+        // outlast every part of it.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.15) {
+            withAnimation(Motion.gentle) { collectPhase = 0 }
+            isCollecting = false
+            onCelebrated()
+        }
     }
 
     private var goals: some View {
@@ -101,57 +178,153 @@ struct TodayPanel: View {
 
     // MARK: Streak
 
-    /// The same row vocabulary as the goals — tinted glyph, title, sub-line,
-    /// soft tinted plate — so it reads as a sibling rather than as leftovers.
-    /// It is deliberately not a button: nothing here starts anything, and the
-    /// full-width shape against the two column-width rows above is what says
-    /// so without an affordance that lies.
-    private var streakRow: some View {
-        HStack(spacing: 11) {
-            ZStack {
-                Circle().fill(Palette.gold.opacity(0.18))
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(Palette.gold)
-            }
-            .frame(width: 36, height: 36)
+    /// Its own object, not a third goal row. It is deliberately not a button:
+    /// nothing here starts anything, and the wider radius against the two
+    /// control-radius rows above is what says so without an affordance that
+    /// lies.
+    private var streakCard: some View {
+        VStack(spacing: 11) {
+            HStack(spacing: 12) {
+                flame
 
-            VStack(alignment: .leading, spacing: 1) {
-                Text(streak == 1 ? "1 day streak" : "\(streak) day streak")
-                    .font(.appBodyMedium)
-                    .foregroundStyle(Palette.textPrimary)
-                    .monospacedDigit()
-                Text(streakDetail)
-                    .font(.appCaption)
-                    .foregroundStyle(Palette.textTertiary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                VStack(alignment: .leading, spacing: -2) {
+                    // A figure rather than a sentence. The number is the whole
+                    // point of the card and it was previously set at body
+                    // weight in the middle of a line of prose.
+                    CountingNumber(value: Double(streak),
+                                   font: .numeric(30),
+                                   color: streak > 0 ? Palette.gold : Palette.textTertiary)
+                    Text("day streak")
+                        .font(.appCaption)
+                        .foregroundStyle(Palette.textSecondary)
+                }
+
+                Spacer(minLength: 8)
+
+                freezeCapsule
             }
 
-            Spacer(minLength: 8)
-
-            HStack(spacing: 3) {
-                Image(systemName: "snowflake")
-                    .font(.system(size: 11, weight: .bold))
-                Text("\(freezes)/\(StreakRules.maxFreezes)")
-                    .font(.appCaptionBold)
-                    .monospacedDigit()
-            }
-            .foregroundStyle(freezes > 0 ? Palette.gold : Palette.textTertiary)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 5)
-            .background(Capsule().fill(freezes > 0 ? Palette.goldSoft : Palette.cardSunken))
+            freezeTrack
         }
-        .padding(.vertical, 7)
-        .padding(.horizontal, 9)
+        .padding(.vertical, 13)
+        .padding(.horizontal, 14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
-                .fill(Palette.gold.opacity(0.07))
-        )
+        .background(streakSurface)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(streak) day streak, \(freezes) of \(StreakRules.maxFreezes) freezes")
         .accessibilityValue(streakDetail)
+    }
+
+    /// The flame, with a bloom behind it and a ripple that leaves the card on
+    /// collect. The bloom is the same recipe as the ring's wash — a blurred
+    /// static circle — so it costs one cached pass rather than a live blur.
+    private var flame: some View {
+        ZStack {
+            Circle()
+                .fill(RadialGradient(colors: [Palette.gold.opacity(0.34), .clear],
+                                     center: .center, startRadius: 1, endRadius: 30))
+                .frame(width: 66, height: 66)
+                .blur(radius: 6)
+                .opacity(streak > 0 ? 1 : 0.35)
+                .scaleEffect(1 + collectPhase * 0.4)
+
+            // The ripple: a ring that expands past the glyph and fades as it
+            // goes. Drawn only while collecting, so the home screen is not
+            // carrying a permanently animating layer.
+            if showsRipple {
+                Circle()
+                    .strokeBorder(Palette.gold.opacity(0.55 * (1 - ripplePhase)), lineWidth: 2)
+                    .frame(width: 40, height: 40)
+                    .scaleEffect(1 + ripplePhase * 1.6)
+            }
+
+            Circle()
+                .fill(Palette.gold.opacity(streak > 0 ? 0.18 : 0.10))
+                .frame(width: 40, height: 40)
+
+            Image(systemName: "flame.fill")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(streak > 0 ? Palette.gold : Palette.textTertiary)
+                // Overshoots and settles. The spring in `collect()` is what
+                // makes this a pop rather than a swell.
+                .scaleEffect(1 + collectPhase * 0.35)
+                .rotationEffect(.degrees(collectPhase * 8))
+        }
+        .frame(width: 44, height: 44)
+    }
+
+    private var freezeCapsule: some View {
+        HStack(spacing: 3) {
+            Image(systemName: "snowflake")
+                .font(.system(size: 11, weight: .bold))
+            Text("\(freezes)/\(StreakRules.maxFreezes)")
+                .font(.appCaptionBold)
+                .monospacedDigit()
+        }
+        .foregroundStyle(freezes > 0 ? Palette.gold : Palette.textTertiary)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background(Capsule().fill(freezes > 0 ? Palette.goldSoft : Palette.cardSunken))
+    }
+
+    /// Ten segments, one per day between earned freezes. Lit segments are the
+    /// days already banked. At the freeze cap there is nothing being worked
+    /// toward, so the track states that instead of filling a bar that means
+    /// nothing.
+    private var freezeTrack: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if freezes < StreakRules.maxFreezes {
+                HStack(spacing: 3) {
+                    ForEach(0..<StreakRules.daysPerFreeze, id: \.self) { day in
+                        Capsule()
+                            .fill(day < bankedDays ? Palette.gold : Palette.cardSunken)
+                            .frame(height: 4)
+                            // The segment that just landed lifts clear of the
+                            // rest, so the animation says which day was won.
+                            .scaleEffect(y: day == bankedDays - 1 ? 1 + collectPhase * 1.6 : 1)
+                    }
+                }
+            }
+
+            Text(streakDetail)
+                .font(.appCaption)
+                .foregroundStyle(Palette.textTertiary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+    }
+
+    /// Days banked toward the next freeze. A streak sitting exactly on a
+    /// multiple of ten has just earned one and starts the next track empty.
+    private var bankedDays: Int {
+        guard streak > 0 else { return 0 }
+        return streak % StreakRules.daysPerFreeze
+    }
+
+    /// Gold, and a wider radius than the rows above. The border brightens
+    /// while collecting, which is what makes the whole card — rather than one
+    /// glyph inside it — the thing that reacts.
+    private var streakSurface: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
+                .fill(Palette.card)
+                .shadow(color: Palette.shadow.opacity(0.05), radius: 10, x: 0, y: 4)
+
+            RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
+                .fill(
+                    LinearGradient(colors: [Palette.gold.opacity(streak > 0 ? 0.13 : 0.05),
+                                            Palette.gold.opacity(0.03)],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                )
+
+            RoundedRectangle(cornerRadius: Metrics.cardRadius, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(colors: [Palette.gold.opacity(0.30 + collectPhase * 0.55),
+                                            Palette.gold.opacity(0.10 + collectPhase * 0.30)],
+                                   startPoint: .top, endPoint: .bottom),
+                    lineWidth: 1
+                )
+        }
     }
 
     private var streakDetail: String {
@@ -250,6 +423,33 @@ struct TodayPanel: View {
 
     // MARK: Rows
 
+    /// The app's card treatment, carrying a tint.
+    ///
+    /// `appCard` cannot do this and should not be taught to: its fill is one
+    /// colour, and a translucent tint would put the shadow *through* the card
+    /// rather than under it — the whole reason `CardBackground` puts the
+    /// shadow on an opaque shape. So the tint sits as a wash over an opaque
+    /// base here, and the border picks the tint up rather than the neutral
+    /// glint, which is what keeps these reading as the questions card and the
+    /// Quick Think card rather than as two identical grey panels.
+    private func tintedCard(_ tint: Color) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                .fill(Palette.card)
+                .shadow(color: Palette.shadow.opacity(0.05), radius: 8, x: 0, y: 3)
+
+            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                .fill(tint.opacity(0.09))
+
+            RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(colors: [tint.opacity(0.34), tint.opacity(0.12)],
+                                   startPoint: .top, endPoint: .bottom),
+                    lineWidth: 1
+                )
+        }
+    }
+
     /// The whole row is the control. Two full-width buttons were the heaviest
     /// thing on the screen and neither was the point; a tinted glyph carries
     /// the affordance and doubles as the key linking the row to its arc.
@@ -287,13 +487,14 @@ struct TodayPanel: View {
 
                 Spacer(minLength: 0)
             }
-            .padding(.vertical, 7)
-            .padding(.horizontal, 9)
+            .padding(.vertical, 9)
+            .padding(.horizontal, 11)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: Metrics.controlRadius, style: .continuous)
-                    .fill(tint.opacity(0.07))
-            )
+            // Tinted to the goal, not to whether it is met: the card keeps
+            // being the questions card all day. The glyph turning green with
+            // a checkmark is what reports the state, and having the whole
+            // surface change colour underneath it said the same thing twice.
+            .background(tintedCard(tint))
         }
         .buttonStyle(PressableButtonStyle(scale: 0.98, haptic: false))
         .accessibilityLabel("\(title), \(done) of \(goal)")

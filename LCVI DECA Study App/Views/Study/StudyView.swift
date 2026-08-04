@@ -177,6 +177,13 @@ struct StudyView: View {
                    streak: dash.streak.current,
                    freezes: dash.streak.freezes,
                    daysUntilNextFreeze: dash.streak.daysUntilNextFreeze,
+                   // Withheld while a session, a mock or Quick Think is over
+                   // the top of this screen. The streak always advances inside
+                   // one of those, and a card celebrating behind a cover has
+                   // celebrated to nobody.
+                   pendingCelebration: store.fullScreenLayers == 0
+                       ? store.pendingStreakCelebration : nil,
+                   onCelebrated: { store.pendingStreakCelebration = nil },
                    onQuestions: { startDaily() },
                    onQuickThink: { showingQuickThink = true })
     }

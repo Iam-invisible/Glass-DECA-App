@@ -280,7 +280,8 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 ## 6. Feature inventory
 
 **Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
-loud, "EIP") above the greeting, then **`TodayPanel`**: one large segmented ring, then a row per goal, then the streak. The ring is
+loud, "EIP") above the greeting, then **`TodayPanel`**: one large segmented ring, then a card per
+goal, then the streak card. The ring is
 cut into a section per item — questions clockwise from twelve, then Quick Think — because a smooth
 arc says how far through you are and sections say what one question is worth. Its centre shows
 what is **left**, not what is done, tinted to whichever goal is still open. Below that a `ModeTile`
@@ -288,6 +289,19 @@ garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bo
 full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in
 Settings. `GoalDial` was deleted; `TodayPanel` + `SegmentedGoalRing` replaced it.
+
+The two goal cards carry the app's card treatment — opaque fill, gradient border, shape shadow —
+tinted to their goal rather than filled flat, because a bare wash of tint was a surface nothing
+else in the app uses. `appCard` can't express it and shouldn't learn to: its fill is one colour,
+and a translucent tint would put the shadow through the card instead of under it. The tint tracks
+the goal, never whether it is met — the glyph reports that.
+
+The **streak card** is deliberately not a third goal card: wider radius, gold gradient, a bloom
+behind the flame, the count set as a figure, and a ten-segment track for the freeze it is working
+toward. It animates once when a streak is collected — flame pop, a ripple that only ever travels
+outward, and the border brightening. `AppStore.pendingStreakCelebration` holds the moment rather
+than firing it, because a streak always advances inside a `fullScreenCover`; Study passes it to
+the panel only while `fullScreenLayers == 0`, so it plays to somebody.
 
 **Progress** — the analytics pane: accuracy, PI mastery, cluster breakdowns, achievements. Carries
 the same `EventTag` above its title.

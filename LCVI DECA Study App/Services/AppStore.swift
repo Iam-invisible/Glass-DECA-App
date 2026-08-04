@@ -87,6 +87,13 @@ final class AppStore: ObservableObject {
     /// Set when the user taps a widget or a shortcut into a specific flow.
     @Published var pendingDeepLink: DeepLink? = nil
 
+    /// The streak a student just earned, waiting to be shown on the Study
+    /// screen. Held rather than fired, because a streak always advances during
+    /// a practice session — inside a `fullScreenCover` — and an animation
+    /// played on a card nobody can see has not happened. Study consumes it
+    /// once nothing is covering the screen.
+    @Published var pendingStreakCelebration: Int? = nil
+
     // MARK: Navigation intents
     //
     // The app used to *describe* routes — "Settings ▸ Question Bank Manager
@@ -418,6 +425,13 @@ final class AppStore: ObservableObject {
     func greetBunny() { react(.opened) }
 
     func handle(_ outcome: StreakOutcome) {
+        if outcome.streakIncreased {
+            // Queued, not celebrated here: the overlay for `goalCompleted`
+            // covers this same moment, and two things firing at once would
+            // read as one loud event rather than two clear ones. This waits
+            // for the student to land back on Study.
+            pendingStreakCelebration = outcome.newStreak
+        }
         if outcome.goalJustCompleted {
             settings.award(CoinRate.dailyGoal)
             react(.goalMet)
