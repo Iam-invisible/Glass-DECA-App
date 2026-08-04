@@ -123,14 +123,24 @@ struct IntroReveal: View {
                 solid(glass, inflate: inflate)
                     .opacity(fill)
 
-                LinearGradient(colors: [.clear, .white.opacity(0.85), .clear],
-                               startPoint: .leading, endPoint: .trailing)
-                    .frame(width: geo.size.width * 0.4)
-                    .offset(x: sweep * geo.size.width)
-                    .blur(radius: 4)
-                    .mask(solid(Color.black, inflate: inflate))
-                    .opacity(fill)
-                    .allowsHitTesting(false)
+                // The band has to be positioned inside a full-size container
+                // and the mask applied to *that*, not to the band.
+                //
+                // Masking the band directly puts the mask through the band's
+                // own layout, so `WordShape` fits the whole word into a box
+                // 40% of the width — and a squashed little wordmark rides
+                // across the letters as a white block. This is the shape the
+                // real intro uses for the same reason.
+                GeometryReader { sweepBox in
+                    LinearGradient(colors: [.clear, .white.opacity(0.85), .clear],
+                                   startPoint: .leading, endPoint: .trailing)
+                        .frame(width: sweepBox.size.width * 0.4)
+                        .offset(x: sweep * sweepBox.size.width)
+                        .blur(radius: 4)
+                }
+                .mask(solid(Color.black, inflate: inflate))
+                .opacity(fill)
+                .allowsHitTesting(false)
             }
         }
         .frame(height: 92)
