@@ -6,28 +6,54 @@
 <title>Privacy Notice — Glass: DECA Study App</title>
 <meta name="description" content="Privacy notice for Glass, an offline-first DECA Ontario study app. We collect no personal information.">
 <meta name="robots" content="index,follow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/Michroma-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Manrope-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- Deliberately self-contained rather than linking /web/app.css. That file is
      the interactive preview's stylesheet and will change as the preview does;
      a privacy notice is a document Apple and users may load years from now and
      it should not be able to break. Tokens below are copied from
-     Core/DesignSystem.swift, same as the preview's. -->
+     Core/DesignSystem.swift, same as the preview's.
+
+     The faces are self-hosted rather than fetched from Google Fonts, for two
+     reasons. Michroma Bold does not exist upstream — the foundry ships one cut,
+     and the app's bold is generated from it (§5), so there is nothing to fetch.
+     And a page whose own second bullet promises no tracking of any kind should
+     not hand the reader's IP to a third party to render its headings. WOFF2
+     brings all three faces to 63 KB, less than the two Google requests cost.
+     OFL licences sit beside them in fonts/, as they do in the app. -->
 <style>
+  @font-face {
+    font-family:'Michroma App'; font-weight:700; font-style:normal; font-display:swap;
+    src:url('fonts/Michroma-Bold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family:'Manrope App'; font-weight:400; font-style:normal; font-display:swap;
+    src:url('fonts/Manrope-Regular.woff2') format('woff2');
+  }
+  @font-face {
+    font-family:'Manrope App'; font-weight:600; font-style:normal; font-display:swap;
+    src:url('fonts/Manrope-SemiBold.woff2') format('woff2');
+  }
+
   :root {
-    --canvas:#F4F6FA; --card:#FFFFFF; --stroke:#E2E8F0;
+    --canvas:#F4F6FA; --card:#FFFFFF; --card-sunken:#EDF1F7;
+    --stroke:#E2E8F0; --stroke-glint:#EDF2F9;
     --text-primary:#0F1B2D; --text-secondary:#53627A; --text-tertiary:#8A97AB;
     --accent:#2563EB; --success:#12855C; --success-soft:#DDF5EC;
-    --display:'Instrument Serif',Didot,'Bodoni 72',Georgia,serif;
-    --text:'Manrope',-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+    --shadow:15,27,45;
+    --display:'Michroma App','Michroma',Verdana,sans-serif;
+    --text:'Manrope App','Manrope',-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;
+    --radius-card:18px; --radius-control:14px;
+    --gap-header:10px; --gap-stack:14px; --gap-section:32px;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --canvas:#0D1219; --card:#161E29; --stroke:#27313F;
+      --canvas:#0D1219; --card:#161E29; --card-sunken:#111823;
+      --stroke:#27313F; --stroke-glint:#3B4859;
       --text-primary:#F2F5F9; --text-secondary:#9AA8BC; --text-tertiary:#6C7A8D;
       --accent:#5B8DEF; --success:#34C793; --success-soft:#11312A;
+      --shadow:0,0,0;
     }
   }
   *,*::before,*::after { box-sizing:border-box; }
@@ -37,24 +63,54 @@
     font-family:var(--text); font-size:16px; line-height:1.62;
     -webkit-font-smoothing:antialiased;
   }
+  /* The ambient wash the app puts behind every screen, held still. Fixed and
+     behind everything, so it never costs a repaint while reading and never
+     sits between the eye and the text. */
+  body::before {
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(58rem 34rem at 18% -8%, rgba(37,99,235,.07), transparent 70%),
+      radial-gradient(46rem 30rem at 92% 4%, rgba(18,133,92,.05), transparent 70%);
+  }
+  @media (prefers-color-scheme: dark) {
+    body::before {
+      background:
+        radial-gradient(58rem 34rem at 18% -8%, rgba(91,141,239,.10), transparent 70%),
+        radial-gradient(46rem 30rem at 92% 4%, rgba(52,199,147,.06), transparent 70%);
+    }
+  }
   .wrap { max-width:44rem; margin:0 auto; padding:56px 22px 96px; }
 
+  /* Tracked uppercase, the app's one eyebrow treatment (§8.23: this is
+     .appCaptionBold, there is no .appKicker). */
   .eyebrow {
     font-size:.75rem; font-weight:600; letter-spacing:.11em; text-transform:uppercase;
-    color:var(--accent); margin:0 0 10px;
+    color:var(--accent); margin:0 0 var(--gap-header);
   }
+
+  /* Michroma carries the document title and nothing else on this page.
+     Measured before it was chosen: "Privacy Notice" is one line at every size
+     the clamp reaches, but the longest section heading — "4. When and with
+     whom do we share your personal information?" — is 764px at 19px Michroma,
+     which is three lines on a 360px phone and still two on the desktop column.
+     A display face that wraps three times has stopped announcing a heading and
+     started obstructing it, so the section headings are Manrope SemiBold, the
+     same division the app makes when it puts Michroma on a screen title and
+     Manrope on everything beneath. */
   h1 {
-    font-family:var(--display); font-weight:400; font-size:clamp(2.2rem,6vw,3rem);
-    line-height:1.1; color:var(--text-primary); margin:0 0 8px; letter-spacing:.01em;
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(1.5rem,5.5vw,2rem); line-height:1.18;
+    color:var(--text-primary); margin:0 0 8px;
   }
-  .updated { font-size:.9rem; color:var(--text-tertiary); margin:0 0 34px; }
+  .updated { font-size:.9rem; color:var(--text-tertiary); margin:0 0 var(--gap-section); }
 
   h2 {
-    font-family:var(--display); font-weight:400; font-size:1.55rem; line-height:1.25;
-    color:var(--text-primary); margin:46px 0 12px; letter-spacing:.01em;
+    font-family:var(--text); font-weight:600; font-size:1.19rem; line-height:1.34;
+    color:var(--text-primary); margin:var(--gap-section) 0 var(--gap-header);
   }
   h3 {
-    font-size:1rem; font-weight:600; color:var(--text-primary); margin:26px 0 8px;
+    font-size:1rem; font-weight:600; color:var(--text-primary);
+    margin:22px 0 var(--gap-header);
   }
   p { margin:0 0 15px; }
   a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; word-break:break-word; }
@@ -62,32 +118,70 @@
   ul { margin:0 0 15px; padding-left:1.15rem; }
   li { margin:0 0 7px; }
 
-  .short {
-    background:var(--success-soft); border:1px solid color-mix(in srgb,var(--success) 26%,transparent);
-    border-radius:18px; padding:20px 22px; margin:0 0 40px;
+  /* The app's card: opaque fill, a border that is lighter at the top as if the
+     pane were catching the light field it sits in, and a shadow belonging to
+     the shape rather than the content. Two stacked backgrounds are how CSS
+     does a gradient border — the first paints the fill over the padding box,
+     the second the gradient over the border box. */
+  .card {
+    background:
+      linear-gradient(var(--card),var(--card)) padding-box,
+      linear-gradient(to bottom,var(--stroke-glint),var(--stroke)) border-box;
+    border:1px solid transparent;
+    border-radius:var(--radius-card);
+    box-shadow:0 4px 10px rgba(var(--shadow),.05);
   }
-  .short h2 { margin:0 0 12px; font-size:1.2rem; }
+
+  .short {
+    background:
+      linear-gradient(var(--success-soft),var(--success-soft)) padding-box,
+      linear-gradient(to bottom,
+        color-mix(in srgb,var(--success) 34%,transparent),
+        color-mix(in srgb,var(--success) 16%,transparent)) border-box;
+    border:1px solid transparent;
+    border-radius:var(--radius-card);
+    box-shadow:0 4px 10px rgba(var(--shadow),.05);
+    padding:20px 22px; margin:0 0 var(--gap-section);
+  }
+  .short h2 {
+    font-family:var(--display); font-weight:700; font-size:1.1rem; line-height:1.3;
+    margin:0 0 var(--gap-stack);
+  }
   .short ul { list-style:none; padding:0; margin:0; }
   .short li { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; color:var(--text-primary); }
-  .short li::before { content:"✓"; color:var(--success); font-weight:700; flex:none; line-height:1.6; }
+  .short li::before { content:"\2713"; color:var(--success); font-weight:600; flex:none; line-height:1.6; }
   .short li:last-child { margin-bottom:0; }
 
   .lede { font-size:1.06rem; color:var(--text-primary); }
+
+  /* The app states a rule and then the detail under it; this is that shape.
+     A tinted plate rather than a bare rule, so it reads as a surface the app
+     uses rather than as a blockquote. */
   .inshort {
     font-weight:600; color:var(--text-primary);
-    border-left:3px solid var(--accent); padding-left:12px; margin:0 0 15px;
+    background:var(--card-sunken);
+    border-left:3px solid var(--accent);
+    border-radius:0 var(--radius-control) var(--radius-control) 0;
+    padding:10px 14px; margin:0 0 15px;
   }
 
   table { width:100%; border-collapse:collapse; margin:14px 0 20px; font-size:.9rem; }
   th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--stroke); vertical-align:top; }
   th { color:var(--text-primary); font-weight:600; }
   td.no { color:var(--success); font-weight:600; white-space:nowrap; }
+  /* Wide tables scroll inside themselves rather than pushing the page sideways. */
+  .scroller { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 
   footer {
     margin-top:56px; padding-top:22px; border-top:1px solid var(--stroke);
     font-size:.85rem; color:var(--text-tertiary);
   }
-  @media print { body { background:#fff; } .wrap { padding:0; max-width:none; } }
+  @media print {
+    body { background:#fff; }
+    body::before { display:none; }
+    .wrap { padding:0; max-width:none; }
+    .short, .card { box-shadow:none; }
+  }
 </style>
 </head>
 <body>
@@ -203,6 +297,7 @@
   <p>We maintain no personal information about any user, so each of these requests would return nothing.</p>
   <h3>Categories of personal information we collect</h3>
   <p>The table below shows the categories of personal information described by the California Consumer Privacy Act, and whether we have collected any in the preceding twelve (12) months.</p>
+  <div class="scroller">
   <table>
     <thead><tr><th>Category</th><th>Examples</th><th>Collected</th></tr></thead>
     <tbody>
@@ -220,6 +315,7 @@
       <tr><td>L. Sensitive personal information</td><td>As defined by applicable state law</td><td class="no">NO</td></tr>
     </tbody>
   </table>
+  </div>
   <p>We collect no personal information in any category listed above, and no other personal information through any other interaction.</p>
   <h3>Sources of personal information</h3>
   <p>Not applicable. We obtain no personal information from any source.</p>
