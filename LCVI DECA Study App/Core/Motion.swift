@@ -65,6 +65,68 @@ extension View {
     func appearBeat(_ seconds: Double, distance: CGFloat = 18) -> some View {
         modifier(AppearTransition(index: 0, distance: distance, delay: seconds))
     }
+
+    /// A band of light crossing the view over and over, for work that is
+    /// running with no progress to report.
+    ///
+    /// A spinner says "busy". This says "busy *on this*", because the light
+    /// travels across the thing being worked on — which is the whole reason it
+    /// exists on a local model's answer, where the wait is long enough that a
+    /// student starts wondering whether they actually tapped anything.
+    func shimmering(_ active: Bool,
+                    period: Double = 1.5,
+                    pause: Double = 0.55) -> some View {
+        modifier(Shimmer(active: active, period: period, pause: pause))
+    }
+}
+
+/// A repeating shine, masked to whatever it is applied to.
+///
+/// The band is masked by the content rather than drawn over it, so it lights
+/// the glyphs themselves and never washes the space between them. That mask is
+/// also what keeps the sweep from parking beside the view as a stray rectangle
+/// once it travels past the edge (§8.14) — no outer `clipped()` is needed, and
+/// adding one would silently crop any caller whose content overflows on
+/// purpose.
+struct Shimmer: ViewModifier {
+    let active: Bool
+    let period: Double
+    /// Dead time between passes. Without it the band is continuous, which
+    /// reads as a loading skeleton — a thing that is missing — rather than as
+    /// attention moving across a thing that is present.
+    let pause: Double
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var phase: CGFloat = -1
+
+    func body(content: Content) -> some View {
+        content.overlay {
+            if active && !reduceMotion {
+                GeometryReader { geo in
+                    LinearGradient(colors: [.clear,
+                                            .white.opacity(0.75),
+                                            .clear],
+                                   startPoint: .leading, endPoint: .trailing)
+                        .frame(width: geo.size.width * 0.45)
+                        .offset(x: phase * geo.size.width)
+                        .blur(radius: 3)
+                }
+                // The mask goes on the full-size container, never on the band:
+                // masking a view already narrowed by `.frame` makes the mask
+                // lay itself out inside that narrow box.
+                .mask(content)
+                .allowsHitTesting(false)
+                .task(id: active) {
+                    while !Task.isCancelled {
+                        phase = -1
+                        withAnimation(.easeInOut(duration: period)) { phase = 1.1 }
+                        try? await Task.sleep(nanoseconds:
+                            UInt64((period + pause) * 1_000_000_000))
+                    }
+                }
+            }
+        }
+    }
 }
 
 /// A number that animates from its previous value to the new one.

@@ -352,22 +352,34 @@ struct ProgressDashboardView: View {
     private var adviceSection: some View {
         VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: "Study advice")
+            // No "On-device coaching" caption above this any more. It was a
+            // sparkle glyph in accent type sitting directly over a button that
+            // is also a sparkle glyph in accent type, so the card offered two
+            // things that looked equally tappable and only one was. Where the
+            // work happens is worth saying once, and the line under the button
+            // says it — it is not worth a heading that competes with the only
+            // control on the card.
             VStack(alignment: .leading, spacing: 10) {
-                Label("On-device coaching", systemImage: "sparkles")
-                    .font(.appCaptionBold)
-                    .foregroundStyle(Palette.accent)
-
                 if let aiAdvice {
                     Text(aiAdvice)
                         .font(.appCallout)
                         .foregroundStyle(Palette.textPrimary)
                         .fixedSize(horizontal: false, vertical: true)
                 } else if loadingAdvice {
-                    HStack(spacing: 8) {
-                        ProgressView().controlSize(.small)
-                        Text("Reviewing your weak areas on device…")
-                            .font(.appFootnote)
-                            .foregroundStyle(Palette.textSecondary)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label("Reading your weak areas…", systemImage: "sparkles")
+                            .font(.appFootnote.weight(.semibold))
+                            .foregroundStyle(Palette.accent)
+                            // The light crosses the line it is talking about,
+                            // which a spinner beside it could not do. A local
+                            // model can take several seconds on an older phone
+                            // and the only thing worse than a wait is a wait
+                            // that looks like nothing is happening.
+                            .shimmering(true)
+
+                        Text("This runs on your device, so it can take a moment.")
+                            .font(.appCaption)
+                            .foregroundStyle(Palette.textTertiary)
                     }
                 } else {
                     Button {
@@ -379,6 +391,7 @@ struct ProgressDashboardView: View {
                             .foregroundStyle(Palette.accent)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityHint("Reviews your weakest indicators on this device")
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)

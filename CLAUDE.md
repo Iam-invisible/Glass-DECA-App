@@ -242,8 +242,12 @@ week chart are all off their cards; the sections that are lists of rows kept the
 
 **Motion** — `Core/Motion.swift`: `Motion.page/.snappy/.gentle/.bouncy/.quick/.reveal`,
 `PageShift`, `AnyTransition.page(direction:)`, `CountingNumber`, `AppearTransition`,
-`appearIn(_:)` (index stagger, 55 ms apart) and **`appearBeat(_:)`** (authored delay in seconds,
-for choreographed scenes). Tab changes set `direction` **before** committing the tab.
+`appearIn(_:)` (index stagger, 55 ms apart), **`appearBeat(_:)`** (authored delay in seconds,
+for choreographed scenes) and **`shimmering(_:)`** — a band of light crossing a view on a loop,
+for work with no progress to report. Masked by its own content, which lights the glyphs rather
+than the gaps and keeps the sweep from parking beside the view (§8.14); it pauses between passes
+so it reads as attention on something present rather than as a loading skeleton. Tab changes set
+`direction` **before** committing the tab.
 
 **Ambience** — `AmbientCanvas` puts the intro's drifting light pools behind every screen via
 `appCanvas()`. Static circles whose *offset* animates, so Core Animation blurs once and caches;
