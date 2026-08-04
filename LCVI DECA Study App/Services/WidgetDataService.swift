@@ -45,6 +45,15 @@ struct WidgetSnapshot: Codable, Equatable {
     var weakestCode: String = ""
     var weakestText: String = ""
 
+    // v3 — what the daily tip widgets read.
+    /// `DECACluster.rawValue`, so the widget picks a tip list without
+    /// parsing a display name back into a cluster.
+    var clusterKey: String = "marketing"
+    /// Per-install, generated once and never changed. It is what stops a
+    /// whole class seeing the same tip on the same morning; it identifies
+    /// nothing and never leaves the device.
+    var tipSalt: UInt64 = 0
+
     var remaining: Int { max(0, goal - answeredToday) }
     var fraction: Double { goal <= 0 ? 1 : min(1, Double(answeredToday) / Double(goal)) }
     var goalMet: Bool { answeredToday >= goal }
@@ -66,6 +75,7 @@ struct WidgetSnapshot: Codable, Equatable {
         case clusterShortName, answeredToday, goal, streak, freezes, dueForReview, updatedAt
         case eventCode, quickThinkToday, quickThinkGoal, openMistakes, accuracy
         case totalAnswered, bookmarked, achievements, lastMockScore, weakestCode, weakestText
+        case clusterKey, tipSalt
     }
 
     /// Hand-written so a snapshot encoded by an older build — which carries
@@ -92,6 +102,8 @@ struct WidgetSnapshot: Codable, Equatable {
         lastMockScore    = try c.decodeIfPresent(Int.self,    forKey: .lastMockScore)
         weakestCode      = try c.decodeIfPresent(String.self, forKey: .weakestCode) ?? ""
         weakestText      = try c.decodeIfPresent(String.self, forKey: .weakestText) ?? ""
+        clusterKey       = try c.decodeIfPresent(String.self, forKey: .clusterKey) ?? "marketing"
+        tipSalt          = try c.decodeIfPresent(UInt64.self, forKey: .tipSalt) ?? 0
     }
 
     /// Declaring `init(from:)` above suppresses the memberwise initialiser,
@@ -113,7 +125,9 @@ struct WidgetSnapshot: Codable, Equatable {
          achievements: Int = 0,
          lastMockScore: Int? = nil,
          weakestCode: String = "",
-         weakestText: String = "") {
+         weakestText: String = "",
+         clusterKey: String = "marketing",
+         tipSalt: UInt64 = 0) {
         self.clusterShortName = clusterShortName
         self.answeredToday = answeredToday
         self.goal = goal
@@ -132,6 +146,8 @@ struct WidgetSnapshot: Codable, Equatable {
         self.lastMockScore = lastMockScore
         self.weakestCode = weakestCode
         self.weakestText = weakestText
+        self.clusterKey = clusterKey
+        self.tipSalt = tipSalt
     }
 }
 

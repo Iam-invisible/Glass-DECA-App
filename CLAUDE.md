@@ -24,7 +24,7 @@ been tried and rejected.
 
 ```bash
 git status --short && git log --oneline -8
-python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py
+python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py && python3 Scripts/check_tips.py
 xcodebuild -project "LCVI DECA Study App.xcodeproj" -scheme "LCVI DECA Study App" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug clean build 2>&1 | grep -E "error:|warning:|BUILD" | grep -viE "AppIntents|metadata extraction"
 ```
 
@@ -154,9 +154,23 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   `isSample`, and preserves bookmarks.
 - **Widget** (`DECAStudyWidget/`) reads a snapshot written by `WidgetDataService` through the
   shared app group, and bundles its own copies of the app's fonts. `WidgetSnapshot` is
-  **duplicated verbatim** in both targets — the extension cannot import the app. Its decoder is
-  hand-written with `decodeIfPresent` so a payload from an older build still decodes rather than
-  throwing and blanking every widget.
+  **duplicated in both targets** — the extension cannot import the app. The *coding surface* is
+  what has to stay in step (same properties, same order, same `CodingKeys`); the two copies do
+  differ in helpers and sample values, so diff the keys, not the file. Its decoder is hand-written
+  with `decodeIfPresent` so a payload from an older build still decodes rather than throwing and
+  blanking every widget.
+- **The daily-fact widgets own their content and their timeline.** `DECAStudyWidget/Tips/` holds
+  ~100 study facts per cluster (605 total), in the widget target only — the app never reads them.
+  That is deliberate: if the app picked the line and wrote it into the snapshot, the widget could
+  not build a timeline past today on a phone the app had not been opened on, which is exactly the
+  phone the widget is for. So `TipProvider` builds a week of entries instead of the single entry
+  every other widget uses.
+  The line is chosen by a **seeded permutation**, not a seeded pick: `tipSalt` (per install,
+  generated once in `UserSettings`, never sent anywhere) plus the cluster key seeds a shuffle, and
+  the day index walks it. Hashing the day straight to an index would repeat a fact long before the
+  list ran out; this shows all 100 first, in an order that is this install's own. Property-tested
+  over every cluster: stable within a day, a full cycle before any repeat, and no two of 200
+  simulated installs sharing a first week.
 - **Deep links** are `decastudy://` and the switch in `LCVI_DECA_Study_AppApp.swift` is the only
   reader: `practice`, `cram`, `review`, `mistakes`, `quickthink`. Keep in step with `WidgetLink`.
 - **Files worth knowing about**: `Models/InputSanitizer.swift` (§8.26),
@@ -693,8 +707,11 @@ Run **both** Debug and Release, always with `clean`, always grepping warnings. F
 matters more than it sounds:
 
 ```bash
-python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py
+python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py && python3 Scripts/check_tips.py
 ```
+
+`check_tips.py` gates the widget fact corpus: a count per cluster, a length window the
+lock-screen rectangle can actually show, and no duplicates within or across clusters.
 
 `check_questions.py` fails on a duplicate stable key (a collision silently *drops* a question at
 seed time), a `why` array that isn't exactly four entries, a `correctIndex` out of range, and —

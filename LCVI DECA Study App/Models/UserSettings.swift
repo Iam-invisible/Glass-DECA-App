@@ -173,6 +173,7 @@ final class UserSettings: ObservableObject {
         static let appIcon = "appIcon"
         static let theme = "appTheme"
         static let soundPack = "soundPack"
+        static let tipSalt = "tipSalt"
     }
 
     @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
@@ -278,6 +279,21 @@ final class UserSettings: ObservableObject {
     /// restore path, and restore needs an account — which the app does not
     /// have and is not going to grow.
     @Published var coins: Int { didSet { defaults.set(coins, forKey: Keys.coins) } }
+
+    /// Seeds this install's own order for the daily tip widgets.
+    ///
+    /// Generated once on first read and kept for the life of the install, so
+    /// the order never restarts and a student is not shown yesterday's fact
+    /// again tomorrow. It is a random number and nothing else: it identifies no
+    /// one, is never sent anywhere, and lives beside the rest of the settings
+    /// in the shared app group so the widget can read it.
+    var tipSalt: UInt64 {
+        let stored = defaults.object(forKey: Keys.tipSalt) as? NSNumber
+        if let stored { return stored.uint64Value }
+        let fresh = UInt64.random(in: 1 ... .max)
+        defaults.set(NSNumber(value: fresh), forKey: Keys.tipSalt)
+        return fresh
+    }
 
     @Published var ownedCosmeticIDs: Set<String> {
         didSet { defaults.set(Array(ownedCosmeticIDs), forKey: Keys.ownedCosmetics) }

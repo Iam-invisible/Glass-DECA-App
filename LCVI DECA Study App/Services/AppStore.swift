@@ -338,7 +338,14 @@ final class AppStore: ObservableObject {
             achievements: state.achievementsUnlocked,
             lastMockScore: state.lastMockScore.map { Int($0.rounded()) },
             weakestCode: state.weakestIndicator?.code ?? "",
-            weakestText: state.weakestIndicator?.text ?? ""
+            weakestText: state.weakestIndicator?.text ?? "",
+            // The tip widgets pick their own line from these two. The raw
+            // cluster rather than the display name, so the widget is not
+            // parsing "Business Mgmt" back into a case; and the install's own
+            // salt, so two students in the same class do not spend the term
+            // reading the same fact to each other on the same morning.
+            clusterKey: settings.cluster.rawValue,
+            tipSalt: settings.tipSalt
         ))
     }
 

@@ -14,5 +14,7 @@ struct DECAStudyWidgetBundle: WidgetBundle {
         StreakWidget()
         RemainingWidget()
         QuickLaunchWidget()
+        DailyTipWidget()
+        DailyTipLockWidget()
     }
 }
