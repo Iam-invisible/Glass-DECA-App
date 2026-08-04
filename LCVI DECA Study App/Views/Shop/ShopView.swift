@@ -332,15 +332,21 @@ struct ShopView: View {
     /// A pack shows its contents fanned, and gets no plate behind it: the cards
     /// are the picture, and a tinted square under them would be a second
     /// surface competing with eight rounded corners. Everything else keeps the
-    /// plate, because a lone icon or a colour needs something to sit on.
+    /// plate, because a lone icon, a wordmark or a colour needs something to
+    /// sit on.
+    ///
+    /// Only themes and sounds are still a bare colour, and for those the colour
+    /// is the honest answer: a theme *is* its accent, and a sound has nothing
+    /// to look at until you play it.
     @ViewBuilder
     private func preview(for item: AppCosmeticItem) -> some View {
         if item.isPack {
             PackFan(ids: item.unlocks)
         } else {
             RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .fill(item.kind == .companion ? Palette.cardSunken
-                                              : Color(hex: item.previewHex))
+                .fill(item.kind == .companion || item.kind == .intro
+                      ? Palette.cardSunken
+                      : Color(hex: item.previewHex))
                 .frame(width: 46, height: 46)
                 .overlay {
                     if item.kind == .companion, let ui = UIImage(named: BunnyMood.happy.imageName) {
@@ -352,6 +358,12 @@ struct ShopView: View {
                         // The icon itself. A coloured square standing in for
                         // artwork is the thing this screen was doing wrong.
                         AppIconTile(id: item.id, side: 46)
+                    } else if item.kind == .intro {
+                        // The wordmark that intro traces, in the state that
+                        // intro leaves it: outlined for Etched, filled for
+                        // Script. A recessed plate rather than a tint, so the
+                        // letters are the only thing with a colour.
+                        IntroMark(isScript: item.id == "intro.script")
                     }
                 }
                 .overlay(

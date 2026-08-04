@@ -402,10 +402,19 @@ companion, icons, themes, intros, sounds.
 - **Themes** recolour the accent only. **Intros** drive `introStyleRaw`; Etched is the free default
   and Script is bought. **Sounds** are a filename suffix with per-file fallback, so a half-populated
   pack degrades to the default tone rather than to silence.
-- **Every shop row opens `ShopPreviewOverlay` before it can be bought** — the real icon masked at
-  Apple's 22.37% corner, the theme on a real ring and button, the intro's own lettering, the sound
-  played out loud. Buying happens in that card. Tapping a swatch and being charged was the thing
-  this replaced.
+- **Every shop row shows the thing itself, not a swatch for it.** Single icons use `AppIconTile`;
+  a pack fans its members like a hand of cards (`PackFan`, rotated about `.bottom` so the bottom
+  edges stay gathered); an intro shows its wordmark in the state that intro leaves it — outlined
+  for Etched, filled for Script (`IntroMark`). Only themes and sounds are still a bare colour,
+  which is honest: a theme *is* its accent and a sound has nothing to look at.
+- **Every row opens `ShopPreviewOverlay` before it can be bought** — the real icon masked at
+  Apple's 22.37% corner, the theme on a real ring and button, the sound played out loud, and the
+  intro **actually playing** (`IntroReveal`, with a replay button). An intro is a motion, so a
+  still of one is half an answer, and it is the one item a student cannot otherwise see before
+  buying — the real thing runs once at launch. `IntroReveal` reuses the intro's own `WordGlyphs`,
+  `TracedGlyph` and `PenStroke` so it cannot drift, but drops the three blurred contour passes,
+  which read as mud at 92pt and cost frames on an iPhone 8. Buying happens in that card. Tapping
+  a swatch and being charged was the thing this replaced.
 - **Promo codes** in `PromoCode`: `GLASSUNLOCK` owns everything and tops up, `GLASSRESET` puts it
   all back. Not a security boundary — see §8.30.
 

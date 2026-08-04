@@ -150,6 +150,10 @@ struct ShopPreviewOverlay: View {
 struct ShopPreview: View {
     let item: AppCosmeticItem
 
+    /// Bumped to replay the intro reveal. A counter rather than a flag, because
+    /// the animation has to restart even when it is already sitting at the end.
+    @State private var introPlays = 0
+
     var body: some View {
         switch item.kind {
         case .icon:      iconPreview
@@ -216,14 +220,35 @@ struct ShopPreview: View {
 
     // MARK: Intros
 
-    /// The wordmark in the face that intro actually traces.
+    /// The reveal, playing.
+    ///
+    /// This used to be the wordmark sitting still with a sentence underneath
+    /// saying what it would do if you bought it. An intro is a motion, so a
+    /// still of one is half an answer — and it is the one thing in the shop a
+    /// student cannot see anywhere else, since the real thing plays once at
+    /// launch before they own it.
     private var introPreview: some View {
         let script = item.id == "intro.script"
-        return VStack(spacing: 8) {
-            Text(script ? "glass" : "Glass")
-                .font(.custom(script ? AppType.script : AppType.displayBold,
-                              size: script ? 52 : 34))
-                .foregroundStyle(Palette.textPrimary)
+        return VStack(spacing: 12) {
+            IntroReveal(isScript: script, playToken: introPlays)
+
+            Button {
+                Haptics.tap()
+                introPlays += 1
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.system(size: 15, weight: .semibold))
+                    Text("Play again")
+                        .font(.appBodyMedium)
+                }
+                .foregroundStyle(Palette.accent)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
+                .background(Capsule().fill(Palette.accentSoft))
+            }
+            .buttonStyle(PressableButtonStyle(haptic: false))
+
             Text(script ? "Written out, then flooded as glass."
                         : "Traced, then filled as glass.")
                 .font(.appCaption)
