@@ -33,20 +33,23 @@ STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
 # they are a ceiling on "obvious", not a demand that all four match to the byte.
 
 MAX_LEAD = 25          # chars the correct choice may lead the longest distractor by
-MAX_LONGEST_RATE = 0.40  # expected score of "always pick the longest", ties split
+MAX_RANK_DEVIATION = 0.15  # how far the length-rank spread may sit from flat
 MAX_MEAN_RATIO = 1.25    # mean correct length / mean distractor length, per cluster
 
-# MAX_LONGEST_RATE scores the strategy the way a student would actually run it,
-# over every question rather than only those with a single longest choice, and
-# splitting the credit when two tie. Measuring it conditionally instead reads
-# high — the bank scored 85.9% that way against a true 80.5% — because it
-# quietly drops the questions where the rule gives no answer.
+# The gate is the *rank* of the correct answer by length — longest, second,
+# third, shortest — which has to come out near 25% each. Gating on "how often
+# is the correct answer the longest" alone is not enough, and getting that
+# wrong is how this bank acquired its second tell while the first was being
+# fixed: pushing one distractor past the correct answer drops the longest rate
+# to 8% and parks the answer at second-longest 61% of the time. "Never the
+# longest" is worth a free elimination, and "always in the middle" narrows four
+# options to two, which is worse than the tell it replaced.
 #
-# It will not reach 25%. Terminology questions have an irreducible floor: the
-# four cells of a BCG matrix are "cash cow", "star", "question mark" and "dog",
-# and padding those to equal length would wreck the question to beat a metric.
-# The target is that length stops being worth betting on, not that every choice
-# matches to the byte.
+# The spread will not come out perfectly flat. Terminology questions have an
+# irreducible floor: the four cells of a BCG matrix are "cash cow", "star",
+# "question mark" and "dog", and padding those to equal length would wreck the
+# question to beat a metric. The target is that length stops being worth
+# betting on in any direction, not that every choice matches to the byte.
 
 # Set once every cluster clears the bar. Until then the report prints and the
 # thresholds do not fail the run, so the bank can be brought up to standard one
@@ -130,28 +133,38 @@ def main():
     print("\nall structural checks passed")
 
 
-def longest_pick_score(rows):
-    """Expected accuracy of 'always pick the longest choice'.
+def rank_spread(rows):
+    """Share of questions where the correct answer is the Nth longest choice.
 
-    Scored over every question, not only those with a single longest choice,
-    and splitting the credit across a tie the way guessing between them would.
+    Returns four figures, longest first. A tie splits its credit across the
+    ranks it spans, so four equal-length choices contribute 25% to each rank
+    rather than pretending to an order the student cannot see. Flat is 25%
+    across the board; each figure is also the expected score of the strategy
+    "always pick the Nth longest".
     """
     if not rows:
-        return 0.0
-    expected = 0.0
+        return [0.0] * 4
+    spread = [0.0] * 4
     for _, lens, correct in rows:
-        top = max(lens)
-        tied = [i for i, L in enumerate(lens) if L == top]
-        if correct in tied:
-            expected += 1.0 / len(tied)
-    return expected / len(rows)
+        longer = sum(1 for L in lens if L > lens[correct])
+        tied = sum(1 for L in lens if L == lens[correct])
+        for rank in range(longer, longer + tied):
+            spread[rank] += 1.0 / tied
+    return [s / len(rows) for s in spread]
+
+
+def worst_deviation(spread):
+    """How far the most lopsided rank sits from an even 25%."""
+    return max(abs(s - 0.25) for s in spread)
 
 
 def report_shape(shapes):
     """Prints the choice-shape report and returns the list of violations."""
     problems = []
-    print("\nchoice shape — can a student score without reading?")
-    print(f"  {'cluster':<20} {'longest wins':>13} {'len ratio':>10} {'worst lead':>11}")
+    print("\nchoice shape — can a student score without reading the question?")
+    print("  share of questions where the correct answer is the Nth longest choice")
+    print(f"  {'cluster':<18} {'longest':>8} {'2nd':>7} {'3rd':>7} {'shortest':>9}"
+          f" {'off flat':>9} {'ratio':>7} {'lead':>6}")
 
     all_rows = [r for rows in shapes.values() for r in rows]
     for name, rows in sorted(shapes.items()):
@@ -159,7 +172,8 @@ def report_shape(shapes):
             continue
         cluster = name[len("SeedQuestions+"):-len(".swift")]
 
-        rate = longest_pick_score(rows)
+        spread = rank_spread(rows)
+        deviation = worst_deviation(spread)
 
         cor = [lens[correct] for _, lens, correct in rows]
         wrong = [L for _, lens, correct in rows
@@ -171,16 +185,18 @@ def report_shape(shapes):
         worst, worst_key = max(leads)
 
         flag = ""
-        if rate > MAX_LONGEST_RATE:
-            flag += " !rate"
-            problems.append(f"{cluster}: 'pick the longest' wins {rate:.1%}, "
-                            f"limit {MAX_LONGEST_RATE:.0%}")
+        if deviation > MAX_RANK_DEVIATION:
+            flag += " !spread"
+            worst_rank = max(range(4), key=lambda r: abs(spread[r] - 0.25))
+            label = ["longest", "2nd longest", "3rd longest", "shortest"][worst_rank]
+            problems.append(f"{cluster}: correct answer is the {label} choice "
+                            f"{spread[worst_rank]:.1%} of the time, should be near 25%")
         if ratio > MAX_MEAN_RATIO:
             flag += " !ratio"
             problems.append(f"{cluster}: correct choice averages {ratio:.2f}x the "
                             f"distractors, limit {MAX_MEAN_RATIO:.2f}x")
-        print(f"  {cluster:<20} {rate:12.1%} {ratio:9.2f}x "
-              f"{worst:+8d} {worst_key}{flag}")
+        print(f"  {cluster:<18} " + " ".join(f"{s:7.1%}" for s in spread)
+              + f" {deviation:8.1%} {ratio:6.2f}x {worst:+5d}{flag}")
 
         for lead, key in leads:
             if lead > MAX_LEAD:
@@ -190,8 +206,10 @@ def report_shape(shapes):
     if all_rows:
         over = sum(1 for _, lens, correct in all_rows
                    if lens[correct] - max(L for i, L in enumerate(lens) if i != correct) > MAX_LEAD)
-        print(f"\n  whole bank: 'always pick the longest' scores "
-              f"{longest_pick_score(all_rows):.1%}  (chance 25.0%)")
+        spread = rank_spread(all_rows)
+        print(f"\n  whole bank: " + "  ".join(
+            f"{label} {s:.1%}" for label, s in
+            zip(["longest", "2nd", "3rd", "shortest"], spread)) + "   (flat = 25.0%)")
         print(f"  questions leading by more than {MAX_LEAD} chars: {over}")
         if not ENFORCE_SHAPE:
             print("  (reporting only — ENFORCE_SHAPE is off while the bank is "

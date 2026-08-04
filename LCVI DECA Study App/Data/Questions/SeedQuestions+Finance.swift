@@ -214,7 +214,7 @@ extension SeedQuestions {
 
         q("fin-17", .finance, .medium,
           "A high debt-to-equity ratio tells an investor that the company",
-          "relies heavily on borrowed money relative to owner funding.", "holds a large amount of inventory.", "collects its receivables quickly.", "has high gross margins.",
+          "leans on borrowed money more than owner funding.", "is holding a large amount of unsold inventory.", "collects its receivables unusually quickly.", "earns high gross margins on what it sells.",
           correct: 0,
           explanation: "Debt-to-equity compares what creditors have supplied against what owners have. A high figure means the business is leveraged, which raises both potential returns and the risk of failing to meet fixed payments.",
           why: ["Correct. The ratio compares creditor funding to owner funding, so a high figure means heavy borrowing.",
@@ -276,7 +276,7 @@ extension SeedQuestions {
 
         q("fin-22", .finance, .medium,
           "The main difference between simple and compound interest is that compound interest",
-          "is always charged by banks rather than paid.", "is calculated on principal plus previously earned interest.", "applies only to loans longer than five years.", "is set by the government.",
+          "is always charged by banks rather than paid out.", "is calculated on principal plus interest earned.", "applies only to loans longer than five years.", "is set centrally by the federal government.",
           correct: 1,
           explanation: "Simple interest is always calculated on the original principal. Compound interest is calculated on the principal plus interest already accumulated, so the balance grows faster the longer it is left.",
           why: ["Compound interest is both charged on loans and paid on savings. The direction is not what distinguishes it.",
@@ -288,7 +288,7 @@ extension SeedQuestions {
 
         q("fin-23", .finance, .medium,
           "A business chooses to finance expansion by issuing shares rather than taking a loan. A key trade-off is that",
-          "shareholders must be repaid on a fixed schedule.", "ownership and future profits are shared with new investors.", "the business loses its limited liability.", "interest expense will rise sharply.",
+          "shareholders must be repaid on a fixed schedule.", "ownership and future profits are shared out.", "the business gives up its limited liability.", "interest expense will rise sharply from here.",
           correct: 1,
           explanation: "Equity financing requires no repayment schedule and no interest, but it permanently divides ownership, control and future profits among more people. Debt keeps ownership intact at the cost of fixed obligations.",
           why: ["Shareholders have no repayment schedule. That is a feature of debt, not equity.",
@@ -300,7 +300,7 @@ extension SeedQuestions {
 
         q("fin-24", .finance, .medium,
           "A supplier offers terms of \"2/10, net 30.\" What does this mean?",
-          "Pay 2% extra if paying after 10 days; the full amount is due in 30 days.", "Take a 2% discount if paying within 10 days; otherwise the full amount is due in 30 days.", "Pay 2% of the invoice every 10 days for 30 days.", "The invoice is 30 days overdue and carries a 2% penalty.",
+          "Pay 2% extra after 10 days; the full sum is due in 30.", "Take 2% off within 10 days; otherwise pay in full in 30.", "Pay 2% of the invoice every 10 days for 30 days.", "The invoice is 30 days overdue and carries a 2% penalty.",
           correct: 1,
           explanation: "\"2/10, net 30\" is a cash discount: 2% off if the buyer pays within 10 days, with the full balance due by day 30. Suppliers offer it to accelerate collection of their receivables.",
           why: ["The 2% is a discount for paying early, not a surcharge for paying late.",
@@ -326,7 +326,7 @@ extension SeedQuestions {
 
         q("fin-26", .finance, .easy,
           "The main purpose of a budget is to",
-          "guarantee the business makes a profit.", "plan expected income and spending so performance can be measured against it.", "replace the need for financial statements.", "satisfy a legal filing requirement.",
+          "guarantee that the business will make a profit.", "plan income and spending so results can be judged.", "replace the need for any financial statements.", "satisfy a legal filing requirement each year.",
           correct: 1,
           explanation: "A budget is a financial plan for a future period. Its value comes from the comparison afterwards: actual results measured against the plan show where the business is off course while there is still time to act.",
           why: ["No plan can guarantee profit. A budget makes shortfalls visible sooner, which is a different thing.",
@@ -350,7 +350,7 @@ extension SeedQuestions {
 
         q("fin-28", .finance, .medium,
           "Why does a seasonal business prepare a cash budget in addition to a profit forecast?",
-          "Profit and cash arrive at different times, so a profitable month can still run short of cash.", "Cash budgets are required by lenders in every case.", "A profit forecast cannot be prepared for seasonal businesses.", "Cash budgets eliminate the need to hold inventory.",
+          "Profit and cash arrive at different times.", "Lenders require a cash budget in every case.", "Seasonal businesses cannot forecast profit.", "A cash budget removes the need for inventory.",
           correct: 0,
           explanation: "A seasonal business buys inventory and pays wages months before the revenue arrives. The cash budget maps the timing of receipts and payments so the shortfall is arranged for in advance rather than discovered.",
           why: ["Correct. Stock and wages are paid months before the season's revenue arrives, so timing matters as much as profitability.",
@@ -362,7 +362,7 @@ extension SeedQuestions {
 
         q("fin-29", .finance, .medium,
           "A small store cannot afford to hire a second person to separate cash duties. Which compensating control is most practical?",
-          "Stop accepting cash entirely.", "Have the owner review daily cash reports and bank deposits personally.", "Ask employees to sign a promise not to steal.", "Count the cash once a year.",
+          "Stop accepting cash payments entirely.", "Have the owner check daily cash and deposits.", "Ask employees to sign a promise not to steal.", "Count the cash drawer once a year.",
           correct: 1,
           explanation: "When staffing makes full separation of duties impossible, owner oversight is the standard compensating control: an independent review of daily records and deposits reintroduces a second pair of eyes.",
           why: ["Refusing cash may lose sales and is a drastic response to a control problem that oversight can address.",
@@ -436,7 +436,7 @@ extension SeedQuestions {
 
         q("fin-35", .finance, .medium,
           "Why is depreciation added back when converting net income to cash from operations?",
-          "It was never actually recorded.", "It reduced net income but no cash left the business.", "It represents cash paid to suppliers.", "It is a form of revenue.",
+          "It was never actually recorded in the books.", "It cut net income but no cash left.", "It represents cash already paid to suppliers.", "It is a form of revenue rather than a cost.",
           correct: 1,
           explanation: "Depreciation is an accounting allocation of a cost paid in an earlier period. It lowers reported profit without any cash leaving in the current period, so it is added back.",
           why: ["It is recorded — that is precisely why net income was reduced.",
@@ -460,7 +460,7 @@ extension SeedQuestions {
 
         q("fin-37", .finance, .medium,
           "The matching principle requires that",
-          "assets always match liabilities.", "expenses are recorded in the same period as the revenues they helped generate.", "cash receipts match cash payments each month.", "every account has an equal and opposite account.",
+          "assets must always match liabilities exactly.", "expenses sit in the period of their revenues.", "cash receipts match cash payments each month.", "every account has an equal and opposite one.",
           correct: 1,
           explanation: "Matching pairs an expense with the revenue it produced, so each period's profit reflects the true cost of what was earned. It is why depreciation is spread and why unsold inventory is not yet an expense.",
           why: ["The accounting equation balances assets against liabilities plus equity, which is a different rule.",
@@ -510,7 +510,7 @@ extension SeedQuestions {
 
         q("fin-41", .finance, .medium,
           "Days sales outstanding measures",
-          "how long inventory sits before selling.", "the average number of days it takes to collect a receivable.", "how many days of cash the business holds.", "the useful life of an asset.",
+          "how long inventory sits before it is sold.", "the average days taken to collect a debt.", "how many days of cash the business holds.", "the useful life remaining in a fixed asset.",
           correct: 1,
           explanation: "Days sales outstanding converts receivables into a collection period. A rising figure means customers are paying more slowly, which strains cash even while sales look healthy.",
           why: ["Inventory holding period is days inventory outstanding, a different measure.",
@@ -534,7 +534,7 @@ extension SeedQuestions {
 
         q("fin-43", .finance, .medium,
           "A current ratio far above the industry average may indicate that a business",
-          "is about to become insolvent.", "is holding idle cash or slow inventory that could be put to better use.", "has no current liabilities.", "is highly leveraged.",
+          "is on the verge of becoming insolvent.", "holds idle cash or slow-moving inventory.", "has no current liabilities at all.", "is very highly leveraged indeed.",
           correct: 1,
           explanation: "Liquidity that is too high has a cost. Cash sitting idle and inventory that is not moving both tie up capital that could be invested, so an unusually high ratio deserves investigation rather than praise.",
           why: ["A high current ratio indicates the opposite of an imminent liquidity failure.",
@@ -546,7 +546,7 @@ extension SeedQuestions {
 
         q("fin-44", .finance, .medium,
           "Trend analysis of ratios over several years is valuable mainly because it",
-          "removes the need for an income statement.", "reveals the direction a business is moving, which a single year cannot.", "guarantees future performance.", "eliminates the effect of inflation.",
+          "it removes the need for an income statement.", "it shows direction, which one year cannot.", "it guarantees future performance will hold.", "it eliminates the effect of inflation.",
           correct: 1,
           explanation: "One year's ratio is a snapshot. A three- or five-year trend shows whether margins are eroding or liquidity tightening, which is what actually informs a decision.",
           why: ["Ratios are calculated from the financial statements, so the statements remain essential.",
@@ -572,7 +572,7 @@ extension SeedQuestions {
 
         q("fin-46", .finance, .medium,
           "The Rule of 72 is used to estimate",
-          "the break-even point.", "how long an investment takes to double at a given rate.", "the current ratio.", "annual depreciation.",
+          "the break-even point for a product line.", "how long an investment takes to double.", "the current ratio from the balance sheet.", "annual depreciation on a fixed asset.",
           correct: 1,
           explanation: "Dividing 72 by the annual percentage rate gives an approximate doubling time. At 9%, an investment doubles in roughly eight years.",
           why: ["Break-even uses fixed costs divided by contribution margin.",
@@ -620,7 +620,7 @@ extension SeedQuestions {
 
         q("fin-50", .finance, .medium,
           "Why do lenders charge a higher interest rate on an unsecured loan than a secured one?",
-          "Unsecured loans are always larger.", "There is no collateral to recover, so the lender's risk of loss is greater.", "The law requires a higher rate.", "Unsecured loans have longer terms.",
+          "Unsecured loans are always larger in value.", "There is no collateral to recover on default.", "The law requires a higher rate be charged.", "Unsecured loans run for much longer terms.",
           correct: 1,
           explanation: "Interest compensates for risk. With no asset pledged, a default leaves the lender with only a claim, so the rate rises to cover the greater expected loss.",
           why: ["Unsecured loans are often smaller, not larger.",
@@ -646,7 +646,7 @@ extension SeedQuestions {
 
         q("fin-52", .finance, .medium,
           "A key advantage of debt financing over equity financing is that",
-          "no repayment is ever required.", "ownership is not diluted and interest is tax-deductible.", "it carries no risk.", "lenders share in the profits.",
+          "no repayment is ever required of the business.", "ownership holds and interest is deductible.", "it carries no risk to the business at all.", "lenders share in the profits that result.",
           correct: 1,
           explanation: "Debt keeps ownership intact and interest is generally deductible, which lowers the effective cost. The trade-off is a fixed obligation that must be met whether or not the business is profitable.",
           why: ["Debt must be repaid on schedule; that obligation is its defining feature.",
@@ -670,7 +670,7 @@ extension SeedQuestions {
 
         q("fin-54", .finance, .medium,
           "Leasing equipment rather than buying it is most attractive when",
-          "the equipment will be used unchanged for twenty years.", "the technology changes quickly and the business wants to avoid obsolescence.", "the business has unlimited cash.", "interest rates are irrelevant.",
+          "the equipment will run unchanged for twenty years.", "technology moves fast and obsolescence is a risk.", "the business has effectively unlimited cash.", "interest rates are irrelevant to the decision.",
           correct: 1,
           explanation: "Leasing shifts obsolescence risk to the lessor and preserves cash. It usually costs more over the full term, so it suits fast-changing assets more than long-lived stable ones.",
           why: ["An asset used unchanged for twenty years is usually cheaper to own outright.",
@@ -732,7 +732,7 @@ extension SeedQuestions {
 
         q("fin-59", .finance, .medium,
           "A master budget is best described as",
-          "the marketing department's advertising plan.", "the consolidated set of budgets covering the whole organisation for a period.", "a record of last year's actual spending.", "a list of the company's assets.",
+          "the marketing department's advertising plan.", "the consolidated budgets for the whole firm.", "a record of last year's actual spending.", "a list of the company's assets and their value.",
           correct: 1,
           explanation: "The master budget pulls sales, production, expense, cash and capital budgets into one coordinated financial plan, ending in projected statements for the period.",
           why: ["An advertising plan is one small component of one department's budget.",
@@ -756,7 +756,7 @@ extension SeedQuestions {
 
         q("fin-61", .finance, .medium,
           "A flexible budget is useful because it",
-          "never changes once approved.", "adjusts budgeted costs to the activity level actually achieved.", "eliminates all variances.", "applies only to fixed costs.",
+          "it never changes once it has been approved.", "it adjusts costs to the activity achieved.", "it eliminates all variances from the outset.", "it applies only to the fixed cost base.",
           correct: 1,
           explanation: "Comparing actual costs at 12,000 units against a budget built for 10,000 units is misleading. A flexible budget restates the plan at actual volume so variances reflect efficiency rather than volume.",
           why: ["A budget that never changes is a static budget, the alternative.",
@@ -780,7 +780,7 @@ extension SeedQuestions {
 
         q("fin-63", .finance, .medium,
           "A capital budget is concerned primarily with",
-          "day-to-day operating expenses.", "major long-term asset purchases such as buildings and equipment.", "weekly payroll.", "office supplies.",
+          "the day-to-day operating expenses of the firm.", "major long-term purchases such as buildings.", "the weekly payroll run and its deductions.", "office supplies and other small consumables.",
           correct: 1,
           explanation: "Capital budgeting evaluates large, long-lived investments whose benefits span years, using tools such as payback period and net present value to compare competing proposals.",
           why: ["Day-to-day expenses belong in the operating budget.",
@@ -804,7 +804,7 @@ extension SeedQuestions {
 
         q("fin-65", .finance, .medium,
           "Involving department managers in setting their own budgets tends to",
-          "guarantee lower costs.", "improve commitment to the targets, though it risks managers building in slack.", "remove the need for review.", "make variance analysis impossible.",
+          "guarantee that costs will come in lower.", "improve commitment, but invite built-in slack.", "remove the need for any budget review.", "make variance analysis impossible to perform.",
           correct: 1,
           explanation: "Participative budgeting raises ownership and uses the knowledge of people closest to the work. The known risk is budgetary slack — targets set deliberately easy — which is why senior review still matters.",
           why: ["Participation improves realism and commitment but guarantees nothing about cost levels.",
@@ -854,7 +854,7 @@ extension SeedQuestions {
 
         q("fin-69", .finance, .medium,
           "A business that depends on a single supplier for a critical component faces",
-          "no meaningful risk if the supplier is reliable.", "concentration risk, which can be reduced by qualifying a second supplier.", "a guaranteed cost advantage.", "an internal control weakness only.",
+          "no meaningful risk, provided the supplier is reliable.", "concentration risk, easing with a second supplier.", "a guaranteed cost advantage on that component.", "an internal control weakness and nothing more.",
           correct: 1,
           explanation: "Concentration risk means one failure point can halt operations. A reliable supplier can still suffer a fire, a strike or a bankruptcy, so a qualified alternative is the standard mitigation.",
           why: ["Reliability today does not protect against a fire, strike or insolvency tomorrow.",
@@ -866,7 +866,7 @@ extension SeedQuestions {
 
         q("fin-70", .finance, .medium,
           "Business interruption insurance is designed to cover",
-          "the cost of rebuilding a damaged property.", "income lost while operations are suspended after an insured event.", "employee wages in normal operations.", "the cost of raw materials.",
+          "the cost of rebuilding a damaged property.", "income lost while operations are suspended.", "employee wages during normal operations.", "the cost of replacing spoiled raw materials.",
           correct: 1,
           explanation: "Property insurance rebuilds the building; business interruption cover replaces the profit that would have been earned during the closure and helps meet continuing fixed costs.",
           why: ["Rebuilding is covered by property insurance.",
@@ -890,7 +890,7 @@ extension SeedQuestions {
 
         q("fin-72", .finance, .medium,
           "In the risk-management process, risks should be prioritised by",
-          "alphabetical order.", "a combination of likelihood and potential impact.", "how recently they were discovered.", "which department reported them.",
+          "the alphabetical order of their names.", "likelihood combined with potential impact.", "how recently each one was discovered.", "which department first reported them.",
           correct: 1,
           explanation: "Ranking by likelihood against impact directs attention to what could actually hurt the business. A catastrophic but near-impossible event and a trivial weekly nuisance both rank low; the middle is where the work is.",
           why: ["Alphabetical order has no relationship to importance.",
@@ -928,7 +928,7 @@ extension SeedQuestions {
 
         q("fin-75", .finance, .medium,
           "Extending credit to customers increases sales but also",
-          "eliminates the need for a cash budget.", "ties up cash in receivables and creates the risk of bad debts.", "reduces the cost of goods sold.", "guarantees repeat business.",
+          "removes the need to keep a cash budget.", "ties up cash and risks bad debts.", "reduces the cost of the goods sold.", "guarantees the customer will come back.",
           correct: 1,
           explanation: "Credit sales are revenue before they are cash. The business funds the gap in the meantime and absorbs the losses from customers who never pay, which is the cost of the extra sales.",
           why: ["Credit sales make a cash budget more necessary, not less.",
@@ -952,7 +952,7 @@ extension SeedQuestions {
 
         q("fin-77", .finance, .medium,
           "Stretching payables — paying suppliers as late as possible — carries the risk that",
-          "the business will be charged sales tax twice.", "suppliers may tighten terms, withhold supply or add late fees.", "receivables will automatically rise.", "the business loses limited liability.",
+          "the business will be charged sales tax twice.", "suppliers tighten terms or add late fees.", "receivables will automatically rise as well.", "the business loses its limited liability.",
           correct: 1,
           explanation: "Delaying payment conserves cash in the short run, but suppliers respond. Losing favourable terms, priority or the relationship itself usually costs more than the cash gained.",
           why: ["Payment timing has no effect on sales tax.",
@@ -976,7 +976,7 @@ extension SeedQuestions {
 
         q("fin-79", .finance, .medium,
           "Before extending significant credit to a new commercial customer, the most prudent step is to",
-          "accept the order and hope for the best.", "check credit references and review the customer's payment history.", "require payment in a foreign currency.", "raise the price to cover any default.",
+          "accept the order and hope for the best.", "check references and past payment history.", "require payment in a foreign currency.", "raise the price to cover any default.",
           correct: 1,
           explanation: "Credit assessment before the sale is far cheaper than collection afterwards. References, credit reports and payment history are the standard checks before terms are granted.",
           why: ["Extending credit without assessment is how bad debts are created.",
@@ -990,7 +990,7 @@ extension SeedQuestions {
 
         q("fin-80", .finance, .easy,
           "The main difference between a credit union and a chartered bank is that a credit union is",
-          "owned by its members, who are also its customers.", "owned by the federal government.", "prohibited from offering loans.", "available only to businesses.",
+          "owned by its members, who are its customers.", "owned outright by the federal government.", "prohibited from offering any kind of loan.", "available only to incorporated businesses.",
           correct: 0,
           explanation: "Credit unions are member-owned co-operatives, so surpluses return to members through better rates and lower fees. Banks are owned by shareholders who expect a return on their investment.",
           why: ["Correct. Members are both owners and customers, which is what distinguishes the model.",
@@ -1002,7 +1002,7 @@ extension SeedQuestions {
 
         q("fin-81", .finance, .medium,
           "A merchant account provided by a financial institution allows a business to",
-          "borrow at zero interest indefinitely.", "accept debit and credit card payments from customers.", "avoid paying income tax.", "issue its own currency.",
+          "borrow at zero interest for as long as it likes.", "accept debit and credit cards from customers.", "avoid paying income tax on its earnings.", "issue a currency of its own to customers.",
           correct: 1,
           explanation: "A merchant account lets a business accept card payments, with the institution processing the transaction and depositing the funds less a processing fee.",
           why: ["No account provides indefinite interest-free borrowing.",
@@ -1026,7 +1026,7 @@ extension SeedQuestions {
 
         q("fin-83", .finance, .medium,
           "The Canada Deposit Insurance Corporation protects",
-          "the value of shares held in a brokerage account.", "eligible deposits at member institutions up to a set limit.", "all business losses.", "the value of real estate.",
+          "the value of shares held in a brokerage account.", "eligible deposits, up to a set limit.", "all losses a business might suffer.", "the market value of commercial real estate.",
           correct: 1,
           explanation: "CDIC insures eligible deposits at member institutions up to a legislated limit per category, so depositors do not lose their savings if a member institution fails. Investments are not covered.",
           why: ["Shares and other market investments are not deposits and are not covered.",
@@ -1038,7 +1038,7 @@ extension SeedQuestions {
 
         q("fin-84", .finance, .medium,
           "An overdraft facility on a business chequing account allows the business to",
-          "withdraw more than the account balance up to an agreed limit, for a fee.", "avoid ever paying interest.", "convert debt into equity.", "skip bank reconciliations.",
+          "withdraw past its balance, up to a limit, for a fee.", "avoid ever paying interest on its borrowings.", "convert its outstanding debt into equity.", "skip the monthly bank reconciliation.",
           correct: 0,
           explanation: "An overdraft is short-term borrowing attached to the account. It covers brief timing gaps between payments and receipts, and it is expensive if used as ongoing financing.",
           why: ["Correct. It permits withdrawal beyond the balance up to a limit, with interest and fees.",
@@ -1050,7 +1050,7 @@ extension SeedQuestions {
 
         q("fin-85", .finance, .medium,
           "A business chooses a financial institution primarily on the basis of",
-          "the colour of its branding.", "the fit between its services, fees and the business's actual needs.", "the number of television advertisements it runs.", "the age of the institution.",
+          "the colour and style of its branding.", "the fit between its services, fees and needs.", "the number of television advertisements it runs.", "the age and history of the institution.",
           correct: 1,
           explanation: "The right institution is the one whose lending appetite, transaction fees, digital tools and advisory support match how the business actually operates. Fees on high transaction volumes add up quickly.",
           why: ["Branding says nothing about the terms a business will receive.",
@@ -1062,7 +1062,7 @@ extension SeedQuestions {
 
         q("fin-86", .finance, .medium,
           "Which of these is an investment dealer's role rather than a retail bank's?",
-          "Accepting chequing deposits", "Underwriting and distributing a new share issue", "Issuing debit cards", "Providing an overdraft",
+          "Accepting deposits into chequing accounts", "Underwriting a new share issue", "Issuing debit cards to customers", "Providing an overdraft facility",
           correct: 1,
           explanation: "Investment dealers help companies raise capital in the markets — underwriting share and bond issues and distributing them to investors. Retail banks provide deposit and payment services.",
           why: ["Deposit accounts are retail banking.",
@@ -1124,7 +1124,7 @@ extension SeedQuestions {
 
         q("fin-91", .finance, .medium,
           "The margin of safety tells a business",
-          "how much sales can fall before it reaches break-even.", "how much cash is in the bank.", "the maximum price it can charge.", "how long inventory will last.",
+          "how far sales can fall before break-even.", "how much cash is sitting in the bank.", "the maximum price it is able to charge.", "how long the current inventory will last.",
           correct: 0,
           explanation: "Margin of safety is the gap between current sales and the break-even point. A thin margin means a small downturn pushes the business into loss, which is why it is watched alongside break-even itself.",
           why: ["Correct. It measures how far sales can fall before the business stops covering its costs.",
@@ -1136,7 +1136,7 @@ extension SeedQuestions {
 
         q("fin-92", .finance, .medium,
           "A key limitation of break-even analysis is that it assumes",
-          "fixed costs change with every unit.", "selling price and variable cost per unit stay constant at all volumes.", "the business has no competitors.", "all sales are made on credit.",
+          "fixed costs change with every unit made.", "price and variable cost hold at all volumes.", "the business faces no competitors at all.", "all of its sales are made on credit terms.",
           correct: 1,
           explanation: "Real prices fall with volume discounts and variable costs shift with scale and input prices. Break-even is a useful planning tool precisely because it is simple, but the simplification is also its weakness.",
           why: ["Fixed costs staying constant within a relevant range is an assumption, but the stated version is backwards.",
@@ -1162,7 +1162,7 @@ extension SeedQuestions {
 
         q("fin-94", .finance, .medium,
           "The primary purpose of a bank reconciliation is to",
-          "increase the bank balance.", "explain the difference between the company's cash record and the bank statement.", "calculate income tax.", "set the following year's budget.",
+          "increase the balance held at the bank.", "explain the gap between the books and the bank.", "calculate the income tax owed for the year.", "set the budget for the following year.",
           correct: 1,
           explanation: "Outstanding cheques, deposits in transit, bank fees and errors all cause the two records to differ. Reconciling them monthly is how mistakes and unauthorised transactions are caught.",
           why: ["Reconciliation explains balances; it does not change how much money exists.",
@@ -1186,7 +1186,7 @@ extension SeedQuestions {
 
         q("fin-96", .finance, .medium,
           "Mandatory vacation policies serve as an internal control because",
-          "employees work harder after a holiday.", "a scheme requiring constant concealment tends to surface while the employee is away.", "vacations reduce payroll cost.", "they are required by accounting standards.",
+          "employees work harder after a holiday.", "a scheme needing constant concealment surfaces.", "vacations reduce the overall payroll cost.", "accounting standards require them to exist.",
           correct: 1,
           explanation: "Many frauds need continuous attention to stay hidden. Requiring an employee to step away, with someone else covering the duties, is a long-standing and cheap detective control.",
           why: ["Rest may improve performance, but that is not why the policy is a control.",
@@ -1210,7 +1210,7 @@ extension SeedQuestions {
 
         q("fin-98", .finance, .medium,
           "An audit trail is valuable because it",
-          "guarantees no errors will occur.", "lets a transaction be traced from source document through to the financial statements.", "removes the need for approvals.", "replaces the accounting system.",
+          "it guarantees that no errors will occur.", "a transaction can be traced end to end.", "it removes the need for any approvals.", "it replaces the accounting system itself.",
           correct: 1,
           explanation: "A complete trail links every entry back to its supporting document. Without it, an irregularity can be seen in the totals but never explained or attributed.",
           why: ["A trail helps find errors; it does not prevent them.",
@@ -1222,7 +1222,7 @@ extension SeedQuestions {
 
         q("fin-99", .finance, .medium,
           "The most common reason small businesses suffer employee fraud is that",
-          "employees are inherently dishonest.", "limited staff makes full separation of duties difficult and oversight is often informal.", "small businesses handle no cash.", "fraud is legal below a certain amount.",
+          "employees are inherently dishonest people.", "thin staffing makes separating duties hard.", "small businesses handle no cash at all.", "fraud is legal below a certain amount.",
           correct: 1,
           explanation: "One person often handles ordering, receiving, recording and payment because there is nobody else. That concentration, combined with high trust and little review, is what creates the opportunity.",
           why: ["Fraud is driven by opportunity and pressure far more than by character.",
@@ -1234,7 +1234,7 @@ extension SeedQuestions {
 
         q("fin-100", .finance, .hard,
           "A company discovers that its purchasing manager approves orders, receives goods and approves invoices for payment. The most serious concern is that",
-          "the manager will be overworked.", "one person controls the entire cycle, so fictitious purchases could be created and paid without detection.", "purchase orders will be filed incorrectly.", "suppliers will be paid too quickly.",
+          "the manager will end up badly overworked.", "one person controls the whole cycle.", "purchase orders will be filed incorrectly.", "suppliers will end up being paid too quickly.",
           correct: 1,
           explanation: "Authorisation, custody and record-keeping are concentrated in one role. That person could set up a supplier that does not exist, approve its invoices and release payment, with nothing in the process to catch it.",
           why: ["Workload is a management issue, not the control failure here.",

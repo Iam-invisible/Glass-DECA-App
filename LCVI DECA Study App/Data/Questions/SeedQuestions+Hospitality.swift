@@ -30,7 +30,7 @@ extension SeedQuestions {
 
         q("ht-2", .hospitality, .medium,
           "Why do hotels deliberately accept more reservations than they have rooms?",
-          "To increase the average daily rate", "To offset expected cancellations and no-shows", "Because provincial law requires it", "To reduce housekeeping costs",
+          "To lift the average daily rate achieved", "To offset cancellations and no-shows", "Because provincial law requires it", "To hold down housekeeping costs",
           correct: 1,
           explanation: "Controlled overbooking compensates for predictable cancellations and no-shows so the hotel does not run with unsold, unrecoverable inventory. Hotels manage the risk with walk policies that relocate and compensate displaced guests.",
           why: ["Overbooking fills rooms that would otherwise go empty; it does not raise the rate charged.",
@@ -42,7 +42,7 @@ extension SeedQuestions {
 
         q("ht-3", .hospitality, .medium,
           "The night audit in a lodging property is primarily responsible for",
-          "cleaning guest rooms after late checkout.", "balancing the day's guest accounts and posting room charges.", "negotiating group rates with tour operators.", "inspecting kitchen sanitation.",
+          "cleaning guest rooms after a late checkout.", "balancing guest accounts and posting charges.", "negotiating group rates with tour operators.", "inspecting sanitation in the main kitchen.",
           correct: 1,
           explanation: "The night audit closes the business day: it verifies postings, reconciles guest folios against departmental revenue, posts room and tax charges, and produces reports management uses the next morning.",
           why: ["Housekeeping cleans rooms; the night audit is an accounting function.",
@@ -54,7 +54,7 @@ extension SeedQuestions {
 
         q("ht-4", .hospitality, .medium,
           "A guest complains loudly that their room was not ready at check-in. What should the front-desk agent do first?",
-          "Explain the hotel's check-in policy in detail", "Listen fully and acknowledge the guest's frustration", "Offer a free night immediately", "Direct the guest to the manager",
+          "Explain the hotel's standard check-in policy in detail", "Listen fully and acknowledge the guest's frustration", "Offer a free night immediately", "Direct the guest to the manager",
           correct: 1,
           explanation: "Effective service recovery starts with listening and empathizing so the guest feels heard. Jumping to policy sounds defensive, and leading with a large giveaway skips diagnosis. Apologize, then solve, then follow up.",
           why: ["Leading with policy sounds defensive and tells the guest their frustration does not matter.",
@@ -114,7 +114,7 @@ extension SeedQuestions {
 
         q("ht-9", .hospitality, .medium,
           "When planning a large outdoor conference, why does an event planner prepare a contingency plan?",
-          "To reduce the number of attendees", "To lower the venue deposit", "To manage risks such as weather, vendor failure or power loss", "To satisfy accounting standards",
+          "To reduce the number of attendees expected", "To lower the deposit payable on the venue", "To manage weather, vendor or power failure", "To satisfy the relevant accounting standards",
           correct: 2,
           explanation: "Contingency planning identifies what could disrupt the event and pre-arranges backup venues, vendors, equipment and communication plans. It protects attendee experience and limits financial exposure when something goes wrong.",
           why: ["Attendance targets are a marketing decision, unrelated to contingency planning.",
@@ -126,7 +126,7 @@ extension SeedQuestions {
 
         q("ht-10", .hospitality, .easy,
           "A hotel offers guests the option to skip daily linen changes. This programme primarily supports",
-          "revenue management goals.", "sustainability and cost-reduction goals.", "front-office training goals.", "food-safety compliance.",
+          "revenue management goals.", "sustainability and cost goals.", "front-office training goals.", "food-safety and compliance goals.",
           correct: 1,
           explanation: "Opt-out linen programmes reduce water, energy, detergent and labour, which lowers operating costs while supporting environmental commitments. Many properties also promote it as part of their guest-facing sustainability story.",
           why: ["Revenue management concerns pricing and inventory, not housekeeping consumption.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("ht-11", .hospitality, .medium,
           "Leakage in tourism economics refers to",
-          "guests leaving a hotel before checkout.", "visitor spending that leaves the local economy, for example to foreign-owned operators.", "water lost from resort pools.", "the gap between forecast and actual occupancy.",
+          "guests leaving a hotel before checkout time.", "visitor spending that leaves the local economy.", "water lost from the resort's pools each day.", "the gap between forecast and actual occupancy.",
           correct: 1,
           explanation: "Leakage is the share of tourist spending that does not stay in the destination — profits repatriated by foreign owners, imported food and drink, non-local staff. High leakage weakens the multiplier effect.",
           why: ["Early departure is a front-office matter, not an economic term.",
@@ -164,7 +164,7 @@ extension SeedQuestions {
 
         q("ht-13", .hospitality, .medium,
           "Carrying capacity in a tourism destination refers to",
-          "the number of seats on a tour bus.", "the level of visitation a destination can sustain without unacceptable damage.", "hotel storage space.", "the maximum room rate the market will bear.",
+          "the number of seats available on a large tour bus.", "the visitation a place can take without damage.", "the storage space available within a hotel.", "the maximum room rate the market will bear.",
           correct: 1,
           explanation: "Carrying capacity balances visitor numbers against environmental, infrastructure and community tolerance. Exceeding it produces the crowding, strain and resident resistance grouped under overtourism.",
           why: ["Vehicle capacity is an operational detail, not the concept.",
@@ -188,7 +188,7 @@ extension SeedQuestions {
 
         q("ht-15", .hospitality, .medium,
           "Which is a genuine economic cost of tourism to a host community?",
-          "Increased employment in hospitality", "Upward pressure on housing costs and strain on local infrastructure", "Greater tax revenue from visitors", "Improved airport connections",
+          "Increased employment across hospitality", "Pressure on housing and infrastructure", "Greater tax revenue collected from visitors", "Improved airport and transport connections",
           correct: 1,
           explanation: "Tourism brings jobs and revenue, but short-term rentals bidding up housing and roads, water and waste systems built for residents carrying visitor loads are real costs borne by the community.",
           why: ["Employment is one of tourism's principal benefits.",
@@ -200,7 +200,7 @@ extension SeedQuestions {
 
         q("ht-16", .hospitality, .medium,
           "Ecotourism is best described as travel that",
-          "visits only cities.", "focuses on natural areas while minimising impact and benefiting local communities.", "is always the cheapest option.", "requires no guides or planning.",
+          "visits only the major cities of a country.", "centres on nature, with impact kept low.", "is always the cheapest option available.", "requires no guides or advance planning.",
           correct: 1,
           explanation: "Ecotourism combines nature-based experience with low environmental impact and genuine local benefit. Marketing that claims the label without delivering the last two is greenwashing.",
           why: ["Ecotourism is centred on natural rather than urban environments.",
@@ -212,7 +212,7 @@ extension SeedQuestions {
 
         q("ht-17", .hospitality, .medium,
           "Business travel demand differs from leisure travel demand mainly because business demand is",
-          "more price-sensitive and books far in advance.", "less price-sensitive and often books close to the travel date.", "concentrated entirely in summer.", "unaffected by economic conditions.",
+          "more price-sensitive, and books far ahead.", "less price-sensitive, and books close in.", "concentrated entirely in the summer months.", "unaffected by prevailing economic conditions.",
           correct: 1,
           explanation: "A business traveller's schedule is set by the meeting, so the trip happens regardless of fare and is often booked late. That combination is why carriers and hotels price late bookings highest.",
           why: ["That describes leisure demand, which plans ahead and shops on price.",
@@ -226,7 +226,7 @@ extension SeedQuestions {
 
         q("ht-18", .hospitality, .medium,
           "A guest folio in a lodging property is",
-          "the housekeeping schedule.", "the running account of a guest's charges and payments.", "the hotel's fire safety plan.", "a directory of local attractions.",
+          "the daily housekeeping schedule.", "the running account of a guest's charges.", "the property's fire safety plan.", "a directory of local attractions.",
           correct: 1,
           explanation: "The folio accumulates room charges, taxes, food and beverage postings and payments for the length of the stay, and it becomes the bill presented at checkout.",
           why: ["Housekeeping schedules are a separate operational document.",
@@ -238,7 +238,7 @@ extension SeedQuestions {
 
         q("ht-19", .hospitality, .medium,
           "A property management system in a hotel is used primarily to",
-          "manage the building's heating and cooling.", "handle reservations, room assignment, guest accounts and reporting.", "schedule kitchen deliveries.", "design marketing campaigns.",
+          "manage the building's heating and cooling.", "handle reservations, rooms and accounts.", "schedule deliveries to the kitchen.", "design and run marketing campaigns.",
           correct: 1,
           explanation: "The property management system is the front office's core software: availability, rates, arrivals, room status, folios and the reports management runs the property from.",
           why: ["Building systems are handled by a separate building management system.",
@@ -250,7 +250,7 @@ extension SeedQuestions {
 
         q("ht-20", .hospitality, .medium,
           "\"Walking\" a guest means the hotel",
-          "escorts the guest to their room.", "arranges and pays for a comparable room at another property because none is available.", "cancels the reservation with no compensation.", "upgrades the guest to a suite.",
+          "escorts the guest personally to their room.", "pays for a comparable room elsewhere.", "cancels the reservation with no compensation.", "upgrades the guest to a suite at no charge.",
           correct: 1,
           explanation: "When overbooking exceeds actual attrition, the hotel walks the guest: it books a comparable nearby room, covers the cost and the transport, and usually offers a future stay to repair the relationship.",
           why: ["Escorting a guest is a rooming courtesy, not the industry term.",
@@ -274,7 +274,7 @@ extension SeedQuestions {
 
         q("ht-22", .hospitality, .medium,
           "Upselling at the front desk means",
-          "charging a guest twice for the same room.", "offering a guest a higher category of room or added amenity at check-in.", "raising the published rate overnight.", "refusing a discounted rate.",
+          "charging a guest twice for the same room.", "offering a better room or amenity at check-in.", "raising the published rate overnight.", "refusing to honour a discounted rate.",
           correct: 1,
           explanation: "Upselling converts an arriving guest into higher-value inventory at the moment they are most receptive. It raises average daily rate without any additional acquisition cost.",
           why: ["Double-charging is a billing error, not a sales technique.",
@@ -286,7 +286,7 @@ extension SeedQuestions {
 
         q("ht-23", .hospitality, .medium,
           "Why does a hotel place a pre-authorisation hold on a guest's credit card at check-in?",
-          "To charge the guest immediately for incidentals.", "To confirm the card is valid and reserve funds for the stay and likely incidentals.", "To collect a marketing database.", "To satisfy fire regulations.",
+          "To charge the guest at once for incidentals.", "To confirm the card and reserve funds.", "To build a marketing database of guests.", "To satisfy provincial fire regulations.",
           correct: 1,
           explanation: "The hold verifies the card and reserves an amount against the room, tax and expected incidentals. It is released after checkout, though the funds may show as unavailable to the guest for several days.",
           why: ["A hold reserves funds; it is not a charge, which is why the amount is released later.",
@@ -312,7 +312,7 @@ extension SeedQuestions {
 
         q("ht-25", .hospitality, .medium,
           "Hotel rooms and airline seats are described as perishable inventory because",
-          "they spoil like food.", "an unsold room-night or seat can never be sold again.", "they lose physical quality over time.", "they must be refrigerated.",
+          "they spoil in the way that food does.", "an unsold night can never be sold again.", "they lose physical quality as time passes.", "they have to be kept under refrigeration.",
           correct: 1,
           explanation: "Perishability is why revenue management exists. Tonight's empty room earns nothing forever, so selling it at a reduced rate almost always beats holding out for a rate that never comes.",
           why: ["The perishability is economic rather than physical.",
@@ -336,7 +336,7 @@ extension SeedQuestions {
 
         q("ht-27", .hospitality, .medium,
           "A hotel offers a lower rate to guests who book 21 days ahead and cannot cancel. The purpose is to",
-          "punish late bookers.", "capture price-sensitive demand early while protecting rooms for higher-paying late bookings.", "reduce housekeeping costs.", "comply with consumer law.",
+          "to punish guests who book late.", "to capture early demand, protecting late rooms.", "to reduce the daily housekeeping cost.", "to comply with consumer protection law.",
           correct: 1,
           explanation: "Rate fencing separates segments that would otherwise pay the same price. Advance purchase and non-refundability are conditions leisure travellers accept and business travellers cannot, so each pays what they will bear.",
           why: ["The aim is to segment demand, not to penalise anyone.",
@@ -348,7 +348,7 @@ extension SeedQuestions {
 
         q("ht-28", .hospitality, .medium,
           "During a citywide convention, a hotel applies a minimum-length-of-stay restriction. This is intended to",
-          "reduce total occupancy.", "prevent one-night bookings from blocking rooms on the highest-demand nights.", "eliminate group business.", "lower the average daily rate.",
+          "reduce the property's total occupancy.", "stop one-night stays blocking peak nights.", "eliminate group business from the property.", "lower the average daily rate achieved.",
           correct: 1,
           explanation: "A single-night booking on peak Tuesday can block a guest who would have stayed Monday to Thursday. A minimum stay protects the higher total revenue across the whole compression period.",
           why: ["The restriction protects total revenue and generally raises occupancy across the period.",
@@ -360,7 +360,7 @@ extension SeedQuestions {
 
         q("ht-29", .hospitality, .hard,
           "A hotel can sell a room tonight at $95 or hold it hoping for a $210 walk-in that has a 30% chance of arriving. Which is the better expected outcome?",
-          "Hold the room — expected value $210", "Sell at $95 — the hold has an expected value of only $63", "Both are identical", "Hold the room — expected value $147",
+          "Hold the room — the expected value is $210", "Sell at $95 — holding is worth only $63", "Both come out identical in the end", "Hold the room — expected value $147",
           correct: 1,
           explanation: "The hold is worth $210 × 0.30 = $63, since a 70% chance leaves the room empty and worth nothing. Selling now at $95 is worth more than the gamble.",
           why: ["$210 is the value only if the walk-in is certain, which it is not.",
@@ -372,7 +372,7 @@ extension SeedQuestions {
 
         q("ht-30", .hospitality, .medium,
           "Displacement analysis in hotel revenue management asks whether",
-          "guests should be moved between rooms.", "accepting a group booking would displace higher-rated transient business.", "furniture should be replaced.", "staff should be reassigned.",
+          "guests ought to be moved between rooms.", "a group booking would displace better business.", "the furniture is due to be replaced.", "staff ought to be reassigned between shifts.",
           correct: 1,
           explanation: "A group filling 80 rooms at $120 looks attractive until it blocks transient demand that would have paid $190. Displacement analysis compares the group's total value against the business it crowds out.",
           why: ["Moving guests between rooms is a front-office task.",
@@ -410,7 +410,7 @@ extension SeedQuestions {
 
         q("ht-33", .hospitality, .medium,
           "A guest posts a detailed negative review two weeks after departure. The property's best response is to",
-          "ignore it, since the stay is over.", "reply publicly, thank them, address the specific issue and invite direct contact.", "dispute each point in detail publicly.", "ask the platform to remove it.",
+          "ignore it, since the stay is long over.", "reply publicly and invite direct contact.", "dispute each point in detail, publicly.", "ask the platform to take the review down.",
           correct: 1,
           explanation: "The reply is written for the hundreds of future guests reading it, not only for the reviewer. A specific, non-defensive response demonstrates how the property handles problems.",
           why: ["Silence leaves the complaint as the only account future guests will read.",
@@ -422,7 +422,7 @@ extension SeedQuestions {
 
         q("ht-34", .hospitality, .medium,
           "A guest is dissatisfied but the fault lies with a third-party booking site. The property should",
-          "tell the guest to take it up with the booking site.", "resolve what it can for the guest first, then pursue the issue with the intermediary.", "refuse to serve the guest.", "charge the guest the difference.",
+          "tell the guest to take it up with the site.", "fix what it can, then pursue the intermediary.", "refuse to serve the guest on this occasion.", "charge the guest the difference in rate.",
           correct: 1,
           explanation: "The guest experiences the property, not the intermediary. Fixing the guest's problem first and settling the channel dispute afterwards protects the relationship that generates repeat business.",
           why: ["Sending the guest away to argue with someone else guarantees the property is blamed anyway.",
@@ -434,7 +434,7 @@ extension SeedQuestions {
 
         q("ht-35", .hospitality, .medium,
           "The main value of empowering hotel staff to resolve issues up to a set dollar limit is that",
-          "guests stop complaining.", "problems are solved during the stay, when recovery still works.", "managers become unnecessary.", "the property spends nothing on recovery.",
+          "guests stop complaining altogether.", "problems are solved during the stay.", "managers become unnecessary on shift.", "the property spends nothing on recovery.",
           correct: 1,
           explanation: "A problem fixed on the second night can still save the stay. The same problem raised in a review after checkout cannot be recovered at all, only answered.",
           why: ["Empowerment changes how quickly complaints are handled, not whether they occur.",
@@ -446,7 +446,7 @@ extension SeedQuestions {
 
         q("ht-36", .hospitality, .medium,
           "A hotel tracks how many guests would recommend it and repeats the survey quarterly. The main benefit is that it",
-          "guarantees higher occupancy.", "reveals trends in guest satisfaction before they show up in revenue.", "replaces staff training.", "sets the room rate.",
+          "guarantees higher occupancy next quarter.", "shows satisfaction trends before revenue does.", "replaces the need for any staff training.", "sets the room rate for the coming season.",
           correct: 1,
           explanation: "Satisfaction scores move before bookings do. A declining trend gives management time to find the cause while the revenue impact is still ahead of them rather than behind.",
           why: ["Measurement informs action but guarantees no commercial outcome.",
@@ -458,7 +458,7 @@ extension SeedQuestions {
 
         q("ht-37", .hospitality, .medium,
           "A guest with a disability requests an accessible room feature the hotel has not prepared. The property should",
-          "explain that the request was not made in advance.", "make every reasonable effort to accommodate, since accessibility is a legal and service obligation.", "charge an accommodation fee.", "refer the guest to another hotel immediately.",
+          "explain that the request came too late.", "make every reasonable effort to accommodate.", "charge an additional accommodation fee.", "refer the guest to another hotel at once.",
           correct: 1,
           explanation: "Accessibility legislation requires reasonable accommodation, and beyond the legal duty a guest turned away for a foreseeable need is a service failure the property controls.",
           why: ["Blaming the guest for not planning ahead fails both the legal and the service standard.",
@@ -470,7 +470,7 @@ extension SeedQuestions {
 
         q("ht-38", .hospitality, .medium,
           "Personalising a returning guest's stay using their stored preferences primarily",
-          "reduces the room rate.", "signals recognition, which raises loyalty and lifetime value.", "removes the need for housekeeping.", "shortens check-in to zero.",
+          "reduces the rate the guest is charged.", "signals recognition, which builds loyalty.", "removes the need for daily housekeeping.", "shortens the check-in process to nothing.",
           correct: 1,
           explanation: "Recognition is what distinguishes a hotel from a commodity room. A guest whose preferences are already known has a reason to return that price alone cannot supply.",
           why: ["Personalisation supports a rate premium rather than a discount.",
@@ -494,7 +494,7 @@ extension SeedQuestions {
 
         q("ht-40", .hospitality, .medium,
           "A guest complains about noise from an adjacent event. The weakest response is to",
-          "offer to move the guest to a quieter floor.", "tell the guest the event was booked first and nothing can be done.", "explain when the event ends and offer a courtesy.", "check whether the event is exceeding agreed sound limits.",
+          "offer to move the guest to a quieter floor.", "tell the guest the event was booked first and nothing can be done.", "explain when the event ends and offer a courtesy.", "check whether the event is exceeding the agreed sound limits and intervene.",
           correct: 1,
           explanation: "The other three all give the guest either a solution, information or evidence of action. Explaining that nothing can be done offers none of them and confirms that the guest's experience ranks last.",
           why: ["Relocation is a direct solution.",
@@ -506,7 +506,7 @@ extension SeedQuestions {
 
         q("ht-41", .hospitality, .medium,
           "\"Moments of truth\" in hospitality refers to",
-          "the annual financial audit.", "each point of contact where a guest forms a judgement about the property.", "the legal terms of a booking.", "staff performance reviews.",
+          "the annual financial audit of the property.", "each contact where a guest forms a judgement.", "the legal terms attached to a booking.", "the annual staff performance review cycle.",
           correct: 1,
           explanation: "Every interaction — the reservation call, the arrival, the first look at the room — is a moment where the guest's impression is set. Managing the whole sequence is what produces a consistent experience.",
           why: ["The audit is a financial process invisible to guests.",
@@ -518,7 +518,7 @@ extension SeedQuestions {
 
         q("ht-42", .hospitality, .medium,
           "Why is the recovery of a complaint from a loyalty-programme member especially important?",
-          "Members never complain.", "They are high-value repeat guests whose defection costs far more than one stay.", "Members pay higher rates by law.", "Loyalty members cannot leave reviews.",
+          "Members never complain about anything.", "Their defection costs far more than one stay.", "Members pay higher rates as a matter of law here.", "Loyalty members are unable to leave any reviews.",
           correct: 1,
           explanation: "A loyalty member represents many future stays, not one. Losing them forfeits the entire remaining stream, which is why properties resolve their issues with more latitude.",
           why: ["Members complain readily, and often expect more because they stay more.",
@@ -544,7 +544,7 @@ extension SeedQuestions {
 
         q("ht-44", .hospitality, .medium,
           "Cross-contamination is best prevented by",
-          "cooking everything at the same temperature.", "using separate cutting boards and utensils for raw proteins and ready-to-eat foods.", "storing all food at room temperature.", "washing hands once per shift.",
+          "cooking everything to the same temperature.", "keeping raw and ready-to-eat tools apart.", "storing all of the food at room temperature.", "washing hands once at the start of a shift.",
           correct: 1,
           explanation: "Cross-contamination moves pathogens from raw food to food that will not be cooked again. Separate boards, utensils and storage levels break that path.",
           why: ["Different foods require different safe internal temperatures.",
@@ -556,7 +556,7 @@ extension SeedQuestions {
 
         q("ht-45", .hospitality, .medium,
           "HACCP is a food-safety system based on",
-          "inspecting the final dish only.", "identifying hazards and controlling them at critical points in the process.", "tasting food before service.", "recording customer complaints.",
+          "inspecting only the finished dish.", "controlling hazards at critical points.", "tasting the food shortly before service.", "recording and reviewing customer complaints.",
           correct: 1,
           explanation: "Hazard Analysis and Critical Control Points builds safety into the process — receiving, storage, cooking, cooling, reheating — rather than inspecting for failure at the end, when it is too late.",
           why: ["End-point inspection catches problems only after the food is already made.",
@@ -568,7 +568,7 @@ extension SeedQuestions {
 
         q("ht-46", .hospitality, .medium,
           "A cook prepares raw chicken, then makes a salad without changing gloves or washing hands. The most likely outcome is",
-          "improved efficiency with no risk.", "cross-contamination of the salad with pathogens from the chicken.", "a change in the salad's flavour only.", "a violation of no rule.",
+          "improved efficiency, at no real risk.", "cross-contamination of the salad.", "a change in the salad's flavour only.", "no breach of any rule whatsoever.",
           correct: 1,
           explanation: "Salad is not cooked again, so any pathogen transferred to it reaches the guest alive. This is the single most common route to foodborne illness in a commercial kitchen.",
           why: ["The time saved is trivial against the risk created.",
@@ -592,7 +592,7 @@ extension SeedQuestions {
 
         q("ht-48", .hospitality, .hard,
           "Cooked rice must be cooled from 60°C to 4°C. Best practice is to",
-          "leave it on the counter overnight.", "cool it rapidly in shallow pans, reaching 4°C within the required window.", "return it to the oven.", "seal it hot in a deep covered container.",
+          "leave it out on the counter overnight.", "cool it fast in shallow pans, within the window.", "return it to the oven and reheat it through again.", "seal it hot in a deep covered container and refrigerate.",
           correct: 1,
           explanation: "Cooling is the step most often done badly. Shallow pans increase surface area so the food passes through the danger zone quickly; a deep sealed container holds the centre warm for hours.",
           why: ["Overnight counter cooling leaves food in the danger zone for many hours.",
@@ -616,7 +616,7 @@ extension SeedQuestions {
 
         q("ht-50", .hospitality, .medium,
           "The main food-safety reason for labelling prepared items with a date is to",
-          "track which cook prepared them.", "ensure items are used or discarded within their safe holding period.", "calculate food cost.", "satisfy the marketing department.",
+          "track which cook prepared each item.", "ensure items go within their holding period.", "calculate the food cost of every dish served.", "satisfy a request from the marketing department.",
           correct: 1,
           explanation: "Prepared food has a limited safe life even under refrigeration. Dating makes that life visible so items are used in time or discarded rather than kept indefinitely.",
           why: ["Attribution may be a secondary benefit but is not the safety reason.",
@@ -628,7 +628,7 @@ extension SeedQuestions {
 
         q("ht-51", .hospitality, .medium,
           "A restaurant must disclose the presence of common allergens because",
-          "allergens change the price of the dish.", "an undisclosed allergen can cause a severe or fatal reaction.", "allergens reduce shelf life.", "it improves menu design.",
+          "allergens change the price of the dish.", "an undisclosed allergen can be fatal.", "allergens reduce the dish's shelf life.", "it improves the design of the menu.",
           correct: 1,
           explanation: "For a guest with a serious allergy, an undisclosed trace is a medical emergency. Staff must know the ingredients, and \"probably fine\" is never an acceptable answer.",
           why: ["Allergen content does not determine price.",
@@ -640,7 +640,7 @@ extension SeedQuestions {
 
         q("ht-52", .hospitality, .medium,
           "The correct order for manual dishwashing in a three-compartment sink is",
-          "rinse, wash, sanitise.", "wash, rinse, sanitise, then air dry.", "sanitise, wash, rinse.", "wash, sanitise, towel dry.",
+          "rinse, wash, sanitise.", "wash, rinse, sanitise, then air dry.", "sanitise the surface, then wash and rinse.", "wash, sanitise, then towel dry by hand.",
           correct: 1,
           explanation: "Wash removes soil, rinse removes detergent that would neutralise the sanitiser, sanitise reduces pathogens, and air drying avoids recontamination from a cloth.",
           why: ["Rinsing before washing leaves the soil in place.",
@@ -652,7 +652,7 @@ extension SeedQuestions {
 
         q("ht-53", .hospitality, .medium,
           "A buffet holds hot food at 55°C for three hours. This is a violation because",
-          "the food is too hot to eat.", "hot holding must be above 60°C, so the food sat in the danger zone.", "buffets may not serve hot food.", "three hours is the maximum for any food.",
+          "the food is far too hot to be eaten.", "hot holding must be above 60°C, not below.", "buffets are not permitted to serve hot food.", "three hours is the maximum for any food.",
           correct: 1,
           explanation: "55°C is inside the danger zone. Three hours there allows substantial bacterial growth, and the food cannot be made safe again by reheating it for service.",
           why: ["55°C is below safe hot-holding temperature, not dangerously hot.",
@@ -664,7 +664,7 @@ extension SeedQuestions {
 
         q("ht-54", .hospitality, .medium,
           "Which record most directly demonstrates food-safety due diligence to an inspector?",
-          "The staff schedule", "Completed temperature logs for cooking, cooling and holding", "The dining room reservation book", "Supplier advertising material",
+          "The staff schedule for the week", "Temperature logs for cooking and holding", "The dining room reservation book for the week", "Advertising material supplied by food suppliers",
           correct: 1,
           explanation: "Temperature logs show the critical control points were monitored and acted on. Without records, a kitchen can claim compliance but cannot demonstrate it.",
           why: ["Schedules show who worked, not whether controls were met.",
@@ -678,7 +678,7 @@ extension SeedQuestions {
 
         q("ht-55", .hospitality, .medium,
           "A destination's brand positioning should be built primarily on",
-          "whatever slogan sounds best.", "authentic attributes the destination genuinely has and competitors cannot easily claim.", "the largest advertising budget available.", "copying a successful destination's campaign.",
+          "whichever slogan happens to sound best.", "genuine attributes rivals cannot claim.", "the largest advertising budget available.", "a successful destination's campaign, copied.",
           correct: 1,
           explanation: "A destination brand has to survive contact with the visit. Positioning built on something the place genuinely offers is defensible; a borrowed promise produces disappointed visitors and poor reviews.",
           why: ["A slogan is an expression of positioning, not a substitute for one.",
@@ -690,7 +690,7 @@ extension SeedQuestions {
 
         q("ht-56", .hospitality, .medium,
           "Shoulder season marketing aims to",
-          "increase visits during the busiest weeks.", "build demand in the periods just before and after peak season.", "close the destination entirely.", "raise peak-season prices.",
+          "increase visits during the busiest weeks.", "build demand either side of peak season.", "close the destination down entirely.", "raise the prices charged at peak season.",
           correct: 1,
           explanation: "Shoulder periods have capacity already built and staffed. Filling them raises annual utilisation without adding infrastructure or worsening peak crowding.",
           why: ["Peak weeks are already full; adding demand there worsens crowding.",
@@ -702,7 +702,7 @@ extension SeedQuestions {
 
         q("ht-57", .hospitality, .medium,
           "A destination marketing organisation's stakeholders typically include",
-          "only hotel owners.", "hotels, attractions, restaurants, transport operators, government and residents.", "only the provincial government.", "only airlines.",
+          "only the owners of hotels.", "hotels, attractions, transport and residents.", "only the provincial government and its agencies.", "only the airlines serving the region and their partners.",
           correct: 1,
           explanation: "A destination is experienced as a whole, so the DMO coordinates across every business the visitor touches — and residents, whose support determines whether tourism remains welcome.",
           why: ["Hotels are one stakeholder among many.",
@@ -714,7 +714,7 @@ extension SeedQuestions {
 
         q("ht-58", .hospitality, .medium,
           "Which measure best indicates a destination campaign's economic success?",
-          "Number of social media impressions", "Incremental visitor spending attributable to the campaign", "Number of press releases issued", "Size of the campaign budget",
+          "The number of social media impressions gained", "Extra visitor spending the campaign caused", "The number of press releases issued", "The overall size of the campaign's media budget",
           correct: 1,
           explanation: "Impressions measure exposure, not result. Incremental spending traceable to the campaign is what tells stakeholders whether the investment returned anything.",
           why: ["Impressions show how many people saw a message, not what they did.",
@@ -726,7 +726,7 @@ extension SeedQuestions {
 
         q("ht-59", .hospitality, .medium,
           "Overtourism describes a situation where",
-          "a destination has too few visitors.", "visitor volume exceeds what infrastructure and residents can comfortably absorb.", "hotels are overbooked on one night.", "tour guides are oversubscribed.",
+          "a destination has far too few visitors.", "visitor volume exceeds what a place can absorb.", "the hotels are all overbooked on one single night.", "the available tour guides are all oversubscribed.",
           correct: 1,
           explanation: "Overtourism is carrying capacity exceeded: crowding, strained services, rising housing costs and resident resistance. Destinations respond with dispersal, timed entry and demand-shifting rather than more promotion.",
           why: ["Too few visitors is the opposite problem.",
@@ -750,7 +750,7 @@ extension SeedQuestions {
 
         q("ht-61", .hospitality, .medium,
           "Familiarisation trips for travel media and agents are intended to",
-          "provide staff holidays.", "let influential intermediaries experience the destination so they recommend it credibly.", "test hotel fire alarms.", "reduce airline fares.",
+          "provide holidays for the destination's staff.", "let intermediaries experience it first-hand.", "test the fire alarm systems in the hotels.", "bring down the fares charged by airlines.",
           correct: 1,
           explanation: "A recommendation from someone who has actually visited carries weight advertising cannot buy. Familiarisation trips convert intermediaries into credible advocates.",
           why: ["They are business trips with structured itineraries and reporting expectations.",
@@ -762,7 +762,7 @@ extension SeedQuestions {
 
         q("ht-62", .hospitality, .medium,
           "User-generated content is valuable in destination marketing chiefly because it",
-          "costs the destination nothing to license.", "carries the credibility of a real visitor rather than an advertisement.", "is always higher quality than professional photography.", "cannot be negative.",
+          "it costs the destination nothing to license.", "it carries a real visitor's credibility.", "it always beats professional photography.", "it can never turn out to be negative.",
           correct: 1,
           explanation: "A photograph from an actual visitor reads as evidence rather than a claim. That authenticity is the asset, though usage rights still have to be obtained.",
           why: ["Rights must still be secured; content is not automatically free to use.",
@@ -774,7 +774,7 @@ extension SeedQuestions {
 
         q("ht-63", .hospitality, .medium,
           "A destination's visitor profile research is most useful for",
-          "setting hotel construction codes.", "deciding which markets and segments to target and how to reach them.", "calculating property taxes.", "scheduling road maintenance.",
+          "setting the construction codes for hotels.", "choosing which markets to target, and how.", "calculating the property taxes payable.", "scheduling maintenance on the local roads.",
           correct: 1,
           explanation: "Knowing who visits, where they come from, what they spend and what they came for determines where the marketing budget goes and what the message should say.",
           why: ["Building codes are a regulatory matter.",
@@ -786,7 +786,7 @@ extension SeedQuestions {
 
         q("ht-64", .hospitality, .medium,
           "Which is the clearest example of experiential tourism marketing?",
-          "Listing the number of hotel rooms available", "Promoting a guided harvest day with a local farming family", "Advertising the lowest airfare", "Publishing a map of parking lots",
+          "Listing how many hotel rooms are available locally", "Promoting a harvest day with a local family", "Advertising the lowest available airfare to the city", "Publishing a map of the parking lots",
           correct: 1,
           explanation: "Experiential tourism sells participation and connection rather than facilities. A hands-on day with local hosts is a memory, which is what the traveller is actually buying.",
           why: ["Room inventory is a capacity statistic.",
@@ -798,7 +798,7 @@ extension SeedQuestions {
 
         q("ht-65", .hospitality, .medium,
           "When a destination markets Indigenous cultural experiences, the essential requirement is that",
-          "the imagery looks dramatic.", "the experiences are Indigenous-led, with communities controlling how their culture is represented.", "the price is kept low.", "the content is translated into many languages.",
+          "the imagery used looks suitably dramatic.", "the experiences are Indigenous-led.", "the price is kept as low as possible.", "the content is translated into many languages.",
           correct: 1,
           explanation: "Cultural tourism marketed without community leadership becomes appropriation, and the representation is usually wrong as well. Indigenous-led development keeps both the accuracy and the benefit where they belong.",
           why: ["Dramatic imagery without community control is exactly the failure mode.",
@@ -812,7 +812,7 @@ extension SeedQuestions {
 
         q("ht-66", .hospitality, .medium,
           "A banquet event order is a document that",
-          "lists the guests invited to an event.", "specifies every operational detail of an event for the venue's departments.", "records the event's profit.", "advertises the event to the public.",
+          "lists the guests invited to an event.", "sets out every operational detail of an event.", "records the profit the event eventually returned.", "advertises the event to the general public beforehand.",
           correct: 1,
           explanation: "The BEO is the venue's single source of truth: timings, room setup, menu, audiovisual, staffing and billing. Every department works from it, which is why an error there surfaces everywhere at once.",
           why: ["A guest list is separate and usually held by the client.",
@@ -824,7 +824,7 @@ extension SeedQuestions {
 
         q("ht-67", .hospitality, .medium,
           "An attrition clause in a group contract protects the venue by",
-          "guaranteeing the group a discount.", "requiring payment if the group fills fewer rooms than contracted.", "allowing the group to cancel at will.", "fixing the menu price permanently.",
+          "guaranteeing the group a discounted room rate.", "requiring payment if the group falls short.", "allowing the group to cancel the booking at will.", "fixing the menu price permanently.",
           correct: 1,
           explanation: "The venue holds inventory out of general sale for the group. Attrition compensates for rooms that were blocked, turned away other business and then went unsold.",
           why: ["Discounts are a rate negotiation, not an attrition clause.",
@@ -848,7 +848,7 @@ extension SeedQuestions {
 
         q("ht-69", .hospitality, .medium,
           "A theatre-style room setup is most appropriate for",
-          "a hands-on workshop requiring writing.", "a keynote presentation to a large audience with no table work.", "a formal banquet dinner.", "a small board meeting.",
+          "a hands-on workshop that requires writing.", "a keynote to a large audience, no tables.", "a formal banquet dinner with service.", "a small board meeting of a dozen people.",
           correct: 1,
           explanation: "Theatre style maximises seating in a given footprint but provides no writing surface, so it suits presentations where the audience only watches and listens.",
           why: ["Workshops need classroom or crescent-round setups with table space.",
@@ -860,7 +860,7 @@ extension SeedQuestions {
 
         q("ht-70", .hospitality, .medium,
           "The main purpose of a site inspection before contracting a venue is to",
-          "sample the catering for free.", "verify that the space, access, capacity and services genuinely match the event's requirements.", "meet the sales team socially.", "reduce the deposit.",
+          "sample the venue's catering entirely free of charge.", "verify space, access and services first-hand.", "meet the venue's sales team in a social setting.", "negotiate a reduction in the deposit.",
           correct: 1,
           explanation: "Floor plans and photographs hide obstructions, low ceilings, awkward loading access and inadequate power. Seeing the space is how those are found before a contract is signed rather than on setup day.",
           why: ["Tastings may occur but are not the purpose of the inspection.",
@@ -872,7 +872,7 @@ extension SeedQuestions {
 
         q("ht-71", .hospitality, .medium,
           "Force majeure in an event contract addresses",
-          "the planner changing their mind about the theme.", "extraordinary events beyond either party's control that prevent performance.", "the venue's ordinary staffing costs.", "the guest count guarantee.",
+          "the planner changing their mind on the theme.", "extraordinary events beyond either party.", "the venue's ordinary staffing costs.", "the guest count the planner guaranteed.",
           correct: 1,
           explanation: "Force majeure excuses performance when something genuinely outside both parties' control — a natural disaster, a government order — makes the event impossible. It does not cover ordinary business difficulty.",
           why: ["A change of preference is a cancellation, and cancellation penalties apply.",
@@ -884,7 +884,7 @@ extension SeedQuestions {
 
         q("ht-72", .hospitality, .medium,
           "A run of show document is used to",
-          "list every attendee's dietary needs.", "sequence the event minute by minute so all parties act in the right order.", "record the venue's insurance details.", "track marketing spend.",
+          "list every attendee's dietary requirement.", "sequence the event minute by minute.", "record the venue's insurance details.", "track the marketing spend on the event.",
           correct: 1,
           explanation: "The run of show sequences cues, speakers, transitions and technical changes against the clock, so the stage manager, technicians and speakers share one timeline.",
           why: ["Dietary requirements are tracked in the catering documentation.",
@@ -908,7 +908,7 @@ extension SeedQuestions {
 
         q("ht-74", .hospitality, .medium,
           "Accessibility planning for a conference should include",
-          "step-free access, captioning, quiet space and clear dietary accommodation.", "only wheelchair ramps.", "nothing unless a request is received.", "a single accessible washroom only.",
+          "step-free access, captioning and quiet space.", "wheelchair ramps, and nothing at all beyond them.", "nothing whatsoever unless a request is received.", "one accessible washroom, and nothing more than that.",
           correct: 0,
           explanation: "Access covers mobility, sensory, cognitive and dietary needs together. Planning it in from the start costs far less than retrofitting it and avoids excluding attendees who then simply do not come back.",
           why: ["Correct. Mobility, sensory, cognitive and dietary needs all have to be planned together.",
@@ -920,7 +920,7 @@ extension SeedQuestions {
 
         q("ht-75", .hospitality, .medium,
           "A hybrid event is one that",
-          "serves two different menus.", "combines in-person attendance with a live virtual audience.", "uses two venues on different dates.", "mixes two unrelated themes.",
+          "serves two entirely different menus on the night.", "joins in-person and live virtual audiences.", "uses two separate venues on two different dates.", "mixes two completely unrelated event themes.",
           correct: 1,
           explanation: "Hybrid events extend reach beyond the room, but the virtual audience needs its own production, moderation and engagement plan rather than a camera pointed at the stage.",
           why: ["Menu variety is a catering choice.",
@@ -932,7 +932,7 @@ extension SeedQuestions {
 
         q("ht-76", .hospitality, .medium,
           "A post-event evaluation is most valuable when it",
-          "is completed a year later.", "gathers attendee, staff and financial data while the event is fresh, and feeds the next one.", "records only the final profit.", "is skipped to save time.",
+          "it is completed a full year after the event.", "it gathers data while the event is fresh.", "it records only the final profit figure achieved.", "it is skipped altogether in order to save time.",
           correct: 1,
           explanation: "Evaluation closes the loop between what was planned and what happened. Collected while memories are current and reviewed against the budget, it becomes the starting point for the next event.",
           why: ["A year later the operational detail is gone.",
@@ -944,7 +944,7 @@ extension SeedQuestions {
 
         q("ht-77", .hospitality, .medium,
           "A meeting planner negotiates a lower room rate in exchange for a larger food and beverage commitment. This works because",
-          "rooms cost the hotel nothing.", "the hotel evaluates the total value of the business, not the room rate alone.", "food is always free.", "rate is fixed by regulation.",
+          "rooms cost the hotel nothing at all to provide.", "the hotel weighs the total value of business.", "food and beverage is always provided free of charge.", "the room rate is fixed by provincial regulation.",
           correct: 1,
           explanation: "Hotels assess total account value across rooms, catering and meeting space. Concessions on one line are routinely traded for commitments on another with a better margin.",
           why: ["Rooms carry real housekeeping, energy and amenity costs.",
@@ -958,7 +958,7 @@ extension SeedQuestions {
 
         q("ht-78", .hospitality, .medium,
           "Greenwashing in hospitality refers to",
-          "using green cleaning products.", "claiming environmental credentials the business does not actually deliver.", "painting a building green.", "recycling paper.",
+          "using genuinely green cleaning products only.", "claiming credentials it does not deliver.", "painting the outside of the building green.", "recycling the paper used in the back office.",
           correct: 1,
           explanation: "Greenwashing is a marketing claim without the substance behind it. It is now a regulatory risk as well as a reputational one, since misleading environmental claims fall under competition law.",
           why: ["Genuinely using green products is the substance, not the false claim.",
@@ -970,7 +970,7 @@ extension SeedQuestions {
 
         q("ht-79", .hospitality, .medium,
           "The largest single source of energy consumption in a typical full-service hotel is",
-          "guest room televisions.", "heating, ventilation and air conditioning.", "elevator operation.", "lobby lighting.",
+          "the televisions in the guest rooms.", "heating, ventilation and cooling.", "the operation of the lifts.", "the lighting used in the lobby.",
           correct: 1,
           explanation: "HVAC dominates a hotel's energy load, which is why occupancy-linked controls and setbacks in unsold rooms produce far larger savings than any lighting or appliance change.",
           why: ["Televisions draw a trivial share of total load.",
@@ -982,7 +982,7 @@ extension SeedQuestions {
 
         q("ht-80", .hospitality, .medium,
           "A restaurant conducts a food waste audit primarily to",
-          "reduce the number of menu items.", "identify where food is being lost so both cost and environmental impact fall.", "increase portion sizes.", "satisfy the marketing team.",
+          "reduce the number of items on the menu.", "find where food is lost, cutting cost.", "increase the portion sizes it serves.", "satisfy a request from the marketing team.",
           correct: 1,
           explanation: "Waste audits separate spoilage, prep trim and plate waste. Each has a different cause and a different fix, and food thrown away was paid for at full cost.",
           why: ["Menu reduction may follow, but it is not the purpose of the audit.",
@@ -994,7 +994,7 @@ extension SeedQuestions {
 
         q("ht-81", .hospitality, .medium,
           "Sourcing food from local producers can support sustainability by",
-          "always costing less.", "reducing transport emissions and keeping spending in the local economy.", "eliminating food safety requirements.", "removing the need for storage.",
+          "it always costs the business considerably less than before.", "it cuts transport emissions and keeps spend local.", "it removes every food safety requirement that applies.", "it removes the need for any storage on the premises.",
           correct: 1,
           explanation: "Local sourcing shortens supply chains and reduces leakage, keeping more visitor spending in the community. It often costs more per unit, and the safety obligations are identical.",
           why: ["Local product frequently costs more, particularly at small scale.",
@@ -1006,7 +1006,7 @@ extension SeedQuestions {
 
         q("ht-82", .hospitality, .medium,
           "A hotel installs low-flow fixtures and reports a 22% drop in water use. This is best described as",
-          "greenwashing.", "a measurable operational sustainability improvement.", "a marketing slogan.", "a revenue management tactic.",
+          "greenwashing, plain and simple as that.", "a measurable operational improvement.", "a marketing slogan and nothing more than that.", "a revenue management tactic and nothing else.",
           correct: 1,
           explanation: "The claim is backed by a measured outcome, which is exactly what separates real sustainability performance from a marketing assertion.",
           why: ["Greenwashing is a claim without substance; this one has a measured result.",
@@ -1030,7 +1030,7 @@ extension SeedQuestions {
 
         q("ht-84", .hospitality, .medium,
           "A resort limits daily visitors to a fragile natural site and requires timed entry. This primarily protects",
-          "the resort's profit margin.", "the site's carrying capacity and long-term viability as an attraction.", "the marketing budget.", "employee schedules.",
+          "the resort's own profit margin on bookings.", "the site's carrying capacity over time.", "the destination's overall marketing budget.", "the schedules worked by the resort's employees.",
           correct: 1,
           explanation: "An attraction degraded by overuse stops being worth visiting. Limiting volume protects the asset that generates the demand in the first place, even though it caps short-term revenue.",
           why: ["Capping volume reduces short-term revenue rather than protecting margin.",
@@ -1042,7 +1042,7 @@ extension SeedQuestions {
 
         q("ht-85", .hospitality, .medium,
           "Which practice most directly reduces single-use plastic in lodging operations?",
-          "Offering bottled water in every room daily", "Installing bulk amenity dispensers and refill stations", "Wrapping each towel individually", "Providing plastic key cards only",
+          "Offering bottled water in every room every day", "Installing bulk dispensers and refill points", "Wrapping every single towel individually in film", "Providing plastic key cards to guests and nothing else",
           correct: 1,
           explanation: "Bulk dispensers replace thousands of miniature bottles a year in a mid-size property, and refill stations remove the single largest source of in-room plastic waste.",
           why: ["Daily bottled water is a major source of the plastic being eliminated.",
@@ -1054,7 +1054,7 @@ extension SeedQuestions {
 
         q("ht-86", .hospitality, .medium,
           "A hotel's sustainability certification is most credible when it is",
-          "self-declared on the hotel's own website.", "awarded by an independent body against published criteria and periodically re-audited.", "based on a single guest survey.", "purchased without assessment.",
+          "self-declared on the hotel's own website.", "awarded independently and re-audited.", "based on the results of one guest survey.", "purchased outright without any assessment.",
           correct: 1,
           explanation: "Independent assessment against published criteria, with re-auditing, is what makes a certification mean something. Self-declaration and pay-to-display schemes are the mechanics of greenwashing.",
           why: ["Self-declaration carries no external verification.",
@@ -1066,7 +1066,7 @@ extension SeedQuestions {
 
         q("ht-87", .hospitality, .medium,
           "Employing and training local residents supports the social pillar of sustainability because it",
-          "lowers wages.", "keeps income and career progression within the host community.", "reduces the need for guest services.", "eliminates seasonality.",
+          "it lowers the wages that the property has to pay.", "income and progression stay in the community.", "it reduces the need for any guest services at all.", "it eliminates the effect of seasonality entirely.",
           correct: 1,
           explanation: "Local employment reduces leakage and builds a workforce with a stake in the destination's future, which is the social dimension that purely environmental measures miss.",
           why: ["Sustainable employment practice implies fair wages, not lower ones.",
@@ -1078,7 +1078,7 @@ extension SeedQuestions {
 
         q("ht-88", .hospitality, .medium,
           "The business case for sustainability in hospitality is strongest when initiatives",
-          "cost the most possible.", "reduce operating costs while also improving guest perception.", "are invisible to guests.", "are announced but not implemented.",
+          "they cost as much as it is possible to spend.", "they cut costs and improve perception.", "they remain entirely invisible to guests.", "they are announced but never implemented.",
           correct: 1,
           explanation: "Energy, water and waste reductions cut cost directly, and guests increasingly weigh environmental performance. Initiatives that do both are the ones that survive a budget review.",
           why: ["Cost alone is not a business case.",
@@ -1128,7 +1128,7 @@ extension SeedQuestions {
 
         q("ht-92", .hospitality, .medium,
           "Standardised recipes are used in commercial kitchens chiefly to",
-          "restrict chef creativity permanently.", "ensure consistent quality, portion size and food cost every time a dish is made.", "reduce the number of ingredients.", "avoid labelling requirements.",
+          "restrict the chef's creativity permanently.", "hold quality, portion and cost steady.", "reduce the number of ingredients carried.", "avoid the labelling requirements entirely.",
           correct: 1,
           explanation: "A standardised recipe fixes quantities, method and yield so the dish costs and tastes the same whoever prepares it. Without one, food cost cannot be calculated reliably.",
           why: ["Creativity happens in menu development; standardisation governs execution.",
@@ -1140,7 +1140,7 @@ extension SeedQuestions {
 
         q("ht-93", .hospitality, .medium,
           "In lodging, \"heads in beds\" describes a strategy focused on",
-          "maximising occupancy, sometimes at the expense of rate.", "raising the average daily rate above all else.", "reducing staff numbers.", "expanding food and beverage only.",
+          "maximising occupancy, sometimes at the expense of rate.", "raising the average daily rate above all other considerations.", "reducing the number of staff employed across the property.", "expanding the food and beverage side of the business only.",
           correct: 0,
           explanation: "Filling rooms at lower rates raises occupancy and drives ancillary spend, but it can erode RevPAR if the discount is deeper than the volume gain. The trade-off is a standing revenue management debate.",
           why: ["Correct. It prioritises filling rooms, accepting a lower rate to do so.",
@@ -1152,7 +1152,7 @@ extension SeedQuestions {
 
         q("ht-94", .hospitality, .medium,
           "A hotel's ancillary revenue includes",
-          "room charges only.", "parking, spa, resort fees and in-room dining.", "property taxes.", "staff wages.",
+          "room charges alone, and nothing besides.", "parking, spa, resort fees and dining.", "the property taxes it pays.", "the wages paid to its staff.",
           correct: 1,
           explanation: "Ancillary revenue is everything earned beyond the room itself. It often carries better margins than rooms and is a major focus once occupancy is stable.",
           why: ["Room charges are the primary revenue, not ancillary.",
@@ -1164,7 +1164,7 @@ extension SeedQuestions {
 
         q("ht-95", .hospitality, .medium,
           "The primary risk of relying heavily on online travel agencies for bookings is that",
-          "guests cannot find the hotel.", "commission costs reduce margin and the hotel loses direct guest relationships.", "the hotel cannot set its own rates.", "occupancy always falls.",
+          "guests become entirely unable to find the hotel.", "commission erodes margin and the relationship.", "the hotel loses the ability to set its own rates.", "occupancy falls away without any exception at all.",
           correct: 1,
           explanation: "OTAs supply real demand at a commission that can reach the high teens, and the guest relationship stays with the platform. Properties counter with direct-booking incentives and loyalty benefits.",
           why: ["OTAs are highly effective at making hotels visible; that is why they are used.",
@@ -1176,7 +1176,7 @@ extension SeedQuestions {
 
         q("ht-96", .hospitality, .medium,
           "A tour operator differs from a travel agent because the operator",
-          "sells only airline tickets.", "assembles and packages the components of a trip.", "works exclusively for hotels.", "regulates the industry.",
+          "sells only the airline tickets.", "assembles the components of a trip.", "works exclusively on behalf of hotels.", "regulates the industry it operates in.",
           correct: 1,
           explanation: "Tour operators combine transport, accommodation, transfers and activities into a package sold as one product. Agents distribute that package and other travel products to consumers.",
           why: ["Ticketing alone is a narrower function typically performed by agents.",
@@ -1188,7 +1188,7 @@ extension SeedQuestions {
 
         q("ht-97", .hospitality, .medium,
           "The main operational reason a hotel tracks its pace report is to",
-          "measure housekeeping speed.", "compare bookings on the books against the same point last year to guide pricing.", "time the restaurant service.", "schedule maintenance.",
+          "measure the speed of the housekeeping department.", "compare bookings against last year, to price.", "time the service delivered in the main restaurant.", "schedule the property's planned maintenance work.",
           correct: 1,
           explanation: "A pace report shows whether a future date is booking ahead of or behind last year. Booking ahead supports holding rate; booking behind is the signal to open discounted inventory while there is still time.",
           why: ["Housekeeping productivity is tracked separately.",
@@ -1200,7 +1200,7 @@ extension SeedQuestions {
 
         q("ht-98", .hospitality, .medium,
           "Cross-training staff across front office and food and beverage helps a seasonal property primarily by",
-          "reducing the need for any training.", "allowing flexible deployment as demand shifts between departments.", "eliminating payroll costs.", "removing the need for supervisors.",
+          "removing the need for any training at all.", "letting staff move as demand shifts.", "eliminating the property's payroll costs.", "removing the need for any supervisors.",
           correct: 1,
           explanation: "Seasonal demand does not hit every department evenly. Staff who can work in more than one area let a property cover peaks without carrying idle headcount in the quiet department.",
           why: ["Cross-training increases the total training required.",
@@ -1212,7 +1212,7 @@ extension SeedQuestions {
 
         q("ht-99", .hospitality, .medium,
           "A guest's stay is described as \"seamless.\" In service design terms this means",
-          "the guest never interacted with staff.", "handoffs between departments were invisible to the guest.", "the hotel used no technology.", "the guest paid nothing.",
+          "the guest never interacted with any staff at all.", "handoffs between departments were invisible.", "the hotel made no use of technology.", "the guest was not charged for anything.",
           correct: 1,
           explanation: "A stay touches reservations, front desk, housekeeping, dining and billing. Seamlessness means the guest never had to repeat themselves or notice the joins between those departments.",
           why: ["Seamless describes coordination, not the absence of contact.",
