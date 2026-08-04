@@ -122,40 +122,83 @@ struct StudyView: View {
                                      cluster: store.settings.cluster))
     }
 
-    /// The one line on the home screen that changes every day. Streak
-    /// first when there is one to protect — that is the thing a student
-    /// actually does not want to break.
-    private var dayLine: String {
-        if dash.today.goalMet {
-            return dash.streak.current > 1
-                ? "Goal met. \(dash.streak.current) days running."
-                : "Goal met for today."
-        }
-        let left = max(0, store.settings.dailyGoal - dash.today.answered)
-        if dash.streak.current > 1 {
-            return "\(left) more to keep a \(dash.streak.current)-day streak alive."
-        }
-        return left == store.settings.dailyGoal
-            ? "\(left) questions to start today off."
-            : "\(left) to go today."
+    // MARK: - What the header says
+
+    private var showsQuickThink: Bool { store.settings.eventHasRoleplay }
+    private var questionsMet: Bool { dash.today.goalMet }
+    private var allGoalsMet: Bool {
+        questionsMet && (!showsQuickThink || dash.quickThinkGoalMet)
+    }
+    private var nothingDoneToday: Bool {
+        dash.today.answered == 0 && dash.quickThinkToday == 0
     }
 
-    /// Without "Good". For a while this header had no eyebrow, so the title
-    /// was its first line and sat beside the floating coin badge: "Good
-    /// afternoon" is 320pt of the 265pt an iPhone 8 leaves there, and it would
-    /// have run underneath the badge for a third of every day.
+    /// The largest text on the home screen, so it should be the line that says
+    /// the most.
     ///
-    /// The event tag now takes that first line back, so the width is no longer
-    /// forced. Kept short anyway — nothing was lost when the word went, and
-    /// re-lengthening it would only put the title back within reach of the
-    /// badge on the narrowest phone the app supports.
+    /// It used to be the time of day — "Morning", "Afternoon" — which is the
+    /// one thing on this screen a student can already see on their own status
+    /// bar. Everything else in the panel states a number: the ring centre, both
+    /// goal cards and the line directly underneath this one. The title was the
+    /// only element free to say where the day actually stands, and it was
+    /// spending that on the clock.
+    ///
+    /// All four hold one line at 32pt Michroma to at least 134% Dynamic Type on
+    /// an iPhone 8, which is what keeps the header from changing height — and
+    /// shifting the whole panel — as the day is worked through. Michroma is
+    /// wide enough that this is a real constraint and not a formality: "Done
+    /// for today" reads better and wraps at 112%.
     private var greetingLine: String {
-        switch Calendar.current.component(.hour, from: Date()) {
-        case 0..<5:   return "Still up"
-        case 5..<12:  return "Morning"
-        case 12..<17: return "Afternoon"
-        default:      return "Evening"
+        if allGoalsMet { return "Done today" }
+        // Only reachable with Quick Think shown and still open; without it,
+        // the questions goal is the whole day and the branch above catches it.
+        if questionsMet { return "Nearly there" }
+        if nothingDoneToday { return "Start today" }
+        return "Keep going"
+    }
+
+    /// The line under the title. The title says where the day stands; this says
+    /// what it will take, and what is at stake when there is a streak running.
+    private var dayLine: String {
+        let streak = dash.streak.current
+
+        if allGoalsMet {
+            if streak > 1 { return "\(streak) days running." }
+            if streak == 1 { return "Day one of a new streak." }
+            return goalsMetLine
         }
+
+        let questionsLeft = max(0, store.settings.dailyGoal - dash.today.answered)
+        let thinksLeft = showsQuickThink
+            ? max(0, store.settings.quickThinkGoal - dash.quickThinkToday)
+            : 0
+
+        // A streak is the strongest reason to come back, so it leads when there
+        // is one to protect. It rides on the questions goal alone, so that is
+        // the number it is allowed to name.
+        if streak > 1 && questionsLeft > 0 {
+            return "\(questionsLeft) more to keep a \(streak)-day streak alive."
+        }
+
+        // Both goals, because the panel shows both and naming only the
+        // questions left made the Quick Think card look like it was not part
+        // of the day.
+        var parts: [String] = []
+        if questionsLeft > 0 {
+            parts.append("\(questionsLeft) question\(questionsLeft == 1 ? "" : "s")")
+        }
+        if thinksLeft > 0 {
+            parts.append("\(thinksLeft) quick think\(thinksLeft == 1 ? "" : "s")")
+        }
+        guard !parts.isEmpty else { return goalsMetLine }
+        return parts.joined(separator: " and ") + " to go."
+    }
+
+    /// Goals met with no streak to report. Reachable rather than theoretical:
+    /// lowering the daily goal in Settings after answering leaves today met
+    /// without the answer that would have advanced a streak.
+    private var goalsMetLine: String {
+        showsQuickThink ? "Both goals met." : "Goal met for today."
     }
 
     // MARK: - Goal card

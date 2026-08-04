@@ -280,7 +280,7 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 ## 6. Feature inventory
 
 **Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
-loud, "EIP") above the greeting, then **`TodayPanel`**: one large segmented ring, then a card per
+loud, "EIP") above the header, then **`TodayPanel`**: one large segmented ring, then a card per
 goal, then the streak card. The ring is
 cut into a section per item — questions clockwise from twelve, then Quick Think — because a smooth
 arc says how far through you are and sections say what one question is worth. Its centre shows
@@ -289,6 +289,13 @@ garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bo
 full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in
 Settings. `GoalDial` was deleted; `TodayPanel` + `SegmentedGoalRing` replaced it.
+
+The header states where the day stands — "Start today", "Keep going", "Nearly there", "Done
+today" — rather than the time of day, which is the one fact on that screen the status bar already
+carries. The line beneath it names what is left across *both* goals, and leads with the streak when
+there is one to protect. All four titles hold one line at 32pt Michroma to at least 134% Dynamic
+Type on an iPhone 8, which is what stops the header changing height as the day is worked through;
+"Done for today" reads better and wraps at 112%.
 
 The two goal cards carry the app's card treatment — opaque fill, gradient border, shape shadow —
 tinted to their goal rather than filled flat, because a bare wash of tint was a surface nothing
