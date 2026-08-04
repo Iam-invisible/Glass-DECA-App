@@ -501,7 +501,14 @@ app survive ~1 GB resident on a 4 GB phone.
     seed — needs its own stable digest. `UUID.stableSeed` in `ChoiceOrder.swift` is FNV-1a over
     the sixteen bytes for exactly this reason. `SystemRandomNumberGenerator` cannot be seeded at
     all, hence `SplitMix64`.
-36. **A presented question is not a storable question.** `QuestionData.canonicalOrder` records the
+36. **Fixing "the correct answer is the longest" by lengthening one distractor creates a worse
+    tell.** It drops the longest rate below chance and parks the answer at second-longest, which
+    a student reads as "never the longest" — a free elimination — or "always in the middle",
+    which narrows four options to two. Hospitality went 87% → 8% longest and 61% second before
+    this was caught. The measure that does not lie is the *rank* spread, and it has to be levelled
+    in all four directions at once. Terminology questions have a floor: the BCG cells are "cash
+    cow", "star", "question mark" and "dog", and padding those to match wrecks the question.
+37. **A presented question is not a storable question.** `QuestionData.canonicalOrder` records the
     shuffle applied for one presentation and is deliberately outside `CodingKeys`, so an export
     carries the bank's order rather than one student's deal. The two funnels that persist an
     index — `AppStore.recordAnswer` and `MockExamService.saveAttempt` — call `.canonical()` and
@@ -547,6 +554,8 @@ app survive ~1 GB resident on a 4 GB phone.
 - Intro audio now stops when the intro is skipped; freezes cap at two.
 - "Erase everything" now erases the model and the wallet, and says so.
 - The local coach's two activation bugs.
+- Both answer tells: choices now shuffle per presentation, and all 600 questions were
+  rebalanced so length no longer points at the answer. `check_questions.py` gates both.
 
 **Candidate for removal**
 
@@ -623,7 +632,15 @@ python3 Scripts/check_questions.py && python3 Scripts/check_roleplays.py
 `check_questions.py` fails on a duplicate stable key (a collision silently *drops* a question at
 seed time), a `why` array that isn't exactly four entries, a `correctIndex` out of range, and —
 the one that earns its keep — a `"Correct."` rationale sitting at a different index than
-`correctIndex`, which compiles perfectly and teaches the wrong answer. `check_roleplays.py` fails
+`correctIndex`, which compiles perfectly and teaches the wrong answer.
+
+It also gates the **shape** of the choices, which is a tell rather than an error and so is
+invisible to everything else. The bank once answered B in 502 of 600 questions and put the
+longest choice on the right answer often enough that "always pick the longest" scored **80.5%**.
+The gate is the correct answer's length *rank* — longest, second, third, shortest — which has to
+come out near 25% each; each figure is also the score of "always pick the Nth longest", so the
+table reads as what a student could get without reading. Gating on the longest rate alone is not
+enough and is how the bank acquired a second tell while the first was being fixed (§8.37). `check_roleplays.py` fails
 if a cluster collapses back to a single event format, which is the regression the roleplay
 rebuild existed to fix.
 

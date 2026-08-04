@@ -21,7 +21,12 @@ final class QuestionBankService {
     ///     The existing twelve scenarios kept their stable IDs but changed
     ///     event type and timings, so they need the refresh rather than just
     ///     the insert.
-    static let seedVersion = 3
+    /// 4 — every choice reworded so length stops giving the answer away. The
+    ///     wording of all four choices moved on 392 questions; the claims,
+    ///     `correctIndex` and the rationale order did not, so an answer or
+    ///     mistake already recorded against one of these still points at the
+    ///     choice the student actually picked.
+    static let seedVersion = 4
 
     init(context: NSManagedObjectContext) {
         self.ctx = context

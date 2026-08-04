@@ -42,7 +42,7 @@ extension SeedQuestions {
 
         q("fin-3", .finance, .medium,
           "Why is $1,000 received today worth more than $1,000 received in three years?",
-          "Inflation is always negative over time.", "Money available today can be invested to earn a return.", "Banks charge a fee for future payments.", "Accounting standards require discounting all revenue.",
+          "Inflation is always negative over a long period.", "Money today can be invested to earn a return.", "Banks charge a fee on all future payments.", "Accounting standards require discounting all revenue.",
           correct: 1,
           explanation: "The time value of money rests on opportunity cost: cash in hand can be invested and earn interest, so a dollar today has greater purchasing and earning power than the same dollar later. Inflation reinforces this but is not the core reason.",
           why: ["Inflation reinforces the idea but is not the reason, and \"always negative\" misstates what inflation is.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("fin-11", .finance, .easy,
           "A balance sheet is best described as",
-          "a record of cash received and paid during the year.", "a snapshot of what a business owns and owes on one date.", "a forecast of next year's revenues.", "a summary of profit earned over a quarter.",
+          "a record of the cash received and paid during the year.", "a snapshot of what is owned and owed on one date.", "a forecast of the revenues expected next year.", "a summary of the profit earned over a quarter.",
           correct: 1,
           explanation: "The balance sheet reports assets, liabilities and owner's equity as they stand at a single moment — usually a year end. Every other statement covers a span of time.",
           why: ["That describes the statement of cash flows, which covers a period rather than a date.",
@@ -214,7 +214,7 @@ extension SeedQuestions {
 
         q("fin-17", .finance, .medium,
           "A high debt-to-equity ratio tells an investor that the company",
-          "leans on borrowed money more than owner funding.", "is holding a large amount of unsold inventory.", "collects its receivables unusually quickly.", "earns high gross margins on what it sells.",
+          "leans on borrowed money more than owner funding.", "is holding a large amount of unsold inventory.", "collects its receivables unusually quickly indeed.", "earns high gross margins on everything it sells.",
           correct: 0,
           explanation: "Debt-to-equity compares what creditors have supplied against what owners have. A high figure means the business is leveraged, which raises both potential returns and the risk of failing to meet fixed payments.",
           why: ["Correct. The ratio compares creditor funding to owner funding, so a high figure means heavy borrowing.",
@@ -226,7 +226,7 @@ extension SeedQuestions {
 
         q("fin-18", .finance, .hard,
           "A retailer's inventory turnover falls from 8 times a year to 5. What is the most likely concern?",
-          "Inventory is selling faster than expected.", "Cash is tied up in stock that is moving more slowly.", "The business has stopped buying inventory.", "Gross margin must have risen.",
+          "Inventory is selling faster than had been expected.", "Cash is tied up in stock that is moving slowly.", "The business has stopped buying inventory entirely.", "Gross margin must have risen over the period.",
           correct: 1,
           explanation: "Turnover measures how many times inventory is sold and replaced in a year. A drop means goods sit longer, which ties up cash, raises storage costs and increases the risk of obsolescence or markdowns.",
           why: ["Falling turnover means the opposite — stock is moving more slowly, not faster.",
@@ -326,7 +326,7 @@ extension SeedQuestions {
 
         q("fin-26", .finance, .easy,
           "The main purpose of a budget is to",
-          "guarantee that the business will make a profit.", "plan income and spending so results can be judged.", "replace the need for any financial statements.", "satisfy a legal filing requirement each year.",
+          "guarantee that the business will make a profit.", "plan income and spending so results can be judged.", "replace the need for any financial statements at all.", "satisfy a legal filing requirement each and every year.",
           correct: 1,
           explanation: "A budget is a financial plan for a future period. Its value comes from the comparison afterwards: actual results measured against the plan show where the business is off course while there is still time to act.",
           why: ["No plan can guarantee profit. A budget makes shortfalls visible sooner, which is a different thing.",
@@ -534,7 +534,7 @@ extension SeedQuestions {
 
         q("fin-43", .finance, .medium,
           "A current ratio far above the industry average may indicate that a business",
-          "is on the verge of becoming insolvent.", "holds idle cash or slow-moving inventory.", "has no current liabilities at all.", "is very highly leveraged indeed.",
+          "is on the verge of becoming entirely insolvent.", "holds idle cash or slow-moving inventory.", "has no current liabilities on its books at all.", "is very highly leveraged indeed on its balance sheet.",
           correct: 1,
           explanation: "Liquidity that is too high has a cost. Cash sitting idle and inventory that is not moving both tie up capital that could be invested, so an unusually high ratio deserves investigation rather than praise.",
           why: ["A high current ratio indicates the opposite of an imminent liquidity failure.",
@@ -596,7 +596,7 @@ extension SeedQuestions {
 
         q("fin-48", .finance, .medium,
           "Present value answers the question",
-          "what a sum today will grow to in the future.", "what a future sum is worth in today's dollars.", "how much total interest will be paid.", "what an asset originally cost.",
+          "what a sum today will grow to at some future date.", "what a future sum is worth in today's dollars.", "how much interest will be paid in total over the term.", "what an asset originally cost when it was bought.",
           correct: 1,
           explanation: "Present value discounts a future amount back to today using a required rate of return, which is how investments with different timings are compared on equal terms.",
           why: ["Growing a sum forward is future value, the mirror calculation.",
@@ -620,7 +620,7 @@ extension SeedQuestions {
 
         q("fin-50", .finance, .medium,
           "Why do lenders charge a higher interest rate on an unsecured loan than a secured one?",
-          "Unsecured loans are always larger in value.", "There is no collateral to recover on default.", "The law requires a higher rate be charged.", "Unsecured loans run for much longer terms.",
+          "Unsecured loans are always larger in value.", "There is no collateral to recover on default.", "The law requires that a higher rate be charged.", "Unsecured loans run for very much longer terms.",
           correct: 1,
           explanation: "Interest compensates for risk. With no asset pledged, a default leaves the lender with only a claim, so the rate rises to cover the greater expected loss.",
           why: ["Unsecured loans are often smaller, not larger.",
@@ -694,7 +694,7 @@ extension SeedQuestions {
 
         q("fin-56", .finance, .medium,
           "If a company is highly leveraged, a fall in sales is especially dangerous because",
-          "interest payments continue regardless of revenue.", "shareholders can demand immediate repayment.", "leverage eliminates fixed costs.", "taxes rise when sales fall.",
+          "interest payments continue regardless of revenue.", "shareholders can demand immediate repayment in full.", "leverage eliminates the fixed costs of a business.", "taxes rise at the point when sales start to fall.",
           correct: 0,
           explanation: "Debt creates obligations that do not shrink with revenue. High leverage amplifies returns in good years and losses in bad ones, and a sales fall can leave the business unable to service its debt.",
           why: ["Correct. Interest is a fixed obligation that continues whatever revenue does.",
@@ -744,7 +744,7 @@ extension SeedQuestions {
 
         q("fin-60", .finance, .medium,
           "Zero-based budgeting differs from incremental budgeting because it requires that",
-          "every expense be justified from scratch each period.", "last year's budget be increased by inflation.", "no expenses be permitted.", "budgets be set only once every five years.",
+          "every expense be justified from scratch each period.", "last year's budget be increased in line with inflation.", "no expenses of any kind be permitted at all.", "budgets be set only once every five years.",
           correct: 0,
           explanation: "Zero-based budgeting starts each period at zero and requires every line to be justified. It is more work than adjusting last year's numbers, but it stops obsolete spending from surviving indefinitely.",
           why: ["Correct. Every line starts at zero and must be justified afresh.",
@@ -804,7 +804,7 @@ extension SeedQuestions {
 
         q("fin-65", .finance, .medium,
           "Involving department managers in setting their own budgets tends to",
-          "guarantee that costs will come in lower.", "improve commitment, but invite built-in slack.", "remove the need for any budget review.", "make variance analysis impossible to perform.",
+          "guarantee that the costs will all come in lower.", "improve commitment, but invite built-in slack.", "remove the need for any kind of budget review.", "make variance analysis impossible to perform at all.",
           correct: 1,
           explanation: "Participative budgeting raises ownership and uses the knowledge of people closest to the work. The known risk is budgetary slack — targets set deliberately easy — which is why senior review still matters.",
           why: ["Participation improves realism and commitment but guarantees nothing about cost levels.",
@@ -890,7 +890,7 @@ extension SeedQuestions {
 
         q("fin-72", .finance, .medium,
           "In the risk-management process, risks should be prioritised by",
-          "the alphabetical order of their names.", "likelihood combined with potential impact.", "how recently each one was discovered.", "which department first reported them.",
+          "the alphabetical order of each of their names.", "likelihood combined with potential impact.", "how recently each one of them was discovered.", "which of the departments first reported them.",
           correct: 1,
           explanation: "Ranking by likelihood against impact directs attention to what could actually hurt the business. A catastrophic but near-impossible event and a trivial weekly nuisance both rank low; the middle is where the work is.",
           why: ["Alphabetical order has no relationship to importance.",

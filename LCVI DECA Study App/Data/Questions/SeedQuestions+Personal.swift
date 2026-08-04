@@ -42,7 +42,7 @@ extension SeedQuestions {
 
         q("pfl-3", .personalFinancialLiteracy, .medium,
           "The relationship between risk and return in investing means that",
-          "higher potential returns generally come with higher risk of loss.", "all investments carry identical risk.", "government bonds return more than stocks.", "risk can be eliminated through diversification.",
+          "higher potential returns come with higher risk of loss.", "every investment carries an identical level of risk to the rest.", "government bonds return more than stocks do over the long run.", "risk is eliminated through diversification.",
           correct: 0,
           explanation: "Investors demand extra expected return to accept extra uncertainty. Diversification reduces company-specific risk but cannot remove market-wide risk, so it lowers volatility rather than eliminating it.",
           why: ["Correct. Investors require extra expected return to accept extra uncertainty.",
@@ -54,7 +54,7 @@ extension SeedQuestions {
 
         q("pfl-4", .personalFinancialLiteracy, .hard,
           "In Canada, which statement best distinguishes a TFSA from an RRSP?",
-          "Contributions to a TFSA are tax-deductible; RRSP withdrawals are tax-free.", "TFSA withdrawals are generally tax-free; RRSP contributions are generally tax-deductible.", "Both accounts allow unlimited annual contributions.", "Neither account allows the holder to invest in stocks.",
+          "TFSA contributions are deductible; RRSP withdrawals are tax-free.", "TFSA withdrawals are tax-free; RRSP contributions are deductible.", "Both accounts allow unlimited annual contributions.", "Neither account lets the holder invest in stocks.",
           correct: 1,
           explanation: "A TFSA is funded with after-tax dollars and qualified withdrawals are not taxed. An RRSP gives a deduction on contribution and defers tax until withdrawal, typically in retirement when income may be lower. Both have annual contribution limits and can hold a range of investments.",
           why: ["This reverses both accounts. TFSA contributions are not deductible, and RRSP withdrawals are taxed.",
@@ -66,7 +66,7 @@ extension SeedQuestions {
 
         q("pfl-5", .personalFinancialLiteracy, .easy,
           "Gross pay differs from net pay because net pay",
-          "includes overtime but not base salary.", "is the amount remaining after deductions such as income tax and CPP.", "is always higher than gross pay.", "excludes all employer contributions.",
+          "it includes the overtime but not the base salary.", "it is what remains after tax and CPP.", "it is always higher than the gross figure.", "it excludes every employer contribution made.",
           correct: 1,
           explanation: "Gross pay is total earnings before deductions. Net pay — take-home pay — is what remains after income tax, Canada Pension Plan contributions, Employment Insurance premiums and any voluntary deductions.",
           why: ["Gross pay includes base salary and overtime together; the distinction is deductions, not pay type.",
@@ -78,7 +78,7 @@ extension SeedQuestions {
 
         q("pfl-6", .personalFinancialLiteracy, .medium,
           "An insurance deductible is",
-          "the monthly amount paid to keep a policy active.", "the amount the policyholder pays out of pocket before coverage applies.", "the maximum the insurer will ever pay.", "a government rebate on premiums.",
+          "the monthly amount paid to keep the policy active.", "what you pay before cover starts.", "the maximum the insurer will ever pay out.", "a government rebate paid on the premiums.",
           correct: 1,
           explanation: "The deductible is the policyholder's share of a claim. Choosing a higher deductible usually lowers the premium but increases out-of-pocket cost when a loss occurs — a direct trade-off between certainty and monthly cost.",
           why: ["The recurring amount paid to keep a policy active is the premium.",
@@ -114,7 +114,7 @@ extension SeedQuestions {
 
         q("pfl-9", .personalFinancialLiteracy, .medium,
           "Financial planners commonly recommend an emergency fund covering",
-          "one week of expenses.", "three to six months of essential expenses.", "five years of expenses.", "the value of all owned assets.",
+          "one single week of ordinary living expenses.", "three to six months of essential expenses.", "a full five years of ordinary living expenses.", "the total value of all of the assets owned.",
           correct: 1,
           explanation: "Three to six months of essential expenses held in an accessible account covers job loss, medical costs or major repairs without resorting to high-interest credit. The right size depends on income stability and fixed obligations.",
           why: ["One week does not cover a job loss or a major repair.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("pfl-11", .personalFinancialLiteracy, .easy,
           "A fixed expense is one that",
-          "changes every month with usage.", "stays roughly the same each month, such as rent.", "occurs only once a year.", "is always optional.",
+          "it changes every month, according to how much is used.", "it stays roughly level each month, like rent.", "it happens only once within any given calendar year.", "it is always entirely optional for you to pay.",
           correct: 1,
           explanation: "Fixed expenses stay constant month to month, so they are predictable but hard to reduce quickly. Variable expenses move with behaviour and are where short-term savings usually come from.",
           why: ["Expenses that change with usage are variable, such as electricity.",
@@ -152,7 +152,7 @@ extension SeedQuestions {
 
         q("pfl-12", .personalFinancialLiteracy, .medium,
           "The 50/30/20 budgeting guideline allocates income to",
-          "50% wants, 30% needs, 20% savings.", "50% needs, 30% wants, 20% savings and debt repayment.", "50% savings, 30% needs, 20% wants.", "equal thirds with nothing saved.",
+          "50% on wants, 30% on needs and 20% to savings.", "50% needs, 30% wants, 20% savings and debt.", "50% to savings, 30% on needs and 20% on wants.", "three equal thirds, with nothing put aside at all.",
           correct: 1,
           explanation: "The guideline caps needs at half of take-home pay, allows 30% for discretionary spending and directs 20% to savings and debt repayment. It is a starting frame rather than a rule.",
           why: ["This reverses needs and wants, allowing more discretionary than essential spending.",
@@ -164,7 +164,7 @@ extension SeedQuestions {
 
         q("pfl-13", .personalFinancialLiteracy, .medium,
           "Paying yourself first means",
-          "spending on wants before bills.", "transferring money to savings as soon as income arrives, before discretionary spending.", "taking a salary advance.", "repaying friends before lenders.",
+          "spending on the wants before paying any of the bills.", "moving money to savings the moment income lands.", "taking an advance against your own future salary.", "repaying your friends before you repay the lenders.",
           correct: 1,
           explanation: "Saving whatever is left at month end usually means saving nothing. Automating the transfer on payday makes saving the default rather than a matter of monthly willpower.",
           why: ["Spending on wants first is what the principle guards against.",
@@ -188,7 +188,7 @@ extension SeedQuestions {
 
         q("pfl-15", .personalFinancialLiteracy, .medium,
           "Tracking spending for a month before setting a budget is useful because it",
-          "guarantees higher income.", "reveals where money actually goes, which is often different from what people assume.", "eliminates fixed expenses.", "raises the credit score.",
+          "it guarantees a higher level of income.", "it shows where the money actually goes.", "it eliminates the fixed expenses entirely.", "it raises the credit score of the household.",
           correct: 1,
           explanation: "Most people underestimate small recurring purchases substantially. A month of actual data replaces assumption with evidence, and the surprises are usually where the savings are.",
           why: ["Tracking records spending; it does not change income.",
@@ -200,7 +200,7 @@ extension SeedQuestions {
 
         q("pfl-16", .personalFinancialLiteracy, .medium,
           "A sinking fund is money set aside",
-          "to cover an unexpected emergency.", "regularly for a known future expense, such as annual insurance or a car repair.", "for daily groceries.", "that cannot be withdrawn.",
+          "to cover an unexpected emergency cost.", "regularly, for a known future expense.", "for the daily grocery shopping bill.", "in a way that cannot be withdrawn.",
           correct: 1,
           explanation: "A sinking fund converts a large predictable cost into small monthly amounts, so an annual premium or a known replacement does not arrive as a crisis. It is distinct from an emergency fund.",
           why: ["Unexpected costs are what the emergency fund covers.",
@@ -212,7 +212,7 @@ extension SeedQuestions {
 
         q("pfl-17", .personalFinancialLiteracy, .medium,
           "Lifestyle inflation refers to",
-          "prices rising across the economy.", "spending rising to match income increases, so saving does not improve.", "the cost of housing only.", "a decline in living standards.",
+          "prices rising right across the whole of the economy.", "spending rising with income, so saving stalls.", "the cost of housing alone, and nothing else besides.", "a general decline in the overall standard of living.",
           correct: 1,
           explanation: "A raise absorbed entirely by higher spending leaves the person no better off financially. Directing part of each increase to savings before adjusting spending is what converts income growth into wealth.",
           why: ["Economy-wide price rises are inflation.",
@@ -250,7 +250,7 @@ extension SeedQuestions {
 
         q("pfl-20", .personalFinancialLiteracy, .medium,
           "Closing an old credit card can lower a credit score because it",
-          "increases total available credit.", "shortens average account age and reduces available credit, raising utilization.", "removes payment history instantly.", "is reported as a default.",
+          "it increases the total amount of credit available.", "it shortens account age and raises utilization.", "it removes the payment history from the file instantly.", "it is reported to the credit bureau as a default.",
           correct: 1,
           explanation: "Length of credit history and available credit both matter. Closing an old, unused card can therefore hurt on two fronts at once, which surprises people expecting it to help.",
           why: ["Closing an account reduces available credit rather than increasing it.",
@@ -262,7 +262,7 @@ extension SeedQuestions {
 
         q("pfl-21", .personalFinancialLiteracy, .medium,
           "A hard inquiry on a credit report occurs when",
-          "the consumer checks their own score.", "a lender checks the report as part of a credit application.", "a bill is paid on time.", "a savings account is opened.",
+          "a consumer checks their own credit score.", "a lender checks it for an application.", "a bill is paid on time each month.", "a new savings account is opened up.",
           correct: 1,
           explanation: "Hard inquiries follow applications and can slightly lower a score. Checking your own report is a soft inquiry and has no effect at all.",
           why: ["Checking your own report is a soft inquiry with no score effect.",
@@ -274,7 +274,7 @@ extension SeedQuestions {
 
         q("pfl-22", .personalFinancialLiteracy, .medium,
           "The main risk of a payday loan is that",
-          "it has no fees.", "the effective annual interest rate is extremely high, and rollovers can trap a borrower in a debt cycle.", "it improves the credit score automatically.", "it must be repaid over ten years.",
+          "there are no fees at all charged on this particular kind of loan.", "the effective rate is very high, and rollovers trap you.", "it improves the borrower's own credit score automatically.", "it has to be repaid over a full ten years.",
           correct: 1,
           explanation: "A modest-sounding fee over a two-week term implies an annual rate in the hundreds of percent. Borrowers who cannot repay in full often roll the loan over, and the fees compound.",
           why: ["Payday loans carry substantial fees; that is the entire business model.",
@@ -286,7 +286,7 @@ extension SeedQuestions {
 
         q("pfl-23", .personalFinancialLiteracy, .medium,
           "A secured credit card differs from a regular one because it",
-          "has no credit limit.", "requires a cash deposit that generally sets the credit limit.", "charges no interest ever.", "cannot affect the credit score.",
+          "it does not carry a credit limit at all.", "a cash deposit usually sets the limit.", "it never charges any interest whatsoever.", "it cannot affect the holder's credit score.",
           correct: 1,
           explanation: "The deposit protects the issuer, which is why secured cards are available to people with no history. Used responsibly, they build the record needed to qualify for an unsecured card.",
           why: ["Secured cards have limits, usually equal to the deposit.",
@@ -298,7 +298,7 @@ extension SeedQuestions {
 
         q("pfl-24", .personalFinancialLiteracy, .medium,
           "If a consumer finds an error on their credit report, they should",
-          "ignore it, since reports cannot be changed.", "dispute it with the credit bureau and provide supporting documentation.", "open a new account to offset it.", "close all their accounts.",
+          "ignore it, since reports cannot be changed.", "dispute it with the bureau, with documents.", "open a new account to offset the error.", "close every one of their existing accounts.",
           correct: 1,
           explanation: "Consumers have the right to dispute inaccurate information, and bureaus must investigate. Errors are common enough that checking the report periodically is worth the effort.",
           why: ["Reports can and must be corrected when they are wrong.",
@@ -312,7 +312,7 @@ extension SeedQuestions {
 
         q("pfl-25", .personalFinancialLiteracy, .medium,
           "Diversification reduces risk by",
-          "concentrating investments in one strong company.", "spreading investments so a single poor performer has limited effect.", "eliminating market risk entirely.", "guaranteeing a positive return.",
+          "concentrating everything into one very strong company.", "spreading money so one bad holding matters less.", "eliminating the market risk from a portfolio entirely.", "guaranteeing a positive return in every single year.",
           correct: 1,
           explanation: "Spreading across companies, sectors and asset classes reduces the damage any one holding can do. Market-wide declines still affect the whole portfolio, which is the risk diversification cannot remove.",
           why: ["Concentration increases risk rather than reducing it.",
@@ -324,7 +324,7 @@ extension SeedQuestions {
 
         q("pfl-26", .personalFinancialLiteracy, .medium,
           "A young investor with a long time horizon can generally",
-          "take no risk at all.", "tolerate more short-term volatility, because there is time to recover from downturns.", "guarantee higher returns.", "avoid all fees.",
+          "take no investment risk of any kind at all.", "take more short-term volatility, with time to recover.", "guarantee themselves consistently higher annual returns.", "avoid paying any of the fees that would normally be charged.",
           correct: 1,
           explanation: "Time horizon is the main input to risk capacity. Decades of contributions ahead allow a downturn to be ridden out, and a portfolio that never falls also never grows much.",
           why: ["Avoiding all risk over decades usually means losing purchasing power to inflation.",
@@ -348,7 +348,7 @@ extension SeedQuestions {
 
         q("pfl-28", .personalFinancialLiteracy, .medium,
           "Dollar-cost averaging means investing",
-          "everything at once at the market peak.", "a fixed amount at regular intervals regardless of price.", "only when prices are falling.", "only in a single stock.",
+          "the whole amount all at once, right at the market peak.", "a set amount at set intervals, whatever the price.", "only at those times when the prices happen to be falling.", "only ever into one single company's stock.",
           correct: 1,
           explanation: "Investing a fixed amount regularly buys more units when prices are low and fewer when high. It removes the need to time the market, which few people do successfully.",
           why: ["Lump-sum investing at a peak is the risk this approach reduces.",
@@ -360,7 +360,7 @@ extension SeedQuestions {
 
         q("pfl-29", .personalFinancialLiteracy, .medium,
           "Inflation risk to a saver means that",
-          "savings accounts cannot lose nominal value.", "money held in low-return accounts may lose purchasing power over time.", "prices always fall.", "interest is never paid.",
+          "savings accounts cannot lose nominal value.", "low-return money can lose purchasing power.", "the prices of everything always fall.", "no interest is ever paid on savings.",
           correct: 1,
           explanation: "A 1% return against 3% inflation loses 2% of purchasing power annually. Cash is safe in nominal terms and risky in real terms, which is why long-horizon money is usually invested.",
           why: ["Nominal safety is real, but it is not the risk being described.",
@@ -374,7 +374,7 @@ extension SeedQuestions {
 
         q("pfl-30", .personalFinancialLiteracy, .medium,
           "A guaranteed investment certificate (GIC) is best described as",
-          "an ownership stake in a company.", "a deposit paying a set rate of interest over a fixed term.", "a high-risk speculative asset.", "an insurance policy.",
+          "an ownership stake held in a company.", "a deposit at a set rate for a fixed term.", "a speculative asset carrying high risk.", "an insurance policy of a particular kind.",
           correct: 1,
           explanation: "A GIC pays a known rate for a set term, with principal protected and eligible for deposit insurance. The trade-off is a lower return and money locked up until maturity.",
           why: ["Ownership stakes are shares.",
@@ -386,7 +386,7 @@ extension SeedQuestions {
 
         q("pfl-31", .personalFinancialLiteracy, .medium,
           "A mutual fund pools money from many investors to",
-          "lend to a single borrower.", "buy a diversified portfolio managed on the investors' behalf.", "purchase real estate only.", "guarantee a fixed return.",
+          "lend the whole sum to one single borrower alone.", "buy a diversified portfolio, managed for them.", "purchase real estate holdings, and nothing else.", "guarantee a fixed return to each of the investors.",
           correct: 1,
           explanation: "Pooling gives small investors diversification and professional management they could not achieve alone. Management fees are the cost, and they compound against returns over time.",
           why: ["Lending to one borrower is the opposite of diversification.",
@@ -410,7 +410,7 @@ extension SeedQuestions {
 
         q("pfl-33", .personalFinancialLiteracy, .medium,
           "A management expense ratio matters to an investor because it",
-          "is charged only in profitable years.", "is deducted from returns every year, compounding its effect over time.", "is refunded at retirement.", "applies only to bonds.",
+          "it is charged only in the profitable years.", "it comes off returns yearly and compounds.", "it is refunded to the investor at retirement.", "it applies to bond holdings and nothing else.",
           correct: 1,
           explanation: "A 2% MER against a 7% return takes nearly a third of the gain every year. Compounded over decades, the difference between a 2% and a 0.2% fund is very large.",
           why: ["Fees are charged whether the fund gains or loses.",
@@ -422,7 +422,7 @@ extension SeedQuestions {
 
         q("pfl-34", .personalFinancialLiteracy, .medium,
           "A Registered Education Savings Plan is attractive to Canadian families primarily because",
-          "contributions are tax-deductible.", "government grants add to contributions and growth is tax-sheltered until withdrawal.", "it guarantees university admission.", "withdrawals are never taxed.",
+          "the contributions made into it are fully tax-deductible.", "grants top up contributions and growth is sheltered.", "it guarantees the child a place at a chosen university.", "withdrawals from it are never taxed at all.",
           correct: 1,
           explanation: "The Canada Education Savings Grant adds a percentage of annual contributions up to a limit, which is a return no other savings vehicle matches. Growth is sheltered and taxed in the student's hands on withdrawal, usually at a low rate.",
           why: ["RESP contributions are not deductible; the grant is the benefit.",
@@ -434,7 +434,7 @@ extension SeedQuestions {
 
         q("pfl-35", .personalFinancialLiteracy, .medium,
           "A bond's holder is best described as",
-          "a part owner of the issuer.", "a lender to the issuer, receiving interest and principal at maturity.", "an employee of the issuer.", "a guarantor of the issuer's debts.",
+          "a part owner of the issuing organisation.", "a lender, paid interest and principal.", "an employee of the issuing organisation.", "a guarantor of the issuer's other debts.",
           correct: 1,
           explanation: "Bonds are debt. Holders rank ahead of shareholders if the issuer fails, which is why bonds are generally lower risk and lower return than shares.",
           why: ["Ownership belongs to shareholders.",
@@ -448,7 +448,7 @@ extension SeedQuestions {
 
         q("pfl-36", .personalFinancialLiteracy, .hard,
           "Canada uses a progressive income tax system, which means",
-          "everyone pays the same percentage.", "higher portions of income are taxed at higher rates, not the entire income.", "only high earners pay any tax.", "tax falls as income rises.",
+          "everyone pays exactly the same percentage.", "higher portions are taxed at higher rates.", "only the high earners pay any tax at all.", "the tax rate falls as the income rises.",
           correct: 1,
           explanation: "Moving into a higher bracket taxes only the income above that threshold at the higher rate. A raise can therefore never reduce take-home pay, despite a very persistent belief that it can.",
           why: ["A single flat percentage would be a flat tax, not a progressive one.",
@@ -460,7 +460,7 @@ extension SeedQuestions {
 
         q("pfl-37", .personalFinancialLiteracy, .medium,
           "A tax deduction differs from a tax credit because a deduction",
-          "reduces tax owing directly.", "reduces taxable income, so its value depends on the taxpayer's marginal rate.", "is always worth more.", "applies only to businesses.",
+          "it reduces the amount of tax that is owing to you directly.", "it cuts taxable income, so the marginal rate decides.", "it is always worth more than the equivalent tax credit.", "it applies only to registered businesses.",
           correct: 1,
           explanation: "A deduction lowers the income being taxed, so it is worth more to someone in a higher bracket. A credit reduces the tax itself and is worth the same amount to everyone.",
           why: ["Reducing tax owing directly describes a credit.",
@@ -472,7 +472,7 @@ extension SeedQuestions {
 
         q("pfl-38", .personalFinancialLiteracy, .medium,
           "CPP and EI deductions on a Canadian pay stub are",
-          "voluntary contributions.", "mandatory contributions to public pension and employment insurance programmes.", "charitable donations.", "employer profit sharing.",
+          "voluntary contributions that the employee elects.", "mandatory payments into public pension and EI.", "charitable donations made to a registered charity.", "the employer's own share of the annual profit sharing.",
           correct: 1,
           explanation: "Both are required contributions with annual maximums. CPP funds retirement, disability and survivor benefits; EI funds temporary income support during unemployment and certain leaves.",
           why: ["Both are mandatory for most employees.",
@@ -496,7 +496,7 @@ extension SeedQuestions {
 
         q("pfl-40", .personalFinancialLiteracy, .medium,
           "A student who earned income should file a tax return even if they owe no tax because",
-          "filing is optional and pointless.", "they may receive a refund and can accumulate RRSP contribution room and benefit eligibility.", "it raises their credit score.", "it is required to open a bank account.",
+          "filing is optional and entirely pointless.", "a refund, RRSP room and benefit eligibility.", "it raises the credit score of the student.", "it is required in order to open a bank account.",
           correct: 1,
           explanation: "Filing recovers over-withheld tax, establishes RRSP room based on earned income, and registers eligibility for benefits and credits that require a filed return.",
           why: ["Filing has concrete benefits even when no tax is owed.",
@@ -510,7 +510,7 @@ extension SeedQuestions {
 
         q("pfl-41", .personalFinancialLiteracy, .medium,
           "A premium in an insurance contract is",
-          "the amount paid out on a claim.", "the recurring amount paid to keep coverage in force.", "the policyholder's share of a loss.", "a penalty for late payment.",
+          "the amount that is actually paid out when you claim.", "the recurring amount that keeps cover in force.", "the policyholder's own share of any particular loss.", "a penalty that is charged for paying the bill late.",
           correct: 1,
           explanation: "The premium buys the coverage; the deductible is the policyholder's share of a claim; the limit caps what the insurer pays. Confusing the three is the most common error in this topic.",
           why: ["The claim payment is the benefit or settlement.",
@@ -522,7 +522,7 @@ extension SeedQuestions {
 
         q("pfl-42", .personalFinancialLiteracy, .medium,
           "Term life insurance differs from permanent life insurance because term coverage",
-          "lasts for the insured's whole life.", "covers a set period and generally costs less for the same death benefit.", "always builds cash value.", "cannot be purchased by young people.",
+          "it lasts for the whole of the insured's life.", "it runs a set period and costs less.", "it always builds up a cash value over time.", "it cannot be bought by younger people.",
           correct: 1,
           explanation: "Term insurance covers a defined period at lower cost, which suits temporary obligations like a mortgage or dependent children. Permanent policies cost more and accumulate cash value.",
           why: ["Whole-life coverage is permanent insurance.",
@@ -534,7 +534,7 @@ extension SeedQuestions {
 
         q("pfl-43", .personalFinancialLiteracy, .medium,
           "A young driver's auto insurance premium is typically higher because",
-          "young drivers own more expensive cars.", "statistically, drivers in that group have more and costlier claims.", "insurers are required to charge more.", "young drivers drive less.",
+          "young drivers own more expensive cars.", "that group makes more and costlier claims.", "insurers are required by law to charge more.", "young drivers cover far fewer miles a year.",
           correct: 1,
           explanation: "Premiums are priced on claims experience for groups sharing risk characteristics. Age correlates strongly with collision frequency, so the group price reflects that.",
           why: ["Vehicle value is a separate rating factor.",
@@ -546,7 +546,7 @@ extension SeedQuestions {
 
         q("pfl-44", .personalFinancialLiteracy, .medium,
           "Tenant insurance is worth carrying because a landlord's policy",
-          "covers the tenant's belongings fully.", "covers the building, not the tenant's possessions or personal liability.", "covers everything in the unit.", "is paid for by the tenant anyway.",
+          "it covers the tenant's belongings in full.", "it covers the building, not your things.", "it covers everything inside the unit.", "it is paid for by the tenant in any case.",
           correct: 1,
           explanation: "The landlord insures the structure. A tenant's own possessions and their liability if they cause damage or injury are uninsured unless the tenant buys their own policy.",
           why: ["A landlord's policy does not cover tenant belongings.",
@@ -570,7 +570,7 @@ extension SeedQuestions {
 
         q("pfl-46", .personalFinancialLiteracy, .medium,
           "Disability insurance protects against the risk of",
-          "property damage.", "losing income because illness or injury prevents working.", "a car accident only.", "investment losses.",
+          "damage caused to a person's own home or property.", "losing income when illness stops you working.", "being involved in a car accident, and nothing else.", "losses suffered on an investment portfolio held.",
           correct: 1,
           explanation: "For most working people, future earning capacity is their largest asset. Disability coverage insures the income stream itself, which is why it often matters more than life insurance early in a career.",
           why: ["Property damage is covered by home or auto insurance.",
@@ -596,7 +596,7 @@ extension SeedQuestions {
 
         q("pfl-48", .personalFinancialLiteracy, .medium,
           "Compound interest works against a borrower when",
-          "the balance is paid in full each month.", "unpaid interest is added to the balance and then itself charged interest.", "the interest rate is zero.", "payments exceed the balance.",
+          "the whole of the balance is paid off in full monthly.", "unpaid interest joins the balance and is charged.", "the rate of interest being charged happens to be zero.", "the payments that are made exceed the balance owing.",
           correct: 1,
           explanation: "Interest capitalised into the principal earns interest of its own. The same mechanism that builds savings over decades destroys a borrower's position on a carried credit card balance.",
           why: ["Paying in full avoids interest on purchases entirely.",
@@ -608,7 +608,7 @@ extension SeedQuestions {
 
         q("pfl-49", .personalFinancialLiteracy, .medium,
           "Starting to invest at 20 rather than 30, with the same monthly amount, matters most because",
-          "returns are higher for young people.", "the extra decade of compounding does a disproportionate share of the total growth.", "fees are waived under 25.", "markets always rise.",
+          "the returns are simply higher for younger people.", "the extra decade of compounding does the work.", "the fees charged are all waived for those under 25.", "the markets always rise over any long term period.",
           correct: 1,
           explanation: "The earliest contributions compound the longest, so they contribute far more to the final balance than later ones. Time in the market is the variable a young investor uniquely controls.",
           why: ["Returns depend on the investments, not the investor's age.",
@@ -632,7 +632,7 @@ extension SeedQuestions {
 
         q("pfl-51", .personalFinancialLiteracy, .medium,
           "The avalanche method of debt repayment directs extra payments to",
-          "the smallest balance first.", "the highest interest rate first, minimising total interest paid.", "the newest debt first.", "all debts equally.",
+          "the smallest outstanding balance on the list first.", "the highest rate first, cutting total interest.", "the most recently taken-on debt of the group first.", "every single one of the debts equally, all at once.",
           correct: 1,
           explanation: "Avalanche minimises total interest by attacking the most expensive debt first. The snowball method targets the smallest balance instead, trading some cost for earlier psychological wins.",
           why: ["Smallest balance first is the snowball method.",
@@ -644,7 +644,7 @@ extension SeedQuestions {
 
         q("pfl-52", .personalFinancialLiteracy, .medium,
           "An annual percentage rate is more useful than a stated monthly rate because it",
-          "is always lower.", "expresses the yearly cost of borrowing, making offers comparable.", "excludes all fees.", "applies only to mortgages.",
+          "it is always the lower of the two figures.", "it gives the yearly cost, so offers compare.", "it excludes all of the fees that are charged.", "it applies to mortgage borrowing and nothing else.",
           correct: 1,
           explanation: "APR standardises the cost of borrowing on an annual basis so different offers can be compared directly. A 2% monthly rate sounds small and is roughly 27% a year once compounded.",
           why: ["The APR is higher than a monthly figure, which is precisely why it clarifies the cost.",
@@ -658,7 +658,7 @@ extension SeedQuestions {
 
         q("pfl-53", .personalFinancialLiteracy, .medium,
           "A scholarship differs from a bursary in that a scholarship is generally awarded on",
-          "financial need.", "merit such as academic, athletic or leadership achievement.", "a random draw.", "family size.",
+          "the demonstrated financial need of the applicant.", "merit — academic, athletic or leadership.", "the outcome of a completely random prize draw.", "the size of the applicant's own immediate family.",
           correct: 1,
           explanation: "Scholarships reward demonstrated achievement; bursaries address financial need. Many students qualify for both and apply to only one.",
           why: ["Need-based aid is a bursary.",
@@ -670,7 +670,7 @@ extension SeedQuestions {
 
         q("pfl-54", .personalFinancialLiteracy, .medium,
           "When comparing post-secondary options, the most complete measure of cost is",
-          "tuition alone.", "tuition plus housing, materials, transport and forgone earnings.", "the application fee.", "the cost of textbooks.",
+          "the published tuition fee alone, and nothing whatsoever else.", "tuition, housing, materials, transport and lost earnings.", "the cost of buying every one of the textbooks that are required.", "the fee charged to make the application.",
           correct: 1,
           explanation: "Tuition is often less than half the real cost. Living expenses and the income given up while studying belong in any honest comparison of programmes or of studying versus working.",
           why: ["Tuition frequently understates the total substantially.",
@@ -694,7 +694,7 @@ extension SeedQuestions {
 
         q("pfl-56", .personalFinancialLiteracy, .medium,
           "A student considering borrowing for education should first",
-          "borrow the maximum available.", "exhaust grants, scholarships and bursaries, then borrow only what is needed.", "avoid education entirely.", "use a credit card for tuition.",
+          "borrow the maximum sum that happens to be available.", "use grants and bursaries, then borrow the rest.", "avoid taking any further education at all, altogether.", "pay the tuition using a credit card.",
           correct: 1,
           explanation: "Non-repayable aid costs nothing, and borrowing the maximum offered leads to repaying money that was never needed. Credit cards are the most expensive option available.",
           why: ["Borrowing the maximum creates repayment obligations beyond what was required.",
@@ -706,7 +706,7 @@ extension SeedQuestions {
 
         q("pfl-57", .personalFinancialLiteracy, .medium,
           "Student loan repayment in Canada typically begins",
-          "immediately upon enrolment.", "after a grace period following the end of full-time studies.", "only after age 30.", "never, if the student graduates.",
+          "immediately, on the very first day of their enrolment.", "after a grace period once full-time study ends.", "never at all, provided that the student graduates.", "only once the borrower has turned thirty.",
           correct: 1,
           explanation: "A grace period after studies end gives graduates time to find work before payments start. Interest treatment during that period varies by programme and province.",
           why: ["Payments are not required while studying full time.",
@@ -718,7 +718,7 @@ extension SeedQuestions {
 
         q("pfl-58", .personalFinancialLiteracy, .medium,
           "A co-op or apprenticeship programme can reduce the net cost of education because it",
-          "eliminates tuition entirely.", "provides paid work terms that offset costs and build experience.", "shortens the programme to one year.", "removes the need to study.",
+          "it eliminates the tuition fees for the student entirely.", "paid work terms offset the cost and build experience.", "it shortens the whole of the programme to a single year.", "it removes the need to study the material.",
           correct: 1,
           explanation: "Paid work terms reduce borrowing and produce relevant experience and contacts, which typically shortens the job search after graduation.",
           why: ["Tuition is still charged, often with an additional co-op fee.",
@@ -730,7 +730,7 @@ extension SeedQuestions {
 
         q("pfl-59", .personalFinancialLiteracy, .medium,
           "When evaluating whether a credential is worth its cost, the most relevant question is",
-          "how prestigious the institution sounds.", "what graduates of that specific programme actually earn and how employable they are.", "how far away the campus is.", "the age of the buildings.",
+          "how prestigious the name of the institution happens to sound.", "what its graduates earn, and how employable they are.", "how far away the campus happens to be from the family home.", "the age of the buildings on the campus.",
           correct: 1,
           explanation: "Outcomes vary enormously between programmes at the same institution. Graduate employment and earnings data for the specific programme are what the decision should rest on.",
           why: ["Reputation is a weak proxy for programme-level outcomes.",
@@ -742,7 +742,7 @@ extension SeedQuestions {
 
         q("pfl-60", .personalFinancialLiteracy, .medium,
           "A student uses a line of credit at 8% to avoid a credit card at 20%. This decision is",
-          "always unwise, since all borrowing is equal.", "sensible, because the same debt costs substantially less to carry.", "irrelevant, since rates do not matter.", "only valid for large amounts.",
+          "always unwise, since all borrowing is equal.", "sensible — the same debt costs less to carry.", "irrelevant, because the rates do not matter.", "valid only where large amounts are involved.",
           correct: 1,
           explanation: "Moving a balance to a lower rate reduces the cost of the same debt. The risk is treating the cheaper credit as a reason to borrow more.",
           why: ["Borrowing costs vary enormously, and the difference here is more than double.",
@@ -766,7 +766,7 @@ extension SeedQuestions {
 
         q("pfl-62", .personalFinancialLiteracy, .medium,
           "An appreciating asset is one that",
-          "loses value over time.", "tends to increase in value over time.", "must be insured.", "cannot be sold.",
+          "it loses its value steadily over time.", "it tends to gain value over time.", "it has to be insured against loss.", "it cannot be sold on to anyone else.",
           correct: 1,
           explanation: "Property and investments generally appreciate; vehicles and electronics generally depreciate. Borrowing to buy a depreciating asset is what leaves people owing more than the item is worth.",
           why: ["Losing value over time is depreciation.",
@@ -778,7 +778,7 @@ extension SeedQuestions {
 
         q("pfl-63", .personalFinancialLiteracy, .medium,
           "A chequing account differs from a savings account principally because a chequing account",
-          "pays higher interest.", "is designed for frequent transactions rather than for earning interest.", "cannot be accessed by debit card.", "has no fees ever.",
+          "it pays a considerably higher rate of interest each year.", "it is built for frequent transactions, not interest.", "it cannot be reached by using an ordinary debit card at all.", "it never charges any fees whatsoever.",
           correct: 1,
           explanation: "Chequing accounts optimise for access and transaction volume; savings accounts optimise for interest and typically limit withdrawals. Keeping spending money in one and reserves in the other is the standard arrangement.",
           why: ["Savings accounts pay the higher rate.",
@@ -790,7 +790,7 @@ extension SeedQuestions {
 
         q("pfl-64", .personalFinancialLiteracy, .medium,
           "Overdraft protection on a chequing account",
-          "is always free.", "covers transactions beyond the balance for a fee or interest, preventing declined payments.", "increases the account's interest rate.", "is required by law.",
+          "it is always entirely free to use.", "it covers you past the balance, for a fee.", "it increases the interest rate on the account.", "it is required by law on every account.",
           correct: 1,
           explanation: "Overdraft protection avoids declined payments and non-sufficient funds charges, but it is borrowing. Relied on routinely, its fees make it an expensive way to bridge a recurring shortfall.",
           why: ["Overdraft protection carries fees, interest or both.",
@@ -802,7 +802,7 @@ extension SeedQuestions {
 
         q("pfl-65", .personalFinancialLiteracy, .medium,
           "Comparison shopping for a major purchase is most valuable when the buyer compares",
-          "only the advertised sticker price.", "total cost including delivery, warranty, financing charges and running costs.", "the store's decor.", "the brand's advertising budget.",
+          "only the sticker price that has been advertised in store.", "total cost — delivery, warranty, financing, running.", "the size of the brand's overall annual advertising budget.", "the decor and layout of the store itself.",
           correct: 1,
           explanation: "Financing charges and running costs frequently exceed the difference in sticker price. The cheapest purchase price and the cheapest total cost are often two different products.",
           why: ["The sticker price omits several of the largest cost components.",
@@ -814,7 +814,7 @@ extension SeedQuestions {
 
         q("pfl-66", .personalFinancialLiteracy, .medium,
           "A warranty differs from insurance because a warranty",
-          "covers accidental damage from any cause.", "covers defects in materials or workmanship for a stated period.", "pays out cash on any claim.", "is always mandatory.",
+          "it covers accidental damage arising from any cause.", "it covers defects in materials or workmanship.", "it is always mandatory on any major purchase made.", "it pays out in cash on any claim made.",
           correct: 1,
           explanation: "A warranty promises the product performs as sold and covers defects. Damage caused by the owner falls outside it, which is where extended warranty marketing is often misleading.",
           why: ["Accidental damage generally falls outside a standard warranty.",
@@ -826,7 +826,7 @@ extension SeedQuestions {
 
         q("pfl-67", .personalFinancialLiteracy, .medium,
           "Identity theft protection begins most effectively with",
-          "sharing passwords with trusted friends.", "using strong unique passwords, guarding personal information and monitoring accounts.", "posting personal details publicly.", "carrying all identification at all times.",
+          "sharing your passwords with trusted friends.", "strong unique passwords and monitored accounts.", "posting personal details on public profiles.", "carrying all your identification at all times.",
           correct: 1,
           explanation: "Most identity theft exploits reused passwords and carelessly shared information. Monitoring accounts and credit reports catches misuse early, when it is far easier to unwind.",
           why: ["Shared passwords expand the number of people who can be compromised.",
@@ -838,7 +838,7 @@ extension SeedQuestions {
 
         q("pfl-68", .personalFinancialLiteracy, .medium,
           "A phishing message typically tries to",
-          "confirm a legitimate transaction.", "create urgency so the recipient reveals credentials or personal information.", "provide financial education.", "reduce account fees.",
+          "confirm that a recent transaction was legitimate.", "create urgency so you hand over credentials.", "provide genuine financial education free of charge.", "reduce the fees that are charged on your account.",
           correct: 1,
           explanation: "Urgency is the mechanism — an account about to be closed, a payment about to fail. Legitimate institutions do not ask for credentials by message, and the safe response is to contact them independently.",
           why: ["Legitimate confirmations do not ask for credentials.",
@@ -850,7 +850,7 @@ extension SeedQuestions {
 
         q("pfl-69", .personalFinancialLiteracy, .medium,
           "Buy-now-pay-later services carry the risk that",
-          "they never involve fees.", "several small instalment plans overlap, obscuring the total commitment.", "they always report to credit bureaus.", "they eliminate the purchase price.",
+          "they never involve any kind of fee whatsoever.", "small overlapping plans hide the total owed.", "they always report the plan to the credit bureaus.", "they eliminate the purchase price of the item entirely.",
           correct: 1,
           explanation: "Each plan looks small in isolation. Running four or five at once produces a monthly obligation the buyer never consciously agreed to, and missed instalments attract fees.",
           why: ["Late fees and interest apply on missed instalments.",
@@ -862,7 +862,7 @@ extension SeedQuestions {
 
         q("pfl-70", .personalFinancialLiteracy, .medium,
           "A financial goal is most likely to be achieved when it is",
-          "vague and flexible.", "specific, measurable and given a deadline.", "kept secret.", "set by someone else.",
+          "it is left deliberately vague and entirely flexible.", "it is specific, measurable and has a deadline.", "it has been set for them by somebody else entirely.", "it is kept secret from everybody else.",
           correct: 1,
           explanation: "\"Save more\" cannot be acted on or verified. \"Save $3,000 by December for a car\" produces a monthly amount and a way to tell whether it is working.",
           why: ["Vague goals produce no monthly action and cannot be checked.",
@@ -886,7 +886,7 @@ extension SeedQuestions {
 
         q("pfl-72", .personalFinancialLiteracy, .medium,
           "Renting rather than buying a home may be the better choice when a person",
-          "plans to stay in one place for twenty years.", "expects to move within a few years or lacks a down payment and emergency reserve.", "wants to build equity immediately.", "has a very high income.",
+          "they plan to stay put in one place for twenty years.", "they may move soon, or lack a deposit and reserve.", "they want to start building up their equity immediately.", "they happen to have a very high income.",
           correct: 1,
           explanation: "Transaction costs on buying and selling take years to recover. A short expected stay, or buying with no reserve left afterwards, both favour renting regardless of the ownership narrative.",
           why: ["A twenty-year horizon usually favours buying.",
@@ -922,7 +922,7 @@ extension SeedQuestions {
 
         q("pfl-75", .personalFinancialLiteracy, .medium,
           "A variable-rate loan differs from a fixed-rate loan because the variable rate",
-          "never changes.", "moves with a benchmark rate, so payments or interest costs can rise or fall.", "is always higher.", "is illegal in Canada.",
+          "it never changes across the whole term.", "it tracks a benchmark, so costs can move.", "it is always the higher of the two rates.", "it is not legal to offer one in Canada.",
           correct: 1,
           explanation: "Variable rates often start lower but transfer interest rate risk to the borrower. Whether that is worth taking depends on how much room the budget has if rates rise.",
           why: ["An unchanging rate is a fixed rate.",
@@ -934,7 +934,7 @@ extension SeedQuestions {
 
         q("pfl-76", .personalFinancialLiteracy, .medium,
           "The main financial advantage of an employer-matched retirement contribution is that",
-          "it is taxed twice.", "the match is an immediate return on the employee's contribution.", "it reduces gross pay.", "it cannot be invested.",
+          "the money ends up being taxed twice over.", "the match is an immediate return on your money.", "it reduces the gross pay you are quoted.", "the matched money cannot be invested.",
           correct: 1,
           explanation: "A dollar-for-dollar match doubles the contribution the moment it is made. Not contributing enough to capture the full match forfeits compensation the employee has already earned.",
           why: ["Registered plans defer tax rather than doubling it.",
@@ -946,7 +946,7 @@ extension SeedQuestions {
 
         q("pfl-77", .personalFinancialLiteracy, .medium,
           "Old Age Security and the Canada Pension Plan are best described as",
-          "private investment accounts.", "public retirement income programmes that supplement personal savings.", "employer pensions.", "insurance policies.",
+          "private investment accounts held individually.", "public retirement income that tops up savings.", "pensions provided directly by an employer.", "insurance policies bought from an insurer.",
           correct: 1,
           explanation: "Public programmes provide a base that rarely matches pre-retirement income. Personal savings and workplace plans are what close the gap between that base and the intended standard of living.",
           why: ["Neither is a private account owned by the individual.",
@@ -958,7 +958,7 @@ extension SeedQuestions {
 
         q("pfl-78", .personalFinancialLiteracy, .medium,
           "A person's asset allocation refers to",
-          "the brand of bank they use.", "how their portfolio is divided among stocks, bonds and cash.", "their monthly budget.", "their insurance deductible.",
+          "the particular brand of bank that they happen to bank with.", "how the portfolio splits across stocks, bonds and cash.", "the monthly household budget that they work to each month.", "the deductible set on their insurance.",
           correct: 1,
           explanation: "Allocation across asset classes drives most of a portfolio's risk and return, far more than which specific securities are chosen within each class.",
           why: ["The institution is not the allocation.",
@@ -970,7 +970,7 @@ extension SeedQuestions {
 
         q("pfl-79", .personalFinancialLiteracy, .medium,
           "Rebalancing a portfolio means",
-          "selling everything and starting over.", "adjusting holdings back to the target allocation after market movements shift it.", "adding money only.", "checking the balance daily.",
+          "selling the lot and starting again from scratch.", "moving holdings back to the target split.", "adding further money to the portfolio only.", "checking the account balance every single day.",
           correct: 1,
           explanation: "Strong performance in one asset class raises its weight beyond the target, increasing risk. Rebalancing restores the intended mix, which mechanically sells high and buys low.",
           why: ["Liquidating everything is not rebalancing.",
@@ -982,7 +982,7 @@ extension SeedQuestions {
 
         q("pfl-80", .personalFinancialLiteracy, .medium,
           "A capital gain is realised when an investor",
-          "receives a dividend.", "sells an asset for more than they paid for it.", "holds an asset that rises in value.", "pays a management fee.",
+          "they receive a dividend on a holding.", "they sell an asset for more than they paid.", "they hold an asset that is rising in value.", "they pay the annual management fee.",
           correct: 1,
           explanation: "A gain is realised at the sale. An unrealised gain on a held asset is a paper gain, and in Canada only the realised portion enters income in the year of sale.",
           why: ["Dividends are distributions of profit, taxed differently from capital gains.",
@@ -994,7 +994,7 @@ extension SeedQuestions {
 
         q("pfl-81", .personalFinancialLiteracy, .medium,
           "A key benefit of holding investments inside a TFSA is that",
-          "contributions are tax-deductible.", "investment growth and withdrawals are generally not taxed.", "there is no contribution limit.", "only cash may be held.",
+          "the contributions made are tax-deductible.", "growth and withdrawals are generally untaxed.", "there is no limit on what may be contributed.", "only cash may be held inside the account.",
           correct: 1,
           explanation: "Growth inside a TFSA is never taxed and withdrawals are tax-free, with withdrawn room restored the following year. That flexibility makes it useful for both medium and long-term goals.",
           why: ["TFSA contributions are made with after-tax dollars and are not deductible.",
@@ -1006,7 +1006,7 @@ extension SeedQuestions {
 
         q("pfl-82", .personalFinancialLiteracy, .hard,
           "A TFSA holder withdraws $5,000 in June. That contribution room is restored",
-          "immediately.", "on 1 January of the following year.", "never.", "after five years.",
+          "immediately, as soon as it is withdrawn.", "on 1 January of the following year.", "never at any point in the future.", "once five full years have passed.",
           correct: 1,
           explanation: "Withdrawn amounts are added back to contribution room at the start of the next calendar year. Recontributing in the same year is the most common cause of TFSA over-contribution penalties.",
           why: ["Immediate recontribution in the same year risks an over-contribution penalty.",
@@ -1018,7 +1018,7 @@ extension SeedQuestions {
 
         q("pfl-83", .personalFinancialLiteracy, .medium,
           "Someone with high-interest credit card debt and money in a low-interest savings account should generally",
-          "keep both unchanged.", "consider using savings above their emergency reserve to clear the expensive debt.", "borrow more to invest.", "close the savings account.",
+          "leave both of them exactly as they are.", "use savings above the reserve to clear it.", "borrow further in order to invest it.", "close the savings account down entirely.",
           correct: 1,
           explanation: "Paying off a 20% debt is a guaranteed 20% return, far above what savings earn. The emergency reserve stays intact, so the choice is about surplus savings rather than all of them.",
           why: ["Holding both means earning 2% while paying 20%.",
@@ -1030,7 +1030,7 @@ extension SeedQuestions {
 
         q("pfl-84", .personalFinancialLiteracy, .medium,
           "Consolidating several debts into one loan is beneficial mainly when it",
-          "extends repayment indefinitely.", "lowers the overall interest rate and simplifies repayment, without new borrowing.", "frees up cards for more spending.", "hides the debt from lenders.",
+          "it extends the repayment period indefinitely.", "it lowers the rate and simplifies repayment.", "it frees up the cards for further spending.", "it hides the debt from any future lenders.",
           correct: 1,
           explanation: "Consolidation helps when the blended rate falls and the behaviour that created the debt changes. Without the second condition, the cleared cards simply refill.",
           why: ["A longer term can raise total interest even at a lower rate.",
@@ -1042,7 +1042,7 @@ extension SeedQuestions {
 
         q("pfl-85", .personalFinancialLiteracy, .medium,
           "A co-signer on a loan is",
-          "a witness with no obligation.", "equally responsible for repayment if the primary borrower defaults.", "entitled to the borrowed funds.", "released after one payment.",
+          "a witness to the loan, with no obligation.", "equally liable if the borrower defaults.", "entitled to a share of the borrowed funds.", "released from the loan after one payment.",
           correct: 1,
           explanation: "Co-signing is borrowing without receiving the money. The debt appears on the co-signer's credit report and any missed payment damages their score as much as the borrower's.",
           why: ["A co-signer takes on full legal responsibility, unlike a witness.",
@@ -1054,7 +1054,7 @@ extension SeedQuestions {
 
         q("pfl-86", .personalFinancialLiteracy, .medium,
           "Leasing a vehicle rather than buying it typically means",
-          "owning the vehicle at the end of the term.", "lower monthly payments but no ownership, with mileage limits and wear charges.", "no monthly payments.", "unlimited mileage always.",
+          "you own the vehicle at the end of the term.", "lower payments, no ownership, mileage limits.", "there are no monthly payments to make at all.", "the mileage allowed is always unlimited.",
           correct: 1,
           explanation: "A lease pays for the depreciation during the term rather than the vehicle. Payments are lower, but there is no asset at the end and exceeding the mileage allowance is expensive.",
           why: ["A lease ends with the vehicle returned unless a buyout is exercised.",
@@ -1078,7 +1078,7 @@ extension SeedQuestions {
 
         q("pfl-88", .personalFinancialLiteracy, .medium,
           "An emergency fund should generally be held in",
-          "long-term stock investments.", "an accessible account where the value does not fluctuate.", "cash hidden at home.", "a locked-in retirement account.",
+          "long-term investments held in the stock market.", "an accessible account that does not fluctuate.", "cash that is hidden somewhere in the home.", "a retirement account that is locked in.",
           correct: 1,
           explanation: "An emergency fund must be available immediately and worth what it says. Investing it risks having to sell during the same downturn that caused the emergency.",
           why: ["Stocks can fall precisely when the money is needed.",
@@ -1090,7 +1090,7 @@ extension SeedQuestions {
 
         q("pfl-89", .personalFinancialLiteracy, .medium,
           "Someone whose income varies month to month should budget based on",
-          "their best month ever.", "a conservative estimate, saving surplus from strong months to cover weak ones.", "their highest expected month.", "no budget at all.",
+          "the very best month they have ever had.", "a conservative figure, saving the surplus.", "the highest month they are expecting.", "no budget of any description at all.",
           correct: 1,
           explanation: "Budgeting to a peak guarantees shortfalls. Planning to a conservative baseline and banking the excess converts variable income into something predictable to live on.",
           why: ["Budgeting to the best month guarantees deficits in every other one.",
@@ -1102,7 +1102,7 @@ extension SeedQuestions {
 
         q("pfl-90", .personalFinancialLiteracy, .medium,
           "A financial adviser paid by commission on the products they sell may face",
-          "no conflict of interest.", "a conflict between the client's interests and higher-commission products.", "a legal prohibition on advising.", "an obligation to work for free.",
+          "no conflict of interest of any kind.", "a conflict between you and the better commission.", "a legal prohibition on giving any advice.", "an obligation to do the work for free.",
           correct: 1,
           explanation: "Commission compensation creates an incentive to recommend products that pay more. Asking how an adviser is paid is a fair and important question before taking their advice.",
           why: ["The compensation structure creates the conflict directly.",
@@ -1114,7 +1114,7 @@ extension SeedQuestions {
 
         q("pfl-91", .personalFinancialLiteracy, .medium,
           "The main reason to read the terms of a financial product before signing is that",
-          "terms are always identical.", "fees, rate changes and penalties are usually disclosed there rather than in the advertising.", "it is legally required to read them.", "reading them lowers the rate.",
+          "the terms are always identical anyway.", "fees, rate changes and penalties are disclosed there.", "reading them is a legal requirement.", "reading them brings down the rate charged.",
           correct: 1,
           explanation: "Introductory rates that expire, inactivity fees and early repayment penalties live in the terms. The advertised headline is chosen precisely because it is the most attractive part.",
           why: ["Terms vary substantially between products.",
@@ -1138,7 +1138,7 @@ extension SeedQuestions {
 
         q("pfl-93", .personalFinancialLiteracy, .medium,
           "Behavioural bias in investing most commonly leads people to",
-          "buy low and sell high consistently.", "sell during declines and buy after rises, locking in losses.", "ignore the news entirely.", "diversify too much.",
+          "buy low and sell high, quite consistently.", "sell in the falls and buy after the rises.", "ignore the financial news entirely.", "diversify their holdings far too widely.",
           correct: 1,
           explanation: "Fear and enthusiasm push people to act at exactly the wrong moments. An automatic contribution plan is effective largely because it removes the decision.",
           why: ["That is the ideal, and it is what bias prevents.",
@@ -1150,7 +1150,7 @@ extension SeedQuestions {
 
         q("pfl-94", .personalFinancialLiteracy, .medium,
           "Setting up automatic transfers to savings works because it",
-          "increases income.", "removes the monthly decision, making saving the default.", "guarantees investment returns.", "eliminates all expenses.",
+          "it increases the income coming in.", "the monthly decision goes, so saving is default.", "it guarantees the returns on the investment.", "it eliminates the household expenses entirely.",
           correct: 1,
           explanation: "Saving whatever remains at month end depends on willpower that competes with everything else. Automation makes the saving happen first and the spending adjust around it.",
           why: ["Automation moves money; it does not create it.",
@@ -1162,7 +1162,7 @@ extension SeedQuestions {
 
         q("pfl-95", .personalFinancialLiteracy, .medium,
           "A will matters even for a young adult with modest assets because it",
-          "reduces income tax immediately.", "directs how assets are distributed and can name guardians and an executor.", "increases the credit score.", "is required to open an investment account.",
+          "it reduces the income tax owed immediately.", "it directs assets and names guardians.", "it increases the credit score of the estate.", "it is needed to open an investment account.",
           correct: 1,
           explanation: "Without a will, provincial intestacy rules decide distribution, and the process is slower and more expensive for those left behind. A simple will avoids all of that.",
           why: ["A will has no immediate income tax effect.",
@@ -1174,7 +1174,7 @@ extension SeedQuestions {
 
         q("pfl-96", .personalFinancialLiteracy, .medium,
           "Naming a beneficiary on a registered account is useful because the asset",
-          "avoids all taxes permanently.", "can generally pass directly to the named person outside the estate.", "becomes worthless.", "cannot be changed later.",
+          "it avoids every tax permanently thereafter.", "it can pass straight to them, outside the estate.", "it becomes entirely worthless on death.", "it cannot be changed at any later date.",
           correct: 1,
           explanation: "A named beneficiary lets the asset transfer directly, which is faster and avoids estate administration costs. Tax may still apply depending on the account and the relationship.",
           why: ["Tax treatment depends on the account type and the beneficiary.",
@@ -1186,7 +1186,7 @@ extension SeedQuestions {
 
         q("pfl-97", .personalFinancialLiteracy, .medium,
           "Comparing two job offers on salary alone is incomplete because it ignores",
-          "the company's logo.", "benefits, pension matching, hours, commuting cost and growth prospects.", "the office colour scheme.", "the size of the parking lot.",
+          "the logo the company happens to use.", "benefits, pension, hours, commuting and prospects.", "the colour scheme chosen for the office.", "the size of the car park at the premises.",
           correct: 1,
           explanation: "Employer pension matching and health benefits can be worth thousands annually, and commuting costs come straight out of net pay. Total compensation is the comparison that matters.",
           why: ["Branding has no financial value to the employee.",
@@ -1210,7 +1210,7 @@ extension SeedQuestions {
 
         q("pfl-99", .personalFinancialLiteracy, .medium,
           "The most reliable protection against financial fraud is",
-          "acting quickly on urgent offers.", "slowing down, verifying independently, and refusing to be rushed.", "sharing details to confirm identity.", "trusting unsolicited contact.",
+          "acting quickly on any urgent-sounding offer.", "slowing down and verifying independently.", "sharing details in order to confirm identity.", "trusting contact that arrives unsolicited.",
           correct: 1,
           explanation: "Every fraud depends on speed, because scrutiny defeats it. Verifying through a number or website you looked up yourself is the single most effective defence.",
           why: ["Urgency is the pressure fraud relies on.",
@@ -1222,7 +1222,7 @@ extension SeedQuestions {
 
         q("pfl-100", .personalFinancialLiteracy, .medium,
           "The single habit with the greatest long-term effect on personal wealth is generally",
-          "picking individual winning stocks.", "consistently saving and investing a portion of income over many years.", "timing market entries precisely.", "avoiding all financial products.",
+          "picking the individual winning stocks.", "saving and investing steadily for years.", "timing the market entries precisely.", "avoiding financial products altogether.",
           correct: 1,
           explanation: "Consistency and time in the market outweigh selection and timing for almost everyone. The saving rate is also the variable an individual actually controls.",
           why: ["Stock selection is difficult and unreliable even for professionals.",

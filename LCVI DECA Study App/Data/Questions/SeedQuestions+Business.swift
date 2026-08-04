@@ -42,7 +42,7 @@ extension SeedQuestions {
 
         q("bma-3", .businessManagement, .medium,
           "What is a key advantage of promoting from within rather than hiring externally?",
-          "It always costs more than external hiring.", "Internal candidates already understand the company's culture and processes.", "It guarantees a more diverse workforce.", "It removes the need for performance reviews.",
+          "It always works out considerably more expensive than hiring outside.", "Internal candidates already know the culture and the processes.", "It guarantees a more diverse workforce than external hiring would.", "It removes the need to carry out any performance reviews at all.",
           correct: 1,
           explanation: "Internal promotion shortens onboarding, rewards performance and improves retention because employees see a path forward. External hiring brings fresh perspective and new skills — strong organizations use both deliberately.",
           why: ["Internal promotion is usually cheaper — no agency fees and a much shorter ramp-up.",
@@ -66,7 +66,7 @@ extension SeedQuestions {
 
         q("bma-5", .businessManagement, .medium,
           "A company publishes a code of conduct that all employees must review annually. The main purpose is to",
-          "replace the need for managers.", "set clear expectations for ethical behaviour and decision making.", "guarantee higher profits.", "satisfy customers' warranty claims.",
+          "replace the need for managers entirely.", "set clear expectations for ethical conduct.", "guarantee the business higher profits.", "satisfy the warranty claims made by customers.",
           correct: 1,
           explanation: "A code of conduct translates values into concrete expectations — conflicts of interest, gifts, confidentiality, harassment — so employees can recognize and resolve ethical questions consistently before they become incidents.",
           why: ["A code guides judgement; it does not supervise anyone.",
@@ -102,7 +102,7 @@ extension SeedQuestions {
 
         q("bma-8", .businessManagement, .medium,
           "Employees resist a new scheduling system. Which approach is most likely to reduce that resistance?",
-          "Implementing the change without warning to avoid debate", "Involving employees early and explaining the reasons for the change", "Removing the employees who ask questions", "Delaying all communication until after launch",
+          "Implementing the change without warning", "Involving employees early and explaining why", "Removing the employees who ask questions about it", "Delaying all communication until after the launch",
           correct: 1,
           explanation: "Resistance usually comes from uncertainty and loss of control. Early involvement, clear rationale, training and visible leadership support build ownership. Surprise rollouts increase rumours and reduce adoption.",
           why: ["Surprise removes the sense of control that resistance is largely about, so it deepens the problem.",
@@ -114,7 +114,7 @@ extension SeedQuestions {
 
         q("bma-9", .businessManagement, .easy,
           "A key performance indicator (KPI) is best described as",
-          "any number a business collects.", "a measurable value that shows progress toward a specific objective.", "a legal requirement for annual reporting.", "the total revenue of a company.",
+          "any number at all that a business collects.", "a measure of progress toward an objective.", "a legal requirement for the annual report.", "the total revenue a company brings in.",
           correct: 1,
           explanation: "KPIs are selected deliberately because they track progress toward a stated goal — for example, on-time delivery rate for an operations objective. Collecting numbers without tying them to objectives produces dashboards nobody acts on.",
           why: ["A number becomes a KPI only when it is tied to an objective; the rest is data.",
@@ -126,7 +126,7 @@ extension SeedQuestions {
 
         q("bma-10", .businessManagement, .medium,
           "A manufacturer maps its production process and removes steps that add no value for the customer. This approach is best described as",
-          "vertical integration.", "process improvement using lean principles.", "outsourcing.", "diversification.",
+          "vertical integration of the supply chain.", "process improvement along lean principles.", "outsourcing to a third party.", "diversification into new markets.",
           correct: 1,
           explanation: "Lean thinking identifies and eliminates waste — waiting, excess motion, overproduction, defects — so the same output requires fewer resources. Vertical integration and outsourcing change who does the work, not how efficient the process is.",
           why: ["Vertical integration acquires suppliers or distributors; it changes ownership, not process waste.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("bma-11", .businessManagement, .medium,
           "A tall organizational structure is characterised by",
-          "many levels of management and narrow spans of control.", "few levels and wide spans of control.", "no formal reporting lines.", "employees reporting to customers.",
+          "many levels of management, narrow spans.", "few levels of management and wide spans.", "no formal reporting lines whatsoever.", "employees reporting directly to customers.",
           correct: 0,
           explanation: "Tall structures have many layers, each supervising few people. They give close supervision and clear promotion paths but slow decisions, because information passes through more hands.",
           why: ["Correct. Many layers with narrow spans is the definition of a tall structure.",
@@ -176,7 +176,7 @@ extension SeedQuestions {
 
         q("bma-14", .businessManagement, .medium,
           "Delegation is best described as",
-          "avoiding responsibility for a task.", "assigning authority and responsibility to a subordinate while remaining accountable.", "doing all the work personally.", "removing an employee's duties.",
+          "avoiding responsibility for a task entirely.", "passing authority down but staying accountable.", "doing the whole of the work personally.", "stripping an employee of their existing duties.",
           correct: 1,
           explanation: "A manager can delegate authority and responsibility but not accountability. That is why delegation requires selecting the right person, being clear about the outcome, and following up.",
           why: ["Delegation assigns work; it does not shed the manager's accountability.",
@@ -252,7 +252,7 @@ extension SeedQuestions {
 
         q("bma-20", .businessManagement, .medium,
           "A structured interview improves selection quality mainly because",
-          "it is faster than an unstructured interview.", "every candidate answers the same questions against the same criteria, reducing bias.", "it removes the need to check references.", "it guarantees the best candidate applies.",
+          "it runs faster than an unstructured interview.", "the same questions meet the same criteria.", "it removes the need to check any references.", "it guarantees the best candidate will apply.",
           correct: 1,
           explanation: "Asking every candidate the same job-related questions and scoring against defined criteria makes comparison meaningful and gives the employer a defensible record if a decision is challenged.",
           why: ["Structured interviews often take longer to prepare and run.",
@@ -276,7 +276,7 @@ extension SeedQuestions {
 
         q("bma-22", .businessManagement, .medium,
           "A structured onboarding programme primarily reduces",
-          "the need for a job description.", "early turnover, by helping new hires become effective and connected sooner.", "payroll costs.", "the number of applicants.",
+          "the need for a written job description of any kind at all.", "early turnover, by making new hires effective sooner.", "the payroll cost of running the entire department each year.", "the number of applicants who apply for each opening advertised.",
           correct: 1,
           explanation: "The first weeks determine whether a new hire stays. Structured onboarding shortens time to productivity and builds the relationships that make someone want to remain.",
           why: ["The job description is what onboarding is built around.",
@@ -290,7 +290,7 @@ extension SeedQuestions {
 
         q("bma-23", .businessManagement, .medium,
           "WHMIS is a system for",
-          "scheduling employee shifts.", "communicating the hazards of workplace chemicals through labels, data sheets and training.", "tracking sales performance.", "measuring workplace productivity.",
+          "scheduling the shifts employees work.", "communicating chemical hazards at work.", "tracking the sales performance of staff.", "measuring productivity across the workplace.",
           correct: 1,
           explanation: "WHMIS combines standardised labels, safety data sheets and worker training so anyone handling a hazardous product knows its risks and the required precautions.",
           why: ["Scheduling is a workforce management task.",
@@ -302,7 +302,7 @@ extension SeedQuestions {
 
         q("bma-24", .businessManagement, .medium,
           "A joint health and safety committee exists to",
-          "negotiate wages.", "bring workers and management together to identify and resolve safety concerns.", "conduct performance appraisals.", "approve marketing plans.",
+          "negotiate the wages paid to workers.", "bring workers and management together on safety.", "conduct the annual performance appraisals for all staff.", "approve the marketing plans that are put forward to it.",
           correct: 1,
           explanation: "The committee is the participation half of the internal responsibility system: worker and management representatives inspect, investigate and recommend, so safety is not left to management alone.",
           why: ["Wage negotiation is collective bargaining, a separate process.",
@@ -326,7 +326,7 @@ extension SeedQuestions {
 
         q("bma-26", .businessManagement, .medium,
           "An employer's duty to investigate a workplace harassment complaint arises",
-          "only if the complaint is in writing.", "whenever the employer becomes aware of an incident or complaint.", "only after a police report.", "only if the complainant is a manager.",
+          "only if the complaint arrives in writing.", "whenever the employer becomes aware of it.", "only after a report has been made to police.", "only where the complainant is a manager.",
           correct: 1,
           explanation: "Ontario law requires an appropriate investigation once the employer knows of an incident, however it came to light. Waiting for a formal written complaint is itself a compliance failure.",
           why: ["An investigation can be triggered by a verbal report or by observation.",
@@ -352,7 +352,7 @@ extension SeedQuestions {
 
         q("bma-28", .businessManagement, .medium,
           "Whistleblower protection exists to",
-          "reward employees for criticising managers.", "shield employees who report wrongdoing in good faith from reprisal.", "prevent employees from speaking to regulators.", "guarantee anonymity in all circumstances.",
+          "reward employees for criticising their own managers openly.", "shield good-faith reporters of wrongdoing from reprisal.", "stop employees from speaking to any of the regulators at all.", "guarantee anonymity in every circumstance.",
           correct: 1,
           explanation: "Wrongdoing is usually visible to staff long before it reaches regulators. Protection from reprisal is what makes reporting possible, since the alternative is silence.",
           why: ["Protection covers reports of wrongdoing, not general criticism.",
@@ -364,7 +364,7 @@ extension SeedQuestions {
 
         q("bma-29", .businessManagement, .medium,
           "Corporate social responsibility is best understood as",
-          "donating to charity for publicity.", "taking responsibility for the social and environmental effects of the business's own operations.", "maximising short-term profit only.", "an optional marketing campaign.",
+          "donating to charity for the publicity.", "owning the effects of the firm's operations.", "maximising short-term profit and nothing else.", "an optional campaign run by marketing.",
           correct: 1,
           explanation: "Genuine CSR addresses what the business itself does — how it sources, employs, produces and disposes. Donations disconnected from operations are philanthropy, and sometimes a distraction from them.",
           why: ["Publicity-driven giving is philanthropy, and often a distraction from operational impact.",
@@ -376,7 +376,7 @@ extension SeedQuestions {
 
         q("bma-30", .businessManagement, .hard,
           "An employee discovers the company is overstating revenue in its reports. The most appropriate first step is to",
-          "post the evidence on social media.", "raise it through the internal reporting channel or with an appropriate senior authority.", "ignore it as none of their concern.", "quietly resign without explanation.",
+          "post the evidence on social media at once.", "raise it internally or with a senior authority.", "ignore it, as it is none of their concern.", "resign quietly without offering any explanation.",
           correct: 1,
           explanation: "Internal escalation gives the organisation a chance to correct the problem and creates a documented record. External disclosure remains available if the internal route fails or is compromised.",
           why: ["Public disclosure as a first step forfeits protections and may cause harm before facts are established.",
@@ -390,7 +390,7 @@ extension SeedQuestions {
 
         q("bma-31", .businessManagement, .medium,
           "A bottleneck in a production process is",
-          "the fastest step in the process.", "the step that limits the throughput of the whole process.", "the cheapest step.", "the last step before shipping.",
+          "the fastest step in the whole process.", "the step that limits overall throughput.", "the cheapest step in the whole process.", "the final step before goods are shipped.",
           correct: 1,
           explanation: "Total throughput cannot exceed the slowest step. Improving anything other than the bottleneck adds work in progress without producing more output — which is why the bottleneck is found first.",
           why: ["The fastest step is never the constraint.",
@@ -402,7 +402,7 @@ extension SeedQuestions {
 
         q("bma-32", .businessManagement, .medium,
           "Total quality management differs from end-of-line inspection because it",
-          "checks only finished goods.", "builds quality into every stage and involves all employees.", "applies to manufacturing only.", "eliminates the need for customer feedback.",
+          "it checks only the finished goods right at the end of the line.", "it builds quality in at every stage, with everyone.", "it applies to manufacturing businesses and nowhere else.", "it removes the need for any customer feedback at all.",
           correct: 1,
           explanation: "Inspection finds defects after the money has been spent making them. TQM prevents them by making quality every function's responsibility and pursuing continuous improvement.",
           why: ["Checking finished goods is exactly the end-of-line inspection being contrasted.",
@@ -426,7 +426,7 @@ extension SeedQuestions {
 
         q("bma-34", .businessManagement, .medium,
           "Benchmarking in operations means",
-          "setting prices to match competitors.", "comparing processes and performance against strong performers to find improvement opportunities.", "measuring the physical size of a facility.", "recording daily attendance.",
+          "setting prices to match those charged by competitors.", "comparing performance against strong performers.", "measuring the physical size of a facility.", "recording the daily attendance across the whole site.",
           correct: 1,
           explanation: "Benchmarking compares how the business performs against organisations that do a process well — often in other industries — turning a vague sense of underperformance into a specific, closable gap.",
           why: ["Matching competitor prices is a pricing decision.",
@@ -440,7 +440,7 @@ extension SeedQuestions {
 
         q("bma-35", .businessManagement, .medium,
           "A breach of contract occurs when",
-          "one party changes their mind before any agreement exists.", "a party fails to perform an obligation the contract requires without lawful excuse.", "both parties agree to end the contract.", "the contract is written informally.",
+          "one party changes their mind before agreeing.", "a party fails an obligation without excuse.", "both parties agree to end the contract early.", "the contract was only written up informally.",
           correct: 1,
           explanation: "A breach is non-performance without lawful excuse. Remedies aim to put the injured party where performance would have left them, usually through damages.",
           why: ["Before agreement there is no contract to breach.",
@@ -452,7 +452,7 @@ extension SeedQuestions {
 
         q("bma-36", .businessManagement, .medium,
           "A minor signs a contract for a non-essential item. In general the contract is",
-          "fully binding on the minor.", "voidable at the minor's option, because of limited capacity.", "automatically criminal.", "binding only if witnessed.",
+          "fully binding on the minor who signed it.", "voidable at the minor's option.", "automatically criminal on the seller's part.", "binding only where it has been witnessed.",
           correct: 1,
           explanation: "Capacity is an essential element. Contracts with minors for non-necessaries are generally voidable by the minor, which is why businesses take extra steps before contracting with one.",
           why: ["Limited capacity is precisely why it does not fully bind the minor.",
@@ -464,7 +464,7 @@ extension SeedQuestions {
 
         q("bma-37", .businessManagement, .medium,
           "A non-disclosure agreement is used primarily to",
-          "prevent an employee from ever working again.", "protect confidential business information shared with another party.", "set an employee's salary.", "transfer ownership of the business.",
+          "stop an employee from ever working in the same field again at all.", "protect confidential information shared with another party.", "set out the salary an employee will be paid over the contract.", "transfer the ownership of the whole business to another party.",
           correct: 1,
           explanation: "An NDA defines what information is confidential and restricts its use and disclosure. It is what allows a business to share sensitive material during negotiations or employment.",
           why: ["That describes an overbroad non-compete, which courts routinely refuse to enforce.",
@@ -476,7 +476,7 @@ extension SeedQuestions {
 
         q("bma-38", .businessManagement, .medium,
           "Consumer protection legislation typically prohibits",
-          "offering discounts.", "unfair practices such as false or misleading representations.", "selling online.", "charging interest of any kind.",
+          "the offering of any discount to customers.", "unfair practices such as misleading claims.", "the selling of goods over the internet.", "the charging of interest of any kind.",
           correct: 1,
           explanation: "Consumer protection law targets misleading representations, unconscionable terms and high-pressure tactics, and usually gives buyers cancellation rights for certain contract types.",
           why: ["Discounting is ordinary competitive practice.",
@@ -490,7 +490,7 @@ extension SeedQuestions {
 
         q("bma-39", .businessManagement, .medium,
           "In Lewin's change model, the \"unfreezing\" stage involves",
-          "locking in the new process permanently.", "building awareness that change is necessary and loosening existing habits.", "measuring results after the change.", "reversing the change.",
+          "locking the new process in permanently.", "building awareness that change is needed.", "measuring the results once change is done.", "reversing the change that has been made.",
           correct: 1,
           explanation: "Unfreeze, change, refreeze. Unfreezing establishes why the current state cannot continue — without it, people experience the change as disruption rather than as a solution.",
           why: ["Locking in is the refreezing stage at the end.",
@@ -502,7 +502,7 @@ extension SeedQuestions {
 
         q("bma-40", .businessManagement, .medium,
           "A change initiative most often fails because",
-          "the technology is defective.", "leaders underestimate the need to communicate why the change matters.", "employees are inherently lazy.", "budgets are always too small.",
+          "the technology chosen turns out to be defective.", "leaders under-communicate why it matters.", "employees are inherently lazy about change.", "the budgets allowed are always far too small.",
           correct: 1,
           explanation: "Most failed changes are communication failures rather than technical ones. People who do not understand the reason default to the familiar, whatever the system in front of them can do.",
           why: ["Technology is a common scapegoat but rarely the root cause.",
@@ -514,7 +514,7 @@ extension SeedQuestions {
 
         q("bma-41", .businessManagement, .medium,
           "Identifying and supporting \"change champions\" within departments helps because",
-          "they replace the management team.", "peers influence adoption more credibly than instructions from above.", "it removes the need for training.", "they can approve budgets.",
+          "they take the place of the existing management team.", "peers carry more credibility than instructions do.", "it removes the need for any training programme at all.", "they are able to approve the budgets that are needed.",
           correct: 1,
           explanation: "A respected colleague demonstrating the new way is more persuasive than a directive. Champions also surface real friction early, while it is still cheap to fix.",
           why: ["Champions supplement management rather than replacing it.",
@@ -526,7 +526,7 @@ extension SeedQuestions {
 
         q("bma-42", .businessManagement, .medium,
           "A pilot programme before a full rollout is valuable because it",
-          "guarantees the change will succeed.", "surfaces practical problems at small scale where they are cheap to fix.", "avoids the need for employee input.", "eliminates the cost of the change.",
+          "it guarantees that the change will certainly succeed.", "problems surface small, where they are cheap.", "it avoids the need for any employee input at all.", "it eliminates the cost of making the change entirely.",
           correct: 1,
           explanation: "A pilot converts assumptions into evidence while the blast radius is small. It also produces internal proof and a group of experienced users to support the wider rollout.",
           why: ["A pilot reduces risk but guarantees nothing.",
@@ -540,7 +540,7 @@ extension SeedQuestions {
 
         q("bma-43", .businessManagement, .medium,
           "A leading indicator differs from a lagging indicator because a leading indicator",
-          "reports results after the period ends.", "signals likely future performance while there is still time to act.", "is always financial.", "cannot be measured.",
+          "it reports on the results after the period has ended.", "it signals performance while there is time to act.", "it is always financial rather than operational in nature.", "it cannot be measured in any reliable way.",
           correct: 1,
           explanation: "Revenue is lagging — it reports what already happened. Pipeline volume or customer satisfaction lead it, giving management warning while the outcome can still be changed.",
           why: ["Reporting after the fact describes a lagging indicator.",
@@ -564,7 +564,7 @@ extension SeedQuestions {
 
         q("bma-45", .businessManagement, .hard,
           "A company sets a single KPI of call volume per agent. The most likely unintended consequence is that",
-          "customer satisfaction improves.", "agents rush calls, resolving fewer issues properly.", "call volume falls.", "training becomes unnecessary.",
+          "customer satisfaction scores improve markedly.", "agents rush calls and fix fewer issues.", "the total volume of calls handled falls away.", "training becomes unnecessary for the agents.",
           correct: 1,
           explanation: "A measure optimised in isolation gets gamed. Volume alone rewards speed over resolution, which is why call centres pair it with first-contact resolution and a quality score.",
           why: ["Satisfaction typically falls when agents are pushed to end calls quickly.",
@@ -600,7 +600,7 @@ extension SeedQuestions {
 
         q("bma-48", .businessManagement, .medium,
           "Management by objectives works by",
-          "having managers set goals in secret.", "agreeing specific objectives with employees and reviewing progress against them.", "eliminating all performance measurement.", "rotating employees weekly.",
+          "having managers set the goals in secret.", "agreeing objectives, then reviewing progress on them.", "eliminating performance measurement from the process altogether.", "rotating employees between different roles every single week.",
           correct: 1,
           explanation: "MBO makes goals explicit and jointly agreed, so employees know what success looks like and reviews compare results against something both parties accepted in advance.",
           why: ["Secret goals cannot direct anyone's effort.",
@@ -612,7 +612,7 @@ extension SeedQuestions {
 
         q("bma-49", .businessManagement, .medium,
           "A 360-degree performance review gathers feedback from",
-          "the direct manager only.", "managers, peers, direct reports and sometimes customers.", "the employee alone.", "external auditors.",
+          "the employee's own direct line manager, and no one else.", "managers, peers, reports and sometimes customers.", "the employee themselves, and nobody else in the business.", "the organisation's external auditors.",
           correct: 1,
           explanation: "Multi-source feedback catches behaviour a single manager cannot see — particularly how someone treats peers and juniors, which often differs from how they present upward.",
           why: ["A single-manager review is the traditional approach the method improves on.",
@@ -624,7 +624,7 @@ extension SeedQuestions {
 
         q("bma-50", .businessManagement, .medium,
           "Succession planning is the process of",
-          "replacing employees who resign, after they leave.", "identifying and developing internal candidates for critical roles before they are vacant.", "reducing headcount.", "outsourcing management.",
+          "replacing employees only after they have already resigned.", "developing internal candidates before roles fall vacant.", "cutting the overall headcount right across the whole business.", "outsourcing the entire management function to a third party.",
           correct: 1,
           explanation: "Succession planning treats key-person risk as foreseeable. Identifying and developing candidates in advance means a departure is a transition rather than a crisis.",
           why: ["Reacting after a departure is exactly what succession planning avoids.",
@@ -636,7 +636,7 @@ extension SeedQuestions {
 
         q("bma-51", .businessManagement, .medium,
           "The main purpose of an organizational chart is to",
-          "show the company's profit by department.", "display reporting relationships and lines of authority.", "list every employee's salary.", "track project deadlines.",
+          "show the profit made by each department.", "display reporting lines and authority.", "list the salary paid to every employee.", "track the deadlines on current projects.",
           correct: 1,
           explanation: "The chart makes reporting lines and authority visible, so people know who decides what and where to escalate. It says nothing about how influence actually flows informally.",
           why: ["Departmental profitability appears in management accounts.",
@@ -648,7 +648,7 @@ extension SeedQuestions {
 
         q("bma-52", .businessManagement, .medium,
           "A functional structure groups employees by",
-          "geographic region.", "the type of work they do, such as marketing or finance.", "the customers they serve.", "date of hire.",
+          "the geographic region they work in.", "the type of work that they actually do.", "the particular customers that they serve.", "the date on which they were hired.",
           correct: 1,
           explanation: "Functional structures group specialists together, which builds deep expertise and efficiency. The trade-off is coordination across functions, since each optimises its own area.",
           why: ["Regional grouping is geographic departmentalisation.",
@@ -660,7 +660,7 @@ extension SeedQuestions {
 
         q("bma-53", .businessManagement, .medium,
           "Intrinsic motivation comes from",
-          "a cash bonus.", "the satisfaction of the work itself, such as mastery or purpose.", "a company car.", "a promotion announcement.",
+          "a cash bonus paid at the year end.", "the satisfaction of the work itself.", "a company car provided with the role.", "a promotion announced to the whole team.",
           correct: 1,
           explanation: "Intrinsic motivation arises from the work — autonomy, mastery, purpose. Extrinsic rewards can support it but can also crowd it out when they become the only reason to perform.",
           why: ["A bonus is an extrinsic reward.",
@@ -672,7 +672,7 @@ extension SeedQuestions {
 
         q("bma-54", .businessManagement, .medium,
           "Herzberg's theory holds that improving hygiene factors such as pay and working conditions will",
-          "strongly motivate employees over the long term.", "reduce dissatisfaction but not by itself create motivation.", "have no effect at all.", "replace the need for recognition.",
+          "strongly motivate employees over the long term.", "reduce dissatisfaction without motivating.", "have no effect on employees at all.", "replace the need for any recognition.",
           correct: 1,
           explanation: "Herzberg separates dissatisfiers from motivators. Fixing pay and conditions removes reasons to be unhappy; achievement, recognition and responsibility are what actually motivate.",
           why: ["Hygiene factors stop mattering once they are adequate.",
@@ -684,7 +684,7 @@ extension SeedQuestions {
 
         q("bma-55", .businessManagement, .medium,
           "A manager gives an employee specific, timely feedback on a task. This is most effective when it",
-          "focuses on the person's character.", "describes the behaviour and its effect, and is given close to the event.", "is saved for the annual review.", "is delivered publicly to set an example.",
+          "it focuses on the person's character.", "it names the behaviour and its effect.", "it is saved up for the annual review.", "it is delivered publicly, to set an example.",
           correct: 1,
           explanation: "Feedback works when it is specific, behavioural and prompt. Character judgements provoke defensiveness, and a comment saved for eleven months later cannot change anything.",
           why: ["Character-based feedback invites defensiveness and cannot be acted on.",
@@ -696,7 +696,7 @@ extension SeedQuestions {
 
         q("bma-56", .businessManagement, .medium,
           "Outsourcing a non-core function such as payroll is usually justified when",
-          "the function defines the company's competitive advantage.", "a specialist can perform it more cheaply or reliably than doing it internally.", "the company wants to hire more staff.", "the function is confidential.",
+          "the function is what defines the firm's advantage.", "a specialist can do it more cheaply or reliably.", "the company wants to take on more staff.", "the function handles confidential material.",
           correct: 1,
           explanation: "Outsourcing suits standardised work where scale gives a provider an advantage. Functions that carry the firm's competitive advantage stay in-house, whatever the cost comparison says.",
           why: ["A function that defines competitive advantage should never be handed to a third party.",
@@ -732,7 +732,7 @@ extension SeedQuestions {
 
         q("bma-59", .businessManagement, .medium,
           "Kaizen refers to",
-          "a single large restructuring.", "continuous incremental improvement driven by everyone in the organisation.", "an annual audit.", "a hiring freeze.",
+          "a single large restructuring exercise.", "continuous small improvement by everyone.", "an audit carried out once a year.", "a freeze on all further hiring.",
           correct: 1,
           explanation: "Kaizen accumulates many small improvements suggested by the people doing the work. Its advantage over large projects is that it is continuous and meets little resistance.",
           why: ["A single large restructuring is the opposite approach.",
@@ -744,7 +744,7 @@ extension SeedQuestions {
 
         q("bma-60", .businessManagement, .medium,
           "The primary purpose of a standard operating procedure is to",
-          "restrict employees from thinking.", "document the agreed way a task is performed so it is consistent and trainable.", "increase the number of steps.", "satisfy the marketing department.",
+          "stop employees thinking for themselves.", "document the agreed way a task is done.", "increase the number of steps in a task.", "satisfy a request from the marketing team.",
           correct: 1,
           explanation: "An SOP captures the current best-known method so results do not depend on who is working. It is also the baseline any improvement is measured against.",
           why: ["An SOP frees attention for judgement by settling the routine parts.",
@@ -756,7 +756,7 @@ extension SeedQuestions {
 
         q("bma-61", .businessManagement, .medium,
           "A business continuity plan is designed to",
-          "increase quarterly sales.", "keep critical operations running or restore them quickly after a disruption.", "recruit new employees.", "design a new product.",
+          "increase the volume of sales made over the coming quarter.", "keep critical operations running through disruption.", "recruit and train new employees to join the business soon.", "design an entirely new product for the target market segment.",
           correct: 1,
           explanation: "Continuity planning identifies critical functions and the systems and people they depend on, then arranges alternatives in advance so a disruption is survivable rather than fatal.",
           why: ["Sales growth is a commercial objective.",
@@ -780,7 +780,7 @@ extension SeedQuestions {
 
         q("bma-63", .businessManagement, .medium,
           "Intellectual property in the form of a trademark protects",
-          "an invention's technical function.", "a name, logo or symbol that distinguishes a business's goods or services.", "an original written work.", "a manufacturing secret.",
+          "the technical function that lies behind an invention.", "a name, logo or symbol that distinguishes goods.", "an original written or artistic work.", "a secret used within the manufacturing process itself.",
           correct: 1,
           explanation: "A trademark protects the marks that identify a source in the marketplace. Patents cover inventions, copyright covers original works, and trade secrets cover confidential know-how.",
           why: ["Technical function is protected by a patent.",
@@ -792,7 +792,7 @@ extension SeedQuestions {
 
         q("bma-64", .businessManagement, .medium,
           "Vicarious liability means an employer may be held responsible for",
-          "an employee's private conduct outside work.", "wrongful acts an employee commits in the course of employment.", "a competitor's misconduct.", "a customer's negligence.",
+          "an employee's private conduct entirely outside work.", "wrongful acts done in the course of employment.", "the misconduct of a direct competitor in the market.", "the negligence of one of its customers.",
           correct: 1,
           explanation: "An employer bears responsibility for harm caused by employees acting within the scope of their duties, which is why training, supervision and clear policy are legal protections as well as management ones.",
           why: ["Purely private conduct outside the scope of employment generally falls outside it.",
@@ -804,7 +804,7 @@ extension SeedQuestions {
 
         q("bma-65", .businessManagement, .medium,
           "A privacy policy for a business collecting customer data should explain",
-          "only the company's address.", "what data is collected, why, how it is used and how long it is kept.", "the company's revenue.", "employee salaries.",
+          "only the registered address of the company.", "what is collected, why, and for how long.", "the revenue the company brings in each year.", "the salaries paid to each of its employees.",
           correct: 1,
           explanation: "Privacy legislation requires meaningful notice and consent. A policy that does not say what is collected and why cannot support valid consent, whatever it claims.",
           why: ["An address alone tells the customer nothing about their data.",
@@ -828,7 +828,7 @@ extension SeedQuestions {
 
         q("bma-67", .businessManagement, .medium,
           "Ergonomic assessment in an office primarily aims to",
-          "improve the room's appearance.", "reduce musculoskeletal strain by fitting the workstation to the worker.", "increase desk numbers.", "lower heating costs.",
+          "improve the appearance of the room.", "fit the workstation to the worker.", "increase the number of desks in the office.", "lower the cost of heating the building.",
           correct: 1,
           explanation: "Ergonomics targets repetitive strain and posture injuries, which accumulate quietly over years and are among the most common workplace claims.",
           why: ["Appearance is an interior design consideration.",
@@ -840,7 +840,7 @@ extension SeedQuestions {
 
         q("bma-68", .businessManagement, .medium,
           "A supervisor's core health and safety duty is to",
-          "delegate all responsibility to workers.", "ensure workers follow safe procedures and are advised of hazards.", "conduct government inspections.", "write the legislation.",
+          "delegate the whole of the responsibility down to the workers.", "ensure safe procedures are followed and hazards flagged.", "carry out the government's own statutory site inspections.", "write the health and safety legislation that governs the site.",
           correct: 1,
           explanation: "Supervisors sit closest to the work, so the law places a specific duty on them: ensure procedures are followed, advise of hazards, and take every reasonable precaution.",
           why: ["Responsibility is shared, and it cannot be delegated away.",
@@ -852,7 +852,7 @@ extension SeedQuestions {
 
         q("bma-69", .businessManagement, .medium,
           "Accommodation of an employee's disability under human rights law is required",
-          "only if it costs nothing.", "up to the point of undue hardship for the employer.", "only for physical disabilities.", "only for full-time staff.",
+          "only where it would cost the employer nothing.", "up to the point of undue hardship.", "only in the case of physical disabilities.", "only for employees working full-time hours.",
           correct: 1,
           explanation: "The duty to accommodate runs to undue hardship, judged on cost, outside sources of funding and health and safety. Minor inconvenience or discomfort does not meet that threshold.",
           why: ["Cost alone does not excuse accommodation until it reaches undue hardship.",
@@ -864,7 +864,7 @@ extension SeedQuestions {
 
         q("bma-70", .businessManagement, .medium,
           "A stakeholder analysis helps a manager by",
-          "listing only shareholders.", "identifying everyone affected by a decision and how much influence and interest each has.", "calculating profit.", "setting product prices.",
+          "listing the shareholders and nobody else.", "identifying who is affected, and their influence.", "calculating the profit that a given decision will make.", "setting the prices charged for each of its products.",
           correct: 1,
           explanation: "Mapping influence against interest shows who must be consulted, who must be kept informed and who can derail a decision if ignored — which is usually where change initiatives fail.",
           why: ["Shareholders are one stakeholder group among many.",
@@ -876,7 +876,7 @@ extension SeedQuestions {
 
         q("bma-71", .businessManagement, .medium,
           "Groupthink in a management team occurs when",
-          "members debate vigorously.", "the desire for agreement suppresses dissent and realistic appraisal.", "the team is too small.", "decisions take too long.",
+          "the members of the team debate vigorously.", "wanting agreement suppresses dissent.", "the team is simply too small to function.", "the decisions being made take far too long.",
           correct: 1,
           explanation: "Groupthink produces confident, unanimous and wrong decisions. Assigning someone to argue the opposing case, or seeking outside review, is the standard countermeasure.",
           why: ["Vigorous debate is the antidote, not the condition.",
@@ -888,7 +888,7 @@ extension SeedQuestions {
 
         q("bma-72", .businessManagement, .medium,
           "The main advantage of a cross-functional team is that it",
-          "eliminates the need for managers.", "brings together different expertise so problems are solved with a fuller picture.", "reduces the number of meetings.", "guarantees faster decisions.",
+          "it eliminates the need for any managers in the business at all.", "different expertise gives a fuller picture of a problem.", "it reduces the number of meetings that have to be held overall.", "it guarantees that every decision will be made much faster.",
           correct: 1,
           explanation: "Cross-functional teams surface constraints early, because the people who understand each constraint are in the room. Coordination cost is the trade-off.",
           why: ["Cross-functional work usually needs more coordination, not less management.",
@@ -900,7 +900,7 @@ extension SeedQuestions {
 
         q("bma-73", .businessManagement, .medium,
           "Exit interviews are most useful when the organisation",
-          "uses them to argue with the departing employee.", "looks for patterns across many interviews and acts on them.", "conducts them years after departure.", "files them without review.",
+          "they are used to argue with the leaver.", "patterns across many are found and acted on.", "they are conducted years after departure.", "they are filed away without ever being read.",
           correct: 1,
           explanation: "A single exit interview is one person's view. Patterns across many — one manager, one team, one recurring frustration — are actionable evidence about why people leave.",
           why: ["Arguing shuts down the candour that makes the interview worth conducting.",
@@ -912,7 +912,7 @@ extension SeedQuestions {
 
         q("bma-74", .businessManagement, .medium,
           "Progressive discipline typically follows the sequence",
-          "immediate termination for any issue.", "verbal warning, written warning, suspension, then termination.", "suspension first, then a warning.", "termination followed by a warning.",
+          "immediate termination of employment for any issue whatsoever.", "verbal warning, written warning, suspension, termination.", "suspension first of all, and then a formal written warning.", "termination, followed afterwards by a formal written warning.",
           correct: 1,
           explanation: "Progressive discipline escalates in steps, giving the employee notice and an opportunity to correct while creating the documented record an employer needs if termination follows.",
           why: ["Immediate termination is reserved for serious misconduct, not any issue.",
@@ -924,7 +924,7 @@ extension SeedQuestions {
 
         q("bma-75", .businessManagement, .medium,
           "A company's mission statement should describe",
-          "its share price target.", "its purpose — what it does, for whom, and why.", "its office locations.", "its employee count.",
+          "the share price target it has set itself.", "its purpose — what it does, and for whom.", "the locations of the offices it operates.", "the number of employees it currently has.",
           correct: 1,
           explanation: "A mission states present purpose: what the organisation does and for whom. A vision describes the future state it is working toward.",
           why: ["Share price is a financial target, not a purpose.",
@@ -936,7 +936,7 @@ extension SeedQuestions {
 
         q("bma-76", .businessManagement, .medium,
           "Strategic planning differs from operational planning mainly in its",
-          "use of colour in documents.", "longer time horizon and organisation-wide scope.", "requirement for legal approval.", "exclusion of financial data.",
+          "the use of colour in its documents.", "a longer horizon and an organisation-wide scope.", "a requirement for legal approval first.", "the exclusion of any financial data.",
           correct: 1,
           explanation: "Strategic planning sets direction over years and across the whole organisation. Operational planning covers weeks or months within a department, executing that direction.",
           why: ["Presentation format is irrelevant.",
@@ -948,7 +948,7 @@ extension SeedQuestions {
 
         q("bma-77", .businessManagement, .medium,
           "A contingency plan differs from a primary plan because it",
-          "is implemented first.", "specifies what the organisation will do if key assumptions fail.", "is never written down.", "applies only to marketing.",
+          "it is the plan that gets implemented first.", "it says what happens if assumptions fail.", "it is never actually written down anywhere.", "it applies to the marketing function only.",
           correct: 1,
           explanation: "Contingency planning asks what happens if the assumptions behind the primary plan turn out to be wrong, and pre-decides the response while there is time to think clearly.",
           why: ["The primary plan is implemented first by definition.",
@@ -960,7 +960,7 @@ extension SeedQuestions {
 
         q("bma-78", .businessManagement, .medium,
           "Which is the strongest evidence that a training programme worked?",
-          "Attendance was high.", "Measured on-the-job performance improved after the training.", "Participants said they enjoyed it.", "The trainer was experienced.",
+          "Attendance at the sessions was high", "On-the-job performance improved after it", "Participants said that they enjoyed it", "The trainer was highly experienced",
           correct: 1,
           explanation: "Attendance and satisfaction measure reaction, not result. Changed behaviour and improved performance are what the training was funded to produce.",
           why: ["Attendance measures participation, not learning.",
@@ -972,7 +972,7 @@ extension SeedQuestions {
 
         q("bma-79", .businessManagement, .medium,
           "A company introduces flexible working. The most likely management challenge is",
-          "employees will stop working entirely.", "maintaining communication, fairness and team cohesion across different schedules.", "the office will be too crowded.", "payroll becomes illegal.",
+          "employees will stop working altogether.", "holding communication and fairness together.", "the office will become far too crowded.", "payroll becomes illegal under the legislation.",
           correct: 1,
           explanation: "Flexibility usually improves retention but complicates coordination. The real risks are uneven information flow and a two-tier culture between those present and those not.",
           why: ["Flexible arrangements are managed by output, and most employees deliver.",
@@ -984,7 +984,7 @@ extension SeedQuestions {
 
         q("bma-80", .businessManagement, .medium,
           "An organisation's culture is best described as",
-          "the layout of its offices.", "the shared values, beliefs and norms that shape how people behave.", "its legal structure.", "its annual revenue.",
+          "the physical layout of its offices.", "the shared values and norms that shape behaviour.", "the legal structure it is incorporated under.", "the annual revenue that it reports.",
           correct: 1,
           explanation: "Culture is what people actually do when no one is watching. It defeats strategy and policy routinely, which is why change efforts that ignore it tend to fail.",
           why: ["Office layout can express culture but is not the culture itself.",
@@ -996,7 +996,7 @@ extension SeedQuestions {
 
         q("bma-81", .businessManagement, .medium,
           "The main reason to document a decision-making process is that it",
-          "impresses auditors.", "creates a record of the reasoning, which supports accountability and learning.", "slows the decision.", "removes responsibility from managers.",
+          "it makes a very good impression on the external auditors.", "the reasoning is recorded, supporting accountability.", "it slows the decision down considerably.", "it removes responsibility from each of the managers involved.",
           correct: 1,
           explanation: "Recording what was known and why a choice was made allows the decision to be reviewed on its reasoning rather than on hindsight about the outcome.",
           why: ["Auditors are a beneficiary, not the reason.",
@@ -1020,7 +1020,7 @@ extension SeedQuestions {
 
         q("bma-83", .businessManagement, .medium,
           "A dashboard is most useful to management when it",
-          "displays every metric the company collects.", "shows a small number of measures tied to current objectives.", "updates once a year.", "is accessible only to executives.",
+          "it displays every metric collected anywhere.", "it shows a few measures tied to objectives.", "it is updated once at the end of each year.", "it is made accessible only to the executives.",
           correct: 1,
           explanation: "A dashboard exists to prompt action. Too many measures hide the signal, and a dashboard nobody acts on is a report with better formatting.",
           why: ["Displaying everything buries the few measures that matter.",
@@ -1032,7 +1032,7 @@ extension SeedQuestions {
 
         q("bma-84", .businessManagement, .medium,
           "Data-driven decision making requires, above all, that",
-          "the largest possible dataset is used.", "the data is relevant, accurate and interpreted in context.", "decisions are made only by analysts.", "intuition is banned entirely.",
+          "the largest dataset available is the one used.", "the data is relevant, accurate and in context.", "the decisions are made only by trained analysts.", "intuition is banned from the process entirely.",
           correct: 1,
           explanation: "Volume does not create validity. Data that is inaccurate or read without context produces confident errors, which are harder to correct than uncertain judgement.",
           why: ["A large but irrelevant dataset supports nothing.",
@@ -1044,7 +1044,7 @@ extension SeedQuestions {
 
         q("bma-85", .businessManagement, .medium,
           "A quality circle is",
-          "a customer loyalty programme.", "a small group of employees who meet regularly to identify and solve work problems.", "an inspection station.", "a supplier ranking.",
+          "a loyalty programme aimed at customers.", "a small group meeting to solve work problems.", "an inspection station on the production line.", "a ranking of the suppliers a firm uses.",
           correct: 1,
           explanation: "Quality circles draw on the knowledge of people doing the work. Their value depends entirely on management acting on the recommendations rather than merely receiving them.",
           why: ["Loyalty programmes address customers, not internal quality.",
@@ -1056,7 +1056,7 @@ extension SeedQuestions {
 
         q("bma-86", .businessManagement, .medium,
           "Reshoring refers to a company",
-          "opening a new overseas factory.", "bringing previously offshored production back to its home country.", "closing all production.", "selling to foreign markets.",
+          "opening a new factory somewhere overseas.", "bringing offshored production back home.", "closing down its production entirely.", "selling its products into foreign markets.",
           correct: 1,
           explanation: "Reshoring reverses offshoring, often when wage gaps narrow, shipping costs rise, or supply chain resilience and quality control become more valuable than the labour saving.",
           why: ["That is offshoring.",
@@ -1068,7 +1068,7 @@ extension SeedQuestions {
 
         q("bma-87", .businessManagement, .medium,
           "A supply chain disruption is best mitigated in advance by",
-          "single-sourcing every component.", "diversifying suppliers and holding buffer stock for critical items.", "reducing all inventory to zero.", "ignoring supplier finances.",
+          "single-sourcing every component it needs.", "spreading suppliers and holding buffer stock.", "reducing all of its inventory down to zero.", "ignoring the financial health of its suppliers.",
           correct: 1,
           explanation: "Resilience costs money in normal times and pays for itself in abnormal ones. Alternative suppliers and buffer stock on critical items are the standard trade against pure efficiency.",
           why: ["Single-sourcing concentrates the risk being mitigated.",
@@ -1080,7 +1080,7 @@ extension SeedQuestions {
 
         q("bma-88", .businessManagement, .medium,
           "The difference between efficiency and effectiveness is that efficiency concerns",
-          "doing the right things; effectiveness concerns doing things right.", "doing things with minimal waste; effectiveness concerns achieving the intended result.", "profit only.", "speed only.",
+          "doing the right things, rather than doing things right.", "minimal waste; effectiveness is the intended result.", "profit alone, and nothing else whatsoever besides that.", "speed alone, measured against the clock.",
           correct: 1,
           explanation: "Efficiency is resource use; effectiveness is result. A process can be highly efficient at producing something nobody wants, which is why both are measured.",
           why: ["The two definitions are the right way round in the other option.",
@@ -1092,7 +1092,7 @@ extension SeedQuestions {
 
         q("bma-89", .businessManagement, .medium,
           "A restrictive covenant in an employment contract is most likely to be enforceable when it is",
-          "unlimited in time and geography.", "reasonable in scope, duration and geography, and protects a legitimate interest.", "signed after the employee leaves.", "kept secret from the employee.",
+          "unlimited in both time and geography.", "reasonable in scope, and protects a real interest.", "signed only after the employee has left.", "kept secret from the employee who signed it.",
           correct: 1,
           explanation: "Courts weigh restrictions against a person's right to earn a living. Narrow, time-limited terms protecting a genuine interest are enforced; sweeping ones are struck down entirely.",
           why: ["Unlimited restrictions are routinely found unenforceable.",
@@ -1104,7 +1104,7 @@ extension SeedQuestions {
 
         q("bma-90", .businessManagement, .medium,
           "Under employment standards legislation, an employer must generally provide",
-          "no records of hours worked.", "minimum wage, overtime pay, public holidays and required notice of termination.", "unlimited paid leave.", "a company vehicle.",
+          "no records at all of the hours worked.", "minimum wage, overtime, holidays and notice.", "an unlimited amount of paid leave each year.", "a company vehicle for every member of staff.",
           correct: 1,
           explanation: "Employment standards set the statutory floor — minimum wage, overtime, holidays, vacation and notice. A contract may improve on these but cannot contract below them.",
           why: ["Employers are required to keep records of hours worked.",
@@ -1116,7 +1116,7 @@ extension SeedQuestions {
 
         q("bma-91", .businessManagement, .medium,
           "An employer monitoring employee email should, at minimum,",
-          "monitor without telling anyone.", "have a clear written policy that employees are informed of.", "monitor only executives.", "publish the contents publicly.",
+          "monitor quietly, without telling anyone.", "have a clear written policy staff know of.", "monitor only the executives of the company.", "publish the contents of the email publicly.",
           correct: 1,
           explanation: "Monitoring without notice undermines any claim that it was reasonable and damages trust disproportionately to whatever it detects. A disclosed policy sets expectations on both sides.",
           why: ["Covert monitoring is legally risky and corrosive to trust.",
@@ -1128,7 +1128,7 @@ extension SeedQuestions {
 
         q("bma-92", .businessManagement, .medium,
           "A conflict between two team members is escalating. The manager's most constructive first step is to",
-          "take the side of the more senior person.", "speak to each privately to understand the issue, then bring them together with a clear focus.", "announce the dispute in a team meeting.", "reassign both without discussion.",
+          "take the side of the more senior of the two.", "hear each privately, then bring them together.", "announce the dispute at the next team meeting.", "reassign them both without any discussion.",
           correct: 1,
           explanation: "Private conversations establish what the disagreement actually is before positions harden publicly. Bringing the parties together afterwards keeps the focus on the issue rather than on winning.",
           why: ["Seniority is not evidence about who is right.",
@@ -1140,7 +1140,7 @@ extension SeedQuestions {
 
         q("bma-93", .businessManagement, .medium,
           "Emotional intelligence in a manager most directly improves",
-          "the accuracy of financial forecasts.", "their ability to read situations and respond to people effectively.", "the speed of the company's servers.", "the legal validity of contracts.",
+          "the accuracy of their financial forecasts.", "their reading of situations and of people.", "the speed at which the company's servers run.", "the legal validity of the contracts they sign.",
           correct: 1,
           explanation: "Self-awareness, self-regulation, empathy and social skill determine how well a manager handles the parts of the job that involve people — which is most of it.",
           why: ["Forecasting accuracy depends on data and method.",
@@ -1152,7 +1152,7 @@ extension SeedQuestions {
 
         q("bma-94", .businessManagement, .medium,
           "Sustainable competitive advantage in operations most often comes from",
-          "buying the same equipment as competitors.", "capabilities and processes competitors find difficult to replicate.", "advertising spend alone.", "the lowest wages in the industry.",
+          "buying the same equipment as its competitors.", "capabilities that rivals find hard to replicate.", "the advertising spend of the business alone.", "paying the lowest wages anywhere in the industry.",
           correct: 1,
           explanation: "Equipment and price cuts are copyable. Accumulated capability — trained people, refined processes, supplier relationships built over years — is what a competitor cannot buy quickly.",
           why: ["Equipment available to everyone confers no advantage.",
@@ -1164,7 +1164,7 @@ extension SeedQuestions {
 
         q("bma-95", .businessManagement, .medium,
           "An organisation adopting a new information system should plan for",
-          "technology costs only.", "technology, training, process redesign and change management together.", "training only.", "no planning, since the vendor handles everything.",
+          "the cost of the technology, and nothing else.", "technology, training, process and change together.", "the training of its staff, and nothing else.", "nothing, since the vendor handles all of it.",
           correct: 1,
           explanation: "Most system failures are organisational rather than technical. Budgeting for the software while ignoring process change and training is how a working system ends up unused.",
           why: ["Licence cost is usually the smallest part of the total.",
@@ -1176,7 +1176,7 @@ extension SeedQuestions {
 
         q("bma-96", .businessManagement, .medium,
           "A manager notices a policy is routinely ignored by staff. The most useful first question is",
-          "who should be disciplined?", "why does the policy not fit how the work is actually done?", "how can the policy be enforced harder?", "which employee reported it?",
+          "who ought to be disciplined over this?", "why does it not fit how the work is done?", "how can the policy be enforced more firmly?", "which of the employees reported the problem?",
           correct: 1,
           explanation: "A policy ignored by nearly everyone is usually evidence the policy is wrong, not that everyone is. Understanding the workaround typically reveals a constraint nobody accounted for.",
           why: ["Discipline addresses individuals when the pattern is collective.",
@@ -1188,7 +1188,7 @@ extension SeedQuestions {
 
         q("bma-97", .businessManagement, .medium,
           "Job enrichment differs from job enlargement because enrichment",
-          "adds more tasks at the same level.", "adds depth — more autonomy, responsibility and decision making.", "reduces pay.", "shortens the workday.",
+          "it adds further tasks at the same level.", "it adds depth — autonomy and responsibility.", "it reduces the pay attached to the role.", "it shortens the length of the working day.",
           correct: 1,
           explanation: "Enlargement widens a role horizontally with more tasks of the same kind. Enrichment deepens it vertically with authority and responsibility, which is what actually raises motivation.",
           why: ["Adding same-level tasks is enlargement.",
@@ -1200,7 +1200,7 @@ extension SeedQuestions {
 
         q("bma-98", .businessManagement, .medium,
           "The primary purpose of an internal audit function is to",
-          "prepare the marketing plan.", "provide independent assurance that controls and processes are working.", "set employee salaries.", "negotiate with suppliers.",
+          "prepare the marketing plan for the year.", "give independent assurance that controls work.", "set the salaries paid to the employees.", "negotiate the terms agreed with suppliers.",
           correct: 1,
           explanation: "Internal audit reports independently of the functions it reviews, which is what makes its assurance meaningful to the board and to management.",
           why: ["Marketing planning is a commercial function.",
@@ -1212,7 +1212,7 @@ extension SeedQuestions {
 
         q("bma-99", .businessManagement, .medium,
           "A company's board of directors is primarily responsible for",
-          "day-to-day operational decisions.", "governance and oversight, including appointing and monitoring senior management.", "serving customers directly.", "writing job descriptions.",
+          "the day-to-day operational decisions.", "governance, and appointing senior management.", "serving the customers of the business directly.", "writing the job descriptions for each role.",
           correct: 1,
           explanation: "The board governs; management operates. Boards set direction, appoint and monitor the chief executive, and oversee risk and integrity rather than running the business themselves.",
           why: ["Daily operations are management's responsibility.",

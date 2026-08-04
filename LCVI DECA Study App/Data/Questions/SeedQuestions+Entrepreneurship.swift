@@ -18,7 +18,7 @@ extension SeedQuestions {
     static let entrepreneurship: [QuestionData] = [
         q("ent-1", .entrepreneurship, .easy,
           "The executive summary of a business plan should",
-          "list every financial assumption in detail.", "concisely present the concept, market opportunity and financial need.", "be written before any research is done.", "contain only the founder's biography.",
+          "list out every one of the financial assumptions in detail.", "present the concept, the market and the money needed.", "be written up before any of the research has been done.", "contain the biography of the founder and nothing else.",
           correct: 1,
           explanation: "The executive summary is written last but read first. In roughly one page it must state what the business does, who it serves, why it will win, and what is being asked of the reader — usually funding.",
           why: ["Detailed assumptions belong in the financial section and its appendices.",
@@ -30,7 +30,7 @@ extension SeedQuestions {
 
         q("ent-2", .entrepreneurship, .medium,
           "The main purpose of a feasibility study is to determine whether",
-          "the founder enjoys the industry.", "a business concept is workable and likely to be profitable.", "competitors will approve of the venture.", "the business qualifies for a trademark.",
+          "the founder actually enjoys the industry.", "the concept is workable and likely profitable.", "the competition will approve of the venture.", "the business will qualify for a trademark of its own.",
           correct: 1,
           explanation: "A feasibility study tests the concept against market demand, operational requirements, competition and financial projections before significant money is committed. It is a go/no-go decision tool that precedes the full business plan.",
           why: ["Personal enthusiasm matters to persistence but is not what the study tests.",
@@ -54,7 +54,7 @@ extension SeedQuestions {
 
         q("ent-4", .entrepreneurship, .medium,
           "The most significant disadvantage of a sole proprietorship is that",
-          "profits must be shared with partners.", "the owner has unlimited personal liability for business debts.", "it requires the most complex registration process.", "it cannot hire employees.",
+          "the profits must be shared out with partners.", "the owner is personally liable without limit.", "it demands the most complex registration process.", "it is not permitted to hire any employees at all.",
           correct: 1,
           explanation: "In a sole proprietorship there is no legal separation between owner and business, so personal assets are exposed to business debts and lawsuits. Incorporation creates a separate legal entity and limits that liability.",
           why: ["A sole proprietor has no partners, so profits are not shared.",
@@ -78,7 +78,7 @@ extension SeedQuestions {
 
         q("ent-6", .entrepreneurship, .medium,
           "Why do founders often launch a minimum viable product (MVP) rather than a fully featured product?",
-          "It removes the need for customer feedback.", "It tests core assumptions quickly with less time and money at risk.", "It guarantees the product will be profitable.", "It avoids the need for a business plan.",
+          "It removes the need to gather customer feedback at all.", "It tests the core assumptions with less at risk.", "It guarantees that the product will be profitable.", "It avoids the need to write any business plan.",
           correct: 1,
           explanation: "An MVP includes just enough functionality to learn whether customers actually want the solution. Learning early is cheaper than building a full product on untested assumptions, and the feedback shapes what gets built next.",
           why: ["An MVP exists to generate feedback; it depends on it entirely.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("ent-11", .entrepreneurship, .medium,
           "The financial section of a business plan for a start-up should include",
-          "last year's audited statements.", "projected income, cash flow and balance sheet with the assumptions behind them.", "the founder's personal bank balance.", "competitor salaries.",
+          "the audited statements from last financial year.", "projected income, cash flow and balance sheet, with assumptions.", "the personal bank balance of the founder.", "the salaries paid by named competitors.",
           correct: 1,
           explanation: "A start-up has no history, so the financial section is projections plus the reasoning behind them. Reviewers judge the assumptions more than the numbers, because the numbers follow from them.",
           why: ["A start-up has no prior year to audit.",
@@ -152,7 +152,7 @@ extension SeedQuestions {
 
         q("ent-12", .entrepreneurship, .medium,
           "A business model canvas differs from a full business plan because it",
-          "contains more detail.", "captures the model on a single page, making assumptions quick to test and revise.", "is legally binding.", "replaces financial projections permanently.",
+          "it contains a great deal more detail than a full plan does.", "it fits on one page, so assumptions are quick to test.", "it is legally binding on every one of the founders involved.", "it replaces the financial projections altogether and permanently.",
           correct: 1,
           explanation: "The canvas lays out customer segments, value proposition, channels, revenue and cost on one page. Its value is speed of iteration while the model is still changing weekly.",
           why: ["The canvas is deliberately less detailed than a full plan.",
@@ -164,7 +164,7 @@ extension SeedQuestions {
 
         q("ent-13", .entrepreneurship, .medium,
           "The value proposition section of a plan should state",
-          "how many employees the venture will hire.", "the specific benefit the customer receives and why it is better than the alternatives.", "the founder's education.", "the office lease terms.",
+          "how many employees the venture intends to hire during its first year.", "the benefit the customer gets, and why it beats the alternatives.", "the educational background and prior qualifications of the founder.", "the terms that have been agreed on the lease for the office space.",
           correct: 1,
           explanation: "A value proposition names the customer's problem and the benefit delivered, in the customer's terms. Anything that could be said by a competitor without changing meaning is not a value proposition.",
           why: ["Headcount belongs in the operations or management section.",
@@ -176,7 +176,7 @@ extension SeedQuestions {
 
         q("ent-14", .entrepreneurship, .medium,
           "Investors typically scrutinise the management section of a plan closely because",
-          "team credentials predict the venture's ability to execute.", "it is the shortest section.", "the law requires it.", "it lists the office address.",
+          "team credentials predict execution.", "it is the shortest section in the whole plan.", "the law requires it to be included.", "it sets out the address of the head office.",
           correct: 0,
           explanation: "Early-stage plans change constantly. Investors back the team's ability to adapt, because the specific plan almost never survives contact with the market intact.",
           why: ["Correct. The plan will change; the team's ability to execute and adapt is what is being backed.",
@@ -188,7 +188,7 @@ extension SeedQuestions {
 
         q("ent-15", .entrepreneurship, .medium,
           "A plan's operations section should describe",
-          "the venture's mission only.", "how the product is produced or delivered, and what facilities, suppliers and staff are required.", "shareholder dividends.", "the marketing slogan.",
+          "the mission statement of the venture, and nothing whatsoever else.", "how the product is made or delivered, and what that needs.", "the dividends that are paid out to the shareholders each year.", "the slogan that the marketing campaign will be built around.",
           correct: 1,
           explanation: "Operations translates the concept into what actually has to happen: production or service delivery, suppliers, equipment, location and staffing. Reviewers use it to test whether the model is physically achievable.",
           why: ["Mission belongs in the overview.",
@@ -214,7 +214,7 @@ extension SeedQuestions {
 
         q("ent-17", .entrepreneurship, .medium,
           "Total addressable market refers to",
-          "the number of competitors in an industry.", "the total revenue available if a product captured 100% of its market.", "the company's current sales.", "the cost of market research.",
+          "the number of competitors operating in the industry.", "the revenue available at 100% of the market.", "the sales that the company is currently making.", "the cost of commissioning the market research.",
           correct: 1,
           explanation: "TAM sizes the theoretical ceiling. Serviceable and obtainable market figures narrow it to what the venture could realistically reach, which is the number that actually matters.",
           why: ["Competitor count is a structural measure, not market size.",
@@ -238,7 +238,7 @@ extension SeedQuestions {
 
         q("ent-19", .entrepreneurship, .medium,
           "A feasibility study concludes the concept is not viable. The most appropriate response is to",
-          "proceed anyway to avoid wasting the study.", "revise the concept or abandon it before committing significant capital.", "hide the findings from investors.", "increase the marketing budget.",
+          "proceed with it anyway, so the study is not wasted.", "revise or abandon it before committing capital.", "hide the findings from any prospective investors.", "increase the marketing budget to compensate for it.",
           correct: 1,
           explanation: "A negative result is the study working. Its entire purpose is to make failure cheap, and the money spent on it is trivial against what launching regardless would cost.",
           why: ["Proceeding because money was spent is the sunk cost fallacy in its purest form.",
@@ -250,7 +250,7 @@ extension SeedQuestions {
 
         q("ent-20", .entrepreneurship, .medium,
           "Technical feasibility asks whether",
-          "customers will like the product.", "the venture can actually build and deliver the product with available technology and skills.", "the name is trademarkable.", "investors will fund it.",
+          "the customers are actually going to like the finished product.", "it can be built with the technology and skills to hand.", "the chosen name is one that can actually be trademarked here.", "the investors will be willing to fund it.",
           correct: 1,
           explanation: "Technical feasibility tests capability: can this be built, at quality, at the volumes required, with the technology and people available. Market feasibility asks separately whether anyone wants it.",
           why: ["Customer appetite is market feasibility.",
@@ -262,7 +262,7 @@ extension SeedQuestions {
 
         q("ent-21", .entrepreneurship, .medium,
           "A pivot in a start-up means",
-          "closing the business permanently.", "changing a fundamental element of the model in response to what was learned.", "hiring a new accountant.", "moving to a new office.",
+          "closing down the whole business permanently and for good.", "changing something fundamental in response to learning.", "taking on a new accountant to work for the whole venture.", "moving the whole business over to a brand new office site.",
           correct: 1,
           explanation: "A pivot changes the customer, the problem or the solution while keeping what the venture learned. It is a considered response to evidence, not an admission of failure.",
           why: ["Closing is shutting down, not pivoting.",
@@ -274,7 +274,7 @@ extension SeedQuestions {
 
         q("ent-22", .entrepreneurship, .medium,
           "The strongest evidence of demand during validation is",
-          "friends saying the idea sounds good.", "potential customers pre-ordering or paying a deposit.", "a high number of social media followers.", "a well-designed logo.",
+          "friends of the founder saying that the idea sounds good.", "potential customers pre-ordering or paying up front.", "a high number of followers on the social media accounts.", "a logo that has been designed particularly well indeed.",
           correct: 1,
           explanation: "Stated interest is cheap and consistently overstates real demand. Money changing hands is the only signal that costs the customer something, which is what makes it credible.",
           why: ["Friends have a social reason to be encouraging and rarely represent the market.",
@@ -288,7 +288,7 @@ extension SeedQuestions {
 
         q("ent-23", .entrepreneurship, .medium,
           "Bootstrapping a venture means",
-          "raising a large round of venture capital.", "funding growth from personal savings and reinvested revenue rather than outside investment.", "selling the business early.", "borrowing from a bank only.",
+          "raising a large round of venture capital.", "funding growth from savings and revenue.", "selling the business at the earliest opportunity.", "borrowing from a bank, and nowhere else.",
           correct: 1,
           explanation: "Bootstrapping keeps full ownership and control, at the cost of slower growth. It also forces early discipline about revenue, because there is no cushion.",
           why: ["Venture capital is the alternative to bootstrapping.",
@@ -300,7 +300,7 @@ extension SeedQuestions {
 
         q("ent-24", .entrepreneurship, .medium,
           "Venture capital firms typically seek ventures that",
-          "grow slowly with steady modest returns.", "can scale rapidly to a large market, offering a substantial return on exit.", "never intend to be sold.", "operate only locally.",
+          "grow slowly, at steady and modest returns.", "can scale fast to a large market.", "have no intention of ever being sold on.", "operate only within their local area.",
           correct: 1,
           explanation: "Venture funds rely on a few large winners covering many losses, so they need each investment to have the potential to return the fund. Steady local businesses are excellent businesses and poor venture investments.",
           why: ["Steady modest growth does not fit the venture fund's return model.",
@@ -336,7 +336,7 @@ extension SeedQuestions {
 
         q("ent-27", .entrepreneurship, .medium,
           "Dilution occurs when a founder",
-          "spends money on marketing.", "issues new shares, reducing existing owners' percentage of the company.", "hires an employee.", "repays a loan.",
+          "spends the venture's available money on its marketing efforts.", "issues new shares, cutting existing owners' percentage.", "takes on one additional employee for the growing business.", "repays a loan to the bank.",
           correct: 1,
           explanation: "Each funding round issues new shares, so existing holders own a smaller slice. The question is whether the capital raised grows the company enough that the smaller slice is worth more.",
           why: ["Spending reduces cash, not ownership percentage.",
@@ -348,7 +348,7 @@ extension SeedQuestions {
 
         q("ent-28", .entrepreneurship, .medium,
           "A start-up's runway refers to",
-          "the length of its supply chain.", "how many months it can operate before cash runs out at the current burn rate.", "its marketing timeline.", "the number of products planned.",
+          "the overall length of its own supply chain end to end.", "the months it can run before the cash runs out.", "the timeline that has been set out for its marketing.", "the number of products that it is planning to make.",
           correct: 1,
           explanation: "Runway is cash on hand divided by monthly net burn. It determines when the next raise must start, which is typically several months before the cash actually runs out.",
           why: ["Supply chain length is an operations measure.",
@@ -362,7 +362,7 @@ extension SeedQuestions {
 
         q("ent-29", .entrepreneurship, .medium,
           "In a general partnership, each partner is typically",
-          "liable only for their own actions.", "jointly and severally liable for the partnership's debts.", "protected by limited liability.", "unable to bind the partnership.",
+          "liable only for what they did themselves.", "jointly and severally liable for the debts.", "protected throughout by limited liability.", "unable to bind the partnership to anything.",
           correct: 1,
           explanation: "Joint and several liability means a creditor may pursue any partner for the full debt, including one who had nothing to do with incurring it. It is the main reason partnership agreements matter so much.",
           why: ["Liability extends to the partnership's obligations generally, not just personal acts.",
@@ -374,7 +374,7 @@ extension SeedQuestions {
 
         q("ent-30", .entrepreneurship, .medium,
           "A key advantage of incorporating is",
-          "the business pays no tax.", "limited liability, separating the owners' personal assets from business debts.", "no record-keeping is required.", "profits need not be reported.",
+          "the business does not have to pay any tax whatsoever on profits.", "limited liability, separating personal from business.", "no record-keeping of any kind at all is ever required of it.", "the profits do not have to be reported.",
           correct: 1,
           explanation: "A corporation is a separate legal person, so its debts are its own. That protection is why incorporation is standard once a business carries meaningful risk, despite the added cost and formality.",
           why: ["Corporations pay corporate income tax.",
@@ -386,7 +386,7 @@ extension SeedQuestions {
 
         q("ent-31", .entrepreneurship, .medium,
           "A co-operative differs from a corporation principally because it is",
-          "owned and democratically controlled by its members.", "always larger.", "prohibited from making a surplus.", "owned by the government.",
+          "owned and controlled democratically by its members.", "always larger than a corporation.", "prohibited from making any surplus.", "owned outright by the government.",
           correct: 0,
           explanation: "Co-operatives operate on one member, one vote rather than one share, one vote, and surpluses are returned to members according to their use of the co-op rather than their capital.",
           why: ["Correct. Member ownership with democratic control — one member, one vote.",
@@ -398,7 +398,7 @@ extension SeedQuestions {
 
         q("ent-32", .entrepreneurship, .medium,
           "A partnership agreement should specify, above all,",
-          "the colour of the office walls.", "profit sharing, decision rights and what happens if a partner exits.", "the daily lunch schedule.", "each partner's favourite client.",
+          "the colour that the office walls have been painted.", "profit sharing, decision rights and partner exit.", "the schedule for lunch on each day of the working week.", "the favourite client of each of the partners involved.",
           correct: 1,
           explanation: "Partnerships fail over money, control and exit. Deciding those while everyone is on good terms is far easier than negotiating them during a dispute.",
           why: ["Décor is irrelevant to the agreement.",
@@ -410,7 +410,7 @@ extension SeedQuestions {
 
         q("ent-33", .entrepreneurship, .medium,
           "Buying a franchise typically offers the franchisee",
-          "complete freedom over the business model.", "an established brand and system, in exchange for fees and operating restrictions.", "no ongoing costs.", "ownership of the brand.",
+          "complete freedom over the whole of the business model used.", "a proven brand and system, for fees and restrictions.", "no ongoing costs of any description whatsoever to be paid.", "outright ownership of the brand itself.",
           correct: 1,
           explanation: "A franchise trades independence for a proven system, training and brand recognition. Royalties continue for the life of the agreement, and the brand remains the franchisor's.",
           why: ["Franchise agreements restrict the model tightly; consistency is the product.",
@@ -422,7 +422,7 @@ extension SeedQuestions {
 
         q("ent-34", .entrepreneurship, .medium,
           "A social enterprise is best described as a venture that",
-          "never earns revenue.", "pursues a social or environmental mission through commercial activity.", "is prohibited from hiring staff.", "operates only with volunteers.",
+          "never earns any revenue at all.", "pursues a social mission commercially.", "is prohibited from hiring any paid staff.", "operates using volunteers and nobody else.",
           correct: 1,
           explanation: "A social enterprise earns revenue like any business but exists to advance a mission, with surpluses directed toward that purpose rather than to owners.",
           why: ["Revenue generation is what distinguishes it from a charity dependent on donations.",
@@ -436,7 +436,7 @@ extension SeedQuestions {
 
         q("ent-35", .entrepreneurship, .medium,
           "A first-mover advantage is most durable when the venture",
-          "simply arrives first.", "uses its head start to build something rivals cannot easily copy, such as network effects or switching costs.", "advertises heavily once.", "prices below cost indefinitely.",
+          "it simply happens to arrive in the market before the others.", "it converts the head start into something hard to copy.", "it advertises very heavily on one occasion and then stops.", "it prices below cost for the long term.",
           correct: 1,
           explanation: "Arriving first is only an opportunity. It becomes an advantage when the lead is converted into scale, brand, data or lock-in before better-resourced entrants arrive.",
           why: ["Being first alone is frequently overtaken by a stronger second mover.",
@@ -460,7 +460,7 @@ extension SeedQuestions {
 
         q("ent-37", .entrepreneurship, .medium,
           "Switching costs create advantage because they",
-          "make it cheaper for customers to leave.", "make leaving inconvenient or expensive, so customers stay.", "reduce the product's price.", "eliminate competition entirely.",
+          "they make it cheaper for customers to leave.", "leaving is inconvenient, so customers stay.", "they bring down the price of the product.", "they eliminate the competition entirely.",
           correct: 1,
           explanation: "Migrated data, learned workflows and integrated systems all raise the cost of leaving. High switching costs protect a customer base even when a rival's product is somewhat better.",
           why: ["Switching costs make leaving harder, not cheaper.",
@@ -472,7 +472,7 @@ extension SeedQuestions {
 
         q("ent-38", .entrepreneurship, .medium,
           "A venture claiming its advantage is \"working harder than competitors\" has a weak position because",
-          "hard work is illegal.", "effort is not defensible — any competitor can match it.", "customers dislike hard work.", "it costs nothing.",
+          "hard work is illegal within the industry concerned.", "effort is not defensible; anyone can match it.", "customers actively dislike seeing people work hard.", "it costs the venture absolutely nothing whatsoever.",
           correct: 1,
           explanation: "A real advantage is something a competitor cannot easily replicate. Effort, enthusiasm and good service are matchable by anyone motivated to try.",
           why: ["Hard work is obviously lawful.",
@@ -484,7 +484,7 @@ extension SeedQuestions {
 
         q("ent-39", .entrepreneurship, .medium,
           "A niche strategy suits a new venture because it",
-          "avoids all competition permanently.", "lets limited resources dominate a small segment rather than fail to register in a large one.", "requires no marketing.", "guarantees rapid scale.",
+          "it avoids competition altogether, permanently.", "small resources can dominate a small segment.", "it requires no marketing spend whatsoever.", "it guarantees the venture will scale rapidly.",
           correct: 1,
           explanation: "A start-up cannot outspend an incumbent across a broad market. Owning a narrow segment builds a base, a reputation and cash flow that a wider move can later be launched from.",
           why: ["Niches attract competition once they prove profitable.",
@@ -496,7 +496,7 @@ extension SeedQuestions {
 
         q("ent-40", .entrepreneurship, .hard,
           "A venture's advantage rests on a supplier relationship secured by a two-year exclusive contract. The main strategic risk is that",
-          "the supplier will lower prices.", "the advantage expires with the contract and may not be renewable.", "customers will not notice the product.", "the contract is unenforceable.",
+          "the supplier will end up lowering its own prices further.", "the advantage expires with the contract, unrenewed.", "the customers will simply not notice the product at all.", "the contract will prove unenforceable.",
           correct: 1,
           explanation: "A contractual advantage has an expiry date. Unless the two years are used to build something more durable, renewal negotiations happen with the venture's entire position at stake.",
           why: ["Lower supplier prices would help the venture.",
@@ -510,7 +510,7 @@ extension SeedQuestions {
 
         q("ent-41", .entrepreneurship, .medium,
           "The build-measure-learn loop instructs a founder to",
-          "build the complete product before measuring anything.", "build the smallest thing that tests an assumption, measure the result and adjust.", "measure competitors only.", "learn theory before building anything.",
+          "build the whole of the product before measuring it.", "build the smallest test, measure it, then adjust.", "measure only what the competitors happen to be doing.", "learn all of the theory before building anything at all.",
           correct: 1,
           explanation: "The loop's purpose is to shorten the time between an assumption and evidence about it. Speed round the loop matters more than any single iteration's quality.",
           why: ["Building everything first is what the loop is designed to avoid.",
@@ -522,7 +522,7 @@ extension SeedQuestions {
 
         q("ent-42", .entrepreneurship, .medium,
           "A vanity metric is one that",
-          "looks impressive but does not inform a decision.", "is always negative.", "cannot be measured.", "is required by investors.",
+          "it looks impressive but informs nothing.", "it is always a negative figure to report.", "it cannot be measured in any reliable way.", "it is a figure investors always require.",
           correct: 0,
           explanation: "Cumulative downloads and total page views rise regardless of whether anything is working. Actionable metrics — retention, conversion, revenue per user — can fall, which is what makes them useful.",
           why: ["Correct. It looks impressive but changes no decision, because it only ever goes up.",
@@ -534,7 +534,7 @@ extension SeedQuestions {
 
         q("ent-43", .entrepreneurship, .medium,
           "A concierge MVP tests an idea by",
-          "building full automation first.", "delivering the service manually to early customers to validate demand before automating.", "surveying people who will never buy.", "licensing the idea to a competitor.",
+          "building the full automation first of all.", "delivering it by hand before automating.", "surveying people who will never buy it.", "licensing the whole idea to a competitor.",
           correct: 1,
           explanation: "Doing the work by hand for the first customers proves people will pay before any engineering investment. If nobody wants the manual version, automation would only have made the failure faster.",
           why: ["Automation first is the expensive assumption this technique avoids.",
@@ -546,7 +546,7 @@ extension SeedQuestions {
 
         q("ent-44", .entrepreneurship, .medium,
           "Product-market fit is best evidenced by",
-          "a large advertising budget.", "customers using the product repeatedly and being disappointed if it disappeared.", "a polished website.", "a long feature list.",
+          "having a very large budget made available for advertising.", "customers using it repeatedly and missing it if gone.", "having a website that has been polished very carefully.", "having a long list of features built.",
           correct: 1,
           explanation: "Fit shows up as retention and pull: customers return without prompting and would miss the product. Before that point, growth spending mostly buys users who leave.",
           why: ["Budget buys attention, not fit.",
@@ -558,7 +558,7 @@ extension SeedQuestions {
 
         q("ent-45", .entrepreneurship, .medium,
           "Feature creep in an early-stage product is dangerous because it",
-          "always improves retention.", "consumes limited resources and delays learning whether the core idea works.", "reduces the number of users.", "is required by investors.",
+          "it always improves the retention of existing customers.", "it eats resources and delays the real learning.", "it reduces the number of users who remain active.", "investors require it before they are willing to fund.",
           correct: 1,
           explanation: "Every added feature costs time that could have tested the core assumption, and complicates the product for the users who came for one thing. Scope discipline is what keeps the loop short.",
           why: ["Additional features frequently dilute the product rather than improving retention.",
@@ -570,7 +570,7 @@ extension SeedQuestions {
 
         q("ent-46", .entrepreneurship, .medium,
           "Early adopters are valuable to a start-up because they",
-          "demand a finished product.", "tolerate rough edges and give detailed feedback in exchange for solving their problem sooner.", "never pay.", "represent the mass market exactly.",
+          "they demand a product that is completely finished.", "they take rough edges and give real feedback.", "they never pay anything at all for the product.", "they represent the mass market entirely precisely.",
           correct: 1,
           explanation: "Early adopters feel the problem acutely enough to accept an imperfect solution. Their feedback shapes the product, though their tolerance is not shared by the mainstream that follows.",
           why: ["Demanding polish describes the mainstream market, not early adopters.",
@@ -608,7 +608,7 @@ extension SeedQuestions {
 
         q("ent-49", .entrepreneurship, .medium,
           "Scaling before achieving product-market fit is risky because",
-          "the business will grow too quickly.", "spending accelerates on a product customers do not yet retain, burning capital faster.", "employees become bored.", "competitors will copy the idea.",
+          "the business will simply end up growing too quickly.", "spend accelerates on a product nobody keeps.", "the employees will become bored with the work.", "the competitors will copy the idea very quickly.",
           correct: 1,
           explanation: "Growth spending on a leaky product buys users who leave. The venture reaches the end of its runway with a larger cost base and no better evidence than it started with.",
           why: ["Rapid growth is the goal; the problem is growing the wrong thing.",
@@ -632,7 +632,7 @@ extension SeedQuestions {
 
         q("ent-51", .entrepreneurship, .medium,
           "As a start-up grows past its founding team, the most common organisational failure is",
-          "having too many written processes.", "founders retaining every decision, creating a bottleneck.", "hiring specialists.", "delegating responsibility.",
+          "having far too many written processes in place from the start.", "founders keeping every decision, creating a bottleneck.", "hiring outside specialists into the growing business early.", "delegating responsibility too widely.",
           correct: 1,
           explanation: "The habits that work at five people fail at fifty. Founders who cannot delegate become the constraint on everything, and the fix is deliberate rather than natural.",
           why: ["Growing companies usually suffer from too few documented processes.",
@@ -646,7 +646,7 @@ extension SeedQuestions {
 
         q("ent-52", .entrepreneurship, .medium,
           "A patent protects an invention by granting the holder",
-          "permanent ownership of the idea.", "an exclusive right to use the invention for a limited period, in exchange for public disclosure.", "the right to keep it secret indefinitely.", "protection in every country automatically.",
+          "permanent ownership of the underlying idea itself.", "exclusive use for a period, for disclosure.", "the right to keep it a secret for an indefinite period.", "protection in every country in the world automatically.",
           correct: 1,
           explanation: "A patent is a bargain: the invention is published so others can learn from it, and in return the holder receives an exclusive period, generally twenty years from filing.",
           why: ["Patent protection expires; it is not permanent.",
@@ -670,7 +670,7 @@ extension SeedQuestions {
 
         q("ent-54", .entrepreneurship, .medium,
           "Copyright in Canada generally arises",
-          "only after registration.", "automatically when an original work is created and fixed in a tangible form.", "only for published works.", "only after paying a fee.",
+          "only once it has been formally registered.", "automatically, once a work is fixed.", "only for works that have been published.", "only once the relevant fee has been paid.",
           correct: 1,
           explanation: "Copyright exists on creation. Registration is optional and provides evidentiary benefits in a dispute, but protection does not depend on it.",
           why: ["Registration is optional and strengthens evidence rather than creating the right.",
@@ -682,7 +682,7 @@ extension SeedQuestions {
 
         q("ent-55", .entrepreneurship, .medium,
           "Before adopting a business name, a founder should",
-          "assume it is available if it sounds original.", "search existing trademarks and business registrations for conflicts.", "register it in every country first.", "use it for a year before checking.",
+          "assume it is free if it sounds original.", "search trademarks and registrations first.", "register it in every country before using it.", "use it for a year, then check availability.",
           correct: 1,
           explanation: "Rebranding after a conflict costs far more than searching beforehand — signage, packaging, domains and whatever recognition had been built are all lost.",
           why: ["Sounding original is no evidence that the name is free.",
@@ -694,7 +694,7 @@ extension SeedQuestions {
 
         q("ent-56", .entrepreneurship, .medium,
           "A licensing agreement allows a venture to",
-          "give away its intellectual property permanently.", "earn revenue by permitting another party to use its intellectual property under agreed terms.", "avoid all taxes.", "eliminate competitors.",
+          "give its intellectual property away entirely permanently.", "earn revenue by letting others use its IP on terms.", "avoid all of the taxes it would owe.", "eliminate its competitors from the market altogether.",
           correct: 1,
           explanation: "Licensing monetises intellectual property without the licensor having to manufacture or distribute. Terms typically cover territory, exclusivity, duration and royalty rate.",
           why: ["A licence grants permission for a term; ownership is retained.",
@@ -706,7 +706,7 @@ extension SeedQuestions {
 
         q("ent-57", .entrepreneurship, .medium,
           "An entrepreneur's tolerance for calculated risk is best described as",
-          "gambling on any opportunity.", "accepting uncertainty after assessing the potential loss and the chance of success.", "avoiding all risk.", "ignoring financial data.",
+          "gambling on absolutely any opportunity that arises.", "accepting uncertainty once loss is assessed.", "avoiding every single risk that presents itself.", "ignoring the financial data on the venture altogether.",
           correct: 1,
           explanation: "Successful founders are not indifferent to risk; they size it. The question is always what can be lost, how likely that is, and whether the venture survives if it happens.",
           why: ["Gambling accepts risk without assessing it.",
@@ -718,7 +718,7 @@ extension SeedQuestions {
 
         q("ent-58", .entrepreneurship, .medium,
           "An opportunity cost for a founder leaving employment to start a venture is",
-          "the venture's marketing budget.", "the salary and benefits forgone by not staying employed.", "the cost of business cards.", "the office rent.",
+          "the marketing budget set for the venture.", "the salary and benefits given up.", "the cost of printing new business cards.", "the rent payable on the venture's office.",
           correct: 1,
           explanation: "Opportunity cost is the value of the best alternative given up. For a founder that is usually the forgone salary, and ignoring it makes a venture look more profitable than it is.",
           why: ["Marketing spend is a direct cost of the venture.",
@@ -730,7 +730,7 @@ extension SeedQuestions {
 
         q("ent-59", .entrepreneurship, .medium,
           "A break-even analysis helps a founder decide",
-          "which logo to use.", "how many units must be sold before the venture stops losing money.", "who to hire first.", "which social platform to use.",
+          "which of the logos ought to be used for it.", "how many units must sell to stop losing.", "which person ought to be hired first of all.", "which social platform ought to be used for it.",
           correct: 1,
           explanation: "Break-even converts a plan into a concrete sales target. If that target looks implausible against the market size, the model needs changing before launch rather than after.",
           why: ["Logo selection is a branding decision.",
@@ -754,7 +754,7 @@ extension SeedQuestions {
 
         q("ent-61", .entrepreneurship, .medium,
           "A start-up's advisory board differs from a board of directors because advisers",
-          "have legal authority over the company.", "provide guidance without fiduciary duty or formal control.", "must own shares.", "are paid the most.",
+          "they hold legal authority over the whole company.", "they guide without fiduciary duty or control.", "they are required to own shares.", "they are the highest paid people in the whole group.",
           correct: 1,
           explanation: "Advisers offer expertise and contacts informally, usually for a small equity grant. Directors carry legal duties to the corporation and can hire or remove the chief executive.",
           why: ["Legal authority rests with the board of directors.",
@@ -766,7 +766,7 @@ extension SeedQuestions {
 
         q("ent-62", .entrepreneurship, .medium,
           "An incubator or accelerator programme typically provides a start-up with",
-          "guaranteed profitability.", "mentorship, workspace, networks and sometimes seed funding, often for equity.", "a completed product.", "permanent employees.",
+          "a guarantee that the venture will become profitable.", "mentorship, space and networks, often for equity.", "a finished product that has already been completed.", "permanent employees for the business.",
           correct: 1,
           explanation: "Accelerators compress early learning through structured mentorship and investor access. The equity given up is significant, so the value has to be in the network and the discipline rather than the cash.",
           why: ["No programme guarantees profitability.",
@@ -778,7 +778,7 @@ extension SeedQuestions {
 
         q("ent-63", .entrepreneurship, .medium,
           "A term sheet in a funding round is",
-          "the final binding contract.", "a mostly non-binding outline of the proposed investment terms.", "the company's tax return.", "a marketing document.",
+          "the final contract, binding on both.", "a mostly non-binding outline of the terms.", "the tax return filed by the company.", "a document produced by the marketing team.",
           correct: 1,
           explanation: "The term sheet sets out valuation, investment amount, board composition and key rights before lawyers draft definitive agreements. Most of it is non-binding, though confidentiality and exclusivity usually are.",
           why: ["Definitive agreements follow the term sheet.",
@@ -790,7 +790,7 @@ extension SeedQuestions {
 
         q("ent-64", .entrepreneurship, .medium,
           "Due diligence by an investor means",
-          "signing quickly to secure the deal.", "verifying the venture's financial, legal and commercial claims before investing.", "advertising the investment.", "hiring the founder.",
+          "signing quickly, to secure the deal.", "checking the financial and legal claims.", "advertising the investment to the market.", "taking the founder on as an employee.",
           correct: 1,
           explanation: "Due diligence tests what the pitch asserted — contracts, financial records, intellectual property ownership, customer references. Discrepancies found here routinely end deals.",
           why: ["Speed without verification is how investors lose money.",
@@ -802,7 +802,7 @@ extension SeedQuestions {
 
         q("ent-65", .entrepreneurship, .medium,
           "An exit strategy in a business plan describes",
-          "how employees leave the building.", "how founders and investors will eventually realise the value of their ownership.", "the refund policy.", "the closing time.",
+          "how the employees get out of the building safely.", "how founders and investors realise their value.", "the refund policy that is offered to its customers.", "the time the business closes each day.",
           correct: 1,
           explanation: "Acquisition, public listing, management buyout or succession — investors need to see a credible route to a return, since equity is worth nothing until it can be sold.",
           why: ["Building evacuation is a safety procedure.",
@@ -826,7 +826,7 @@ extension SeedQuestions {
 
         q("ent-67", .entrepreneurship, .medium,
           "A personal guarantee on a business loan means the founder",
-          "has no obligation if the business defaults.", "is personally responsible for repayment even if the business is incorporated.", "owns more shares.", "pays a lower interest rate.",
+          "they owe nothing at all if the business ever defaults.", "they are personally liable even if incorporated.", "they end up owning a greater share of the company.", "they pay a lower rate of interest.",
           correct: 1,
           explanation: "Lenders often require a personal guarantee from a young company's owner, which pierces the limited liability incorporation was meant to provide. It is the most commonly overlooked risk in start-up borrowing.",
           why: ["The guarantee exists precisely to create the obligation.",
@@ -838,7 +838,7 @@ extension SeedQuestions {
 
         q("ent-68", .entrepreneurship, .medium,
           "Vesting on founder shares is used to",
-          "reward founders immediately in full.", "ensure founders earn their equity over time, protecting the venture if one leaves early.", "increase the tax bill.", "prevent hiring.",
+          "reward the founders in full immediately.", "make founders earn equity over time.", "increase the tax bill the venture faces.", "prevent the venture from hiring anyone.",
           correct: 1,
           explanation: "Without vesting, a co-founder who leaves after three months keeps a full stake permanently while contributing nothing further. Vesting over several years makes equity reflect contribution.",
           why: ["Immediate full ownership is exactly the risk vesting addresses.",
@@ -850,7 +850,7 @@ extension SeedQuestions {
 
         q("ent-69", .entrepreneurship, .medium,
           "A blue ocean strategy seeks to",
-          "compete harder in an existing crowded market.", "create uncontested market space where competition is largely irrelevant.", "lower prices below every rival.", "copy the market leader.",
+          "compete harder in a crowded existing market.", "create space where rivalry hardly matters.", "price below every rival in the market.", "copy whatever the market leader does.",
           correct: 1,
           explanation: "Blue ocean strategy makes competition irrelevant by redefining the offer, rather than winning a share contest in a red ocean where rivals fight over the same customers.",
           why: ["Fighting in a crowded market is the red ocean the strategy contrasts with.",
@@ -862,7 +862,7 @@ extension SeedQuestions {
 
         q("ent-70", .entrepreneurship, .medium,
           "A venture's brand is an asset because it",
-          "is recorded at cost on the balance sheet.", "reduces the customer's perceived risk, which supports both preference and price.", "eliminates competitors.", "guarantees quality automatically.",
+          "it is recorded at its historic cost on the balance sheet each year.", "it cuts perceived risk, supporting preference and price.", "it eliminates all of the competitors from the market entirely.", "it guarantees the quality automatically.",
           correct: 1,
           explanation: "A brand accumulates the customer's accumulated expectations. Once trusted, it lowers the perceived risk of buying, which supports both repeat purchase and a price premium.",
           why: ["An internally built brand generally does not appear on the balance sheet.",
@@ -874,7 +874,7 @@ extension SeedQuestions {
 
         q("ent-71", .entrepreneurship, .medium,
           "A venture that solves a problem customers describe as \"annoying but tolerable\" faces the risk that",
-          "the market is too large.", "customers will not change behaviour or pay to fix a problem they can live with.", "the product is too cheap to build.", "competitors will not exist.",
+          "the market will turn out to be too large.", "people will not pay to fix what they tolerate.", "the product is too cheap to be worth building.", "no competitors will emerge in the market.",
           correct: 1,
           explanation: "Willingness to pay tracks pain. A tolerable problem produces polite interest in surveys and very little purchasing, which is why founders test for urgency rather than agreement.",
           why: ["Market size is not the issue; willingness to act is.",
@@ -886,7 +886,7 @@ extension SeedQuestions {
 
         q("ent-72", .entrepreneurship, .medium,
           "A subscription model benefits a venture primarily by",
-          "eliminating the need for customer service.", "producing predictable recurring revenue and a longer customer relationship.", "removing all churn.", "avoiding sales tax.",
+          "it removes the need for customer service.", "revenue recurs and relationships run longer.", "it removes churn from the business entirely.", "it avoids the sales tax that would be due.",
           correct: 1,
           explanation: "Recurring revenue makes forecasting and planning far easier and raises lifetime value. The trade-off is that churn becomes the number the whole business lives or dies by.",
           why: ["Subscriptions increase service expectations, because customers can leave monthly.",
@@ -898,7 +898,7 @@ extension SeedQuestions {
 
         q("ent-73", .entrepreneurship, .medium,
           "A freemium model works when",
-          "the free tier costs nothing to serve and a meaningful share of users upgrade.", "every user pays immediately.", "the paid tier is identical to the free one.", "there is no free tier.",
+          "the free tier is cheap to serve and some upgrade.", "every single user pays from the very beginning.", "the paid tier is identical to the free one.", "there is no free tier offered at all.",
           correct: 0,
           explanation: "Freemium needs cheap marginal cost on the free tier and a genuine reason to upgrade. If serving free users is expensive or the paid tier adds little, the model loses money at scale.",
           why: ["Correct. Cheap-to-serve free users plus a meaningful upgrade rate is what makes it work.",
@@ -910,7 +910,7 @@ extension SeedQuestions {
 
         q("ent-74", .entrepreneurship, .medium,
           "A marketplace business faces the chicken-and-egg problem, meaning it must",
-          "choose between profit and growth.", "attract buyers and sellers simultaneously, since neither joins without the other.", "decide whether to incorporate.", "select a logo before launch.",
+          "choose between making a profit and growing the business.", "attract buyers and sellers at the same time, together.", "decide whether or not it ought to incorporate itself at all.", "select a logo before it can launch.",
           correct: 1,
           explanation: "Neither side of a marketplace is useful alone. The standard solutions are to seed one side artificially, focus on a narrow niche first, or subsidise the harder side to join.",
           why: ["That trade-off exists in most businesses and is not this problem.",
@@ -934,7 +934,7 @@ extension SeedQuestions {
 
         q("ent-76", .entrepreneurship, .medium,
           "Churn rate measures the percentage of customers who",
-          "buy more than once.", "stop using the product over a given period.", "refer a friend.", "pay late.",
+          "buy from the business more than once.", "stop using the product over a period.", "refer at least one friend to the business.", "pay their invoices later than agreed.",
           correct: 1,
           explanation: "Churn is the leak in the bucket. High churn means acquisition spending only replaces losses, so growth stalls no matter how effective marketing is.",
           why: ["Repeat purchase is retention, the complement of churn.",
@@ -946,7 +946,7 @@ extension SeedQuestions {
 
         q("ent-77", .entrepreneurship, .medium,
           "A venture should generally hire its first employees in roles that",
-          "duplicate the founder's existing strengths.", "cover critical gaps the founders cannot fill themselves.", "are the cheapest available.", "sound most impressive.",
+          "duplicate the founder's existing strengths.", "cover gaps the founders cannot fill.", "are the cheapest that can be found.", "have the most impressive-sounding titles.",
           correct: 1,
           explanation: "Early hires are expensive relative to runway, so each must remove a real constraint. Hiring a second version of the founder leaves the actual gap unfilled.",
           why: ["Duplicating existing strengths leaves the real constraint in place.",
@@ -958,7 +958,7 @@ extension SeedQuestions {
 
         q("ent-78", .entrepreneurship, .medium,
           "Documenting processes as a venture grows is valuable because it",
-          "creates unnecessary bureaucracy.", "lets new people perform work consistently without the founder present.", "slows every decision.", "replaces the need for hiring.",
+          "it creates bureaucracy nobody actually needs.", "new people can work without the founder.", "it slows down every decision that is made.", "it removes the need to hire anyone else.",
           correct: 1,
           explanation: "Undocumented knowledge lives in the founders' heads and does not scale. Written process is what allows a new hire to be productive without constant supervision.",
           why: ["Bureaucracy is over-documentation; the failure here is usually the opposite.",
@@ -970,7 +970,7 @@ extension SeedQuestions {
 
         q("ent-79", .entrepreneurship, .medium,
           "Expanding internationally introduces which risk a domestic-only venture avoids?",
-          "Customer service demands", "Currency fluctuation and unfamiliar regulatory regimes", "Employee turnover", "Marketing costs",
+          "The demands made by customer service", "Currency swings and unfamiliar regulation", "The turnover of employees each year", "The costs of marketing the product",
           correct: 1,
           explanation: "Exchange rate movement can erase a margin between order and payment, and regulation, tax and consumer law differ by jurisdiction in ways that are expensive to discover late.",
           why: ["Service demands exist in every market.",
@@ -982,7 +982,7 @@ extension SeedQuestions {
 
         q("ent-80", .entrepreneurship, .medium,
           "A venture's unit economics describe",
-          "the total revenue of the business.", "the revenue and cost associated with one customer or one unit sold.", "the number of employees.", "the office square footage.",
+          "the total revenue the business brings in.", "the revenue and cost of one customer.", "the number of people it employs.", "the square footage of its office.",
           correct: 1,
           explanation: "If a single unit or customer loses money, scale multiplies the loss. Unit economics is where a venture finds out whether growth will help or hurt.",
           why: ["Total revenue is an aggregate, not a per-unit view.",
@@ -994,7 +994,7 @@ extension SeedQuestions {
 
         q("ent-81", .entrepreneurship, .medium,
           "A venture discovers a competitor has patented the core technology it planned to use. Its most practical options include",
-          "ignoring the patent entirely.", "designing around the patent, licensing it, or pivoting the approach.", "publicly criticising the competitor.", "filing an identical patent.",
+          "ignoring the patent entirely and simply proceeding.", "designing around it, licensing it, or pivoting.", "criticising the competitor publicly in the press.", "filing a patent identical to theirs.",
           correct: 1,
           explanation: "Infringement is expensive and can end a venture. Designing around, licensing or pivoting are the workable routes, and all three are cheaper than litigation.",
           why: ["Ignoring a valid patent invites an infringement claim.",
@@ -1006,7 +1006,7 @@ extension SeedQuestions {
 
         q("ent-82", .entrepreneurship, .medium,
           "A founder should have employees and contractors sign intellectual property assignment agreements because",
-          "it is a formality with no effect.", "without them, the creator may retain rights to work the venture paid for.", "it reduces their pay.", "it is required for incorporation.",
+          "it is a formality that has no real effect.", "the creator may keep rights otherwise.", "it reduces the pay they have to be given.", "it is a requirement before incorporating.",
           correct: 1,
           explanation: "Contractors in particular often retain copyright in what they create absent a written assignment. Investors check this in diligence, and a gap can delay or kill a round.",
           why: ["The agreements have direct legal effect on who owns the work.",
@@ -1018,7 +1018,7 @@ extension SeedQuestions {
 
         q("ent-83", .entrepreneurship, .medium,
           "Open-source software licences matter to a start-up because",
-          "all open-source code is free of obligations.", "some licences require derivative works to be released under the same terms.", "they prohibit commercial use entirely.", "they expire annually.",
+          "all open-source code comes free of obligations.", "some require derivative works on the same terms.", "they prohibit commercial use entirely.", "they expire at the end of each year.",
           correct: 1,
           explanation: "Copyleft licences can require a venture to publish source code for derivative works. Building a proprietary product on the wrong licence is discovered in diligence, when it is expensive to unwind.",
           why: ["Open-source licences carry conditions, which vary considerably.",
@@ -1030,7 +1030,7 @@ extension SeedQuestions {
 
         q("ent-84", .entrepreneurship, .medium,
           "A venture's competitive advantage is best tested by asking",
-          "whether the founder likes it.", "how quickly and cheaply a well-resourced competitor could replicate it.", "how long the pitch deck is.", "whether the logo is memorable.",
+          "whether or not the founder happens to like it much.", "how fast a well-resourced rival could copy it.", "how long the pitch deck ends up being in the end.", "whether the logo is a memorable one.",
           correct: 1,
           explanation: "Replication cost is the real measure of a moat. If a funded competitor could copy the advantage in a quarter, it is a feature rather than an advantage.",
           why: ["Founder enthusiasm is not evidence.",
@@ -1042,7 +1042,7 @@ extension SeedQuestions {
 
         q("ent-85", .entrepreneurship, .medium,
           "A cost structure with high fixed and low variable costs means the venture",
-          "breaks even at very low volume.", "needs volume to become profitable, but earns strong margins beyond break-even.", "has no break-even point.", "should never scale.",
+          "it will break even at a very low volume indeed.", "it needs volume, then margins are strong.", "it has no break-even point of any kind at all.", "it should never attempt to scale up at all.",
           correct: 1,
           explanation: "High fixed costs push break-even out, but once covered each additional sale contributes heavily. It is a high-risk, high-reward shape that rewards reaching scale and punishes stalling short of it.",
           why: ["High fixed costs push break-even higher, not lower.",
@@ -1054,7 +1054,7 @@ extension SeedQuestions {
 
         q("ent-86", .entrepreneurship, .medium,
           "A start-up's pitch to investors should lead with",
-          "the technology architecture in detail.", "the problem, who has it, and why this team's solution wins.", "the founder's childhood.", "a list of every feature.",
+          "the technical architecture of the product, in fine detail.", "the problem, who has it, and why this team wins.", "the childhood and upbringing of the founder.", "a list of every single feature that has been built.",
           correct: 1,
           explanation: "Investors decide early whether the problem is real and large. Technical detail matters in diligence, but a pitch that opens with architecture usually loses the room before the problem is established.",
           why: ["Architecture belongs in diligence, not the opening.",
@@ -1066,7 +1066,7 @@ extension SeedQuestions {
 
         q("ent-87", .entrepreneurship, .medium,
           "Traction in an investor pitch means",
-          "the number of features built.", "evidence customers are actually adopting and paying — users, revenue, retention.", "the size of the office.", "the number of meetings held.",
+          "the number of features that have been built so far.", "evidence of adoption — users, revenue, retention.", "the size of the office space that the venture occupies.", "the number of meetings that have been held.",
           correct: 1,
           explanation: "Traction is the evidence that replaces belief. Users, revenue and retention are what turn a plausible story into a fundable one.",
           why: ["Features built are effort, not evidence of demand.",
@@ -1078,7 +1078,7 @@ extension SeedQuestions {
 
         q("ent-88", .entrepreneurship, .medium,
           "A convertible note is",
-          "a fixed-rate mortgage.", "short-term debt that converts into equity at a later financing round.", "a type of trademark.", "a customer contract.",
+          "a mortgage taken at a fixed rate.", "short-term debt converting to equity later.", "a particular type of trademark.", "a contract signed with a customer.",
           correct: 1,
           explanation: "Convertible notes defer the valuation question to a later priced round, which is why they are common in early raises where valuing the company is largely guesswork.",
           why: ["A mortgage is secured property debt.",
@@ -1090,7 +1090,7 @@ extension SeedQuestions {
 
         q("ent-89", .entrepreneurship, .medium,
           "A founder should track burn rate because it",
-          "measures customer satisfaction.", "shows how fast cash is being consumed, which determines how long the venture survives.", "sets the product price.", "measures employee productivity.",
+          "it measures how satisfied customers are.", "it shows how fast the cash is going.", "it sets the price charged for the product.", "it measures how productive employees are.",
           correct: 1,
           explanation: "Burn rate and cash balance together give runway. Most failed start-ups did not run out of ideas; they ran out of cash while still working on them.",
           why: ["Satisfaction is measured separately.",
@@ -1102,7 +1102,7 @@ extension SeedQuestions {
 
         q("ent-90", .entrepreneurship, .medium,
           "An entrepreneur identifies an opportunity most reliably by",
-          "waiting for inspiration.", "observing an unmet need or a persistent frustration in a market they understand.", "copying a trending product.", "choosing whatever is easiest to build.",
+          "waiting patiently for inspiration to strike.", "spotting an unmet need in a market they know.", "copying whichever product is trending now.", "choosing whatever is the easiest thing to build.",
           correct: 1,
           explanation: "Opportunities come from noticing a problem people already work around. Domain familiarity is what allows a founder to see the frustration that outsiders miss.",
           why: ["Inspiration is unreliable as a method.",
@@ -1114,7 +1114,7 @@ extension SeedQuestions {
 
         q("ent-91", .entrepreneurship, .medium,
           "The main purpose of a customer persona for a start-up is to",
-          "describe the founder.", "keep product and marketing decisions anchored to a specific real buyer.", "set the tax rate.", "choose an office location.",
+          "describe the founder of the business.", "anchor product and marketing to a real buyer.", "set the rate of tax the venture pays.", "choose where the office should be located.",
           correct: 1,
           explanation: "A persona keeps a small team building for one identifiable person rather than an abstract average, which is what prevents a product that half-fits everybody.",
           why: ["The founder is not the customer, even when they resemble one.",
@@ -1126,7 +1126,7 @@ extension SeedQuestions {
 
         q("ent-92", .entrepreneurship, .medium,
           "Selling to businesses rather than consumers typically means",
-          "shorter sales cycles and smaller orders.", "longer sales cycles, more decision makers, and larger contract values.", "no need for a sales process.", "identical marketing tactics.",
+          "shorter sales cycles and smaller orders.", "longer cycles, more deciders, bigger contracts.", "no need for any sales process at all.", "marketing tactics identical to consumer ones.",
           correct: 1,
           explanation: "Business purchases involve budget holders, users and often procurement, so cycles run months. The compensation is larger contracts and lower churn once embedded.",
           why: ["That describes consumer selling.",
@@ -1138,7 +1138,7 @@ extension SeedQuestions {
 
         q("ent-93", .entrepreneurship, .medium,
           "A venture's gross margin matters to investors because it indicates",
-          "how much revenue remains after the direct cost of delivering the product.", "the founder's salary.", "the total addressable market.", "the number of competitors.",
+          "what remains after the direct cost of delivery.", "the salary the founder is drawing.", "the total addressable market available.", "the number of competitors in the market.",
           correct: 0,
           explanation: "Gross margin sets the ceiling on everything else. A venture with thin gross margin has little left to fund sales, development or profit no matter how fast it grows.",
           why: ["Correct. It is what remains after the direct cost of delivery, and it caps everything downstream.",
@@ -1150,7 +1150,7 @@ extension SeedQuestions {
 
         q("ent-94", .entrepreneurship, .medium,
           "A start-up should validate its pricing by",
-          "guessing based on cost alone.", "testing what customers will actually pay against the value they receive.", "always matching the cheapest competitor.", "setting the highest possible price.",
+          "guessing on the basis of its cost alone.", "testing what customers pay against value.", "always matching the cheapest competitor.", "setting the highest price the market allows.",
           correct: 1,
           explanation: "Cost sets a floor, not a price. What the customer will pay depends on the value delivered, and testing it directly is more reliable than any internal calculation.",
           why: ["Cost-based pricing ignores what the offer is worth to the buyer.",
@@ -1162,7 +1162,7 @@ extension SeedQuestions {
 
         q("ent-95", .entrepreneurship, .medium,
           "A minimum viable product should be judged on whether it",
-          "looks polished.", "answers the specific question it was built to test.", "includes every planned feature.", "took a long time to build.",
+          "it ends up looking suitably polished.", "it answers the question it was built to test.", "it includes every feature that was planned.", "it took a considerable time to build.",
           correct: 1,
           explanation: "An MVP is an experiment, so it succeeds if it produces a clear answer. Polish and completeness matter later, once there is something worth polishing.",
           why: ["Polish is not the point at this stage.",
@@ -1174,7 +1174,7 @@ extension SeedQuestions {
 
         q("ent-96", .entrepreneurship, .medium,
           "A start-up's advisory relationship with a mentor is most productive when the founder",
-          "asks the mentor to make decisions.", "brings specific questions and remains accountable for the decision.", "reports only good news.", "meets without preparation.",
+          "they ask the mentor to make the decisions.", "they bring questions and stay accountable.", "they report only the good news upward.", "they turn up to meetings unprepared.",
           correct: 1,
           explanation: "Mentors add most value against a concrete question. Handing over the decision removes the founder's ownership, and reporting only successes wastes the relationship entirely.",
           why: ["Decisions belong to the founder, who carries the consequences.",
@@ -1186,7 +1186,7 @@ extension SeedQuestions {
 
         q("ent-97", .entrepreneurship, .medium,
           "A venture facing a slow market response should first",
-          "double the advertising budget.", "investigate whether the problem is the message, the product, the price or the audience.", "lower the price immediately.", "abandon the business.",
+          "double the budget it spends on advertising.", "ask whether it is message, product, price or audience.", "lower the price of the product immediately.", "abandon the business and move on.",
           correct: 1,
           explanation: "Spending more on an undiagnosed problem amplifies it. Isolating which variable is failing costs almost nothing and determines which fix is worth trying.",
           why: ["More spending on an undiagnosed problem amplifies the waste.",
@@ -1198,7 +1198,7 @@ extension SeedQuestions {
 
         q("ent-98", .entrepreneurship, .medium,
           "An entrepreneur's competitive research should include",
-          "direct competitors only.", "direct competitors, substitutes, and the customer's option to do nothing.", "suppliers only.", "no competitors, to stay original.",
+          "the direct competitors, and nobody else.", "direct rivals, substitutes, and doing nothing.", "the venture's own suppliers, and no one else.", "no competitors at all, so as to stay original.",
           correct: 1,
           explanation: "The most common competitor is inertia. A customer solving the problem with a spreadsheet, or not solving it at all, is competition the venture has to beat.",
           why: ["Direct competitors are only part of the picture.",
@@ -1210,7 +1210,7 @@ extension SeedQuestions {
 
         q("ent-99", .entrepreneurship, .medium,
           "A social entrepreneur measures success by",
-          "profit alone.", "both financial sustainability and measurable progress against the social mission.", "the number of press mentions.", "the size of the founding team.",
+          "the profit the venture makes, and nothing else.", "financial sustainability and progress on the mission.", "the number of times the press mentions it.", "the size of the team that founded it.",
           correct: 1,
           explanation: "A social enterprise that fails financially cannot serve anyone, and one that is profitable while achieving nothing socially has abandoned its purpose. Both have to be measured.",
           why: ["Profit alone ignores the mission the enterprise exists for.",

@@ -51,10 +51,9 @@ MAX_MEAN_RATIO = 1.25    # mean correct length / mean distractor length, per clu
 # question to beat a metric. The target is that length stops being worth
 # betting on in any direction, not that every choice matches to the byte.
 
-# Set once every cluster clears the bar. Until then the report prints and the
-# thresholds do not fail the run, so the bank can be brought up to standard one
-# cluster at a time without leaving the validator red in between.
-ENFORCE_SHAPE = False
+# All six clusters clear the bar, so the thresholds now fail the run. Anything
+# added to the bank has to hold the same line.
+ENFORCE_SHAPE = True
 
 
 def split_top_level(body):
