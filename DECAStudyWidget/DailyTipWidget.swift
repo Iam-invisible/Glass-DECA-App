@@ -157,14 +157,14 @@ struct DailyTipView: View {
             // easy to read, and the block still sits in the middle of the space
             // rather than falling to the top of it.
             //
-            // 19pt because this is New York, not Manrope. Its x-height is 0.46
-            // against Manrope's 0.54, so the 17pt that suited the sans reads
-            // noticeably smaller here. Measured over all 605 facts at the full
-            // column: 19pt is the largest that still holds every one of them
-            // inside four lines, and 327 of them use all four. At 20pt, 413
-            // need a fifth and would be scaled down.
+            // 20pt. Instrument Serif is narrow enough that every one of the 605
+            // facts fits in three lines at this size — 511 take three and 94
+            // take two — and not one is scaled down. 21pt is where nine of them
+            // start needing a fourth. The lineLimit is 4 rather than 3 so a
+            // longer fact added later wraps and shrinks a little instead of
+            // being cut off mid-sentence.
             Text(entry.tip)
-                .font(WidgetType.serif(19))
+                .font(WidgetType.serif(20))
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(2)
@@ -188,23 +188,24 @@ struct DailyTipView: View {
             }
             .foregroundStyle(WidgetPalette.accent)
 
-            // Manrope here, not the serif the medium widget uses, and the
-            // reason is measured rather than stylistic. A fact needs six or
-            // seven lines in a 126pt column, so it is set at 12pt whatever the
-            // face — and at 12pt New York's x-height is 5.5pt against Manrope's
-            // 6.8pt. The serif is the more elegant letter and the harder one to
-            // read this small, and on a widget glanced at across a room that is
-            // not a trade worth making. Medium has room for both.
+            // The same serif as medium, and it is the better face here too —
+            // which was not true of the system serif this replaced. Instrument
+            // Serif is narrow, so a fact reaches five lines in a 126pt column
+            // where Manrope reached seven: at 13pt every one of the 605 fits
+            // without being scaled, against 311 of them shrinking under Manrope
+            // at 12.5pt. Its x-height is 6.6pt to Manrope's 6.8pt, so almost
+            // none of that is paid for in apparent size.
             //
             // A tip is the whole content of this widget, so it shrinks to fit
             // rather than truncating. Half a fact is worse than a small one —
             // and the corpus is length-gated by check_tips.py so the shrinking
             // never has far to go.
             Text(entry.tip)
-                .font(WidgetType.sans(12.5))
+                .font(WidgetType.serif(13))
                 .foregroundStyle(.primary)
+                .lineSpacing(1)
                 .minimumScaleFactor(0.72)
-                .lineLimit(8)
+                .lineLimit(6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }

@@ -219,21 +219,25 @@ enum WidgetType {
                 fixedSize: size)
     }
 
-    /// New York, the system serif. The one place the widget does not use a
-    /// bundled face.
+    /// Instrument Serif, for the daily fact and nothing else.
     ///
-    /// It is for the daily fact and nothing else. A fact is a statement being
-    /// quoted rather than a piece of interface, and a serif is what says so —
-    /// Manrope is the app's voice for chrome and labels, which is the wrong
-    /// register for the one line on the widget a student is meant to read
-    /// rather than scan. Michroma is not an option: the display face averages
-    /// 0.719 em a character, so four lines of prose in it is a wall.
+    /// The app's old display face, brought back from before Michroma replaced
+    /// it (§5) and restored into this target's `Fonts/` with its OFL licence.
+    /// It was dropped as a *display* face because at 19–22pt it read as body
+    /// text set larger and stopped announcing a heading — which is exactly the
+    /// quality wanted here, where the line is body text and is meant to be read
+    /// rather than scanned.
     ///
-    /// Costs nothing to ship. It also has a much smaller x-height than
-    /// Manrope — 0.46 against 0.54 — so a size set from Manrope's ladder comes
-    /// out visibly smaller here and has to be raised, not inherited.
+    /// Registered in `Config/DECAStudyWidget-Info.plist`. `Font.custom`
+    /// resolves by PostScript name (§8.8), which for this file is
+    /// `InstrumentSerif-Regular` — not the family name.
+    ///
+    /// It is narrow: far more characters to the line than Manrope at the same
+    /// size, and its x-height of 0.510 em sits close to Manrope's 0.540. That
+    /// combination is why it can be set larger *and* wrap less, so sizes here
+    /// are measured against the corpus rather than carried over from the sans.
     static func serif(_ size: CGFloat) -> Font {
-        .system(size: size, weight: .regular, design: .serif)
+        .custom("InstrumentSerif-Regular", fixedSize: size)
     }
 }
 
