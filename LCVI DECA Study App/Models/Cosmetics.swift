@@ -209,12 +209,19 @@ enum AppCosmeticCatalogue {
     /// `id` doubles as the value written to `UIApplication.setAlternateIconName`,
     /// except for the default, which passes nil. The names must match the keys
     /// in `CFBundleAlternateIcons`.
+    /// The G, in one form or another. Every entry is the same letterform, so
+    /// the set reads as a family rather than as five unrelated pictures — the
+    /// only thing that changes is what the glass is made of.
+    ///
+    /// Rainbow is the dearest because it is the only one that abandons the
+    /// glass treatment entirely, which makes it the one that looks least like
+    /// the free icon and most like something you chose.
     static let icons: [AppCosmeticItem] = [
-        .init(id: "icon.default",     name: "Glass",    detail: "The wordmark, in glass", kind: .icon, price: 0,   previewHex: 0x000000, isDefault: true),
-        .init(id: "AppIconOriginal",  name: "Original", detail: "The first icon",         kind: .icon, price: 250, previewHex: 0x4FA3E3),
-        .init(id: "AppIconInk",   name: "Ink",      detail: "Warm dark",          kind: .icon, price: 450, previewHex: 0x231F1A),
-        .init(id: "AppIconGold",  name: "Gold",     detail: "Streak gold",        kind: .icon, price: 500, previewHex: 0xB07407),
-        .init(id: "AppIconMint",  name: "Mint",     detail: "Cool green",         kind: .icon, price: 500, previewHex: 0x12855C),
+        .init(id: "icon.default",     name: "Glass",   detail: "The G, in glass",        kind: .icon, price: 0,   previewHex: 0x4E84E8, isDefault: true),
+        .init(id: "AppIconRose",      name: "Rose",    detail: "Pastel pink glass",      kind: .icon, price: 400, previewHex: 0xE87EA8),
+        .init(id: "AppIconMint",      name: "Mint",    detail: "Pastel green glass",     kind: .icon, price: 400, previewHex: 0x4ED2A6),
+        .init(id: "AppIconLilac",     name: "Lilac",   detail: "Pastel violet glass",    kind: .icon, price: 450, previewHex: 0x9A7EE8),
+        .init(id: "AppIconRainbow",   name: "Rainbow", detail: "Not glass. It glows.",   kind: .icon, price: 900, previewHex: 0xFF3B6B),
     ]
 
     static let themes: [AppCosmeticItem] = [
