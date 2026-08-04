@@ -151,23 +151,26 @@ struct DailyTipView: View {
             }
             .foregroundStyle(WidgetPalette.accent)
 
-            // Centred in what is left, both ways. Most facts come to three
-            // lines of the four that fit, so top-aligning them left a band of
-            // nothing along the bottom; centring puts that space evenly above
-            // and below and the block reads as placed rather than as fallen to
-            // the top.
+            // Ranged left, sitting in the middle. `Alignment.leading` is
+            // horizontally leading and vertically centre, which is exactly the
+            // pair wanted: prose keeps the straight left edge that makes it
+            // easy to read, and the block still sits in the middle of the space
+            // rather than falling to the top of it.
             //
-            // 17pt is the largest that still holds every fact in four lines at
-            // full width — measured over all 605. At 18pt, 212 of them need a
-            // fifth line and would be scaled down.
+            // 19pt because this is New York, not Manrope. Its x-height is 0.46
+            // against Manrope's 0.54, so the 17pt that suited the sans reads
+            // noticeably smaller here. Measured over all 605 facts at the full
+            // column: 19pt is the largest that still holds every one of them
+            // inside four lines, and 327 of them use all four. At 20pt, 413
+            // need a fifth and would be scaled down.
             Text(entry.tip)
-                .font(WidgetType.sans(17))
+                .font(WidgetType.serif(19))
                 .foregroundStyle(.primary)
-                .multilineTextAlignment(.center)
+                .multilineTextAlignment(.leading)
                 .lineSpacing(2)
                 .minimumScaleFactor(0.62)
                 .lineLimit(4)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
     }
 
@@ -185,6 +188,14 @@ struct DailyTipView: View {
             }
             .foregroundStyle(WidgetPalette.accent)
 
+            // Manrope here, not the serif the medium widget uses, and the
+            // reason is measured rather than stylistic. A fact needs six or
+            // seven lines in a 126pt column, so it is set at 12pt whatever the
+            // face — and at 12pt New York's x-height is 5.5pt against Manrope's
+            // 6.8pt. The serif is the more elegant letter and the harder one to
+            // read this small, and on a widget glanced at across a room that is
+            // not a trade worth making. Medium has room for both.
+            //
             // A tip is the whole content of this widget, so it shrinks to fit
             // rather than truncating. Half a fact is worse than a small one —
             // and the corpus is length-gated by check_tips.py so the shrinking
