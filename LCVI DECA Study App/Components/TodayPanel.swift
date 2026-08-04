@@ -376,12 +376,13 @@ struct TodayPanel: View {
     }
 
     /// What is still owed, in the units of whichever goal is still open. The
-    /// tint is the arc's tint, so the sweep and the number always agree on
-    /// which goal is being counted down without a label saying so.
+    /// label underneath names the unit; the arc behind it carries the goal's
+    /// tint, so which goal is being counted down is still said without a word
+    /// for it even though the figure itself is now plain.
     ///
-    /// Centred and set large. Freed from the ring, the figure has to carry the
-    /// hero position on its own, so it is bigger than the 46pt it was inside
-    /// one — the ring was doing half that work.
+    /// Centred and set large in the display face. Freed from the ring, the
+    /// figure has to carry the hero position on its own, so it is bigger than
+    /// the 46pt it was inside one — the ring was doing half that work.
     @ViewBuilder
     private var headline: some View {
         if allMet {
@@ -401,9 +402,15 @@ struct TodayPanel: View {
                 ? max(0, questionsGoal - questionsDone)
                 : max(0, quickThinkGoal - quickThinkDone)
             VStack(spacing: -2) {
+                // The display face, and the plain text colour rather than the
+                // goal's tint. `Palette.textPrimary` rather than a literal
+                // white: it is #F2F5F9 in dark and #0F1B2D in light, so a hard
+                // white here would be a near-invisible figure on the light
+                // canvas. The arc still carries the tint, so the pairing of
+                // colour to goal is not lost — it moved to the shape.
                 CountingNumber(value: Double(remaining),
-                               font: .numeric(60),
-                               color: heroTint)
+                               font: .appDisplay(60),
+                               color: Palette.textPrimary)
                 Text(onQuestionsStill
                      ? "question\(remaining == 1 ? "" : "s") left today"
                      : "quick think\(remaining == 1 ? "" : "s") left today")

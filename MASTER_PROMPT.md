@@ -195,7 +195,12 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   that "Mock Exams" overflowed an iPhone SE tile: three of six tiles were being shrunk by
   `minimumScaleFactor` and three were not, so one grid rendered its labels at four sizes. 16 is the
   largest that clears the box outright.
-- **The hierarchy rule: serif is always a heading, Manrope is always content.**
+- **The hierarchy rule: serif is always a heading, Manrope is always content.** The day's remaining
+  count on Study is the one number set in the display face: it is the screen's title as much as it
+  is a figure. `appDisplay(_:)` exists for it. Note Michroma's digits are **not** tabular the way
+  Manrope's are — most are 0.951 em, 4 is 1.000, 7 and 9 are 0.969 — so a counting animation drifts
+  up to 2.9pt at 60pt. Centred, that is under 1.5pt a side; anywhere it would matter more, use
+  `numeric(_:)`.
 - OFL licences ship alongside every font. Keep them.
 
 **Colour — blue-grey** (`Palette`, `Core/DesignSystem.swift`). Light/dark pairs.
@@ -283,7 +288,9 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 loud, "EIP") above the header, then **`TodayPanel`**: the day as one smooth semicircle with the
 figure seated in its well, then a card per goal, then the streak card. The ring is
 one smooth sweep fed by both goals — `DayArc`, 290pt across and 145pt tall. The figure sits in the
-well and shows what is **left**, not what is done, tinted to whichever goal is still open.
+well and shows what is **left**, not what is done — set in Michroma at 60pt via `appDisplay`, in
+`Palette.textPrimary` rather than the goal's tint. The arc behind it keeps the tint, so which goal
+is counting down is still said without a word for it.
 
 It was a 176pt ring inside a 244pt bloom, about 243pt of the roughly 500pt an iPhone 8 shows above
 the fold, spent on a number the line under the title and both cards already stated. The ring's

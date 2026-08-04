@@ -216,6 +216,21 @@ extension Font {
         Font.custom(name(for: weight), fixedSize: size).monospacedDigit()
     }
 
+    /// Michroma at a fixed size, for the one figure that is display rather
+    /// than content: the day's remaining count, which is the screen's title
+    /// as much as it is a number.
+    ///
+    /// Fixed size for the same reason `numeric` is — it sits inside a
+    /// fixed-diameter arc. Michroma's digits are **not** tabular, unlike
+    /// Manrope's: most are 0.951 em but 4 is 1.000 and 7 and 9 are 0.969, so a
+    /// counting animation shifts by up to 2.9pt at 60pt as it rolls. It is
+    /// centred, so that reads as under a point and a half of drift on each
+    /// side. `monospacedDigit()` is applied anyway in case a future cut of the
+    /// face ships `tnum`, where it would take effect for free.
+    static func appDisplay(_ size: CGFloat) -> Font {
+        Font.custom(AppType.displayBold, fixedSize: size).monospacedDigit()
+    }
+
     private static func name(for weight: Font.Weight) -> String {
         switch weight {
         case .bold, .heavy, .black, .semibold: return AppType.semibold
