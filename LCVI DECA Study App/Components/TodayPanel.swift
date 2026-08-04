@@ -84,11 +84,12 @@ struct TodayPanel: View {
     private var allMet: Bool { questionsMet && (!showsQuickThink || quickThinkMet) }
 
     var body: some View {
-        // The day leads and everything else reads as support beneath it. 20
-        // rather than the ring's 28: the bar sits on the same left edge as the
-        // cards now, so they already read as one column and do not need a gap
-        // that wide to stop the first card crowding the hero.
-        VStack(spacing: 20) {
+        // The day leads and everything else reads as support beneath it. The
+        // gap is part of what makes it lead: isolation is most of what the
+        // ring's 244pt of bloom was buying, and at a tighter gap the first
+        // card crowds the figure closely enough to read as a peer of it
+        // rather than as support.
+        VStack(spacing: 26) {
             dayBar
             goals
             streakCard
@@ -341,37 +342,67 @@ struct TodayPanel: View {
     /// The figure stays large and stays the hero. What went is the empty
     /// middle it used to sit in.
     private var dayBar: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(spacing: 16) {
             headline
-            SegmentedDayBar(sections: sections)
+                .frame(maxWidth: .infinity)
+                .background {
+                    // The bloom the ring used to sit in, kept. It is what says
+                    // "this is the important part" without drawing a box, and
+                    // it is the reason this block reads as the hero rather
+                    // than as a stat line above two cards.
+                    //
+                    // In `background` rather than a ZStack on purpose: a 230pt
+                    // circle as a stack child would set the block's height to
+                    // 230pt and hand back the space this format exists to
+                    // save. As a background it overflows visually and costs
+                    // nothing in layout.
+                    Circle()
+                        .fill(RadialGradient(colors: [heroTint.opacity(0.20), .clear],
+                                             center: .center, startRadius: 2, endRadius: 115))
+                        .frame(width: 230, height: 230)
+                        .blur(radius: 12)
+                        .allowsHitTesting(false)
+                }
+
+            SegmentedDayBar(sections: sections, height: 11)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityHidden(true)
+    }
+
+    /// Whichever goal the figure is currently counting down.
+    private var heroTint: Color {
+        if allMet { return Palette.success }
+        return questionsMet ? Palette.gold : Palette.accent
     }
 
     /// What is still owed, in the units of whichever goal is still open. The
     /// tint matches that goal's segments, so the number is always attributable
     /// to part of the bar without a label saying which.
+    /// Centred and set large. Freed from the ring, the figure has to carry the
+    /// hero position on its own, so it is bigger than the 46pt it was inside
+    /// one — the ring was doing half that work.
     @ViewBuilder
     private var headline: some View {
         if allMet {
-            HStack(spacing: 8) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 26, weight: .bold))
+            VStack(spacing: 4) {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 46, weight: .bold))
                     .foregroundStyle(Palette.success)
                 Text(showsQuickThink ? "Both goals met" : "Goal met for today")
-                    .font(.appBodyMedium)
+                    .font(.appCallout)
                     .foregroundStyle(Palette.textSecondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
         } else {
             let onQuestionsStill = !questionsMet
             let remaining = onQuestionsStill
                 ? max(0, questionsGoal - questionsDone)
                 : max(0, quickThinkGoal - quickThinkDone)
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
+            VStack(spacing: -2) {
                 CountingNumber(value: Double(remaining),
-                               font: .numeric(40),
-                               color: onQuestionsStill ? Palette.accent : Palette.gold)
+                               font: .numeric(60),
+                               color: heroTint)
                 Text(onQuestionsStill
                      ? "question\(remaining == 1 ? "" : "s") left today"
                      : "quick think\(remaining == 1 ? "" : "s") left today")

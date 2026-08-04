@@ -289,7 +289,10 @@ is **left**, not what is done, tinted to whichever goal is still open.
 It was a 176pt ring inside a 244pt bloom, about 243pt of the roughly 500pt an iPhone 8 shows above
 the fold, spent on a number the line under the title and both cards already stated. The ring's
 argument was never its size — one object means one day, and a segment per item says what a
-question is worth. `SegmentedDayBar` keeps both for about 150pt. The daily goal goes to 100, so the
+question is worth. `SegmentedDayBar` keeps both for 127pt: the figure set at
+60pt rather than the 46pt it used inside a ring, centred, over the same bloom the ring sat in — a
+`background` rather than a stack child, so 230pt of wash costs nothing in layout — and 26pt of
+clear space beneath it. Isolation and size are what make it lead; the ring's diameter never was. The daily goal goes to 100, so the
 dividers close up past ~30 segments and disappear entirely past ~50: at that density "what one
 question is worth" is not readable however it is drawn, so the bar merges into a continuous
 two-tone track rather than becoming a dotted line. Below that a `ModeTile`
