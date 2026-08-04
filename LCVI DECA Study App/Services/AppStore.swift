@@ -338,12 +338,20 @@ final class AppStore: ObservableObject {
     // MARK: - The single answer pipeline
 
     /// Everything that happens when a question is answered anywhere in the app.
-    func recordAnswer(question: QuestionData,
-                      selectedIndex: Int,
+    func recordAnswer(question presentedQuestion: QuestionData,
+                      selectedIndex presentedSelection: Int,
                       seconds: Double,
                       sessionID: UUID?,
                       mode: PracticeMode,
                       countsTowardDailyGoal: Bool = true) {
+        // The runner hands over the shuffled copy the student actually saw.
+        // Everything below this line — the notebook, spaced repetition, the
+        // session log — speaks the bank's own slots, so convert once here.
+        // This is the only funnel for a practice answer, which is what keeps
+        // the conversion from having to be remembered anywhere else.
+        let question = presentedQuestion.canonical()
+        let selectedIndex = presentedQuestion.canonicalIndex(for: presentedSelection)
+
         let isCorrect = selectedIndex == question.correctIndex
 
         sr.record(questionID: question.id, correct: isCorrect)

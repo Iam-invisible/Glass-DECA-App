@@ -110,6 +110,12 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   `CDRoleplayResponse`, `CDQuickThinkSession`, `CDAchievementRecord`.
 - **Stable IDs**: seed content uses `UUID.stable("question-\(key)")` (`Data/StableID.swift`) so
   re-seeding never duplicates rows.
+- **Choices are shuffled per presentation** (`Models/ChoiceOrder.swift`). The bank's order is
+  canonical and never moves; `presented(salt:)` deals a throwaway copy carrying the map back.
+  Shuffled in exactly two places — `PracticeRunner.init` (every practice route arrives as a
+  `BuiltSession`) and `MockExamService.buildExam` — and converted back in exactly two —
+  `AppStore.recordAnswer` and `saveAttempt`. No schema change, and review screens re-fetch from
+  the bank so they read canonical. See §8.36.
 - **`AppStore`** (`Services/AppStore.swift`) is the single coordination point injected as
   `@EnvironmentObject`. Services are plain types it owns.
 - **Launch flow** in `RootView`, in order: `IntroView` → **privacy consent gate** (shown while
@@ -490,6 +496,17 @@ app survive ~1 GB resident on a 4 GB phone.
 34. **A local `AVAudioPlayer` is deallocated the moment the function returns** and never makes a
     sound. `SoundEffects.preview` holds its own player in a property — its own, so auditioning a
     pack in the Shop cannot evict the cached cues or leave the wrong pack loaded.
+35. **Swift's `Hasher` is salted per process, so `hashValue` differs between launches.** Anything
+    that has to reproduce a result later — a shuffle a review screen replays, a deterministic
+    seed — needs its own stable digest. `UUID.stableSeed` in `ChoiceOrder.swift` is FNV-1a over
+    the sixteen bytes for exactly this reason. `SystemRandomNumberGenerator` cannot be seeded at
+    all, hence `SplitMix64`.
+36. **A presented question is not a storable question.** `QuestionData.canonicalOrder` records the
+    shuffle applied for one presentation and is deliberately outside `CodingKeys`, so an export
+    carries the bank's order rather than one student's deal. The two funnels that persist an
+    index — `AppStore.recordAnswer` and `MockExamService.saveAttempt` — call `.canonical()` and
+    `.canonicalIndex(for:)` first. Writing a presented copy straight to Core Data would reorder
+    the stored choices and silently invalidate every earlier answer's `selectedIndex`.
 
 ---
 

@@ -79,7 +79,10 @@ final class MockExamService {
             if filtered.count >= max(5, config.questionCount / 2) { pool = filtered }
         }
 
-        return Array(pool.shuffled().prefix(max(1, config.questionCount)))
+        // `shuffled()` picks which questions; `presented()` shuffles the four
+        // choices inside each one. The exam view holds this array for the whole
+        // attempt, so the order a student sees stays put until they submit.
+        return Array(pool.shuffled().prefix(max(1, config.questionCount))).presented()
     }
 
     var maxQuestions: Int { max(5, bank.questionCount()) }
@@ -104,8 +107,14 @@ final class MockExamService {
         attempt.weakTopicsOnly = config.weakTopicsOnly
 
         var correct = 0
-        for (index, question) in questions.enumerated() {
-            let selected = selections[question.id] ?? -1
+        for (index, presented) in questions.enumerated() {
+            // `questions` are the shuffled copies the exam displayed and
+            // `selections` are keyed to those slots. The attempt is stored in
+            // the bank's ordering so the review screen, which re-fetches from
+            // the bank, highlights the choice the student actually picked.
+            // An unanswered question's -1 falls straight through.
+            let question = presented.canonical()
+            let selected = presented.canonicalIndex(for: selections[presented.id] ?? -1)
             let isCorrect = selected == question.correctIndex
             if isCorrect { correct += 1 }
 

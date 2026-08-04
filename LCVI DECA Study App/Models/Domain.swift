@@ -205,6 +205,13 @@ struct QuestionData: Identifiable, Codable, Hashable {
     var performanceIndicators: [String]
     var isSample: Bool = true
     var isBookmarked: Bool = false
+    /// Display slot → the slot the bank stores, for a copy shuffled by
+    /// `presented(salt:)`. Identity for everything else.
+    ///
+    /// Deliberately outside `CodingKeys`: an export, and every Core Data
+    /// write, must carry the bank's own order, never one presentation's
+    /// (§8.36). `ChoiceOrder.swift` owns everything that reads it.
+    var canonicalOrder: [Int] = QuestionData.identityOrder
 
     enum CodingKeys: String, CodingKey {
         case id, text, choices, correctIndex, explanation, choiceRationales, cluster, examType

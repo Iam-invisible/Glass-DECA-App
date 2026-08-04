@@ -42,7 +42,12 @@ final class PracticeRunner: ObservableObject {
     private var ticker: AnyCancellable?
 
     init(session: BuiltSession, timeLimit: TimeInterval? = nil) {
-        self.questions = session.questions
+        // Every practice route — daily, cram, custom, mistakes, bookmarks, a
+        // mock retry — is built into a BuiltSession and arrives here, so this
+        // is the one place a practice shuffle has to happen. Shuffled once at
+        // init rather than per question, because a copy rebuilt on each render
+        // would deal the student a new order every time the view redrew.
+        self.questions = session.questions.presented()
         self.mode = session.mode
         self.cluster = session.cluster
         self.composition = session.composition
