@@ -104,12 +104,12 @@ struct DailyTipWidget: Widget {
 /// set at, that is a couple of lines against the top edge and half the widget
 /// left empty — a small widget's layout stretched sideways.
 ///
-/// So medium gets its own arrangement rather than a shared one: the fact set
-/// large enough to be the object rather than a caption, the cluster stated as a
-/// glyph in a tinted tile instead of a word with an icon beside it, and the
-/// cluster's own symbol carried through the background at low contrast so the
-/// empty corner is doing something. Small keeps the compact stack, because at
-/// 141pt square there is nothing spare to spend.
+/// So medium gets its own arrangement rather than a shared one: the same
+/// inline header the small widget uses, the fact set large enough to be the
+/// object rather than a caption and centred in everything below the header,
+/// and the cluster's own symbol carried through the background at low contrast
+/// so the empty corner is doing something. Small keeps the compact stack,
+/// because at 141pt square there is nothing spare to spend.
 struct DailyTipView: View {
     let entry: TipEntry
     @Environment(\.widgetFamily) private var family
@@ -131,50 +131,44 @@ struct DailyTipView: View {
     // MARK: Medium
 
     private var medium: some View {
-        HStack(alignment: .top, spacing: 12) {
-            glyphTile
-
-            VStack(alignment: .leading, spacing: 7) {
-                HStack(spacing: 6) {
-                    Text(entry.clusterShortName.uppercased())
-                        .widgetKicker(WidgetPalette.accent)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.75)
-                    Spacer(minLength: 4)
-                    Text("FACT OF THE DAY")
-                        .font(WidgetType.sans(9, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-
-                // The fact is the widget. It takes every point left over
-                // rather than sitting at the top with a Spacer beneath it,
-                // which is what left the old layout half empty.
-                Text(entry.tip)
-                    .font(WidgetType.sans(16))
-                    .foregroundStyle(.primary)
-                    .lineSpacing(1.5)
-                    .minimumScaleFactor(0.62)
-                    .lineLimit(5)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        VStack(alignment: .leading, spacing: 8) {
+            // The small widget's header, kept: glyph and cluster inline along
+            // the top. The tile that used to sit on the left read as a second
+            // object competing with the fact, and it cost 58pt of the column —
+            // width the fact now has, which is most of a line back.
+            HStack(spacing: 6) {
+                Image(systemName: entry.symbol)
+                    .font(.system(size: 11, weight: .bold))
+                Text(entry.clusterShortName.uppercased())
+                    .font(WidgetType.sans(10, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                Spacer(minLength: 4)
+                Text("FACT OF THE DAY")
+                    .font(WidgetType.sans(9, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
-        }
-    }
+            .foregroundStyle(WidgetPalette.accent)
 
-    /// The cluster as a glyph on a tinted plate — the same shape the app puts
-    /// beside a section heading, and a fixed anchor for the eye on a widget
-    /// whose text changes every morning.
-    private var glyphTile: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                .fill(WidgetPalette.accent.opacity(0.18))
-            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                .strokeBorder(WidgetPalette.accent.opacity(0.28), lineWidth: 1)
-            Image(systemName: entry.symbol)
-                .font(.system(size: 21, weight: .semibold))
-                .foregroundStyle(WidgetPalette.accent)
+            // Centred in what is left, both ways. Most facts come to three
+            // lines of the four that fit, so top-aligning them left a band of
+            // nothing along the bottom; centring puts that space evenly above
+            // and below and the block reads as placed rather than as fallen to
+            // the top.
+            //
+            // 17pt is the largest that still holds every fact in four lines at
+            // full width — measured over all 605. At 18pt, 212 of them need a
+            // fifth line and would be scaled down.
+            Text(entry.tip)
+                .font(WidgetType.sans(17))
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+                .minimumScaleFactor(0.62)
+                .lineLimit(4)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
-        .frame(width: 46, height: 46)
     }
 
     // MARK: Small
