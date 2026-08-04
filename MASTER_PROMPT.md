@@ -437,7 +437,14 @@ companion, icons, themes, intros, sounds.
   all back. Not a security boundary — see §8.30.
 
 **The bunny** (`Bunny.swift`, `BunnyCompanionView`) is a 600-coin companion in the bottom-right of
-every screen. 22 sprites in `Resources/Bunny/`. Three events carry *what happened* rather than just
+every screen. **Owning it and showing it are separate**: `settings.companionEnabled` gates the
+layer, and the Shop's companion card carries a Turn off / Turn on switch rather than the inert
+"In use" label every other category gets. It is the one purchase that follows you onto every
+screen, so a student revising is allowed to want quiet without buying their way back in. The
+switch is `toggleCompanion()` and is kept apart from `select` on purpose — `buy` routes through
+`select`, so a toggle there would have turned the bunny off at the moment it was paid for. The
+row reads "Off" rather than "Owned" in that state, because "Owned" is true either way and does
+not explain a missing bunny. 22 sprites in `Resources/Bunny/`. Three events carry *what happened* rather than just
 that it happened — `correctAnswer(run:)`, `wrongAnswer(run:)`, `mockFinished(percent:)` — so a run
 of three earns the big face and one right answer does not, and a mock scored 12% does not draw the
 same face as one scored 95%. Two rules it must keep: **celebration climbs with the size of the

@@ -116,6 +116,9 @@ final class UserSettings: ObservableObject {
         self.soundEnabled = defaults.object(forKey: Keys.sound) as? Bool ?? true
         self.appearanceRaw = defaults.string(forKey: Keys.appearance) ?? AppearanceMode.system.rawValue
         self.aiAutoExplain = defaults.object(forKey: Keys.aiAutoExplain) as? Bool ?? true
+        // Defaults to on so a student who already bought the bunny does not
+        // open this build and find it gone.
+        self.companionEnabled = defaults.object(forKey: Keys.companionEnabled) as? Bool ?? true
         self.aiEnabled = defaults.object(forKey: Keys.aiEnabled) as? Bool ?? true
         self.seededVersion = defaults.integer(forKey: Keys.seededVersion)
         self.introStyleRaw = defaults.string(forKey: Keys.introStyle) ?? IntroStyle.classic.rawValue
@@ -174,6 +177,7 @@ final class UserSettings: ObservableObject {
         static let theme = "appTheme"
         static let soundPack = "soundPack"
         static let tipSalt = "tipSalt"
+        static let companionEnabled = "companionEnabled"
     }
 
     @Published var hasOnboarded: Bool { didSet { defaults.set(hasOnboarded, forKey: Keys.hasOnboarded) } }
@@ -280,6 +284,23 @@ final class UserSettings: ObservableObject {
     /// have and is not going to grow.
     @Published var coins: Int { didSet { defaults.set(coins, forKey: Keys.coins) } }
 
+    /// Whether the bought companion is actually on screen.
+    ///
+    /// Separate from owning it. A companion is the one purchase that follows
+    /// you onto every screen, and somebody revising for an exam is entitled to
+    /// want the screen quiet without being refunded and re-charged for the
+    /// privilege of changing their mind.
+    @Published var companionEnabled: Bool {
+        didSet { defaults.set(companionEnabled, forKey: Keys.companionEnabled) }
+    }
+
+    /// Turns the companion on or off. Kept apart from `select` because `buy`
+    /// calls `select` on the way through, and a toggle there would have turned
+    /// the bunny off at the moment it was paid for.
+    func toggleCompanion() {
+        companionEnabled.toggle()
+    }
+
     /// Seeds this install's own order for the daily tip widgets.
     ///
     /// Generated once on first read and kept for the life of the install, so
@@ -349,9 +370,9 @@ final class UserSettings: ObservableObject {
         // A pack is a purchase, not a choice — nothing is ever "wearing" it.
         guard !item.isPack else { return false }
         switch item.kind {
-        // Owning the companion is the whole state — there is nothing to
-        // select between, so owned means on.
-        case .companion: return ownedAppItemIDs.contains(item.id)
+        // There is nothing to select between, so "selected" means the
+        // companion is bought and switched on.
+        case .companion: return ownedAppItemIDs.contains(item.id) && companionEnabled
         case .icon:  return appIconID == item.id
         case .theme: return themeID == item.id
         case .sound: return soundPackID == item.id
@@ -425,7 +446,9 @@ final class UserSettings: ObservableObject {
     func select(_ item: AppCosmeticItem) {
         guard owns(item) else { return }
         switch item.kind {
-        case .companion: break
+        // Not a toggle: `buy` routes through here, and a purchase should
+        // always leave the companion on. `toggleCompanion()` is the switch.
+        case .companion: companionEnabled = true
         case .icon:  appIconID = item.id
         case .theme: themeID = item.id
         case .sound: soundPackID = item.id
@@ -467,6 +490,10 @@ final class UserSettings: ObservableObject {
         themeID = "theme.blue"
         soundPackID = "sound.default"
         introStyleRaw = IntroStyle.classic.rawValue
+        // Back to on, so re-buying the companion behaves like buying it fresh
+        // rather than inheriting a switch position from a wallet that no
+        // longer exists.
+        companionEnabled = true
     }
 
     func resetToDefaults() {

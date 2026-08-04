@@ -80,7 +80,32 @@ struct ShopPreviewOverlay: View {
 
     @ViewBuilder
     private var action: some View {
-        if selected {
+        if owned, item.kind == .companion {
+            // A switch, not a status. Every other category answers "which one",
+            // where an off state means nothing; the companion answers "at all",
+            // and a student revising is allowed to want the screen quiet
+            // without buying their way back in afterwards.
+            //
+            // The card deliberately stays open. The bunny lives outside this
+            // sheet, so closing on tap would hide the one thing that just
+            // changed and make a second tap a fresh trip through the shop.
+            VStack(spacing: 9) {
+                Button { onUse() } label: {
+                    label(selected ? "Turn off" : "Turn on",
+                          symbol: selected ? "moon.zzz.fill" : "sparkles",
+                          tint: selected ? Palette.textSecondary : Palette.accent,
+                          filled: !selected)
+                }
+                .buttonStyle(PressableButtonStyle(haptic: false))
+
+                Text(selected ? "On every screen, reacting to how you're doing."
+                              : "Off. Turn it back on any time — it stays bought.")
+                    .font(.appCaption)
+                    .foregroundStyle(Palette.textTertiary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        } else if selected {
             label("In use", symbol: "checkmark", tint: Palette.textTertiary, filled: false)
         } else if owned {
             Button { onUse(); close() } label: {

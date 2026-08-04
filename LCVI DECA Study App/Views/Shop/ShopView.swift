@@ -89,6 +89,13 @@ struct ShopView: View {
     }
 
     private func use(_ item: AppCosmeticItem) {
+        // The companion is the one category with a real off state, so its
+        // action is a switch rather than "wear this". Everything else is a
+        // choice between alternatives, where turning one off means nothing.
+        if item.kind == .companion {
+            settings.toggleCompanion()
+            return
+        }
         settings.select(item)
         if item.kind == .icon { applyIcon(item) }
     }
@@ -397,8 +404,17 @@ struct ShopView: View {
 
                 Spacer(minLength: 0)
 
-                priceLabel(owned: owned, equipped: selected,
-                           price: item.price, affordable: affordable)
+                // An owned companion that is switched off says "Off", not
+                // "Owned". "Owned" is true of both states and tells a student
+                // nothing about why their bunny is missing.
+                if item.kind == .companion, owned, !selected {
+                    Label("Off", systemImage: "moon.zzz.fill")
+                        .font(.appCaptionBold)
+                        .foregroundStyle(Palette.textTertiary)
+                } else {
+                    priceLabel(owned: owned, equipped: selected,
+                               price: item.price, affordable: affordable)
+                }
             }
             .padding(13)
             .background(

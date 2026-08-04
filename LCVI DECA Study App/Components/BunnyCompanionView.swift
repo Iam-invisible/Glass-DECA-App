@@ -123,14 +123,17 @@ struct BunnyLayer: ViewModifier {
         isFullScreen ? true : store.fullScreenLayers == 0
     }
 
-    private var owned: Bool {
+    /// Bought *and* switched on. Owning it is not the same as wanting it on
+    /// screen — the switch is in the Shop, on the row it was bought from.
+    private var showsCompanion: Bool {
         store.settings.ownedAppItemIDs.contains(BunnyCompanion.itemID)
+            && store.settings.companionEnabled
     }
 
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .bottomTrailing) {
-                if hosts, owned {
+                if hosts, showsCompanion {
                     BunnyCompanionView(event: store.bunnyEvent, token: store.bunnyToken)
                         .padding(.trailing, Metrics.gutter)
                         // Clears the floating tab bar at the root; a full-screen
