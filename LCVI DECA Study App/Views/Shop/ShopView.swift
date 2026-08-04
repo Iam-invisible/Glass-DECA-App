@@ -327,6 +327,40 @@ struct ShopView: View {
         }
     }
 
+    /// The 46pt slot at the head of a shop row.
+    ///
+    /// A pack shows its contents fanned, and gets no plate behind it: the cards
+    /// are the picture, and a tinted square under them would be a second
+    /// surface competing with eight rounded corners. Everything else keeps the
+    /// plate, because a lone icon or a colour needs something to sit on.
+    @ViewBuilder
+    private func preview(for item: AppCosmeticItem) -> some View {
+        if item.isPack {
+            PackFan(ids: item.unlocks)
+        } else {
+            RoundedRectangle(cornerRadius: 11, style: .continuous)
+                .fill(item.kind == .companion ? Palette.cardSunken
+                                              : Color(hex: item.previewHex))
+                .frame(width: 46, height: 46)
+                .overlay {
+                    if item.kind == .companion, let ui = UIImage(named: BunnyMood.happy.imageName) {
+                        Image(uiImage: ui)
+                            .resizable()
+                            .scaledToFit()
+                            .padding(4)
+                    } else if item.kind == .icon {
+                        // The icon itself. A coloured square standing in for
+                        // artwork is the thing this screen was doing wrong.
+                        AppIconTile(id: item.id, side: 46)
+                    }
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .strokeBorder(.white.opacity(0.25), lineWidth: 0.5)
+                )
+        }
+    }
+
     private func appTile(_ item: AppCosmeticItem) -> some View {
         let owned = settings.owns(item)
         let selected = settings.isSelected(item)
@@ -338,38 +372,7 @@ struct ShopView: View {
             previewing = item
         } label: {
             HStack(spacing: 13) {
-                // The companion shows itself. Every other category is a colour
-                // — an icon, a theme, a sound — but a swatch standing in for a
-                // character means buying it sight unseen.
-                RoundedRectangle(cornerRadius: 11, style: .continuous)
-                    .fill(item.kind == .companion ? Palette.cardSunken
-                                                  : Color(hex: item.previewHex))
-                    .frame(width: 46, height: 46)
-                    .overlay {
-                        if item.kind == .companion, let ui = UIImage(named: BunnyMood.happy.imageName) {
-                            Image(uiImage: ui)
-                                .resizable()
-                                .scaledToFit()
-                                .padding(4)
-                        } else if item.kind == .icon, !item.isPack {
-                            // The icon itself. A coloured square standing in
-                            // for artwork is the thing this screen was doing
-                            // wrong.
-                            AppIconTile(id: item.id, side: 46)
-                        } else if !item.swatchHexes.isEmpty {
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 13), spacing: 3)],
-                                      spacing: 3) {
-                                ForEach(item.swatchHexes, id: \.self) { hex in
-                                    Circle().fill(Color(hex: hex)).frame(height: 13)
-                                }
-                            }
-                            .padding(7)
-                        }
-                    }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 11, style: .continuous)
-                            .strokeBorder(.white.opacity(0.25), lineWidth: 0.5)
-                    )
+                preview(for: item)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(item.name)
@@ -571,5 +574,67 @@ struct FlowLayout: Layout {
             x += size.width + spacing
             lineHeight = max(lineHeight, size.height)
         }
+    }
+}
+
+// MARK: - Pack fan
+
+/// A pack's members, spread like a hand of cards.
+///
+/// The row used to show a grid of flat coloured circles on a tinted square.
+/// That was the same mistake the single-icon rows had already stopped making —
+/// the app ships the artwork, and standing a swatch in front of it meant a
+/// student had to buy the pack to find out what was in it.
+///
+/// It was also actively misleading. Rose's swatch was pink, but the icon is a
+/// black tile with a rose-tinted glass G on it; every pack member is dark. A
+/// student reading those dots would have expected a pink phone icon and got
+/// something else. These are the real icons, at Apple's own corner radius, in
+/// the order the catalogue lists them.
+///
+/// Rotated about `.bottom` rather than centre, which is what makes it read as a
+/// spread hand rather than a scatter — every card turns on the same pivot, so
+/// the bottom edges stay gathered and only the tops splay. The offsets and
+/// angles are tuned so a four-card fan stays inside the 46pt slot's row
+/// spacing; three cards get a wider angle because there is room for it.
+private struct PackFan: View {
+    let ids: [String]
+    var side: CGFloat = 46
+
+    /// Each card is a little over half the slot, which leaves the fan room to
+    /// spread without any one card shrinking past the point where the letter
+    /// on it stops being a letter.
+    ///
+    /// These three numbers were set by rendering the real artwork at the real
+    /// geometry rather than by eye. Tighter than this and the left-hand cards
+    /// collapse to slivers with no readable letter; wider and a four-card fan
+    /// runs past the row's 13pt gap into the name beside it. At these values a
+    /// three-card fan overflows the 46pt slot by 1.8pt a side and a four-card
+    /// one by 6.3pt, both of which the row's own padding absorbs.
+    private var card: CGFloat { side * 0.52 }
+
+    private var degreesPerCard: Double { ids.count > 3 ? 13 : 16 }
+
+    var body: some View {
+        let count = max(1, ids.count)
+        let middle = Double(count - 1) / 2
+
+        ZStack {
+            ForEach(Array(ids.enumerated()), id: \.element) { index, id in
+                let step = Double(index) - middle
+                AppIconTile(id: id, side: card)
+                    // Enough to lift each card off the one behind it. Any more
+                    // and four overlapping shadows read as grime.
+                    .shadow(color: .black.opacity(0.28), radius: 1.5, x: 0, y: 1)
+                    .rotationEffect(.degrees(step * degreesPerCard), anchor: .bottom)
+                    .offset(x: step * card * 0.28)
+                    // Later cards sit on top, so the fan reads left to right
+                    // the way the catalogue lists the pack.
+                    .zIndex(Double(index))
+            }
+        }
+        .frame(width: side, height: side)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(count) icons")
     }
 }

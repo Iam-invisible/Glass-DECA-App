@@ -204,9 +204,6 @@ struct AppCosmeticItem: Identifiable, Hashable {
     /// this the list would show four icons at zero coins that cannot be
     /// selected, which reads as free items that are quietly broken.
     var packMember: Bool = false
-
-    /// Extra swatches for a pack row, so the tile shows what is in the box.
-    var swatchHexes: [UInt32] = []
 }
 
 enum AppCosmeticCatalogue {
@@ -244,8 +241,7 @@ enum AppCosmeticCatalogue {
 
         .init(id: "pack.icon.pastel", name: "Pastel pack", detail: "Three tinted-glass icons",
               kind: .icon, price: 700, previewHex: 0xE87EA8,
-              unlocks: ["AppIconRose", "AppIconMint", "AppIconLilac"],
-              swatchHexes: [0xE87EA8, 0x4ED2A6, 0x9A7EE8]),
+              unlocks: ["AppIconRose", "AppIconMint", "AppIconLilac"]),
         .init(id: "AppIconRose",  name: "Rose",  detail: "Pastel pink glass",
               kind: .icon, price: 0, previewHex: 0xE87EA8, packMember: true),
         .init(id: "AppIconMint",  name: "Mint",  detail: "Pastel green glass",
@@ -255,8 +251,7 @@ enum AppCosmeticCatalogue {
 
         .init(id: "pack.icon.glow", name: "Glow pack", detail: "Four icons lit from outside",
               kind: .icon, price: 900, previewHex: 0x00D8FF,
-              unlocks: ["AppIconCyan", "AppIconMagenta", "AppIconAmber", "AppIconViolet"],
-              swatchHexes: [0x00D8FF, 0xFF2EC4, 0xFFA60C, 0x7C3AED]),
+              unlocks: ["AppIconCyan", "AppIconMagenta", "AppIconAmber", "AppIconViolet"]),
         .init(id: "AppIconCyan",    name: "Cyan",    detail: "Cyan halo",
               kind: .icon, price: 0, previewHex: 0x00D8FF, packMember: true),
         .init(id: "AppIconMagenta", name: "Magenta", detail: "Magenta halo",
