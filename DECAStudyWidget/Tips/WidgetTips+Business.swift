@@ -35,7 +35,7 @@ extension WidgetTips {
         "Recognition, responsibility and achievement motivate. Pay and working conditions merely stop demotivating.",
         "Intrinsic motivation comes from the work itself — mastery, autonomy, purpose.",
         "Extrinsic motivation comes from outside: bonuses, prizes, praise. It works fast and wears off.",
-        "Theory X assumes people avoid work. Theory Y assumes they seek responsibility. The assumption becomes the culture.",
+        "Theory X assumes people avoid work, Theory Y that they seek it. The assumption becomes the culture.",
         "Job enlargement adds tasks at the same level. Job enrichment adds depth, autonomy and decision-making.",
         "Job rotation broadens skills and reduces the risk of one person being the only one who knows something.",
         "Recruitment attracts candidates. Selection chooses among them. They are different problems.",

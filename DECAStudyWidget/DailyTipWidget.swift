@@ -23,6 +23,20 @@ struct TipEntry: TimelineEntry {
     let date: Date
     let tip: String
     let clusterShortName: String
+    let clusterKey: String
+
+    /// The cluster's glyph, mirroring `DECACluster.symbol`. Duplicated for the
+    /// same reason everything else here is: the extension cannot import the app.
+    var symbol: String {
+        switch clusterKey {
+        case "finance":                   return "chart.line.uptrend.xyaxis"
+        case "hospitality":               return "fork.knife"
+        case "businessManagement":        return "building.2.fill"
+        case "entrepreneurship":          return "lightbulb.fill"
+        case "personalFinancialLiteracy": return "creditcard.fill"
+        default:                          return "megaphone.fill"
+        }
+    }
 }
 
 struct TipProvider: TimelineProvider {
@@ -30,7 +44,8 @@ struct TipProvider: TimelineProvider {
         "Price skimming launches high to capture early adopters, then falls. Penetration pricing does the opposite."
 
     func placeholder(in context: Context) -> TipEntry {
-        TipEntry(date: Date(), tip: Self.placeholderTip, clusterShortName: "Marketing")
+        TipEntry(date: Date(), tip: Self.placeholderTip,
+                 clusterShortName: "Marketing", clusterKey: "marketing")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TipEntry) -> Void) {
@@ -57,13 +72,15 @@ struct TipProvider: TimelineProvider {
 
     private func entry(for date: Date) -> TipEntry {
         guard let snapshot = WidgetStore.read() else {
-            return TipEntry(date: date, tip: Self.placeholderTip, clusterShortName: "Marketing")
+            return TipEntry(date: date, tip: Self.placeholderTip,
+                            clusterShortName: "Marketing", clusterKey: "marketing")
         }
         return TipEntry(date: date,
                         tip: WidgetTips.tip(clusterKey: snapshot.clusterKey,
                                             salt: snapshot.tipSalt,
                                             on: date),
-                        clusterShortName: snapshot.clusterShortName)
+                        clusterShortName: snapshot.clusterShortName,
+                        clusterKey: snapshot.clusterKey)
     }
 }
 
@@ -80,14 +97,92 @@ struct DailyTipWidget: Widget {
     }
 }
 
+/// The home-screen fact.
+///
+/// Medium is a landscape box roughly 305×130pt once the system's own padding is
+/// taken off, and the corpus averages 96 characters. At the 14pt it used to be
+/// set at, that is a couple of lines against the top edge and half the widget
+/// left empty — a small widget's layout stretched sideways.
+///
+/// So medium gets its own arrangement rather than a shared one: the fact set
+/// large enough to be the object rather than a caption, the cluster stated as a
+/// glyph in a tinted tile instead of a word with an icon beside it, and the
+/// cluster's own symbol carried through the background at low contrast so the
+/// empty corner is doing something. Small keeps the compact stack, because at
+/// 141pt square there is nothing spare to spend.
 struct DailyTipView: View {
     let entry: TipEntry
     @Environment(\.widgetFamily) private var family
 
+    private var isMedium: Bool { family == .systemMedium }
+
     var body: some View {
+        Group {
+            if isMedium { medium } else { small }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .widgetURL(WidgetLink.dailyPractice)
+        .tipWidgetBackground(symbol: entry.symbol, prominent: isMedium)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(entry.clusterShortName) fact of the day")
+        .accessibilityValue(entry.tip)
+    }
+
+    // MARK: Medium
+
+    private var medium: some View {
+        HStack(alignment: .top, spacing: 12) {
+            glyphTile
+
+            VStack(alignment: .leading, spacing: 7) {
+                HStack(spacing: 6) {
+                    Text(entry.clusterShortName.uppercased())
+                        .widgetKicker(WidgetPalette.accent)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                    Spacer(minLength: 4)
+                    Text("FACT OF THE DAY")
+                        .font(WidgetType.sans(9, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                // The fact is the widget. It takes every point left over
+                // rather than sitting at the top with a Spacer beneath it,
+                // which is what left the old layout half empty.
+                Text(entry.tip)
+                    .font(WidgetType.sans(16))
+                    .foregroundStyle(.primary)
+                    .lineSpacing(1.5)
+                    .minimumScaleFactor(0.62)
+                    .lineLimit(5)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
+        }
+    }
+
+    /// The cluster as a glyph on a tinted plate — the same shape the app puts
+    /// beside a section heading, and a fixed anchor for the eye on a widget
+    /// whose text changes every morning.
+    private var glyphTile: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 13, style: .continuous)
+                .fill(WidgetPalette.accent.opacity(0.18))
+            RoundedRectangle(cornerRadius: 13, style: .continuous)
+                .strokeBorder(WidgetPalette.accent.opacity(0.28), lineWidth: 1)
+            Image(systemName: entry.symbol)
+                .font(.system(size: 21, weight: .semibold))
+                .foregroundStyle(WidgetPalette.accent)
+        }
+        .frame(width: 46, height: 46)
+    }
+
+    // MARK: Small
+
+    private var small: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack(spacing: 5) {
-                Image(systemName: "lightbulb.fill")
+                Image(systemName: entry.symbol)
                     .font(.system(size: 10, weight: .bold))
                 Text(entry.clusterShortName.uppercased())
                     .font(WidgetType.sans(10, weight: .semibold))
@@ -96,25 +191,47 @@ struct DailyTipView: View {
             }
             .foregroundStyle(WidgetPalette.accent)
 
+            // A tip is the whole content of this widget, so it shrinks to fit
+            // rather than truncating. Half a fact is worse than a small one —
+            // and the corpus is length-gated by check_tips.py so the shrinking
+            // never has far to go.
             Text(entry.tip)
-                .font(WidgetType.sans(family == .systemSmall ? 12 : 14))
+                .font(WidgetType.sans(12.5))
                 .foregroundStyle(.primary)
-                // A tip is the whole content of this widget, so it shrinks to
-                // fit rather than truncating. Half a fact is worse than a small
-                // one — and the corpus is length-gated by check_tips.py so the
-                // shrinking never has far to go.
                 .minimumScaleFactor(0.72)
-                .lineLimit(family == .systemSmall ? 7 : 5)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer(minLength: 0)
+                .lineLimit(8)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .widgetURL(WidgetLink.dailyPractice)
-        .glassWidgetBackground()
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(entry.clusterShortName) fact of the day")
-        .accessibilityValue(entry.tip)
+    }
+}
+
+private extension View {
+    /// The house glass, plus the cluster's own symbol bled off the trailing
+    /// edge at low contrast.
+    ///
+    /// It goes inside `containerBackground` rather than in an overlay, which is
+    /// what the API is for: the system clips it to the widget's corner radius,
+    /// so a glyph running past the edge is cropped by the shape instead of
+    /// needing a `clipShape` that would also crop the content.
+    @ViewBuilder
+    func tipWidgetBackground(symbol: String, prominent: Bool) -> some View {
+        let backdrop = ZStack {
+            WidgetGlass.containerFill
+            if prominent {
+                Image(systemName: symbol)
+                    .font(.system(size: 150, weight: .semibold))
+                    .foregroundStyle(WidgetPalette.accent.opacity(0.09))
+                    .rotationEffect(.degrees(-14))
+                    .offset(x: 46, y: 30)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            }
+        }
+
+        if #available(iOS 17.0, *) {
+            self.containerBackground(for: .widget) { backdrop }
+        } else {
+            self.padding(12).background(backdrop)
+        }
     }
 }
 

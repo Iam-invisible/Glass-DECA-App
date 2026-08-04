@@ -95,7 +95,7 @@ extension WidgetTips {
         "Linen reuse programmes cut both laundry cost and water use, which is why they are offered as a choice.",
         "Bulk amenity dispensers remove far more single-use plastic than any other change in a guest room.",
         "Local sourcing cuts transport emissions and keeps spending in the local economy.",
-        "A sustainability certification is credible when awarded independently against published criteria and re-audited.",
+        "A sustainability certification is credible when awarded independently and re-audited against published criteria.",
         "Employing and training local residents keeps income and career progression within the host community.",
         "The business case for sustainability is strongest where an initiative cuts cost and improves perception at once.",
         "Timed entry to a fragile site protects its carrying capacity and its long-term viability as an attraction.",
@@ -106,7 +106,7 @@ extension WidgetTips {
         "Duty of care means a venue is responsible for the reasonable safety of guests on its premises.",
         "Serving alcohol carries legal liability. Refusing service to an intoxicated guest is part of the job.",
         "Guest data must be protected the same as any other personal information, including at the front desk.",
-        "A no-show and a cancellation are different events with different revenue consequences. Track them separately.",
+        "A no-show and a cancellation carry different revenue consequences. Track them separately.",
         "Group business smooths seasonality but at a lower rate. The mix, not either alone, is the strategy.",
         "The guest remembers how a problem was handled far longer than they remember the problem.",
     ]
