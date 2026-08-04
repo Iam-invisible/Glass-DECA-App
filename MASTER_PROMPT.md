@@ -254,6 +254,16 @@ nothing to group by and a heading floats as far from its own content as from the
 **Cards group lists; single figures float.** Study's today panel, Progress's today block and the
 week chart are all off their cards; the sections that are lists of rows kept theirs.
 
+**`TiltCard`** (`Components/TiltCard.swift`) gives a view the weight of a physical card: it leans
+toward the touch with a specular highlight tracking it. Two stacked rotations rather than one about
+a combined axis, which reads as a wobble. It has two activations and the choice is not cosmetic —
+`.touch` leans on contact and is only safe where the card owns the screen, because a zero-distance
+drag claims the touch; inside a `ScrollView` use `.press`, or the list cannot be scrolled. It
+measures itself from a background probe rather than wrapping in a `GeometryReader`, which as a root
+would expand to fill and break any caller that is not a fixed size. On the celebration badge
+`onTap` has to be passed through, since the overlay dismisses on tap and the gesture would
+otherwise make the one thing in the middle of the screen the one thing that cannot dismiss it.
+
 **Motion** — `Core/Motion.swift`: `Motion.page/.snappy/.gentle/.bouncy/.quick/.reveal`,
 `PageShift`, `AnyTransition.page(direction:)`, `CountingNumber`, `AppearTransition`,
 `appearIn(_:)` (index stagger, 55 ms apart), **`appearBeat(_:)`** (authored delay in seconds,

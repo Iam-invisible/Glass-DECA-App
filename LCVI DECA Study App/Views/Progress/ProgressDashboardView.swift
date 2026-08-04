@@ -485,20 +485,31 @@ struct AchievementsView: View {
     private func section(title: String, items: [AchievementStatus]) -> some View {
         VStack(alignment: .leading, spacing: Metrics.headerGap) {
             SectionHeader(title: title,
+                          // The hold is not something anyone guesses, so the
+                          // line that already explains the tap explains it too.
                           subtitle: items.first?.isUnlocked == true
-                            ? "\(items.count) · tap to replay"
+                            ? "\(items.count) · tap to replay, hold to tilt"
                             : "\(items.count)")
             VStack(spacing: 10) {
                 ForEach(items) { status in
                     if status.isUnlocked {
-                        Button {
-                            // Reuses the app's celebration overlay so a student
-                            // can watch a badge they've already earned again.
-                            store.enqueue(.achievement(status.definition))
-                        } label: {
+                        // Press-activated rather than touch-activated: this is
+                        // a ScrollView, and a zero-distance drag on every row
+                        // would be a list that cannot be scrolled. Holding
+                        // picks the card up; tapping still replays the badge.
+                        TiltCard(maxAngle: 10,
+                                 activation: .press,
+                                 cornerRadius: Metrics.cardRadius,
+                                 onTap: {
+                                     // Reuses the app's celebration overlay so a
+                                     // student can watch a badge they have
+                                     // already earned again.
+                                     Haptics.tap()
+                                     store.enqueue(.achievement(status.definition))
+                                 }) {
                             row(status)
                         }
-                        .buttonStyle(PressableButtonStyle(scale: 0.98))
+
                     } else {
                         row(status)
                     }

@@ -164,7 +164,30 @@ struct CelebrationOverlay: View {
 
     // MARK: - Badge
 
+    /// The badge, in a `TiltCard` so it can be handled once it has landed.
+    ///
+    /// The entrance modifiers stay outside the tilt on purpose: the card spins
+    /// in as one object and only then becomes something you can lean. Nesting
+    /// them the other way would have the student's touch fighting the arrival.
+    ///
+    /// `onTap` matters more than it looks. The overlay dismisses on a tap
+    /// anywhere, and a zero-distance drag gesture over the badge swallows that
+    /// tap — so without this, the one thing in the middle of the screen would
+    /// be the one thing that could not dismiss it.
     private var badge: some View {
+        TiltCard(maxAngle: 16,
+                 cornerRadius: badgeSize * 0.28,
+                 onTap: { dismiss() }) {
+            badgeFace
+        }
+        .frame(width: badgeSize, height: badgeSize)
+        .modifier(TopSpin(angle: spin, total: totalSpin))
+        .rotation3DEffect(.degrees(tilt), axis: (x: 1, y: 0, z: 0), perspective: 0.5)
+        .shadow(color: tint.opacity(0.35 * glow), radius: 26, y: 10)
+        .scaleEffect(scale)
+    }
+
+    private var badgeFace: some View {
         ZStack {
             RoundedRectangle(cornerRadius: badgeSize * 0.28, style: .continuous)
                 .fill(isGold ? Palette.goldSoft : tint.opacity(0.16))
@@ -188,10 +211,6 @@ struct CelebrationOverlay: View {
         }
         .frame(width: badgeSize, height: badgeSize)
         .clipShape(RoundedRectangle(cornerRadius: badgeSize * 0.28, style: .continuous))
-        .modifier(TopSpin(angle: spin, total: totalSpin))
-        .rotation3DEffect(.degrees(tilt), axis: (x: 1, y: 0, z: 0), perspective: 0.5)
-        .shadow(color: tint.opacity(0.35 * glow), radius: 26, y: 10)
-        .scaleEffect(scale)
     }
 
     private var expandingRings: some View {
