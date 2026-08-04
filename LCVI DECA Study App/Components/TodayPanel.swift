@@ -11,14 +11,14 @@
 //  nothing saying they were the same thought.
 //
 //  One object fixes the relationship rather than the styling. The day is one
-//  segmented track, and both goals are obviously parts of it.
+//  arc, and both goals feed it.
 //
-//  That track was a 176pt ring inside a 244pt bloom, and it is now a bar. The
-//  ring's argument was never its size — it was that one object means one day,
-//  and a segment per item says what a single question is worth, which a smooth
-//  arc cannot. A bar keeps both and costs about 150pt against 243pt, on a
-//  screen where an iPhone 8 shows roughly 500pt above the fold. What went is
-//  the empty middle the figure used to sit in, not the figure.
+//  It was a 176pt ring inside a 244pt bloom — 243pt of the roughly 500pt an
+//  iPhone 8 shows above the fold, spent on a number the line under the title
+//  and both cards already stated. What the ring was actually for was that one
+//  object means one day; the bottom half of it was holding nothing. Half a
+//  ring keeps the object, and the well it leaves is where the figure goes, so
+//  the shape and the number read as one thing.
 //
 //  The figure answers the question a student actually has, which is "what is
 //  left", not "what have I done". Done-versus-goal is already on the cards
@@ -52,8 +52,8 @@ struct TodayPanel: View {
     let questionsGoal: Int
     let quickThinkDone: Int
     let quickThinkGoal: Int
-    /// False for events with no roleplay component — then the day is one run
-    /// of segments and one card, not a hollowed-out version of the pair.
+    /// False for events with no roleplay component — then the arc counts only
+    /// questions and there is one card, not a hollowed-out version of the pair.
     let showsQuickThink: Bool
     let streak: Int
     let freezes: Int
@@ -330,41 +330,40 @@ struct TodayPanel: View {
 
     // MARK: The day
 
-    /// The day as a figure and one bar.
+    /// The day as one smooth half ring with the figure seated in its well.
     ///
     /// This was a 176pt ring inside a 244pt bloom — about 243pt of the screen,
     /// which is most of what an iPhone 8 shows above the fold, spent on a
     /// number that the line under the title and the two cards beneath were
-    /// already stating. The ring's own argument was never its size: it was
-    /// that one object means one day, and a segment per item says what a
-    /// single question is worth. A bar keeps both of those and costs 150pt.
-    ///
-    /// The figure stays large and stays the hero. What went is the empty
-    /// middle it used to sit in.
+    /// already stating. The ring's argument was never its size: it was that
+    /// one object means one day. The arc keeps that for 145pt, and the figure
+    /// stays large and stays the hero. What went is the empty middle it used
+    /// to sit in and the bottom half that was holding nothing.
     private var dayBar: some View {
         ZStack(alignment: .bottom) {
-            SegmentedDayArc(sections: sections)
+            DayArc(progress: dayProgress, tint: heroTint)
             // Seated in the arc's well, so the shape and the number read as one
-            // object. The arc's inner edge is 118pt from centre, and the widest
-            // the figure ever gets — a three-digit goal — is 102pt at the top
-            // of the well where 128pt is clear, so it never touches the stroke.
+            // object. At 290pt across the inner edge sits 129pt from centre,
+            // and the widest figure the app can produce — three digits from a
+            // 100-question goal — is 102pt where 193pt is clear, so it never
+            // comes near the stroke.
             headline
-                .padding(.bottom, 4)
+                .padding(.bottom, 6)
         }
         .frame(maxWidth: .infinity)
         .background {
             // The bloom the ring used to sit in, kept. It is what says "this is
             // the important part" without drawing a box.
             //
-            // In `background` rather than a stack child on purpose: a 230pt
-            // circle as a child would set the block's height to 230pt and hand
+            // In `background` rather than a stack child on purpose: a 270pt
+            // circle as a child would set the block's height to 270pt and hand
             // back the space this format exists to save. As a background it
             // overflows visually and costs nothing in layout.
             Circle()
                 .fill(RadialGradient(colors: [heroTint.opacity(0.20), .clear],
-                                     center: .center, startRadius: 2, endRadius: 115))
-                .frame(width: 230, height: 230)
-                .blur(radius: 12)
+                                     center: .center, startRadius: 2, endRadius: 135))
+                .frame(width: 270, height: 270)
+                .blur(radius: 14)
                 .allowsHitTesting(false)
         }
         .accessibilityHidden(true)
@@ -377,8 +376,9 @@ struct TodayPanel: View {
     }
 
     /// What is still owed, in the units of whichever goal is still open. The
-    /// tint matches that goal's segments, so the number is always attributable
-    /// to part of the bar without a label saying which.
+    /// tint is the arc's tint, so the sweep and the number always agree on
+    /// which goal is being counted down without a label saying so.
+    ///
     /// Centred and set large. Freed from the ring, the figure has to carry the
     /// hero position on its own, so it is bigger than the 46pt it was inside
     /// one — the ring was doing half that work.
@@ -415,22 +415,16 @@ struct TodayPanel: View {
         }
     }
 
-    /// Questions first, then Quick Think, so the ring reads clockwise in the
-    /// order the day is usually done.
-    private var sections: [SegmentedGoalRing.Section] {
-        var out: [SegmentedGoalRing.Section] = []
-        let qGoal = max(1, questionsGoal)
-        for i in 0..<qGoal {
-            out.append(.init(tint: questionsMet ? Palette.success : Palette.accent,
-                             isFilled: i < questionsDone))
-        }
-        guard showsQuickThink else { return out }
-        let tGoal = max(1, quickThinkGoal)
-        for i in 0..<tGoal {
-            out.append(.init(tint: quickThinkMet ? Palette.success : Palette.gold,
-                             isFilled: i < quickThinkDone))
-        }
-        return out
+    /// The whole day as one fraction.
+    ///
+    /// Counted in items rather than in goals, so ten questions and one Quick
+    /// Think fill eleven elevenths between them and the sweep is proportional
+    /// to the work. Averaging the two goals' percentages instead would make a
+    /// single Quick Think worth as much as ten questions.
+    private var dayProgress: Double {
+        let done = questionsDone + (showsQuickThink ? quickThinkDone : 0)
+        let goal = max(1, questionsGoal) + (showsQuickThink ? max(1, quickThinkGoal) : 0)
+        return min(1, Double(done) / Double(goal))
     }
 
     // MARK: Rows

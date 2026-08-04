@@ -280,25 +280,29 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 ## 6. Feature inventory
 
 **Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
-loud, "EIP") above the header, then **`TodayPanel`**: the day as one segmented semicircle with the
+loud, "EIP") above the header, then **`TodayPanel`**: the day as one smooth semicircle with the
 figure seated in its well, then a card per goal, then the streak card. The ring is
-cut into a segment per item — questions first, then Quick Think — because a smooth track says how
-far through you are and segments say what one question is worth. The figure beside it shows what
-is **left**, not what is done, tinted to whichever goal is still open.
+one smooth sweep fed by both goals — `DayArc`, 290pt across and 145pt tall. The figure sits in the
+well and shows what is **left**, not what is done, tinted to whichever goal is still open.
 
 It was a 176pt ring inside a 244pt bloom, about 243pt of the roughly 500pt an iPhone 8 shows above
 the fold, spent on a number the line under the title and both cards already stated. The ring's
-argument was never its size — one object means one day, and a segment per item says what a
-question is worth. `SegmentedDayArc` keeps both for 125pt — half a ring, because the bottom
-half was holding nothing and the well is where the figure goes. The figure is set at
-60pt rather than the 46pt it used inside a ring, centred, over the same bloom the ring sat in — a
-`background` rather than a stack child, so 230pt of wash costs nothing in layout — and 26pt of
-clear space beneath it. Isolation and size are what make it lead; the ring's diameter never was. The daily goal goes to 100, so the gap is a
-share of one segment rather than a fixed slice — every segment keeps 70% of its own span at any
-count, and the arc never degrades into a dotted line.
+argument was never its size — it was that one object means one day, and the bottom half was holding
+nothing. Half a ring keeps the object and the well is where the figure goes.
+
+It was briefly segmented, one tick per question, which said what a single question is worth. That
+is a real thing to give up; what it buys is a shape that reads as one object at a glance rather
+than a row of ticks, which is what was asked for. Progress counts items, not goals, so ten
+questions and one Quick Think fill eleven elevenths between them.
 
 The arc insets by half its line width before trimming. `.stroke` centres the line on the path
-(§8.18), so uninset it paints 7pt of arc above its own frame and into the header. Below that a `ModeTile`
+(§8.18), so uninset it paints 8pt of arc above its own frame and into the header. The round caps
+reach 8pt below the crop into the gap beneath, which is why the bottom half is cropped by frame
+rather than clipped — a clip would shear the caps flat. Geometry measured rather than eyeballed,
+since the figure sits inside a curve: 190pt of clear width where the digits start, against 102pt
+for the widest figure the app can produce.
+
+Below that a `ModeTile`
 garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bookmarks) plus a
 full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in
