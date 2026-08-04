@@ -528,7 +528,12 @@ app survive ~1 GB resident on a 4 GB phone.
 11. **Nested `ObservableObject`s don't propagate.** Fixed with a `settingsBridge` piping
     `settings.objectWillChange` into `store.objectWillChange`.
 12. **Widgets can't sample the wallpaper.** The system paints glass *behind* them, so the widget
-    must leave `containerBackground` translucent.
+    must leave `containerBackground` translucent. **Lock-screen (accessory) families must still
+    adopt the API even though they must not paint one** — a widget view that never calls
+    `containerBackground` is replaced wholesale on iOS 17 by the words "Please adopt
+    containerBackground API". Declaring it empty (`accessoryWidgetContainer()`) and omitting it
+    are not the same thing, and the difference is invisible in a build: it compiles, and the
+    placeholder only appears on a real lock screen.
 13. **`CFBundleName` derives from `PRODUCT_NAME`.** A stale widget label is a SpringBoard cache.
 14. **A shine sweep offset outside a view's bounds needs `.clipShape`.**
 15. **`.frame(maxWidth: .infinity)` makes a badge greedy inside rows.** Gate it.

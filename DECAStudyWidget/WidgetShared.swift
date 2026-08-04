@@ -295,6 +295,25 @@ extension View {
         }
     }
 
+    /// For lock-screen (accessory) families.
+    ///
+    /// They must not *paint* a background — the system renders them as a
+    /// vibrancy mask over the wallpaper, so any fill of ours comes out as a
+    /// grey slab. But they must still **adopt** the API: a widget view that
+    /// never calls `containerBackground` is replaced wholesale on iOS 17 by
+    /// the words "Please adopt containerBackground API", which is what the
+    /// lock-screen tip widget was showing.
+    ///
+    /// Declared empty rather than omitted. Those are not the same thing.
+    @ViewBuilder
+    func accessoryWidgetContainer() -> some View {
+        if #available(iOS 17.0, *) {
+            self.containerBackground(.clear, for: .widget)
+        } else {
+            self
+        }
+    }
+
     /// A frosted capsule for inline stats.
     func glassChip(tint: Color) -> some View {
         self

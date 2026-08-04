@@ -157,9 +157,12 @@ struct DailyTipLockView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
-        // No `glassWidgetBackground()` on the lock screen: accessory families
-        // are rendered as a vibrancy mask over the wallpaper, so a fill of our
-        // own comes out as a grey slab.
+        // An empty container background, not a missing one. Accessory families
+        // must not paint a fill — the system renders them as a vibrancy mask
+        // over the wallpaper, so anything of ours comes out as a grey slab —
+        // but skipping the call entirely makes iOS 17 replace the whole widget
+        // with "Please adopt containerBackground API".
+        .accessoryWidgetContainer()
         .widgetURL(WidgetLink.dailyPractice)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(entry.clusterShortName) fact of the day")
