@@ -201,13 +201,6 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
 - **Text: Manrope** (Regular / Medium / SemiBold) — chosen on measurement, not taste: largest
   x-height of 14 candidates (0.540) and second most compact, and it ships `tnum`.
 - **Script: Sacramento** — intro wordmark only. Never set UI text in it.
-- **Instrument Serif** is back, but only in the widget target and only for the daily fact
-  (`WidgetType.serif`). It was dropped as a *display* face because at 19–22pt it read as body text
-  set larger; that is the reason it suits a fact, which is body text. It is narrow — a fact reaches
-  three lines on medium where the sans reached four, and five on small where the sans reached
-  seven — with an x-height of 0.510 em against Manrope's 0.540, so it can be set larger and still
-  wrap less. Registered in `Config/DECAStudyWidget-Info.plist`; the PostScript name is
-  `InstrumentSerif-Regular`.
 - Roles: `.appLargeTitle` (32), `.appTitle` (22), `.appSectionTitle` (19) and `.appTileTitle` (16)
   — all four Michroma **Bold** — plus `.appHeadline`, `.appBody`, `.appBodyMedium`, `.appCallout`,
   `.appFootnote`, `.appCaption`, `.appCaptionBold`, `.appQuestion`, `appSans(_:weight:)` and

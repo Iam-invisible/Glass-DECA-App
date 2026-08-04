@@ -157,14 +157,12 @@ struct DailyTipView: View {
             // easy to read, and the block still sits in the middle of the space
             // rather than falling to the top of it.
             //
-            // 20pt. Instrument Serif is narrow enough that every one of the 605
-            // facts fits in three lines at this size — 511 take three and 94
-            // take two — and not one is scaled down. 21pt is where nine of them
-            // start needing a fourth. The lineLimit is 4 rather than 3 so a
-            // longer fact added later wraps and shrinks a little instead of
-            // being cut off mid-sentence.
+            // 17pt. Measured over all 605 facts at the full column: 16 come to
+            // two lines, 508 to three and 81 to four, and none is scaled down.
+            // 18pt is where 212 of them need a fifth line the widget has no
+            // room for.
             Text(entry.tip)
-                .font(WidgetType.serif(20))
+                .font(WidgetType.sans(17))
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(2)
@@ -188,24 +186,23 @@ struct DailyTipView: View {
             }
             .foregroundStyle(WidgetPalette.accent)
 
-            // The same serif as medium, and it is the better face here too —
-            // which was not true of the system serif this replaced. Instrument
-            // Serif is narrow, so a fact reaches five lines in a 126pt column
-            // where Manrope reached seven: at 13pt every one of the 605 fits
-            // without being scaled, against 311 of them shrinking under Manrope
-            // at 12.5pt. Its x-height is 6.6pt to Manrope's 6.8pt, so almost
-            // none of that is paid for in apparent size.
+            // 12pt, not the 12.5 this shipped with. Half a point either side of
+            // a line-height boundary: at 12.5 the line box is 18.1pt so only
+            // five lines fit the 106 available, and 311 of the 605 facts were
+            // being scaled down to squeeze in. At 12 the box is 17.4 and six
+            // fit, which leaves 11. The difference is invisible; the shrinking
+            // was not.
             //
             // A tip is the whole content of this widget, so it shrinks to fit
             // rather than truncating. Half a fact is worse than a small one —
             // and the corpus is length-gated by check_tips.py so the shrinking
             // never has far to go.
             Text(entry.tip)
-                .font(WidgetType.serif(13))
+                .font(WidgetType.sans(12))
                 .foregroundStyle(.primary)
                 .lineSpacing(1)
                 .minimumScaleFactor(0.72)
-                .lineLimit(6)
+                .lineLimit(7)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }
