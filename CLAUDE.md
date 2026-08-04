@@ -280,8 +280,8 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 ## 6. Feature inventory
 
 **Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
-loud, "EIP") above the header, then **`TodayPanel`**: the day as a figure and one segmented bar,
-then a card per goal, then the streak card. The ring is
+loud, "EIP") above the header, then **`TodayPanel`**: the day as one segmented semicircle with the
+figure seated in its well, then a card per goal, then the streak card. The ring is
 cut into a segment per item — questions first, then Quick Think — because a smooth track says how
 far through you are and segments say what one question is worth. The figure beside it shows what
 is **left**, not what is done, tinted to whichever goal is still open.
@@ -289,13 +289,16 @@ is **left**, not what is done, tinted to whichever goal is still open.
 It was a 176pt ring inside a 244pt bloom, about 243pt of the roughly 500pt an iPhone 8 shows above
 the fold, spent on a number the line under the title and both cards already stated. The ring's
 argument was never its size — one object means one day, and a segment per item says what a
-question is worth. `SegmentedDayBar` keeps both for 127pt: the figure set at
+question is worth. `SegmentedDayArc` keeps both for 125pt — half a ring, because the bottom
+half was holding nothing and the well is where the figure goes. The figure is set at
 60pt rather than the 46pt it used inside a ring, centred, over the same bloom the ring sat in — a
 `background` rather than a stack child, so 230pt of wash costs nothing in layout — and 26pt of
-clear space beneath it. Isolation and size are what make it lead; the ring's diameter never was. The daily goal goes to 100, so the
-dividers close up past ~30 segments and disappear entirely past ~50: at that density "what one
-question is worth" is not readable however it is drawn, so the bar merges into a continuous
-two-tone track rather than becoming a dotted line. Below that a `ModeTile`
+clear space beneath it. Isolation and size are what make it lead; the ring's diameter never was. The daily goal goes to 100, so the gap is a
+share of one segment rather than a fixed slice — every segment keeps 70% of its own span at any
+count, and the arc never degrades into a dotted line.
+
+The arc insets by half its line width before trimming. `.stroke` centres the line on the path
+(§8.18), so uninset it paints 7pt of arc above its own frame and into the header. Below that a `ModeTile`
 garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bookmarks) plus a
 full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in

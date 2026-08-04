@@ -342,29 +342,30 @@ struct TodayPanel: View {
     /// The figure stays large and stays the hero. What went is the empty
     /// middle it used to sit in.
     private var dayBar: some View {
-        VStack(spacing: 16) {
+        ZStack(alignment: .bottom) {
+            SegmentedDayArc(sections: sections)
+            // Seated in the arc's well, so the shape and the number read as one
+            // object. The arc's inner edge is 118pt from centre, and the widest
+            // the figure ever gets — a three-digit goal — is 102pt at the top
+            // of the well where 128pt is clear, so it never touches the stroke.
             headline
-                .frame(maxWidth: .infinity)
-                .background {
-                    // The bloom the ring used to sit in, kept. It is what says
-                    // "this is the important part" without drawing a box, and
-                    // it is the reason this block reads as the hero rather
-                    // than as a stat line above two cards.
-                    //
-                    // In `background` rather than a ZStack on purpose: a 230pt
-                    // circle as a stack child would set the block's height to
-                    // 230pt and hand back the space this format exists to
-                    // save. As a background it overflows visually and costs
-                    // nothing in layout.
-                    Circle()
-                        .fill(RadialGradient(colors: [heroTint.opacity(0.20), .clear],
-                                             center: .center, startRadius: 2, endRadius: 115))
-                        .frame(width: 230, height: 230)
-                        .blur(radius: 12)
-                        .allowsHitTesting(false)
-                }
-
-            SegmentedDayBar(sections: sections, height: 11)
+                .padding(.bottom, 4)
+        }
+        .frame(maxWidth: .infinity)
+        .background {
+            // The bloom the ring used to sit in, kept. It is what says "this is
+            // the important part" without drawing a box.
+            //
+            // In `background` rather than a stack child on purpose: a 230pt
+            // circle as a child would set the block's height to 230pt and hand
+            // back the space this format exists to save. As a background it
+            // overflows visually and costs nothing in layout.
+            Circle()
+                .fill(RadialGradient(colors: [heroTint.opacity(0.20), .clear],
+                                     center: .center, startRadius: 2, endRadius: 115))
+                .frame(width: 230, height: 230)
+                .blur(radius: 12)
+                .allowsHitTesting(false)
         }
         .accessibilityHidden(true)
     }
