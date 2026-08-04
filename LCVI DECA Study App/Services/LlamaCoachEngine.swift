@@ -110,22 +110,53 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine, @unchecked Sendable 
     private var context: OpaquePointer?
     private var vocab: OpaquePointer?
 
-    /// Read from any thread, so it gets its own lock rather than riding on
+    /// Read from any thread, so these get their own lock rather than riding on
     /// `queue` — `isReady` is called from SwiftUI during layout.
     private let readyLock = NSLock()
-    private var _isReady = false
+    private var _isLoaded = false
+    private var _loadFailed = false
 
+    /// Whether the file on disk is the whole model, decided once at init.
+    ///
+    /// Size rather than digest because `isReady` is read during layout: the
+    /// SHA is verified once at download time, and re-hashing 770 MB to answer
+    /// "is AI available" would stall a frame on every screen that asks.
+    private let modelFileIsComplete: Bool
+
+    /// Loaded, **or loadable**. The protocol's contract has always said "a
+    /// model is loaded, or could be loaded on demand", and reporting only the
+    /// first was a deadlock that made the whole local tier unreachable:
+    ///
+    ///   `isUsable` gates `generate()` → `generate()` is the only thing that
+    ///   calls `loadIfNeeded()` → `loadIfNeeded()` was the only thing that set
+    ///   this true.
+    ///
+    /// So it could never become true, on any device. A student downloaded 808
+    /// MB and Quick Think still said no AI was available. It also meant
+    /// `unload()` on backgrounding permanently dropped availability until the
+    /// app was relaunched, since `teardown()` cleared the same flag.
+    ///
+    /// A load that actually fails latches `_loadFailed`, so a corrupt or
+    /// unloadable model reports unavailable rather than claiming AI and then
+    /// returning nothing.
     var isReady: Bool {
         readyLock.lock(); defer { readyLock.unlock() }
-        return _isReady
+        if _isLoaded { return true }
+        return modelFileIsComplete && !_loadFailed
     }
 
-    private func setReady(_ value: Bool) {
-        readyLock.lock(); _isReady = value; readyLock.unlock()
+    private func setLoaded(_ value: Bool) {
+        readyLock.lock(); _isLoaded = value; readyLock.unlock()
+    }
+
+    private func setLoadFailed() {
+        readyLock.lock(); _loadFailed = true; readyLock.unlock()
     }
 
     init(modelURL: URL) {
         self.modelURL = modelURL
+        let size = (try? modelURL.resourceValues(forKeys: [.fileSizeKey]))?.fileSize
+        self.modelFileIsComplete = Int64(size ?? 0) == LocalModelCatalog.expectedBytes
     }
 
     deinit { teardown() }
@@ -146,6 +177,7 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine, @unchecked Sendable 
 
         guard let loaded = llama_model_load_from_file(modelURL.path, modelParams) else {
             NSLog("LlamaCoachEngine: model failed to load at \(modelURL.lastPathComponent)")
+            setLoadFailed()
             return false
         }
         model = loaded
@@ -168,10 +200,11 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine, @unchecked Sendable 
             llama_model_free(loaded)
             model = nil
             vocab = nil
+            setLoadFailed()
             return false
         }
         context = ctx
-        setReady(true)
+        setLoaded(true)
         return true
     }
 
@@ -182,7 +215,9 @@ nonisolated final class LlamaCoachEngine: LocalCoachEngine, @unchecked Sendable 
     }
 
     private func teardown() {
-        setReady(false)
+        // Only clears *loaded*. The model is still on disk and still loadable,
+        // so availability must survive a backgrounding.
+        setLoaded(false)
         if let context { llama_free(context) }
         if let model { llama_model_free(model) }
         context = nil

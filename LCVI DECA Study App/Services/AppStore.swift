@@ -158,6 +158,13 @@ final class AppStore: ObservableObject {
     /// a preference change and silently fails to redraw.
     private var settingsBridge: AnyCancellable?
 
+    /// Watches the local model's download so the engine is attached the moment
+    /// it lands. Without this, `syncLocalCoach()` only ran at launch and on
+    /// foreground: a student who downloaded the model and went straight to a
+    /// Quick Think got "no AI feedback available" until they relaunched,
+    /// because the engine had never been constructed.
+    private var localModelBridge: AnyCancellable?
+
     /// Widget entry points. Each one lands on Study, which owns every launcher
     /// they need, so none of them requires a tab change first.
     enum DeepLink: Equatable {
@@ -219,6 +226,19 @@ final class AppStore: ObservableObject {
         settingsBridge = settings.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
+
+        // Only the settled states. Progress ticks fire this publisher many
+        // times a second during an 808 MB download, and re-running the sync on
+        // each one would detach and re-check for no reason.
+        localModelBridge = localModel.$state
+            .filter { !$0.isBusy }
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.syncLocalCoach()
+                self.ai.refreshAvailability()
+                self.objectWillChange.send()
+            }
     }
 
     // MARK: - Lifecycle

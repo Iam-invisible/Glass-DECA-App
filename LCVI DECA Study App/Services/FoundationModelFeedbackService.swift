@@ -321,7 +321,14 @@ final class FoundationModelFeedbackService: ObservableObject {
         let raw = await localCoach.respond(instructions: Self.systemInstructions,
                                            prompt: prompt,
                                            maxTokens: 320)
-        guard let raw else { return nil }
+        guard let raw else {
+            // The engine latches a failed load, so re-asking it here is what
+            // turns a model that cannot actually run into an honest
+            // "unavailable" instead of a status that promises AI and then
+            // hands back the self-check every time.
+            refreshAvailability()
+            return nil
+        }
         let text = Self.sanitize(raw)
         return text.isEmpty ? nil : text
     }
