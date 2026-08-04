@@ -62,7 +62,10 @@ struct TodayPanel: View {
         // things in a row of equals; the page is called Study and this is the
         // state of the study, so it gets the hero position and the height to
         // hold it.
-        VStack(spacing: 16) {
+        // 28 rather than 16: the ring is the hero and the rows are the
+        // caption, and at the old gap the first row crowded the ring closely
+        // enough to read as part of it.
+        VStack(spacing: 28) {
             rings
                 .frame(maxWidth: .infinity)
             goals
@@ -161,36 +164,53 @@ struct TodayPanel: View {
 
     // MARK: Rings
 
+    /// One ring, divided into a section per item of the day's work.
+    ///
+    /// It was two concentric rings — questions outside, Quick Think inside —
+    /// which made the day look like two separate jobs that happened to be
+    /// drawn near each other. One ring is one day. A section per item also
+    /// says what a smooth arc could not: how much a single question is worth.
+    /// Five of six sections lit is a fact you can read without the number
+    /// underneath it.
     private var rings: some View {
         ZStack {
-            // A soft wash under the rings. Without a card there is nothing
+            // A soft wash under the ring. Without a card there is nothing
             // saying "this is the important part", and a bloom does that
             // without drawing a box — the same trick the app icon uses.
             Circle()
                 .fill(
-                    RadialGradient(colors: [(questionsMet ? Palette.success : Palette.accent).opacity(0.16),
+                    RadialGradient(colors: [(allMet ? Palette.success : Palette.accent).opacity(0.16),
                                             .clear],
                                    center: .center, startRadius: 2, endRadius: 122)
                 )
                 .frame(width: 244, height: 244)
                 .blur(radius: 12)
 
-            ProgressRing(progress: questionsFraction,
-                         lineWidth: 14,
-                         tint: questionsMet ? Palette.success : Palette.accent)
+            SegmentedGoalRing(sections: sections, lineWidth: 14)
                 .frame(width: 176, height: 176)
-
-            if showsQuickThink {
-                ProgressRing(progress: quickThinkFraction,
-                             lineWidth: 12,
-                             tint: quickThinkMet ? Palette.success : Palette.gold)
-                    .frame(width: 130, height: 130)
-            }
 
             centre
         }
         .frame(width: 176, height: 176)
         .accessibilityHidden(true)
+    }
+
+    /// Questions first, then Quick Think, so the ring reads clockwise in the
+    /// order the day is usually done.
+    private var sections: [SegmentedGoalRing.Section] {
+        var out: [SegmentedGoalRing.Section] = []
+        let qGoal = max(1, questionsGoal)
+        for i in 0..<qGoal {
+            out.append(.init(tint: questionsMet ? Palette.success : Palette.accent,
+                             isFilled: i < questionsDone))
+        }
+        guard showsQuickThink else { return out }
+        let tGoal = max(1, quickThinkGoal)
+        for i in 0..<tGoal {
+            out.append(.init(tint: quickThinkMet ? Palette.success : Palette.gold,
+                             isFilled: i < quickThinkDone))
+        }
+        return out
     }
 
     /// What is still owed, in the units of whichever goal is still open. The
