@@ -15,10 +15,11 @@
 //  screens keep their normal inline bars, because those carry the back button
 //  and should behave exactly as the OS expects.
 //
-//  The eyebrow above the title is where a screen says what it is *currently
-//  scoped to* — the student's cluster, "All clusters", a count. It replaces
-//  the subtitle-under-a-section-header pattern that used to carry that, and
-//  puts the context where the eye already is.
+//  A header is a title and, where it earns its place, one line of subtitle.
+//  There used to be an eyebrow above the title carrying scope — the cluster,
+//  "All clusters", an attempt count — and it was removed everywhere: it was a
+//  third line of chrome above the thing you actually came to read, and none of
+//  it was information a student needed on arrival.
 //
 
 import SwiftUI
@@ -26,9 +27,6 @@ import SwiftUI
 struct ScreenHeader<Accessory: View>: View {
     let title: String
 
-    var eyebrow: String? = nil
-    var eyebrowSymbol: String? = nil
-    var eyebrowTint: Color = Palette.accent
     var subtitle: String? = nil
 
     @ViewBuilder var accessory: () -> Accessory
@@ -36,21 +34,6 @@ struct ScreenHeader<Accessory: View>: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 12) {
             VStack(alignment: .leading, spacing: 5) {
-                if let eyebrow {
-                    HStack(spacing: 6) {
-                        if let eyebrowSymbol {
-                            Image(systemName: eyebrowSymbol)
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundStyle(eyebrowTint)
-                        }
-                        Text(eyebrow)
-                            .font(.appCaptionBold)
-                            .foregroundStyle(Palette.textSecondary)
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-
                 Text(title)
                     .font(.appLargeTitle)
                     .foregroundStyle(Palette.textPrimary)
@@ -77,16 +60,8 @@ struct ScreenHeader<Accessory: View>: View {
 }
 
 extension ScreenHeader where Accessory == EmptyView {
-    init(_ title: String,
-         eyebrow: String? = nil,
-         eyebrowSymbol: String? = nil,
-         eyebrowTint: Color = Palette.accent,
-         subtitle: String? = nil) {
-        self.init(title: title,
-                  eyebrow: eyebrow,
-                  eyebrowSymbol: eyebrowSymbol,
-                  eyebrowTint: eyebrowTint,
-                  subtitle: subtitle) { EmptyView() }
+    init(_ title: String, subtitle: String? = nil) {
+        self.init(title: title, subtitle: subtitle) { EmptyView() }
     }
 }
 

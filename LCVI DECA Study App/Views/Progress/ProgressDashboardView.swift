@@ -31,9 +31,6 @@ struct ProgressDashboardView: View {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Progress",
-                                 eyebrow: store.settings.cluster.displayName,
-                                 eyebrowSymbol: store.settings.cluster.symbol,
-                                 eyebrowTint: store.settings.cluster.tint,
                                  subtitle: "Everything you've answered, and what it says about exam day.")
                         .appearIn(0)
 

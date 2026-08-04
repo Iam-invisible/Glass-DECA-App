@@ -115,20 +115,8 @@ struct StudyView: View {
 
     // MARK: - Greeting
 
-    /// The eyebrow names the student's event when they have one — "EIP ·
-    /// Entrepreneurship" — and falls back to the cluster when they are still
-    /// undecided.
     private var greeting: some View {
-        ScreenHeader(greetingLine,
-                     eyebrow: eyebrowText,
-                     eyebrowSymbol: cluster.symbol,
-                     eyebrowTint: cluster.tint,
-                     subtitle: dayLine)
-    }
-
-    private var eyebrowText: String {
-        guard let event = store.settings.event else { return cluster.displayName }
-        return "\(event.code) · \(cluster.shortName)"
+        ScreenHeader(greetingLine, subtitle: dayLine)
     }
 
     /// The one line on the home screen that changes every day. Streak
@@ -149,12 +137,18 @@ struct StudyView: View {
             : "\(left) to go today."
     }
 
+    /// Without "Good". The eyebrow used to be the header's first line, so the
+    /// title sat below the floating coin badge and could be any width. Now the
+    /// title *is* the first line, and "Good afternoon" is 320pt of the 265pt
+    /// an iPhone 8 leaves beside the badge — it would have run underneath it
+    /// for a third of every day. Dropping the word clears the badge by 54pt on
+    /// the narrowest phone without shrinking the type or reserving a band.
     private var greetingLine: String {
         switch Calendar.current.component(.hour, from: Date()) {
         case 0..<5:   return "Still up"
-        case 5..<12:  return "Good morning"
-        case 12..<17: return "Good afternoon"
-        default:      return "Good evening"
+        case 5..<12:  return "Morning"
+        case 12..<17: return "Afternoon"
+        default:      return "Evening"
         }
     }
 

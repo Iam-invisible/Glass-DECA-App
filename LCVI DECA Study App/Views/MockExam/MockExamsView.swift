@@ -20,9 +20,6 @@ struct MockExamsView: View {
         ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Mock Exams",
-                                 eyebrow: summaries.isEmpty ? "No attempts yet"
-                                    : "\(summaries.count) attempt\(summaries.count == 1 ? "" : "s")",
-                                 eyebrowSymbol: "timer",
                                  subtitle: "Full-length practice under real time pressure.")
                         .appearIn(0)
 

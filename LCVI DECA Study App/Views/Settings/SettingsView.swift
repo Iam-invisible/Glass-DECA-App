@@ -30,8 +30,6 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Settings",
-                                 eyebrow: "On this phone only",
-                                 eyebrowSymbol: "lock.shield",
                                  subtitle: "No account, no sync, no tracking.")
                         .appearIn(0)
 

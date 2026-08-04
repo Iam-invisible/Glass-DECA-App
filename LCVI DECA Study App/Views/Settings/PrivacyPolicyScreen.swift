@@ -17,8 +17,6 @@ struct PrivacyPolicyScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Metrics.sectionSpacing) {
                 ScreenHeader("Privacy notice",
-                             eyebrow: "On this phone only",
-                             eyebrowSymbol: "lock.shield",
                              subtitle: "We collect nothing. Here is exactly what that means.")
 
                 if let accepted = store.settings.acceptedPrivacyAt {

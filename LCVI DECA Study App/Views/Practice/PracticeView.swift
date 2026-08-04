@@ -24,9 +24,6 @@ struct LibraryView: View {
         ScrollView {
                 VStack(spacing: Metrics.sectionSpacing) {
                     ScreenHeader("Library",
-                                 eyebrow: store.settings.cluster.displayName,
-                                 eyebrowSymbol: store.settings.cluster.symbol,
-                                 eyebrowTint: store.settings.cluster.tint,
                                  subtitle: dash.questionBankCount == 0 ? nil
                                     : "\(dash.questionBankCount) questions in your bank.")
                         .appearIn(0)

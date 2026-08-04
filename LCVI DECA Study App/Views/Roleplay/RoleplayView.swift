@@ -19,12 +19,6 @@ struct RoleplayView: View {
         ScrollView {
                 VStack(spacing: Metrics.stackSpacing) {
                     ScreenHeader(title: "Roleplay",
-                                 eyebrow: showAllClusters ? "All clusters"
-                                    : store.settings.cluster.displayName,
-                                 eyebrowSymbol: showAllClusters ? "square.grid.2x2"
-                                    : store.settings.cluster.symbol,
-                                 eyebrowTint: showAllClusters ? Palette.accent
-                                    : store.settings.cluster.tint,
                                  subtitle: "Judge-style scenarios with prep timers and a rubric.") {
                         Button {
                             Haptics.tap()

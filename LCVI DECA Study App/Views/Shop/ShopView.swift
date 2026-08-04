@@ -67,9 +67,6 @@ struct ShopView: View {
 
     private var header: some View {
         ScreenHeader("Shop",
-                     eyebrow: "Earned, not bought",
-                     eyebrowSymbol: "circle.hexagongrid.fill",
-                     eyebrowTint: Palette.gold,
                      subtitle: "Coins come from studying. Nothing here costs money.")
     }
 
