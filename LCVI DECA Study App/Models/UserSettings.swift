@@ -330,6 +330,8 @@ final class UserSettings: ObservableObject {
     }
 
     func isSelected(_ item: AppCosmeticItem) -> Bool {
+        // A pack is a purchase, not a choice — nothing is ever "wearing" it.
+        guard !item.isPack else { return false }
         switch item.kind {
         // Owning the companion is the whole state — there is nothing to
         // select between, so owned means on.
@@ -365,7 +367,11 @@ final class UserSettings: ObservableObject {
         guard !owns(item), coins >= item.price else { return false }
         coins -= item.price
         ownedAppItemIDs.insert(item.id)
-        select(item)
+        // A pack grants its members outright. It is not itself selectable, so
+        // buying one leaves the current icon alone rather than picking a
+        // member at random on the student's behalf.
+        ownedAppItemIDs.formUnion(item.unlocks)
+        if !item.isPack { select(item) }
         return true
     }
 

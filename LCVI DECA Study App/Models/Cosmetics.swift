@@ -193,6 +193,20 @@ struct AppCosmeticItem: Identifiable, Hashable {
     let previewHex: UInt32
     /// Free and owned from the start — the default in its category.
     var isDefault: Bool = false
+
+    /// Item ids this purchase also grants. A pack is bought once and unlocks
+    /// several icons; the icons themselves are never individually for sale,
+    /// which is why their own price is zero.
+    var unlocks: [String] = []
+    var isPack: Bool { !unlocks.isEmpty }
+
+    /// Hidden in the shop until the pack that contains it is owned. Without
+    /// this the list would show four icons at zero coins that cannot be
+    /// selected, which reads as free items that are quietly broken.
+    var packMember: Bool = false
+
+    /// Extra swatches for a pack row, so the tile shows what is in the box.
+    var swatchHexes: [UInt32] = []
 }
 
 enum AppCosmeticCatalogue {
@@ -216,12 +230,44 @@ enum AppCosmeticCatalogue {
     /// Rainbow is the dearest because it is the only one that abandons the
     /// glass treatment entirely, which makes it the one that looks least like
     /// the free icon and most like something you chose.
+    /// The G, in one form or another. Every entry is the same letterform, so
+    /// the set reads as a family rather than as unrelated pictures.
+    ///
+    /// Pastels tint the glass; the glow pack leaves the glass white and lights
+    /// it from outside. Rainbow is the same white glass as the free icon with
+    /// a Gemini-style sweep in the halo — the logo lit differently rather than
+    /// a different logo, which is why it can be the dearest without being the
+    /// loudest.
     static let icons: [AppCosmeticItem] = [
-        .init(id: "icon.default",     name: "Glass",   detail: "The G, in glass",        kind: .icon, price: 0,   previewHex: 0x4E84E8, isDefault: true),
-        .init(id: "AppIconRose",      name: "Rose",    detail: "Pastel pink glass",      kind: .icon, price: 400, previewHex: 0xE87EA8),
-        .init(id: "AppIconMint",      name: "Mint",    detail: "Pastel green glass",     kind: .icon, price: 400, previewHex: 0x4ED2A6),
-        .init(id: "AppIconLilac",     name: "Lilac",   detail: "Pastel violet glass",    kind: .icon, price: 450, previewHex: 0x9A7EE8),
-        .init(id: "AppIconRainbow",   name: "Rainbow", detail: "Not glass. It glows.",   kind: .icon, price: 900, previewHex: 0xFF3B6B),
+        .init(id: "icon.default", name: "Glass", detail: "The G, in glass",
+              kind: .icon, price: 0, previewHex: 0x4E84E8, isDefault: true),
+
+        .init(id: "pack.icon.pastel", name: "Pastel pack", detail: "Three tinted-glass icons",
+              kind: .icon, price: 700, previewHex: 0xE87EA8,
+              unlocks: ["AppIconRose", "AppIconMint", "AppIconLilac"],
+              swatchHexes: [0xE87EA8, 0x4ED2A6, 0x9A7EE8]),
+        .init(id: "AppIconRose",  name: "Rose",  detail: "Pastel pink glass",
+              kind: .icon, price: 0, previewHex: 0xE87EA8, packMember: true),
+        .init(id: "AppIconMint",  name: "Mint",  detail: "Pastel green glass",
+              kind: .icon, price: 0, previewHex: 0x4ED2A6, packMember: true),
+        .init(id: "AppIconLilac", name: "Lilac", detail: "Pastel violet glass",
+              kind: .icon, price: 0, previewHex: 0x9A7EE8, packMember: true),
+
+        .init(id: "pack.icon.glow", name: "Glow pack", detail: "Four icons lit from outside",
+              kind: .icon, price: 900, previewHex: 0x00D8FF,
+              unlocks: ["AppIconCyan", "AppIconMagenta", "AppIconAmber", "AppIconViolet"],
+              swatchHexes: [0x00D8FF, 0xFF2EC4, 0xFFA60C, 0x7C3AED]),
+        .init(id: "AppIconCyan",    name: "Cyan",    detail: "Cyan halo",
+              kind: .icon, price: 0, previewHex: 0x00D8FF, packMember: true),
+        .init(id: "AppIconMagenta", name: "Magenta", detail: "Magenta halo",
+              kind: .icon, price: 0, previewHex: 0xFF2EC4, packMember: true),
+        .init(id: "AppIconAmber",   name: "Amber",   detail: "Amber halo",
+              kind: .icon, price: 0, previewHex: 0xFFA60C, packMember: true),
+        .init(id: "AppIconViolet",  name: "Violet",  detail: "Violet halo",
+              kind: .icon, price: 0, previewHex: 0x7C3AED, packMember: true),
+
+        .init(id: "AppIconRainbow", name: "Rainbow", detail: "White glass, rainbow glow",
+              kind: .icon, price: 1200, previewHex: 0x9B72CB),
     ]
 
     static let themes: [AppCosmeticItem] = [
@@ -247,6 +293,11 @@ enum AppCosmeticCatalogue {
 
     static func item(id: String) -> AppCosmeticItem? {
         all.first { $0.id == id }
+    }
+
+    /// The pack that grants `id`, if any.
+    static func pack(containing id: String) -> AppCosmeticItem? {
+        all.first { $0.unlocks.contains(id) }
     }
 
     static func defaultItem(of kind: AppCosmeticKind) -> AppCosmeticItem {

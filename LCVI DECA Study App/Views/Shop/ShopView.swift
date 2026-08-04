@@ -271,7 +271,7 @@ struct ShopView: View {
             }
 
             VStack(spacing: 10) {
-                ForEach(AppCosmeticCatalogue.items(of: appKind)) { item in
+                ForEach(visibleItems(of: appKind)) { item in
                     appTile(item)
                 }
             }
@@ -282,6 +282,18 @@ struct ShopView: View {
                     .foregroundStyle(Palette.textTertiary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+    }
+
+    /// A pack disappears once bought and its contents appear in its place, so
+    /// the list is always either "buy this" or "choose one of these" — never
+    /// both, and never a row of free items that cannot be selected.
+    private func visibleItems(of kind: AppCosmeticKind) -> [AppCosmeticItem] {
+        AppCosmeticCatalogue.items(of: kind).filter { item in
+            if item.isPack { return !settings.owns(item) }
+            guard item.packMember else { return true }
+            guard let pack = AppCosmeticCatalogue.pack(containing: item.id) else { return true }
+            return settings.owns(pack)
         }
     }
 
@@ -320,6 +332,16 @@ struct ShopView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding(4)
+                        } else if !item.swatchHexes.isEmpty {
+                            // A pack shows what is in the box rather than one
+                            // colour standing in for three or four.
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 13), spacing: 3)],
+                                      spacing: 3) {
+                                ForEach(item.swatchHexes, id: \.self) { hex in
+                                    Circle().fill(Color(hex: hex)).frame(height: 13)
+                                }
+                            }
+                            .padding(7)
                         }
                     }
                     .overlay(
