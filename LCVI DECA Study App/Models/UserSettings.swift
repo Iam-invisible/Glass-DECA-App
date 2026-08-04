@@ -395,17 +395,7 @@ final class UserSettings: ObservableObject {
             ownedCosmeticIDs = Set(CosmeticCatalogue.all.map(\.id))
             coins = max(coins, PromoCode.unlockGrant)
         case .resetEverything:
-            ownedAppItemIDs = []
-            ownedCosmeticIDs = []
-            equippedCosmeticIDs = [:]
-            coins = 0
-            // Selections have to come back to their defaults too, or a reset
-            // leaves a locked item still in effect — the same trap the intro
-            // migration in `init` exists to close.
-            appIconID = "icon.default"
-            themeID = "theme.blue"
-            soundPackID = "sound.default"
-            introStyleRaw = IntroStyle.classic.rawValue
+            resetPurchases()
         }
         return code
     }
@@ -441,6 +431,22 @@ final class UserSettings: ObservableObject {
         }
     }
 
+    /// Coins, ownership and every selection back to zero.
+    ///
+    /// Selections have to come back too, not just ownership: a reset that
+    /// un-owns the Script intro but leaves it selected would keep a locked
+    /// item in effect — the same trap the intro migration in `init` closes.
+    func resetPurchases() {
+        coins = 0
+        ownedCosmeticIDs = []
+        ownedAppItemIDs = []
+        equippedCosmeticIDs = [:]
+        appIconID = "icon.default"
+        themeID = "theme.blue"
+        soundPackID = "sound.default"
+        introStyleRaw = IntroStyle.classic.rawValue
+    }
+
     func resetToDefaults() {
         hasOnboarded = false
         cluster = .marketing
@@ -455,6 +461,9 @@ final class UserSettings: ObservableObject {
         aiAutoExplain = true
         aiEnabled = true
         seededVersion = 0
+        // "Erase everything" left coins and every purchase untouched, which
+        // made the sentence untrue.
+        resetPurchases()
     }
 }
 

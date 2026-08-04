@@ -89,14 +89,29 @@ struct SettingsView: View {
                             isPresented: $showingResetEverythingConfirm,
                             titleVisibility: .visible) {
             Button("Erase everything", role: .destructive) {
-                store.resetProgress(keepQuestionBank: false)
-                settings.resetToDefaults()
+                store.eraseEverything()
                 Haptics.warning()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("This deletes your progress AND every question you've added, then restores the bundled sample content. This cannot be undone.")
+            Text(eraseEverythingWarning)
         }
+    }
+
+    /// Names the model only when one is actually on the phone. Warning about
+    /// deleting an 808 MB download nobody has would be noise, and the size is
+    /// there because re-downloading it is the one part of this that costs more
+    /// than a tap.
+    private var eraseEverythingWarning: String {
+        let base = "This deletes your progress AND every question you've added, "
+                 + "plus coins and anything bought in the Shop, "
+                 + "then restores the bundled sample content."
+        guard LocalModelService.isModelPresent else {
+            return base + " This cannot be undone."
+        }
+        return base
+             + " The \(LocalModelCatalog.approximateMegabytes) MB AI model is deleted too "
+             + "and would need downloading again. This cannot be undone."
     }
 
     // MARK: Study

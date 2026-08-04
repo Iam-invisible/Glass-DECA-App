@@ -599,6 +599,22 @@ final class AppStore: ObservableObject {
 
     // MARK: - Reset
 
+    /// The full wipe behind Settings ▸ Erase everything.
+    ///
+    /// The downloaded model goes with it. It is by far the largest thing this
+    /// app ever puts on the phone, and leaving 808 MB behind would make it the
+    /// one file that survives an erase — with no obvious way for a student to
+    /// find out it is still there.
+    func eraseEverything() {
+        resetProgress(keepQuestionBank: false)
+        settings.resetToDefaults()
+        localModel.deleteModel()
+        // The state publisher would reach `syncLocalCoach` anyway; doing it
+        // here as well means the engine is gone before anything can ask it a
+        // question on a destructive path.
+        ai.detachLocalCoach()
+    }
+
     func resetProgress(keepQuestionBank: Bool) {
         let names = AppModel.entityNames
         persistence.deleteAll(entity: names.srRecord)
