@@ -122,6 +122,32 @@ enum SoundEffects {
         }
     }
 
+    /// Plays a pack's correct-answer tone without switching to that pack.
+    ///
+    /// Its own player, so auditioning a sound in the shop cannot evict the
+    /// cached ones or leave the wrong pack loaded if the student decides not
+    /// to buy. Held in a property because a local `AVAudioPlayer` is
+    /// deallocated the moment the function returns and never makes a sound.
+    static func preview(pack id: String) {
+        guard enabled else { return }
+        configureSession()
+        let effect = Effect.correct
+        let names = id == "sound.default"
+            ? [effect.fileName]
+            : ["\(effect.fileName)-\(id.replacingOccurrences(of: "sound.", with: ""))",
+               effect.fileName]
+        let url = names.lazy.compactMap {
+            Bundle.main.url(forResource: $0, withExtension: effect.fileExtension)
+                ?? Bundle.main.url(forResource: $0, withExtension: "wav")
+        }.first
+        guard let url, let player = try? AVAudioPlayer(contentsOf: url) else { return }
+        player.volume = effect.volume
+        previewPlayer = player
+        player.play()
+    }
+
+    private static var previewPlayer: AVAudioPlayer?
+
     static func play(_ effect: Effect) {
         guard enabled else { return }
         prepare()

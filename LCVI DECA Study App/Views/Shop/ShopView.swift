@@ -25,6 +25,8 @@ struct ShopView: View {
     @State private var appKind: AppCosmeticKind = .icon
     @State private var deniedItem: String?
     @State private var shake: CGFloat = 0
+    /// The item whose preview card is open.
+    @State private var previewing: AppCosmeticItem?
     @State private var promoEntry = ""
     @State private var promoResult: String?
     @State private var promoFailed = false
@@ -60,7 +62,35 @@ struct ShopView: View {
             .reportsScrollOffset()
             .appCanvas()
             .rootScreenChrome()
+            .overlay {
+                if let item = previewing {
+                    ShopPreviewOverlay(item: item,
+                                       owned: settings.owns(item),
+                                       selected: settings.isSelected(item),
+                                       coins: settings.coins,
+                                       onBuy: { purchase(item) },
+                                       onUse: { use(item) },
+                                       onClose: { previewing = nil })
+                        .transition(.opacity)
+                }
+            }
+            .animation(reduceMotion ? nil : Motion.quick, value: previewing?.id)
         }
+    }
+
+    private func purchase(_ item: AppCosmeticItem) {
+        guard settings.buy(item) else { return }
+        SoundEffects.celebration()
+        if item.kind == .icon, !item.isPack { applyIcon(item) }
+        store.react(.purchase)
+        // A pack leaves the card open on its contents; anything else has done
+        // its job and can get out of the way.
+        if !item.isPack { previewing = nil }
+    }
+
+    private func use(_ item: AppCosmeticItem) {
+        settings.select(item)
+        if item.kind == .icon { applyIcon(item) }
     }
 
     // MARK: - Header
@@ -305,18 +335,7 @@ struct ShopView: View {
 
         return Button {
             Haptics.tap()
-            if owned {
-                settings.select(item)
-                if item.kind == .icon { applyIcon(item) }
-            } else if settings.buy(item) {
-                SoundEffects.celebration()
-                if item.kind == .icon { applyIcon(item) }
-                // Reacts to its own purchase too, which is the first thing a
-                // student will try after buying it.
-                store.react(.purchase)
-            } else {
-                flashDenied(item.id)
-            }
+            previewing = item
         } label: {
             HStack(spacing: 13) {
                 // The companion shows itself. Every other category is a colour
@@ -332,9 +351,12 @@ struct ShopView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding(4)
+                        } else if item.kind == .icon, !item.isPack {
+                            // The icon itself. A coloured square standing in
+                            // for artwork is the thing this screen was doing
+                            // wrong.
+                            AppIconTile(id: item.id, side: 46)
                         } else if !item.swatchHexes.isEmpty {
-                            // A pack shows what is in the box rather than one
-                            // colour standing in for three or four.
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 13), spacing: 3)],
                                       spacing: 3) {
                                 ForEach(item.swatchHexes, id: \.self) { hex in
