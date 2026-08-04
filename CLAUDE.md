@@ -115,7 +115,7 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   Shuffled in exactly two places — `PracticeRunner.init` (every practice route arrives as a
   `BuiltSession`) and `MockExamService.buildExam` — and converted back in exactly two —
   `AppStore.recordAnswer` and `saveAttempt`. No schema change, and review screens re-fetch from
-  the bank so they read canonical. See §8.36.
+  the bank so they read canonical. See §8.37.
 - **`AppStore`** (`Services/AppStore.swift`) is the single coordination point injected as
   `@EnvironmentObject`. Services are plain types it owns.
 - **Launch flow** in `RootView`, in order: `IntroView` → **privacy consent gate** (shown while
@@ -640,7 +640,7 @@ longest choice on the right answer often enough that "always pick the longest" s
 The gate is the correct answer's length *rank* — longest, second, third, shortest — which has to
 come out near 25% each; each figure is also the score of "always pick the Nth longest", so the
 table reads as what a student could get without reading. Gating on the longest rate alone is not
-enough and is how the bank acquired a second tell while the first was being fixed (§8.37). `check_roleplays.py` fails
+enough and is how the bank acquired a second tell while the first was being fixed (§8.36). `check_roleplays.py` fails
 if a cluster collapses back to a single event format, which is the regression the roleplay
 rebuild existed to fix.
 

@@ -210,7 +210,7 @@ struct QuestionData: Identifiable, Codable, Hashable {
     ///
     /// Deliberately outside `CodingKeys`: an export, and every Core Data
     /// write, must carry the bank's own order, never one presentation's
-    /// (§8.36). `ChoiceOrder.swift` owns everything that reads it.
+    /// (§8.37). `ChoiceOrder.swift` owns everything that reads it.
     var canonicalOrder: [Int] = QuestionData.identityOrder
 
     enum CodingKeys: String, CodingKey {
