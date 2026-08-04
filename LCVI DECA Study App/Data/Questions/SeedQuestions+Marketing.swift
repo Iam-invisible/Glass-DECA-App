@@ -126,7 +126,7 @@ extension SeedQuestions {
 
         q("mkt-10", .marketing, .medium,
           "Why do businesses invest in customer relationship management rather than focusing only on new customers?",
-          "New customers always spend less than existing customers.", "Retaining an existing customer usually costs less than acquiring a new one.", "Customer relationship management eliminates the need for advertising.", "Regulations require businesses to track repeat customers.",
+          "New customers always spend less than existing ones.", "Keeping a customer costs less than winning one.", "Managing relationships removes the need to advertise.", "Regulations require businesses to track repeat custom.",
           correct: 1,
           explanation: "Acquisition costs — advertising, incentives and sales time — typically exceed the cost of keeping a satisfied customer. Loyal customers also buy more often, are less price-sensitive, and generate referrals, which raises lifetime value.",
           why: ["\"Always\" is the giveaway. A new customer can spend a great deal; the issue is what it costs to win them, not what they spend.",
@@ -140,7 +140,7 @@ extension SeedQuestions {
 
         q("mkt-11", .marketing, .easy,
           "Which of the following best describes the marketing concept?",
-          "Producing as much as possible at the lowest cost", "Identifying customer needs and satisfying them profitably", "Selling whatever the factory can produce", "Setting the lowest price in the market",
+          "Producing as much as possible at the lowest cost", "Meeting customer needs at a profit", "Selling whatever the factory can produce", "Setting the lowest price in the market",
           correct: 1,
           explanation: "The marketing concept holds that a business succeeds by determining what customers need and delivering it better than competitors, while still earning a profit. It replaced the older production and selling orientations.",
           why: ["That is a production orientation, which assumes demand exists for whatever is made efficiently.",
@@ -176,7 +176,7 @@ extension SeedQuestions {
 
         q("mkt-14", .marketing, .medium,
           "A business defines its target market as \"everyone who might ever buy.\" The main problem with this is that",
-          "it is illegal to market to everyone.", "resources get spread too thin to appeal strongly to anyone.", "it guarantees the product will be overpriced.", "no research can be conducted on large markets.",
+          "marketing to everyone is against the law.", "resources spread too thin to appeal to anyone.", "the product is guaranteed to end up overpriced.", "no research can be run on a market that broad.",
           correct: 1,
           explanation: "A target market has to be narrow enough that the mix can be tailored to it. Aiming at everyone forces generic messaging and generic products, which lose to competitors who speak directly to a defined group.",
           why: ["Nothing about broad marketing is illegal; it is simply ineffective.",
@@ -188,7 +188,7 @@ extension SeedQuestions {
 
         q("mkt-15", .marketing, .medium,
           "Which statement best describes the relationship between a marketing strategy and a marketing tactic?",
-          "They are two words for the same activity.", "Strategy sets the direction; tactics are the specific actions that carry it out.", "Tactics are decided first, then strategy is written to match.", "Strategy applies only to advertising.",
+          "They are two words for the same activity.", "Strategy sets direction; tactics carry it out.", "Tactics come first, then strategy is written to match.", "Strategy applies only to advertising decisions.",
           correct: 1,
           explanation: "Strategy answers what the business is trying to achieve and for whom; tactics are the concrete steps — a particular campaign, promotion or channel choice — that execute it.",
           why: ["They operate at different levels. Treating them as identical is how businesses end up with activity but no direction.",
@@ -212,7 +212,7 @@ extension SeedQuestions {
 
         q("mkt-17", .marketing, .medium,
           "Which of these is the clearest example of a marketing objective?",
-          "Hire three new salespeople this year.", "Increase market share from 12% to 15% within 12 months.", "Be the best brand in the industry.", "Reduce the cost of raw materials.",
+          "Hire three new salespeople before year end.", "Raise market share from 12% to 15% in a year.", "Become the best-regarded brand in the industry.", "Cut the cost of raw materials this quarter.",
           correct: 1,
           explanation: "A marketing objective states a measurable market outcome with a deadline. \"Increase share from 12% to 15% within 12 months\" can be verified; the others are activities, aspirations or non-marketing goals.",
           why: ["Hiring is an activity that might support an objective, but it measures input rather than result.",
@@ -224,7 +224,7 @@ extension SeedQuestions {
 
         q("mkt-18", .marketing, .medium,
           "A business with a strong differentiation strategy competes primarily by",
-          "charging the lowest price in the category.", "offering features or a brand experience customers value enough to pay more for.", "copying the market leader's products quickly.", "selling through the greatest number of outlets.",
+          "charging the lowest price in the category.", "offering something customers will pay more for.", "copying the market leader's products quickly.", "selling through the greatest number of outlets.",
           correct: 1,
           explanation: "Differentiation builds an advantage on something customers value and rivals find hard to copy — design, quality, service or brand — which supports a price premium. Cost leadership competes on price instead.",
           why: ["Competing on lowest price is cost leadership, the opposite generic strategy.",
@@ -236,7 +236,7 @@ extension SeedQuestions {
 
         q("mkt-19", .marketing, .medium,
           "Why is it risky for a business to build its entire strategy around being the lowest-cost provider?",
-          "Customers never respond to low prices.", "A competitor with deeper resources can undercut the price and erode the advantage.", "Low prices always violate competition law.", "Cost leadership is only permitted for manufacturers.",
+          "Customers never respond to a lower price.", "A better-resourced rival can undercut it.", "Low prices almost always breach competition law.", "Only manufacturers may pursue cost leadership.",
           correct: 1,
           explanation: "Price is the easiest advantage for a rival to copy, and the firm with greater scale or cheaper capital can usually go lower. Cost leadership works only where the cost advantage itself is structural and hard to match.",
           why: ["Customers respond to low prices readily. That is not the weakness in the strategy.",
@@ -262,7 +262,7 @@ extension SeedQuestions {
 
         q("mkt-21", .marketing, .medium,
           "Demand for a product is described as elastic. This means that",
-          "a change in price causes a proportionally larger change in quantity demanded.", "demand stays the same regardless of price.", "the product has no substitutes.", "the price can never be lowered.",
+          "a price change moves quantity demanded more.", "demand stays the same whatever the price is.", "the product has no substitutes available.", "the price can never be lowered any further.",
           correct: 0,
           explanation: "Elastic demand means buyers are price-sensitive: a small price rise causes a proportionally larger drop in quantity sold, so raising price can actually reduce total revenue.",
           why: ["Correct. With elastic demand, quantity moves proportionally more than price does.",
@@ -310,7 +310,7 @@ extension SeedQuestions {
 
         q("mkt-25", .marketing, .medium,
           "A luxury watchmaker keeps prices high partly because lowering them would",
-          "reduce production costs.", "weaken the brand's perception of exclusivity.", "violate consumer protection law.", "increase the elasticity of supply.",
+          "cut what it costs them to make each watch.", "weaken the brand's air of exclusivity.", "put them in breach of consumer protection law.", "raise the elasticity of their own supply.",
           correct: 1,
           explanation: "For prestige goods, price is part of the product's meaning. A high price signals scarcity and status, so discounting can reduce demand rather than raise it by damaging the exclusivity buyers are paying for.",
           why: ["Selling price has no effect on what it costs to make the watch.",
@@ -372,7 +372,7 @@ extension SeedQuestions {
 
         q("mkt-30", .marketing, .medium,
           "What is the main benefit a wholesaler provides to a small retailer?",
-          "It eliminates the retailer's need to price products.", "It breaks large shipments into smaller quantities the retailer can afford to stock.", "It guarantees the retailer a profit.", "It removes the need for the retailer to advertise.",
+          "It removes the retailer's need to set prices.", "It breaks bulk into affordable quantities.", "It guarantees the retailer a profit on resale.", "It removes the retailer's need to advertise.",
           correct: 1,
           explanation: "Wholesalers perform breaking bulk: they buy in large volume from producers and resell in smaller lots, letting a small retailer carry a range of goods without meeting each manufacturer's minimum order.",
           why: ["Retailers still set their own retail prices.",
@@ -384,7 +384,7 @@ extension SeedQuestions {
 
         q("mkt-31", .marketing, .medium,
           "Channel conflict is most likely when a manufacturer",
-          "raises the quality of its packaging.", "begins selling directly to consumers online while its retailers carry the same product.", "hires additional factory staff.", "extends the product warranty.",
+          "raises the quality of its retail packaging.", "starts selling online alongside its retailers.", "hires extra staff for its own factory floor.", "extends the warranty across its product range.",
           correct: 1,
           explanation: "Vertical channel conflict arises when members at different levels compete for the same customer. A manufacturer's direct online store undercuts the retailers who also stock the product, putting the two in direct competition.",
           why: ["Better packaging benefits every channel member.",
@@ -420,7 +420,7 @@ extension SeedQuestions {
 
         q("mkt-34", .marketing, .medium,
           "A furniture manufacturer offers its dealers volume discounts, co-operative advertising funds and priority delivery. The purpose of these is to",
-          "reduce the manufacturer's own tax liability.", "strengthen the relationship and encourage dealers to favour its products.", "eliminate the need for a marketing plan.", "convert the dealers into employees.",
+          "to reduce the manufacturer's own tax bill.", "to strengthen dealer loyalty to its products.", "to remove the need for a marketing plan.", "to turn the dealers into direct employees.",
           correct: 1,
           explanation: "These are trade incentives. Channel members choose which suppliers to push, and support of this kind makes carrying and promoting the brand more attractive than carrying a rival's.",
           why: ["Discounts and advertising funds are business expenses, not a tax strategy.",
@@ -432,7 +432,7 @@ extension SeedQuestions {
 
         q("mkt-35", .marketing, .medium,
           "Disintermediation in a marketing channel means that",
-          "a new wholesaler is added to the channel.", "intermediaries are removed so the producer reaches the customer more directly.", "the product is discontinued.", "the channel switches to exclusive distribution.",
+          "another wholesaler is added to the channel.", "the producer sells direct, cutting intermediaries.", "the product is discontinued by its producer.", "the channel switches to exclusive distribution.",
           correct: 1,
           explanation: "Disintermediation is the removal of middlemen, most often when a producer sells online directly to consumers. It can lower cost and improve margin, but the producer must then perform the functions the intermediary used to.",
           why: ["Adding an intermediary lengthens the channel, which is the opposite.",
@@ -456,7 +456,7 @@ extension SeedQuestions {
 
         q("mkt-37", .marketing, .medium,
           "Just-in-time inventory management aims primarily to",
-          "hold as much safety stock as possible.", "reduce carrying costs by receiving goods close to when they are needed.", "increase the number of suppliers used.", "lengthen the order cycle.",
+          "hold as much safety stock as it possibly can.", "cut carrying costs by timing deliveries closely.", "increase the number of suppliers it uses.", "lengthen its order cycle deliberately.",
           correct: 1,
           explanation: "Just-in-time schedules deliveries to arrive as production or sales require them, cutting the cash, space and obsolescence risk tied up in stored inventory — at the cost of greater exposure to supply disruption.",
           why: ["Large safety stock is exactly what just-in-time is designed to avoid.",
@@ -494,7 +494,7 @@ extension SeedQuestions {
 
         q("mkt-40", .marketing, .medium,
           "A push promotional strategy directs promotional effort primarily at",
-          "final consumers, to build demand that pulls product through the channel.", "channel members such as wholesalers and retailers, to encourage them to stock and sell it.", "government regulators.", "the company's own shareholders.",
+          "final consumers, to pull goods through the channel.", "wholesalers and retailers, to get them stocking it.", "the government regulators overseeing the sector.", "the company's own shareholders and lenders.",
           correct: 1,
           explanation: "A push strategy aims promotion at the trade — discounts, allowances and sales support — so intermediaries stock the product and push it toward consumers. A pull strategy targets consumers so they ask retailers for it.",
           why: ["Targeting consumers so they demand the product is a pull strategy.",
@@ -506,7 +506,7 @@ extension SeedQuestions {
 
         q("mkt-41", .marketing, .medium,
           "The main advantage of advertising over publicity is that advertising",
-          "is free.", "gives the business control over the message, timing and placement.", "is always more believable to consumers.", "requires no budget approval.",
+          "advertising costs the business nothing at all.", "it controls the message, timing and placement.", "it is always more believable to consumers.", "it needs no budget approval beforehand.",
           correct: 1,
           explanation: "Advertising is paid, so the business decides exactly what is said, where and when. Publicity is generally more credible because it comes from a third party, but the business cannot control it.",
           why: ["Advertising is paid by definition. Publicity is the one that costs no media spend.",
@@ -554,7 +554,7 @@ extension SeedQuestions {
 
         q("mkt-45", .marketing, .medium,
           "Why do most businesses use several promotional elements together rather than only one?",
-          "Regulations require using at least three.", "Different elements do different jobs, and together they reach customers at different stages.", "Using one element is always more expensive.", "It guarantees a higher profit margin.",
+          "Regulations require at least three of them.", "Different elements do different jobs.", "Using a single element always costs more.", "It guarantees a higher profit margin.",
           correct: 1,
           explanation: "Advertising builds awareness efficiently, sales promotion triggers immediate action, personal selling closes complex sales and public relations builds credibility. An integrated mix covers stages no single element handles well alone.",
           why: ["No regulation dictates how many promotional elements a business uses.",
@@ -580,7 +580,7 @@ extension SeedQuestions {
 
         q("mkt-47", .marketing, .easy,
           "In a SWOT analysis, an opportunity is best described as",
-          "an internal resource the business controls.", "a favourable external condition the business could take advantage of.", "a weakness that has been corrected.", "a guaranteed source of future profit.",
+          "an internal resource the business controls.", "a favourable external condition to exploit.", "a weakness that has since been corrected.", "a guaranteed source of future profit.",
           correct: 1,
           explanation: "Opportunities are external and favourable — a growing segment, a retreating competitor, a new technology. Whether the business can act on one depends on its internal strengths.",
           why: ["Internal resources are strengths, not opportunities.",
@@ -616,7 +616,7 @@ extension SeedQuestions {
 
         q("mkt-50", .marketing, .medium,
           "Which of these is an external threat in a SWOT analysis for a bookstore?",
-          "Outdated point-of-sale software", "A large online retailer opening a same-day delivery service locally", "High staff turnover", "A cramped storage room",
+          "Outdated point-of-sale software", "A same-day delivery rival opening nearby", "High turnover among the store staff", "A cramped and badly lit storage room",
           correct: 1,
           explanation: "Threats are unfavourable external conditions the business does not control. A competitor launching same-day delivery in the same market is exactly that; the others are internal weaknesses the business could fix.",
           why: ["Outdated software is an internal weakness the bookstore can choose to replace.",
@@ -628,7 +628,7 @@ extension SeedQuestions {
 
         q("mkt-51", .marketing, .medium,
           "Why should a situation analysis be completed before marketing objectives are set?",
-          "Objectives are legally required to follow a fixed template.", "Objectives grounded in real conditions are more realistic and easier to justify.", "It removes the need to measure results later.", "It guarantees competitors cannot respond.",
+          "Objectives must follow a fixed legal template.", "Objectives set in real conditions are realistic.", "It removes the need to measure results later.", "It guarantees that competitors cannot respond.",
           correct: 1,
           explanation: "A situation analysis establishes where the business actually stands — its share, its competitors, its market's direction. Objectives set without that are guesses, and targets that ignore conditions are usually missed.",
           why: ["No law prescribes how marketing objectives are written.",
@@ -640,7 +640,7 @@ extension SeedQuestions {
 
         q("mkt-52", .marketing, .hard,
           "In Porter's five forces, the threat of new entrants is lowest when",
-          "start-up costs are minimal and no licences are needed.", "existing firms hold strong brands, scale advantages and control of distribution.", "the market is growing very quickly.", "there are many substitute products available.",
+          "start-up costs are low and no licence is needed.", "incumbents hold strong brands and scale.", "the market is growing extremely quickly.", "many substitute products are already available.",
           correct: 1,
           explanation: "High barriers to entry — capital requirements, established brands, economies of scale, locked-up distribution — make it costly and risky for newcomers, which keeps the threat of new entrants low.",
           why: ["Low costs and no licensing make entry easy, which raises the threat.",
@@ -652,7 +652,7 @@ extension SeedQuestions {
 
         q("mkt-53", .marketing, .medium,
           "A marketing audit differs from a SWOT analysis mainly because a marketing audit",
-          "considers only external factors.", "is a systematic, comprehensive review of the whole marketing operation.", "can only be performed by government inspectors.", "examines financial statements exclusively.",
+          "considers only factors outside the business.", "reviews the whole marketing operation.", "may only be carried out by government inspectors.", "examines the financial statements exclusively.",
           correct: 1,
           explanation: "A marketing audit is a structured review of objectives, strategies, activities and results across the entire marketing function. SWOT is one summarising tool that may be used within it.",
           why: ["An audit examines internal operations as well as the external environment.",
@@ -676,7 +676,7 @@ extension SeedQuestions {
 
         q("mkt-55", .marketing, .medium,
           "Market share is best calculated as a company's",
-          "total revenue divided by its total costs.", "sales divided by total sales in the market, expressed as a percentage.", "number of customers divided by its number of employees.", "profit divided by its number of products.",
+          "total revenue divided by its total costs.", "sales as a percentage of total market sales.", "customers divided by its number of employees.", "profit divided by its number of product lines.",
           correct: 1,
           explanation: "Market share measures the portion of a market a firm holds: its sales divided by total market sales. Tracking it separates real competitive progress from growth that merely follows a rising market.",
           why: ["Revenue over costs is a profitability measure, not a share of market.",
@@ -702,7 +702,7 @@ extension SeedQuestions {
 
         q("mkt-57", .marketing, .medium,
           "For a market segment to be useful, it must be measurable, accessible, substantial and",
-          "invisible to competitors.", "actionable — the business must be able to serve it with a distinct mix.", "identical to every other segment.", "free of any competition.",
+          "invisible to all of its competitors.", "actionable — servable with a distinct mix.", "identical to every other market segment.", "entirely free of existing competition.",
           correct: 1,
           explanation: "A segment is only worth targeting if the business can actually reach and serve it differently. A group that is measurable and large but impossible to serve distinctly cannot be acted on.",
           why: ["Competitors will usually see the same segment; that does not make it useless.",
@@ -750,7 +750,7 @@ extension SeedQuestions {
 
         q("mkt-61", .marketing, .medium,
           "A sportswear company markets a hijab designed for athletes. Which segmentation base is most clearly in use?",
-          "Geographic", "Demographic, on the basis of religion and culture", "Behavioural, on the basis of loyalty", "Price sensitivity",
+          "Geographic, by where customers live", "Demographic, by religion and culture", "Behavioural, by loyalty and usage", "By price sensitivity alone",
           correct: 1,
           explanation: "Religion and cultural background are demographic variables. Designing for a specific cultural need is a demographic segmentation decision, and it works because the need is real and previously unserved.",
           why: ["The product is not defined by where customers live.",
@@ -774,7 +774,7 @@ extension SeedQuestions {
 
         q("mkt-63", .marketing, .medium,
           "A buyer persona is most useful because it",
-          "replaces the need for any market research.", "turns segment data into a concrete profile the whole team can design and write for.", "guarantees the segment will buy.", "is required before a business can advertise.",
+          "replaces the need for any market research.", "turns segment data into a concrete profile.", "guarantees that the segment will buy.", "is required before a business can advertise.",
           correct: 1,
           explanation: "A persona condenses research into a specific, memorable profile — goals, frustrations, buying triggers — so product, copy and channel decisions are made for a real person rather than an abstract percentage.",
           why: ["Personas are built from research; they do not replace it.",
@@ -800,7 +800,7 @@ extension SeedQuestions {
 
         q("mkt-65", .marketing, .medium,
           "A researcher asks, \"You do agree our new packaging is an improvement, don't you?\" The main flaw is that the question is",
-          "too short.", "leading — it pushes the respondent toward a particular answer.", "impossible to answer.", "written in the past tense.",
+          "far too short to answer properly.", "leading — it pushes toward one answer.", "impossible for anyone to answer.", "written in the wrong tense throughout.",
           correct: 1,
           explanation: "A leading question signals the answer the researcher wants, which biases responses and makes the data worthless. Neutral wording — \"How would you compare the new packaging to the old?\" — avoids this.",
           why: ["Length is not the problem; a short neutral question would be fine.",
@@ -812,7 +812,7 @@ extension SeedQuestions {
 
         q("mkt-66", .marketing, .medium,
           "A company surveys only its existing loyal customers about a proposed price increase. The main risk is",
-          "sampling bias — the sample does not represent the whole market.", "the sample is too large.", "surveys cannot measure price.", "the results will be too precise.",
+          "sampling bias — the sample is unrepresentative.", "that the sample is far too large to analyse.", "that surveys cannot measure price at all.", "that the results will be far too precise.",
           correct: 0,
           explanation: "Loyal customers are systematically more tolerant of price rises than the market as a whole. A sample that excludes occasional and prospective buyers will overstate acceptance of the increase.",
           why: ["Correct. Loyal customers are more price-tolerant, so the sample overstates acceptance.",
@@ -824,7 +824,7 @@ extension SeedQuestions {
 
         q("mkt-67", .marketing, .easy,
           "Which is an example of qualitative research?",
-          "A count of units sold by region", "A focus group discussing how a brand makes participants feel", "A tally of website clicks", "A table of average purchase values",
+          "A count of the units sold by region", "A focus group on how a brand feels", "A running tally of website clicks", "A table of average purchase values",
           correct: 1,
           explanation: "Qualitative research explores reasons, motivations and feelings through methods like focus groups and in-depth interviews. Quantitative research counts and measures.",
           why: ["Unit counts by region are quantitative data.",
@@ -848,7 +848,7 @@ extension SeedQuestions {
 
         q("mkt-69", .marketing, .medium,
           "The first step in the marketing research process is to",
-          "collect data.", "define the problem and the decision the research must inform.", "analyse the findings.", "write the report.",
+          "collect the data from respondents.", "define the problem the research must inform.", "analyse the findings once they arrive.", "write the report for the decision-makers.",
           correct: 1,
           explanation: "Research that begins with data collection usually answers the wrong question. Defining the problem determines what data is needed, from whom, and what decision the answer will drive.",
           why: ["Collecting data before defining the problem produces information no one can use.",
@@ -872,7 +872,7 @@ extension SeedQuestions {
 
         q("mkt-71", .marketing, .hard,
           "A survey of 400 customers finds 62% would buy a proposed product, with a margin of error of ±5%. The most defensible interpretation is that",
-          "exactly 62% of all customers will buy it.", "the true figure for all customers is likely between 57% and 67%.", "the survey proves the product will succeed.", "the margin of error means the data is unusable.",
+          "exactly 62% of all customers will buy it.", "the true figure is likely 57% to 67%.", "the survey proves the product will succeed.", "the margin of error makes the data unusable.",
           correct: 1,
           explanation: "A sample estimates a population value within a range. The margin of error means the true proportion probably lies between 57% and 67% — and stated intent is not the same as actual purchase.",
           why: ["A sample gives a range, not an exact population value.",
@@ -896,7 +896,7 @@ extension SeedQuestions {
 
         q("mkt-73", .marketing, .medium,
           "Why must a business handle customer data collected in research carefully?",
-          "Data becomes the property of the research firm.", "Privacy law and customer trust both require it to be protected and used only as disclosed.", "Research data cannot legally be stored.", "Customers are paid for every response.",
+          "Data becomes the research firm's property.", "Privacy law and customer trust both demand it.", "Research data cannot legally be stored at all.", "Customers are paid for every response given.",
           correct: 1,
           explanation: "Privacy legislation limits how personal information is collected, used and retained, and misuse damages trust well beyond any legal penalty. Consent and purpose limitation are the working rules.",
           why: ["The business collecting the data remains responsible for it.",
@@ -910,7 +910,7 @@ extension SeedQuestions {
 
         q("mkt-74", .marketing, .easy,
           "A company's product mix refers to",
-          "the raw materials used in manufacturing.", "the full set of product lines and items the company offers.", "the ratio of fixed to variable costs.", "the mix of promotional elements used.",
+          "the raw materials used in manufacturing.", "the full set of lines and items it offers.", "the ratio of fixed to variable costs.", "the mix of promotional elements it uses.",
           correct: 1,
           explanation: "Product mix is everything the company sells, described by width (number of lines), depth (items per line) and consistency (how related the lines are).",
           why: ["Raw materials are inputs to production, not the product mix.",
@@ -934,7 +934,7 @@ extension SeedQuestions {
 
         q("mkt-76", .marketing, .medium,
           "A perceptual map is used to show",
-          "the geographic location of stores.", "how customers perceive competing brands on two key attributes.", "the steps in a distribution channel.", "a product's cost structure.",
+          "the geographic location of each of its stores.", "how buyers rank rivals on two attributes.", "the steps a product takes through the channel.", "the cost structure sitting behind a product.",
           correct: 1,
           explanation: "A perceptual map plots brands against two attributes customers care about — price against quality, say — revealing crowded areas and gaps a new position might occupy.",
           why: ["Store locations belong on a geographic map.",
@@ -958,7 +958,7 @@ extension SeedQuestions {
 
         q("mkt-78", .marketing, .medium,
           "Branding benefits a customer primarily because a brand",
-          "always means the lowest price.", "signals consistent quality and reduces the effort of choosing.", "removes the need for warranties.", "prevents competitors from entering the market.",
+          "always means the lowest available price.", "signals quality and eases the choice.", "removes the need for any warranty.", "prevents competitors from entering.",
           correct: 1,
           explanation: "A brand is a promise of consistency. It lowers the customer's perceived risk and search effort, which is why buyers will pay more for a known brand than an unknown equivalent.",
           why: ["Strong brands frequently charge more, not less.",
@@ -982,7 +982,7 @@ extension SeedQuestions {
 
         q("mkt-80", .marketing, .medium,
           "During the introduction stage of the product life cycle, profits are typically",
-          "at their highest.", "negative or very low, because development and promotion costs are heavy.", "stable and predictable.", "unaffected by promotional spending.",
+          "at their highest point of the whole cycle.", "negative or very low, with costs still heavy.", "stable and predictable from the outset.", "entirely unaffected by promotional spending.",
           correct: 1,
           explanation: "In introduction, sales volume is small while development and awareness-building costs are at their heaviest, so the product usually loses money before reaching the growth stage.",
           why: ["Profits usually peak in growth or early maturity, not at launch.",
@@ -1020,7 +1020,7 @@ extension SeedQuestions {
 
         q("mkt-83", .marketing, .easy,
           "A customer complains loudly about a late delivery. The best first response is to",
-          "explain why the customer is mistaken.", "listen fully, acknowledge the problem and apologise before proposing a fix.", "refer them to the written policy immediately.", "offer a refund without discussion.",
+          "explain why the customer has it wrong.", "listen, acknowledge and apologise first.", "refer them to the written policy at once.", "offer a refund without any discussion.",
           correct: 1,
           explanation: "Complaint handling starts with listening and acknowledgement. A customer who feels heard becomes willing to accept a solution; one who is contradicted or handed a policy first usually escalates.",
           why: ["Contradicting an upset customer escalates the situation and rarely changes their mind.",
@@ -1032,7 +1032,7 @@ extension SeedQuestions {
 
         q("mkt-84", .marketing, .medium,
           "The service recovery paradox describes the finding that",
-          "customers never return after a service failure.", "a well-handled failure can leave a customer more loyal than if nothing had gone wrong.", "service failures have no effect on loyalty.", "recovery costs always exceed the customer's value.",
+          "customers never return after a failure.", "a well-handled failure can deepen loyalty.", "service failures have no effect on loyalty.", "recovery always costs more than the customer.",
           correct: 1,
           explanation: "A failure handled quickly, fairly and personally demonstrates that the business can be trusted when something goes wrong — evidence a smooth transaction never provides. It is not a reason to permit failures.",
           why: ["Many customers do return, particularly when the recovery is handled well.",
@@ -1044,7 +1044,7 @@ extension SeedQuestions {
 
         q("mkt-85", .marketing, .medium,
           "Customer lifetime value measures",
-          "the total profit expected from a customer across the whole relationship.", "how long a customer has been alive.", "the cost of one advertising campaign.", "the number of products in the line.",
+          "the profit expected across the relationship.", "how long a customer has been alive so far.", "the cost of running one advertising campaign.", "the number of products in the company's line.",
           correct: 0,
           explanation: "Lifetime value estimates the total contribution a customer generates over the relationship. It justifies spending on retention and shows why a single transaction is the wrong unit for judging a customer.",
           why: ["Correct. It is the total expected profit from a customer across the entire relationship.",
@@ -1056,7 +1056,7 @@ extension SeedQuestions {
 
         q("mkt-86", .marketing, .medium,
           "A business empowers front-line staff to resolve complaints up to $100 without approval. The main benefit is that",
-          "fewer customers will complain.", "problems get resolved immediately, while the customer is still present.", "the business avoids all refund costs.", "supervisors are no longer needed.",
+          "fewer customers will complain in the first place.", "problems get fixed while the customer is there.", "the business avoids paying any refund costs.", "supervisors are no longer needed on the shift.",
           correct: 1,
           explanation: "Empowerment removes the delay that turns a small problem into a large one. Resolving on the spot costs less in both money and goodwill than escalating, waiting and following up.",
           why: ["Empowerment changes how complaints are handled, not how many arise.",
@@ -1080,7 +1080,7 @@ extension SeedQuestions {
 
         q("mkt-88", .marketing, .medium,
           "A customer's expectations of service are shaped most directly by",
-          "the business's internal cost structure.", "prior experience, word of mouth and what the business promised.", "the number of employees on shift.", "the company's legal structure.",
+          "the business's own internal cost structure.", "past experience, word of mouth and promises.", "the number of employees on shift that day.", "the legal structure the company operates under.",
           correct: 1,
           explanation: "Service quality is judged as the gap between what was expected and what was delivered. Expectations come from previous visits, what others say, and the promises the business itself has made.",
           why: ["Customers cannot see internal costs and do not form expectations from them.",
@@ -1092,7 +1092,7 @@ extension SeedQuestions {
 
         q("mkt-89", .marketing, .medium,
           "Why is an unhappy customer who complains often more valuable than one who simply leaves?",
-          "Complaining customers always spend more.", "A complaint identifies a fixable problem and gives the business a chance to keep them.", "Complaints are legally required to be recorded.", "Silent customers cannot be marketed to.",
+          "Complaining customers always spend more.", "A complaint names a problem you can fix.", "Complaints must legally be recorded.", "Silent customers cannot be marketed to.",
           correct: 1,
           explanation: "Most dissatisfied customers never complain — they simply stop coming, taking the reason with them. A complaint is free diagnostic information plus an opportunity to recover the relationship.",
           why: ["Spending is not what makes the complaint valuable.",
@@ -1130,7 +1130,7 @@ extension SeedQuestions {
 
         q("mkt-92", .marketing, .easy,
           "Search engine optimisation refers to",
-          "paying a search engine for the top advertising slot.", "improving a site so it ranks higher in unpaid search results.", "sending promotional emails to subscribers.", "buying followers on social platforms.",
+          "paying a search engine for the top advertising slot.", "improving a site's ranking in unpaid results.", "sending promotional emails out to subscribers.", "buying followers on the major social platforms.",
           correct: 1,
           explanation: "SEO improves organic (unpaid) ranking through relevant content, sound site structure and credible links. Paying for placement is search engine marketing, a separate activity.",
           why: ["Paying for placement is paid search advertising, not optimisation.",
@@ -1142,7 +1142,7 @@ extension SeedQuestions {
 
         q("mkt-93", .marketing, .medium,
           "A brand's conversion rate is best described as",
-          "the number of people who saw an advertisement.", "the percentage of visitors who complete the desired action.", "the total money spent on advertising.", "the number of followers gained in a month.",
+          "the number of people who saw the advertisement.", "the share of visitors who do what you wanted.", "the total money spent on advertising.", "the number of followers gained in a month.",
           correct: 1,
           explanation: "Conversion rate divides the visitors who completed the goal — a purchase, sign-up or enquiry — by total visitors. It measures effectiveness rather than reach.",
           why: ["That is impressions or reach.",
@@ -1154,7 +1154,7 @@ extension SeedQuestions {
 
         q("mkt-94", .marketing, .medium,
           "The main difference between owned, earned and paid media is that owned media is",
-          "purchased from a publisher.", "the channels the business itself controls, such as its website and email list.", "coverage generated by others without payment.", "always more expensive than paid media.",
+          "bought from a publisher at a set rate.", "the channels the business itself controls.", "coverage others generate without payment.", "always dearer than the equivalent paid media.",
           correct: 1,
           explanation: "Owned media is controlled by the business (site, app, email list); paid media is bought (ads); earned media is what others say without payment (reviews, shares, press).",
           why: ["Purchased placement is paid media.",
@@ -1166,7 +1166,7 @@ extension SeedQuestions {
 
         q("mkt-95", .marketing, .medium,
           "Under Canadian anti-spam legislation, a business sending commercial email generally must",
-          "send only on weekdays.", "have consent, identify itself clearly and provide an unsubscribe mechanism.", "limit messages to 500 words.", "copy a regulator on each message.",
+          "send its commercial messages only on weekdays.", "have consent, identify itself and allow opt-out.", "keep every message under five hundred words.", "copy a federal regulator on each message sent.",
           correct: 1,
           explanation: "CASL requires consent (express or implied), clear identification of the sender and a working unsubscribe mechanism in every commercial electronic message. Penalties for non-compliance are substantial.",
           why: ["No rule restricts which days commercial email may be sent.",
@@ -1178,7 +1178,7 @@ extension SeedQuestions {
 
         q("mkt-96", .marketing, .medium,
           "A company pays a creator with 15,000 highly engaged followers in a specific niche to feature its product. Compared with a celebrity endorsement, this approach usually offers",
-          "greater total reach.", "a more targeted, credible audience at lower cost.", "guaranteed sales.", "complete control of the message.",
+          "considerably greater total reach.", "a targeted, credible audience for less.", "guaranteed sales from the campaign.", "complete control over the message.",
           correct: 1,
           explanation: "Micro-influencers reach fewer people but with tighter topical focus and higher trust, which often yields better cost per conversion than broad celebrity reach.",
           why: ["A celebrity almost always reaches more people in total.",
@@ -1202,7 +1202,7 @@ extension SeedQuestions {
 
         q("mkt-98", .marketing, .medium,
           "Content marketing differs from traditional advertising mainly because it",
-          "is always free to produce.", "attracts an audience by offering something useful rather than interrupting them.", "cannot be measured.", "is restricted to print media.",
+          "it is always free for a business to produce.", "it offers something useful, not an interruption.", "it cannot be measured in any meaningful way.", "it is restricted to print media and nothing else.",
           correct: 1,
           explanation: "Content marketing earns attention with material the audience actually wants — guides, videos, tools — building trust over time. Advertising buys attention by interrupting whatever the audience came for.",
           why: ["Producing good content costs time and money, often a great deal.",
@@ -1214,7 +1214,7 @@ extension SeedQuestions {
 
         q("mkt-99", .marketing, .medium,
           "A business notices most of its social traffic comes from mobile devices. The most useful response is to",
-          "stop posting on social media.", "ensure landing pages load fast and read well on a small screen.", "increase the length of every post.", "switch entirely to print advertising.",
+          "stop posting on social media altogether.", "make landing pages fast on a phone.", "increase the length of every post it makes.", "switch its budget entirely to print advertising.",
           correct: 1,
           explanation: "Traffic that arrives on mobile and lands on a slow or unreadable page converts poorly. Matching the destination to how the audience actually arrives is the fix with the clearest payoff.",
           why: ["Abandoning the channel sending most of the traffic makes no sense.",
@@ -1226,7 +1226,7 @@ extension SeedQuestions {
 
         q("mkt-100", .marketing, .medium,
           "A negative review appears on a public platform. The most constructive response is to",
-          "delete or hide it wherever possible.", "reply publicly, acknowledge the issue and offer to resolve it directly.", "post several fake positive reviews to offset it.", "ignore it entirely.",
+          "delete or hide it wherever that is possible.", "reply publicly and offer to put it right.", "post fake positive reviews to offset it.", "ignore it entirely and move on.",
           correct: 1,
           explanation: "A calm public reply demonstrates to every future reader how the business handles problems. Deleting looks evasive, fake reviews are deceptive and often illegal, and silence leaves the complaint unanswered.",
           why: ["Deleting criticism reads as evasion and often provokes a larger reaction.",
