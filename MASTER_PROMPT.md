@@ -280,11 +280,19 @@ large titles on all root screens, which also removed the largest remaining iOS 1
 ## 6. Feature inventory
 
 **Study (home)** — an **`EventTag`** (the cluster's icon and the event code the student says out
-loud, "EIP") above the header, then **`TodayPanel`**: one large segmented ring, then a card per
-goal, then the streak card. The ring is
-cut into a section per item — questions clockwise from twelve, then Quick Think — because a smooth
-arc says how far through you are and sections say what one question is worth. Its centre shows
-what is **left**, not what is done, tinted to whichever goal is still open. Below that a `ModeTile`
+loud, "EIP") above the header, then **`TodayPanel`**: the day as a figure and one segmented bar,
+then a card per goal, then the streak card. The ring is
+cut into a segment per item — questions first, then Quick Think — because a smooth track says how
+far through you are and segments say what one question is worth. The figure beside it shows what
+is **left**, not what is done, tinted to whichever goal is still open.
+
+It was a 176pt ring inside a 244pt bloom, about 243pt of the roughly 500pt an iPhone 8 shows above
+the fold, spent on a number the line under the title and both cards already stated. The ring's
+argument was never its size — one object means one day, and a segment per item says what a
+question is worth. `SegmentedDayBar` keeps both for about 150pt. The daily goal goes to 100, so the
+dividers close up past ~30 segments and disappear entirely past ~50: at that density "what one
+question is worth" is not readable however it is drawn, so the bar merges into a continuous
+two-tone track rather than becoming a dotted line. Below that a `ModeTile`
 garden of six squares (Review Due, Mistakes, Mock Exams, Roleplay, Exam Cram, Bookmarks) plus a
 full-width **Library** banner, then one insight card. Tile affordance rule: **a count means it
 launches, a chevron means it navigates.** Both goal targets are still set with steppers in

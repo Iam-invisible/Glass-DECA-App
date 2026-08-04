@@ -10,22 +10,25 @@
 //  competing for the eye and two heavy buttons competing for the thumb, with
 //  nothing saying they were the same thought.
 //
-//  Concentric rings fix the relationship rather than the styling. One ring
-//  stack is one object — "today" — and the two arcs are obviously parts of it.
-//  The questions goal takes the outer arc because it is the larger job, ten or
-//  more items against Quick Think's one or two.
+//  One object fixes the relationship rather than the styling. The day is one
+//  segmented track, and both goals are obviously parts of it.
 //
-//  The centre answers the question a student actually has, which is "what is
-//  left", not "what have I done". Done-versus-goal is already in the legend
-//  beside it, so repeating it in the middle would waste the one piece of
-//  prominent space on the screen.
+//  That track was a 176pt ring inside a 244pt bloom, and it is now a bar. The
+//  ring's argument was never its size — it was that one object means one day,
+//  and a segment per item says what a single question is worth, which a smooth
+//  arc cannot. A bar keeps both and costs about 150pt against 243pt, on a
+//  screen where an iPhone 8 shows roughly 500pt above the fold. What went is
+//  the empty middle the figure used to sit in, not the figure.
+//
+//  The figure answers the question a student actually has, which is "what is
+//  left", not "what have I done". Done-versus-goal is already on the cards
+//  below, so repeating it here would spend the most prominent line on the
+//  screen saying something twice.
 //
 //  The streak sits inside this panel rather than under it. Left outside it was
 //  a bare line in a different visual language directly beneath a composed
 //  panel, which read as something that had fallen off. It is the third fact
-//  about today, so it belongs in the thing that states today — but full width
-//  under the rings rather than a third item in the legend column, because the
-//  two rows up there start something and this one does not.
+//  about today, so it belongs in the thing that states today.
 //
 //  The two goal rows carry the app's card treatment — opaque fill, gradient
 //  border, shape shadow — tinted rather than plain. They used to be a flat
@@ -49,8 +52,8 @@ struct TodayPanel: View {
     let questionsGoal: Int
     let quickThinkDone: Int
     let quickThinkGoal: Int
-    /// False for events with no roleplay component — then this is a single
-    /// ring and a single row, not a hollowed-out version of the pair.
+    /// False for events with no roleplay component — then the day is one run
+    /// of segments and one card, not a hollowed-out version of the pair.
     let showsQuickThink: Bool
     let streak: Int
     let freezes: Int
@@ -76,28 +79,17 @@ struct TodayPanel: View {
     @State private var showsRipple = false
     @State private var isCollecting = false
 
-    private var questionsFraction: Double {
-        min(1, Double(questionsDone) / Double(max(1, questionsGoal)))
-    }
-    private var quickThinkFraction: Double {
-        min(1, Double(quickThinkDone) / Double(max(1, quickThinkGoal)))
-    }
     private var questionsMet: Bool { questionsDone >= max(1, questionsGoal) }
     private var quickThinkMet: Bool { quickThinkDone >= max(1, quickThinkGoal) }
     private var allMet: Bool { questionsMet && (!showsQuickThink || quickThinkMet) }
 
     var body: some View {
-        // The rings lead, centred and large, with everything else reading as
-        // support beneath them. Side by side they were merely one of three
-        // things in a row of equals; the page is called Study and this is the
-        // state of the study, so it gets the hero position and the height to
-        // hold it.
-        // 28 rather than 16: the ring is the hero and the rows are the
-        // caption, and at the old gap the first row crowded the ring closely
-        // enough to read as part of it.
-        VStack(spacing: 28) {
-            rings
-                .frame(maxWidth: .infinity)
+        // The day leads and everything else reads as support beneath it. 20
+        // rather than the ring's 28: the bar sits on the same left edge as the
+        // cards now, so they already read as one column and do not need a gap
+        // that wide to stop the first card crowding the hero.
+        VStack(spacing: 20) {
+            dayBar
             goals
             streakCard
         }
@@ -335,37 +327,60 @@ struct TodayPanel: View {
             : "\(daysUntilNextFreeze) days to your next freeze"
     }
 
-    // MARK: Rings
+    // MARK: The day
 
-    /// One ring, divided into a section per item of the day's work.
+    /// The day as a figure and one bar.
     ///
-    /// It was two concentric rings — questions outside, Quick Think inside —
-    /// which made the day look like two separate jobs that happened to be
-    /// drawn near each other. One ring is one day. A section per item also
-    /// says what a smooth arc could not: how much a single question is worth.
-    /// Five of six sections lit is a fact you can read without the number
-    /// underneath it.
-    private var rings: some View {
-        ZStack {
-            // A soft wash under the ring. Without a card there is nothing
-            // saying "this is the important part", and a bloom does that
-            // without drawing a box — the same trick the app icon uses.
-            Circle()
-                .fill(
-                    RadialGradient(colors: [(allMet ? Palette.success : Palette.accent).opacity(0.16),
-                                            .clear],
-                                   center: .center, startRadius: 2, endRadius: 122)
-                )
-                .frame(width: 244, height: 244)
-                .blur(radius: 12)
-
-            SegmentedGoalRing(sections: sections, lineWidth: 14)
-                .frame(width: 176, height: 176)
-
-            centre
+    /// This was a 176pt ring inside a 244pt bloom — about 243pt of the screen,
+    /// which is most of what an iPhone 8 shows above the fold, spent on a
+    /// number that the line under the title and the two cards beneath were
+    /// already stating. The ring's own argument was never its size: it was
+    /// that one object means one day, and a segment per item says what a
+    /// single question is worth. A bar keeps both of those and costs 150pt.
+    ///
+    /// The figure stays large and stays the hero. What went is the empty
+    /// middle it used to sit in.
+    private var dayBar: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            headline
+            SegmentedDayBar(sections: sections)
         }
-        .frame(width: 176, height: 176)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityHidden(true)
+    }
+
+    /// What is still owed, in the units of whichever goal is still open. The
+    /// tint matches that goal's segments, so the number is always attributable
+    /// to part of the bar without a label saying which.
+    @ViewBuilder
+    private var headline: some View {
+        if allMet {
+            HStack(spacing: 8) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundStyle(Palette.success)
+                Text(showsQuickThink ? "Both goals met" : "Goal met for today")
+                    .font(.appBodyMedium)
+                    .foregroundStyle(Palette.textSecondary)
+            }
+        } else {
+            let onQuestionsStill = !questionsMet
+            let remaining = onQuestionsStill
+                ? max(0, questionsGoal - questionsDone)
+                : max(0, quickThinkGoal - quickThinkDone)
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                CountingNumber(value: Double(remaining),
+                               font: .numeric(40),
+                               color: onQuestionsStill ? Palette.accent : Palette.gold)
+                Text(onQuestionsStill
+                     ? "question\(remaining == 1 ? "" : "s") left today"
+                     : "quick think\(remaining == 1 ? "" : "s") left today")
+                    .font(.appCallout)
+                    .foregroundStyle(Palette.textTertiary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+        }
     }
 
     /// Questions first, then Quick Think, so the ring reads clockwise in the
@@ -384,41 +399,6 @@ struct TodayPanel: View {
                              isFilled: i < quickThinkDone))
         }
         return out
-    }
-
-    /// What is still owed, in the units of whichever goal is still open. The
-    /// tint matches that goal's arc, so the number is always attributable to a
-    /// ring without a label saying which.
-    @ViewBuilder
-    private var centre: some View {
-        if allMet {
-            VStack(spacing: 2) {
-                Image(systemName: "checkmark")
-                    .font(.system(size: 38, weight: .bold))
-                    .foregroundStyle(Palette.success)
-                Text("Done")
-                    .font(.appCallout)
-                    .foregroundStyle(Palette.textSecondary)
-            }
-        } else {
-            let onQuestionsStill = !questionsMet
-            let remaining = onQuestionsStill
-                ? max(0, questionsGoal - questionsDone)
-                : max(0, quickThinkGoal - quickThinkDone)
-            VStack(spacing: 0) {
-                CountingNumber(value: Double(remaining),
-                               font: .numeric(46),
-                               color: onQuestionsStill ? Palette.accent : Palette.gold)
-                Text(onQuestionsStill
-                     ? "question\(remaining == 1 ? "" : "s") left"
-                     : "quick think\(remaining == 1 ? "" : "s") left")
-                    .font(.appSans(12, weight: .medium))
-                    .foregroundStyle(Palette.textTertiary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            .padding(.horizontal, 8)
-        }
     }
 
     // MARK: Rows
