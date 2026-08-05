@@ -617,6 +617,17 @@ app survive ~1 GB resident on a 4 GB phone.
     index — `AppStore.recordAnswer` and `MockExamService.saveAttempt` — call `.canonical()` and
     `.canonicalIndex(for:)` first. Writing a presented copy straight to Core Data would reorder
     the stored choices and silently invalidate every earlier answer's `selectedIndex`.
+38. **A downloaded model is not a working model.** `LocalModelService.state` reaches `.ready` on
+    file presence and a SHA-256 match — it knows nothing about whether llama can load the file.
+    `LocalAICoachCard` rendered that state as a green "AI coach installed and running on this
+    phone", so a student whose engine had latched a failed load (§8.31) got a tick on one screen
+    and "unavailable" on the next, with no way to tell which was lying. The card now reads
+    `ai.localCoachFailedToLoad`, which stays false on a fresh install — `isReady` means "loaded
+    *or loadable*", so it only flips after a real failed load, at the moment `generateLocally`
+    calls `refreshAvailability()`. **Keep file state and engine state apart wherever either is
+    shown.** The card observes `ai` directly rather than through `AppStore`, because nested
+    `ObservableObject`s don't propagate (§8.11) and `AppStore` bridges only `settings` and
+    `localModel`.
 
 ---
 
@@ -629,10 +640,16 @@ app survive ~1 GB resident on a 4 GB phone.
    on foreground). **It has not been re-tested since.** The three questions §7 has always asked are
    still open: does the GGUF load, is first-token latency short enough that a student waits, and
    does a 4 GB phone survive ~1 GB resident. An iPhone 12 is the device it failed on.
-   **The offer is live** — `LlamaSwift` is linked and pinned at `2.10199.0`, so
-   `CoachEngineFactory.canRunLocalModel` is true and students will be offered the 808 MB download.
-   Either verify it on device or gate it off for v1; shipping a feature that may return nothing
-   after 808 MB is a plausible App Review rejection as well as a bad experience.
+   **The offer is live, by decision** — `LlamaSwift` is linked and pinned at `2.10199.0`, so
+   `CoachEngineFactory.canRunLocalModel` is true and students are offered the 808 MB download.
+   Gating it off for v1 was offered on 2026-08-05 and **declined**: it ships untested. Record it
+   as a decision rather than an oversight, and do not silently re-gate it.
+
+   What that decision was made safer by, the same day: the card no longer claims a downloaded
+   model is a working one (§8.38). If the engine fails to load, the student is told plainly and
+   the delete button that reclaims the 808 MB is right there, instead of a green tick that
+   contradicts the AI status one screen over. The failure path is now honest; whether there *is*
+   a failure on real hardware is still unknown.
 2. **Nothing since `v5-immersive` has had a device pass**, and 67 commits have landed since
    `v9-pre-michroma`. Highest risk first:
    - The Shop end to end: buy, preview, apply an alternate icon, redeem a promo code.
@@ -788,7 +805,7 @@ family built from the same letterform, and a daily-fact widget on both the home 
 
 Debug and Release both build clean with zero warnings, and **all three** content validators pass
 (`check_questions.py`, `check_roleplays.py`, `check_tips.py`). Uncommitted work: none. Unpushed:
-74 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
+75 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
 published and current.
 
 **Nothing since `v5-immersive` has had a full device pass**, and 67 commits have landed since

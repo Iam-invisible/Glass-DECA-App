@@ -13,6 +13,10 @@ import SwiftUI
 
 struct LocalAICoachCard: View {
     @ObservedObject var service: LocalModelService
+    /// Observed directly rather than reached through `AppStore`: nested
+    /// `ObservableObject`s don't propagate (§8.11), and `AppStore` bridges
+    /// only `settings` and `localModel`, not `ai`.
+    @ObservedObject var ai: FoundationModelFeedbackService
     /// Onboarding introduces the idea; Settings just manages it.
     var showsIntroCopy: Bool = true
 
@@ -54,6 +58,7 @@ struct LocalAICoachCard: View {
             }
         }
         .animation(reduceMotion ? nil : Motion.snappy, value: service.state)
+        .animation(reduceMotion ? nil : Motion.snappy, value: ai.localCoachFailedToLoad)
     }
 
     // MARK: Pieces
@@ -126,22 +131,42 @@ struct LocalAICoachCard: View {
         .accessibilityValue("\(Int(progress * 100)) percent")
     }
 
+    /// `service.state` is about the *file* — it reaches `.ready` on presence
+    /// and a hash match alone. Whether the model actually runs is a separate
+    /// question that only the engine can answer, so the green line is claimed
+    /// only while the engine has not failed. Reporting "installed and running"
+    /// on a phone whose engine had already latched a failed load left the
+    /// student a green tick here and an "unavailable" status one screen over.
     private var ready: some View {
         VStack(alignment: .leading, spacing: 12) {
-            statusRow("AI coach installed and running on this phone.",
-                      systemImage: "checkmark.circle.fill",
-                      tint: Palette.success)
-            Button {
-                Haptics.tap()
-                service.deleteModel()
-            } label: {
-                Text("Delete AI coach (frees \(LocalModelCatalog.approximateMegabytes) MB)")
-                    .font(.appFootnote.weight(.medium))
-                    .foregroundStyle(Palette.danger)
+            if ai.localCoachFailedToLoad {
+                InfoBanner(systemImage: "exclamationmark.triangle",
+                           title: "AI coach didn't start",
+                           message: "The download finished, but this phone couldn't load the model. Explanations and roleplay feedback are written instead. Everything else works as normal.",
+                           tint: Palette.gold)
+            } else {
+                statusRow("AI coach installed and running on this phone.",
+                          systemImage: "checkmark.circle.fill",
+                          tint: Palette.success)
             }
-            .buttonStyle(.plain)
+            deleteButton
             attribution
         }
+    }
+
+    /// Shared by both `ready` states: a coach that failed to start is the case
+    /// where reclaiming the space matters most, and this is the only route to
+    /// `deleteModel()`.
+    private var deleteButton: some View {
+        Button {
+            Haptics.tap()
+            service.deleteModel()
+        } label: {
+            Text("Delete AI coach (frees \(LocalModelCatalog.approximateMegabytes) MB)")
+                .font(.appFootnote.weight(.medium))
+                .foregroundStyle(Palette.danger)
+        }
+        .buttonStyle(.plain)
     }
 
     private func downloadButton(title: String) -> some View {

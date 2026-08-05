@@ -212,6 +212,27 @@ final class FoundationModelFeedbackService: ObservableObject {
         localCoach?.isReady == true ? .localCoachAvailable : unavailable
     }
 
+    /// True once an attached local coach has tried to load and failed.
+    ///
+    /// `LlamaCoachEngine.isReady` means "loaded *or loadable*" (§8.31), so this
+    /// stays false on a fresh install and only flips after a real failed load —
+    /// which is the moment `generateLocally` calls `refreshAvailability()`, so
+    /// the change publishes to anything observing this service.
+    ///
+    /// `LocalAICoachCard` reads it because `LocalModelService.state` is about
+    /// the *file*: it reaches `.ready` on presence and a hash match alone, and
+    /// said the coach was "installed and running" on a phone where the engine
+    /// had already failed to start.
+    ///
+    /// A nil coach means no engine was ever built — no runtime linked, or the
+    /// file is absent — which is not a load failure and must not be reported as
+    /// one. `CoachEngineFactory.makeEngine` returns nil rather than a stub in
+    /// exactly those cases.
+    var localCoachFailedToLoad: Bool {
+        guard let localCoach else { return false }
+        return !localCoach.isReady
+    }
+
     // MARK: Local coach
 
     /// Called by `AppStore` once the model's state is known. Idempotent.

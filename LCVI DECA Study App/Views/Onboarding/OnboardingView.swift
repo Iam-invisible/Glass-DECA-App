@@ -686,7 +686,7 @@ struct OnboardingView: View {
                     .appearBeat(1.0)
 
                 if LocalModelService.isOffered, !store.ai.availability.isUsable {
-                    LocalAICoachCard(service: store.localModel)
+                    LocalAICoachCard(service: store.localModel, ai: store.ai)
                         .appCard()
                         .appearBeat(1.15)
                 }

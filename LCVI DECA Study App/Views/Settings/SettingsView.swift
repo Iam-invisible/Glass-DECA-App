@@ -346,7 +346,7 @@ struct SettingsView: View {
 
                 if LocalModelService.isOffered, !store.ai.availability.isUsable {
                     Divider().overlay(Palette.stroke)
-                    LocalAICoachCard(service: store.localModel, showsIntroCopy: false)
+                    LocalAICoachCard(service: store.localModel, ai: store.ai, showsIntroCopy: false)
                 }
 
                 if store.ai.availability.isUsable {
