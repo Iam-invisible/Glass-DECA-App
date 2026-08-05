@@ -650,10 +650,7 @@ app survive ~1 GB resident on a 4 GB phone.
 4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
    roleplay *at regionals*. Left as exam + roleplay at both levels — the error that over-prepares.
    Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
-5. **Confirm the model URL still resolves** before submitting. `LocalModelService` hardcodes a
-   Hugging Face `resolve/main` path and a SHA-256 pin; if that repo moves or renames the file the
-   download 404s.
-6. **No automated tests and no crash reporting.** Two targets, no test target, no test files. The
+5. **No automated tests and no crash reporting.** Two targets, no test target, no test files. The
    only automated safety net is the three Python content validators. Both are defensible for v1,
    but they should be decisions rather than oversights.
 
@@ -678,6 +675,18 @@ app survive ~1 GB resident on a 4 GB phone.
   not hand the reader's IP to a third party to draw its headings.
 - The daily-fact widgets, the event tag, the Study panel rebuild, the Shop preview work, the
   companion switch and the tilt cards. See §6, §6a and §12.
+- **The model download URL, re-verified 2026-08-05.** Worth knowing *how*, because the check is
+  stronger than a 200 and takes one command. Hugging Face answers a `HEAD` on the LFS path with a
+  302 carrying two headers describing the file behind it, and both are pins this app already
+  holds: `x-linked-size` matched `expectedBytes` (807,690,656) exactly and `x-linked-etag` was
+  byte-for-byte `LocalModelCatalog.sha256`. So the repo, the filename, the quantisation and the
+  hash are all confirmed without downloading 808 MB.
+
+  ```bash
+  curl -sIL "https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF/resolve/main/llama-3.2-1b-instruct-q4_k_m.gguf" | grep -iE "^HTTP|x-linked-size|x-linked-etag"
+  ```
+
+  Re-run it before submitting. It says nothing about whether the model *runs* — that is item 1.
 
 **Candidate for removal**
 
@@ -779,7 +788,7 @@ family built from the same letterform, and a daily-fact widget on both the home 
 
 Debug and Release both build clean with zero warnings, and **all three** content validators pass
 (`check_questions.py`, `check_roleplays.py`, `check_tips.py`). Uncommitted work: none. Unpushed:
-72 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
+74 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
 published and current.
 
 **Nothing since `v5-immersive` has had a full device pass**, and 67 commits have landed since
