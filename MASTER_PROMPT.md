@@ -628,6 +628,17 @@ app survive ~1 GB resident on a 4 GB phone.
     shown.** The card observes `ai` directly rather than through `AppStore`, because nested
     `ObservableObject`s don't propagate (§8.11) and `AppStore` bridges only `settings` and
     `localModel`.
+39. **`.gesture()` and `.onTapGesture` on the same view compete, and the tap loses.** `TiltCard`'s
+    `.press` activation sequences a long press before a drag, and that sequence starts tracking the
+    moment the finger lands. A quick tap fails the long press, but SwiftUI does not hand the touch
+    back to a competing `TapGesture` — so `onTap` never ran in `.press` mode at all. The one place
+    that used it, the achievement rows on Progress, advertised "tap to replay" in its own section
+    header and did nothing. The tap is now attached with `.simultaneousGesture`, which never
+    arbitrates. A hold is told apart from a tap by `pickedUp` **and** a `putDownAt` timestamp,
+    because the tilt gesture and the tap recogniser are told about the same lift in an undefined
+    order — one flag alone loses the race in whichever direction it is not checked. This shipped
+    because `.touch` mode reports its own taps from the drag's `onEnded` and was the only
+    activation ever exercised: two call sites, and the working one is the celebration badge.
 
 ---
 
@@ -661,6 +672,9 @@ app survive ~1 GB resident on a 4 GB phone.
      clean and only shows as "Please adopt containerBackground API" on the device itself (§8.12);
      that shipped once already this session.
    - Michroma at every size, and the generated bold, on a real panel.
+   - **Both `TiltCard` activations**, now that the press-mode tap is fixed (§8.39): tapping an
+     earned achievement on Progress must replay its badge, holding one must tilt it without
+     replaying, and the list must still scroll. None of that has been seen working.
    - The tab bar at 10pt clearance, which deliberately lets the home indicator graze the capsule.
 3. **Check App Store metadata for DECA trademark exposure.** The in-app disclaimer is solid; the
    store listing is a separate surface. Avoid "DECA" leading the app name, subtitle or keywords.

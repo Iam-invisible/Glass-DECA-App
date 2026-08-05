@@ -51,6 +51,15 @@ struct TiltCard<Content: View>: View {
     /// The card's own size, measured from a background probe.
     @State private var measured: CGSize = .zero
 
+    /// True from the moment a `.press` card is actually picked up until it is
+    /// put back down. A hold that ends is not a tap, and this is what tells the
+    /// two apart.
+    @State private var pickedUp = false
+    /// When the last pickup ended. Needed as well as `pickedUp` because the
+    /// order in which the tilt gesture and the tap recogniser are told about
+    /// the same lift is not defined — see `tapRecogniser`.
+    @State private var putDownAt: Date = .distantPast
+
     /// Below this a touch counts as a tap, not a drag. Loose enough to survive
     /// the few points a finger moves while pressing.
     private static var tapSlop: CGFloat { 10 }
@@ -95,10 +104,30 @@ struct TiltCard<Content: View>: View {
             }
             .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .gesture(tiltGesture())
-            // In press mode the sequence never fires for a quick tap, so the
-            // tap needs its own recogniser. In touch mode the drag already
-            // reports it and a second one would double-fire.
-            .onTapGesture { if activation == .press { onTap?() } }
+            .simultaneousGesture(tapRecogniser())
+    }
+
+    /// In press mode the sequence never fires for a quick tap, so the tap needs
+    /// its own recogniser. In touch mode the drag already reports it and a
+    /// second one would double-fire, hence the `activation` guard.
+    ///
+    /// **Simultaneous, not `.onTapGesture`.** Attached the ordinary way it
+    /// competes with `tiltGesture()`, and it loses: the sequence's long press
+    /// starts tracking the moment the finger lands, claims the touch, and when
+    /// it fails at lift SwiftUI does not hand that touch back to the tap. So
+    /// `onTap` never ran in press mode — the one place that used it, the
+    /// achievement rows on Progress, had a documented "tap to replay" that did
+    /// nothing. Recognising simultaneously means the two never arbitrate.
+    private func tapRecogniser() -> some Gesture {
+        TapGesture().onEnded {
+            guard activation == .press else { return }
+            // A hold that ends is a put-down, not a tap. Checked two ways
+            // because this and `release()` are told about the same lift in an
+            // undefined order: `pickedUp` catches the case where this runs
+            // first, `putDownAt` the case where `release()` already did.
+            guard !pickedUp, Date().timeIntervalSince(putDownAt) > 0.3 else { return }
+            onTap?()
+        }
     }
 
     /// Erased to `AnyGesture` so the two activations can share one return type.
@@ -125,7 +154,11 @@ struct TiltCard<Content: View>: View {
                 LongPressGesture(minimumDuration: 0.16)
                     .sequenced(before: DragGesture(minimumDistance: 0))
                     .onChanged { value in
+                        // `.second(true, _)` is the long press having succeeded,
+                        // which is exactly the moment the card becomes the
+                        // student's to turn — whether or not they move it after.
                         guard case .second(true, let drag) = value else { return }
+                        pickedUp = true
                         if let drag {
                             apply(drag.location)
                         } else if !touching {
@@ -151,6 +184,13 @@ struct TiltCard<Content: View>: View {
     }
 
     private func release() {
+        // Only a real pickup stamps the clock. A press that never reached
+        // 0.16 s must leave `putDownAt` alone, or it would suppress the very
+        // tap it just was.
+        if pickedUp {
+            putDownAt = Date()
+            pickedUp = false
+        }
         touching = false
         lean = .zero
     }
