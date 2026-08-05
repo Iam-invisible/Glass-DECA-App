@@ -157,12 +157,13 @@ struct DailyTipView: View {
             // easy to read, and the block still sits in the middle of the space
             // rather than falling to the top of it.
             //
-            // 17pt. Measured over all 605 facts at the full column: 16 come to
-            // two lines, 508 to three and 81 to four, and none is scaled down.
-            // 18pt is where 212 of them need a fifth line the widget has no
-            // room for.
+            // 16pt. Measured over the whole corpus at the full column: most
+            // facts come to three lines, a handful to two or four, and none is
+            // scaled down. 18pt is where a couple of hundred of them need a
+            // fifth line the widget has no room for, so there is headroom above
+            // this but not much.
             Text(entry.tip)
-                .font(WidgetType.sans(17))
+                .font(WidgetType.sans(16))
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.leading)
                 .lineSpacing(2)
