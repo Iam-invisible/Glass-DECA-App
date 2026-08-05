@@ -624,27 +624,38 @@ app survive ~1 GB resident on a 4 GB phone.
 
 **Still open**
 
-1. **Fill in `[INSERT YOUR LEGAL OR TRADING NAME]`.** Still live and **publicly visible** on
-   `gh-pages` at `index.html:110`, and in `~/Desktop/Glass-Privacy-Notice.pdf`. The in-app copy
-   does not carry it. Should match the seller name in App Store Connect.
-2. **The local AI coach has been run on hardware exactly once, and it failed.** Two bugs were
+1. **The local AI coach has been run on hardware exactly once, and it failed.** Two bugs were
    found and fixed from that one report (§8.31, plus the engine only being attached at launch or
    on foreground). **It has not been re-tested since.** The three questions §7 has always asked are
    still open: does the GGUF load, is first-token latency short enough that a student waits, and
    does a 4 GB phone survive ~1 GB resident. An iPhone 12 is the device it failed on.
-3. **Everything added since `v9-pre-michroma` is unverified on device** — roughly forty commits,
-   including a whole fourth tab. Highest risk first:
+   **The offer is live** — `LlamaSwift` is linked and pinned at `2.10199.0`, so
+   `CoachEngineFactory.canRunLocalModel` is true and students will be offered the 808 MB download.
+   Either verify it on device or gate it off for v1; shipping a feature that may return nothing
+   after 808 MB is a plausible App Review rejection as well as a bad experience.
+2. **Nothing since `v5-immersive` has had a device pass**, and 67 commits have landed since
+   `v9-pre-michroma`. Highest risk first:
    - The Shop end to end: buy, preview, apply an alternate icon, redeem a promo code.
+   - **An upgrade install over an old build**, to exercise the Core Data lightweight migration.
+     This is the only item on the list whose failure costs a student their whole history rather
+     than merely looking wrong — and `PersistenceController` deletes and recreates the store on a
+     load failure, with only an `NSLog`, so it fails *silently*.
+   - The widgets on a real home screen and lock screen. A missing `containerBackground` compiles
+     clean and only shows as "Please adopt containerBackground API" on the device itself (§8.12);
+     that shipped once already this session.
    - Michroma at every size, and the generated bold, on a real panel.
    - The tab bar at 10pt clearance, which deliberately lets the home indicator graze the capsule.
-   - The coin HUD clearing every screen title.
-   - The Core Data lightweight migration adding four `rationale*` attributes — still never
-     exercised old-build-over-new.
-4. **Check App Store metadata for DECA trademark exposure.** The in-app disclaimer is solid; the
+3. **Check App Store metadata for DECA trademark exposure.** The in-app disclaimer is solid; the
    store listing is a separate surface. Avoid "DECA" leading the app name, subtitle or keywords.
-5. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
+4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
    roleplay *at regionals*. Left as exam + roleplay at both levels — the error that over-prepares.
    Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
+5. **Confirm the model URL still resolves** before submitting. `LocalModelService` hardcodes a
+   Hugging Face `resolve/main` path and a SHA-256 pin; if that repo moves or renames the file the
+   download 404s.
+6. **No automated tests and no crash reporting.** Two targets, no test target, no test files. The
+   only automated safety net is the three Python content validators. Both are defensible for v1,
+   but they should be decisions rather than oversights.
 
 **Closed since `v9-pre-michroma`**
 
@@ -659,6 +670,14 @@ app survive ~1 GB resident on a 4 GB phone.
 - The local coach's two activation bugs.
 - Both answer tells: choices now shuffle per presentation, and all 600 questions were
   rebalanced so length no longer points at the answer. `check_questions.py` gates both.
+- `[INSERT YOUR LEGAL OR TRADING NAME]` filled in as **Shail Patel** and published. Verified
+  against the live URL. The copy at `~/Desktop/Glass-Privacy-Notice.pdf` still carries the
+  placeholder and the old styling — regenerate it from the page if it is ever sent to anyone.
+- The hosted privacy notice restyled to the app: Michroma title, Manrope body, the card treatment,
+  and the faces self-hosted rather than fetched from Google — a page promising no tracking should
+  not hand the reader's IP to a third party to draw its headings.
+- The daily-fact widgets, the event tag, the Study panel rebuild, the Shop preview work, the
+  companion switch and the tilt cards. See §6, §6a and §12.
 
 **Candidate for removal**
 
@@ -755,18 +774,20 @@ rebuild existed to fix.
 ## 12. Current state
 
 Four panes, Michroma throughout with a generated bold, the blue-grey palette, a spacing hierarchy,
-a coin economy with a Shop that previews before it charges, a reacting companion, and an app icon
-family built from the same letterform.
+a coin economy with a Shop that previews before it charges, a reacting companion, an app icon
+family built from the same letterform, and a daily-fact widget on both the home and lock screens.
 
-Debug and Release both build clean with zero warnings, and both content validators pass.
-Uncommitted work: none. Unpushed: check `git status` and both remotes (§10) — `v9-pre-michroma`
-in particular is local only.
+Debug and Release both build clean with zero warnings, and **all three** content validators pass
+(`check_questions.py`, `check_roleplays.py`, `check_tips.py`). Uncommitted work: none. Unpushed:
+72 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
+published and current.
 
-**Nothing since `v5-immersive` has had a full device pass**, and about forty commits have landed
-since `v9-pre-michroma` alone. The single hardware report so far — an iPhone 12 — found two real
-bugs in the local AI coach, which is a fair indication of what a proper pass would turn up.
+**Nothing since `v5-immersive` has had a full device pass**, and 67 commits have landed since
+`v9-pre-michroma`. The single hardware report so far — an iPhone 12 — found two real bugs in the
+local AI coach, and one bug this session ("Please adopt containerBackground API") shipped with both
+configurations green and every validator passing. Treat "it builds" as a weak signal.
 
-Five things worth knowing before touching this again:
+Seven things worth knowing before touching this again:
 
 - **Copy is plain, deliberately.** See §3. Do not let it drift back.
 - **Distractors are the teaching surface.** The rationales name the *specific* error — "65% is
@@ -775,6 +796,12 @@ Five things worth knowing before touching this again:
   clusters; authoring per event produces near-duplicates rather than variety.
 - **The shop must stay cosmetic**, and the bunny must never be harsher than concern (§6a). Both
   are one bad commit away from making a study app feel like it is judging the student.
+- **Measure before choosing a size.** Most of this session's layout decisions were settled by
+  rendering the real fonts at the real geometry rather than by eye, and several reversed the
+  instinct — the Michroma ladder, the arc well, the widget text sizes. The scripts are throwaway;
+  the numbers are in the commit messages.
+- **The codebase has no unsafe force unwraps.** All eleven are literals or guarded one line above,
+  and there is no `fatalError`, `try!` or `precondition` anywhere. Worth preserving.
 - **The hamster is parked, not deleted.** `ShopFeatures.hamsterEnabled = false` gates a complete,
   working vector avatar with 24 cosmetics across five slots. Flipping it back on restores the
   character; it is off only because the app ships without artwork for it. A prompt for generating
