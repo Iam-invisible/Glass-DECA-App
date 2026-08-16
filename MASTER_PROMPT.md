@@ -39,6 +39,14 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
 - Swift + SwiftUI, **iOS 16.4** deployment target. It was 16.0; llama.cpp's XCFramework is
   built for 16.4 and binds at launch, so a 16.0 target would have failed to start on 16.0–16.3.
   The iPhone 8 requirement survives — that device runs iOS 16.7.
+- **iPhone only.** `TARGETED_DEVICE_FAMILY = 1` on both the app and widget targets, so the App
+  Store lists it as iPhone-only rather than "Works on iPad" — nothing in the design system is
+  iPad-adapted (every screen is hand-tuned iPhone geometry: the `DayArc` well, the tab bar's
+  10pt home-indicator clearance, the Michroma ladder), and it would have shipped as a stretched
+  iPhone layout with the full width unused. No Mac Catalyst, no visionOS, no watchOS target. The
+  built app's `Info.plist` is the source of truth — `UIDeviceFamily` should read `[1]` in both
+  the app and `DECAStudyWidget.appex`, checked with
+  `/usr/libexec/PlistBuddy -c "Print :UIDeviceFamily" <path>/Info.plist`.
 - **Four panes: Study · Progress · Shop · Settings** (six tabs → three → four; see §4 and §6)
 - Feel: premium, calm, adult. Explicitly **not** a children's quiz game. Strong motion, haptics,
   full light/dark, full accessibility.
