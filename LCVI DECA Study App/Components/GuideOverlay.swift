@@ -41,10 +41,21 @@ extension View {
 
 // MARK: - Steps
 
+/// One place the widget can be added, and the taps that get it there.
+private struct HowTo: Identifiable {
+    let place: String
+    let steps: [String]
+    var id: String { place }
+}
+
 private struct GuideStep {
-    let target: GuideTarget
+    /// `nil` means there is nothing on screen to point at. The widget lives in
+    /// iOS, not in this app, so that step dims the screen and centres its card
+    /// instead of hunting for an anchor that will never exist.
+    let target: GuideTarget?
     let title: String
     let body: String
+    var howTo: [HowTo] = []
 }
 
 private let guideSteps: [GuideStep] = [
@@ -54,9 +65,29 @@ private let guideSteps: [GuideStep] = [
     GuideStep(target: .waysToStudy,
               title: "Ways to study",
               body: "Tap any tile to start. A number means how many are waiting for you. An arrow means the tile opens a full screen, like Mock Exams or Roleplay."),
+    // Four, not three: the Shop pane arrived after this copy was written and
+    // the guide kept counting the old tab bar.
     GuideStep(target: .tabBar,
-              title: "The three tabs",
-              body: "Study is where you practise. Progress shows your accuracy and stats. Settings has your question bank, reminders, and a button to replay this guide."),
+              title: "The four tabs",
+              body: "Study is where you practise. Progress shows your accuracy and stats. Shop is what your coins buy. Settings has your question bank, reminders, and a button to replay this guide."),
+    // Last on purpose. It is the one feature a student can own without ever
+    // opening the app again, and the only one they cannot stumble across from
+    // inside it — nothing in Glass links to the iOS widget gallery.
+    GuideStep(target: nil,
+              title: "Add the daily fact",
+              body: "One fact from your cluster every day, without opening the app. Add it once and it changes on its own. Both widgets are called Daily fact.",
+              howTo: [
+                HowTo(place: "Home Screen", steps: [
+                    "Touch and hold an empty part of the screen until the icons wobble.",
+                    "Tap the plus button, then search for Glass.",
+                    "Pick Daily fact and add it.",
+                ]),
+                HowTo(place: "Lock Screen", steps: [
+                    "Touch and hold the Lock Screen, then tap Customise.",
+                    "Tap the space under the clock.",
+                    "Pick Glass, then Daily fact.",
+                ]),
+              ]),
 ]
 
 // MARK: - Spotlight shape
@@ -105,8 +136,9 @@ struct GuideOverlay: View {
 
     /// Only the stops whose views are actually on screen. If the bank is
     /// empty the tile garden does not exist, and the guide simply moves on.
+    /// Anchorless steps are always kept — there is nothing to miss.
     private var steps: [GuideStep] {
-        guideSteps.filter { anchors[$0.target] != nil }
+        guideSteps.filter { $0.target == nil || anchors[$0.target!] != nil }
     }
 
     var body: some View {
@@ -117,8 +149,9 @@ struct GuideOverlay: View {
             invitation
         } else {
             let step = available[min(stepIndex, available.count - 1)]
-            let rect = anchors[step.target].map { proxy[$0].insetBy(dx: -6, dy: -6) }
-                ?? .zero
+            let rect: CGRect? = step.target
+                .flatMap { anchors[$0] }
+                .map { proxy[$0].insetBy(dx: -6, dy: -6) }
 
             ZStack {
                 // No ignoresSafeArea here: the host GeometryReader already
@@ -126,8 +159,12 @@ struct GuideOverlay: View {
                 // would shift the shape's origin away from the space the
                 // anchors were resolved in — every cutout would land high by
                 // exactly the top inset. One space for resolving and drawing.
-                Spotlight(rect: rect)
-                    .fill(Color.black.opacity(0.55), style: FillStyle(eoFill: true))
+                // An anchorless step has no cutout, so the dim is a plain fill
+                // rather than an even-odd path with a zero rect — which would
+                // punch a stray hole at the origin.
+                Spotlight(rect: rect ?? .zero)
+                    .fill(Color.black.opacity(0.55),
+                          style: FillStyle(eoFill: rect != nil))
                     .animation(reduceMotion ? nil : Motion.gentle, value: rect)
                     // The dim is the tap target for "next" — but the card's
                     // buttons are the accessible path.
@@ -149,13 +186,13 @@ struct GuideOverlay: View {
                 Text("Quick tour?")
                     .font(.appTitle)
                     .foregroundStyle(Palette.textPrimary)
-                Text("Three steps, about thirty seconds. It points out your daily goal, the ways to study, and what each tab does. You can replay it any time from Settings.")
+                Text("Four steps, about a minute. It points out your daily goal, the ways to study, what each tab does, and how to put the daily fact on your Lock Screen. You can replay it any time from Settings.")
                     .font(.appFootnote)
                     .foregroundStyle(Palette.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
                 PrimaryButton(title: "Start the tour", systemImage: "arrow.right") {
                     Haptics.tap()
-                    onTarget?(steps.first?.target ?? .goalCard)
+                    if let first = steps.first?.target { onTarget?(first) }
                     withAnimation(reduceMotion ? nil : Motion.gentle) { accepted = true }
                 }
                 .padding(.top, 2)
@@ -176,13 +213,14 @@ struct GuideOverlay: View {
         .transition(.opacity)
     }
 
-    private func card(for step: GuideStep, near rect: CGRect, in available: [GuideStep]) -> some View {
+    private func card(for step: GuideStep, near rect: CGRect?, in available: [GuideStep]) -> some View {
         let screen = proxy.size
-        let below = rect.midY < screen.height * 0.55
-        let index = available.firstIndex(where: { $0.target == step.target }) ?? 0
+        // No rect means no element to sit beside, so the card takes the middle.
+        let below = rect.map { $0.midY < screen.height * 0.55 }
+        let index = available.firstIndex(where: { $0.title == step.title }) ?? 0
 
         return VStack {
-            if below { Spacer().frame(height: min(rect.maxY + 18, screen.height - 260)) }
+            if let rect, below == true { Spacer().frame(height: min(rect.maxY + 18, screen.height - 260)) }
             else { Spacer() }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -207,6 +245,32 @@ struct GuideOverlay: View {
                     .foregroundStyle(Palette.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
+                ForEach(step.howTo) { how in
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(how.place.uppercased())
+                            // §8.23: eyebrow text is `.appCaptionBold`.
+                            .font(.appCaptionBold)
+                            .tracking(0.8)
+                            .foregroundStyle(Palette.accent)
+                        ForEach(Array(how.steps.enumerated()), id: \.offset) { i, line in
+                            HStack(alignment: .top, spacing: 9) {
+                                Text("\(i + 1)")
+                                    .font(.appCaption.weight(.semibold))
+                                    .foregroundStyle(Palette.accent)
+                                    .frame(width: 20, height: 20)
+                                    .background(Circle().fill(Palette.accentSoft))
+                                Text(line)
+                                    .font(.appCaption)
+                                    .foregroundStyle(Palette.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Spacer(minLength: 0)
+                            }
+                        }
+                    }
+                    .padding(.top, 3)
+                    .accessibilityElement(children: .combine)
+                }
+
                 PrimaryButton(title: index == available.count - 1 ? "Got it" : "Next",
                               systemImage: index == available.count - 1 ? "checkmark" : "arrow.right") {
                     advance(in: available)
@@ -222,7 +286,7 @@ struct GuideOverlay: View {
             .padding(.horizontal, Metrics.gutter)
             .accessibilityElement(children: .contain)
 
-            if !below { Spacer().frame(height: max(screen.height - rect.minY + 18, 120)) }
+            if let rect, below == false { Spacer().frame(height: max(screen.height - rect.minY + 18, 120)) }
             else { Spacer() }
         }
         .animation(reduceMotion ? nil : Motion.gentle, value: stepIndex)
@@ -233,7 +297,9 @@ struct GuideOverlay: View {
             finish()
         } else {
             Haptics.tap()
-            onTarget?(available[stepIndex + 1].target)
+            // Only ask the screen to scroll when the next stop is something on
+            // it. The widget step has nothing to bring into view.
+            if let next = available[stepIndex + 1].target { onTarget?(next) }
             withAnimation(reduceMotion ? nil : Motion.gentle) { stepIndex += 1 }
         }
     }

@@ -387,8 +387,18 @@ podium rising, a path drawing itself to a flag, the goal ring filling) then five
 AI). Skip present on every frame; acts travel directionally.
 
 **App guide** — `GuideOverlay`. Asks first ("Want a quick tour?"), then spotlights the real UI
-with an animated cutout that travels between three stops, scrolling each into view first.
+with an animated cutout that travels between stops, scrolling each into view first.
 Views opt in with `.guideAnchor(_:)`; anchors resolve at the app root. Replayable from Settings.
+
+`GuideStep.target` is **optional**, and the one step with `nil` is the point of the mechanism:
+the widget lives in iOS, not in this app, so there is no anchor to hunt for and nothing to
+scroll into view. That step dims the whole screen, centres its card, and lists the taps for the
+Home Screen and the Lock Screen — the home-screen and lock-screen widgets are both called
+**Daily fact**, which is why one name covers both. It goes last because it is the only feature a
+student can own without opening the app again, and the only one nothing inside the app links to:
+there is no route from Glass to the iOS widget gallery, so a student who is never told simply
+never finds it. Anchorless steps are never filtered out by the on-screen check, and `onTarget`
+is not fired for them.
 
 **Competitive events** — `Data/DECAEvents.swift`. 50 events keyed by the code students say out
 loud, each modelling `regional` and `provincial` components **separately**, because some events
