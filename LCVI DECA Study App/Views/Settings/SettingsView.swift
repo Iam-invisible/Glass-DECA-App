@@ -676,7 +676,7 @@ struct SettingsView: View {
                 } label: {
                     settingsRow(symbol: "questionmark.circle",
                                 title: "Replay app guide",
-                                subtitle: "The Study screen, the tabs, and adding the daily fact widget.",
+                                subtitle: "The Study screen, the tabs, and adding a widget.",
                                 tint: Palette.accent)
                 }
                 .buttonStyle(.plain)

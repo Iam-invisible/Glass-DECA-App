@@ -393,12 +393,18 @@ Views opt in with `.guideAnchor(_:)`; anchors resolve at the app root. Replayabl
 `GuideStep.target` is **optional**, and the one step with `nil` is the point of the mechanism:
 the widget lives in iOS, not in this app, so there is no anchor to hunt for and nothing to
 scroll into view. That step dims the whole screen, centres its card, and lists the taps for the
-Home Screen and the Lock Screen — the home-screen and lock-screen widgets are both called
-**Daily fact**, which is why one name covers both. It goes last because it is the only feature a
-student can own without opening the app again, and the only one nothing inside the app links to:
-there is no route from Glass to the iOS widget gallery, so a student who is never told simply
-never finds it. Anchorless steps are never filtered out by the on-screen check, and `onTarget`
-is not fired for them.
+Home Screen and the Lock Screen. It goes last because it is the only feature a student can own
+without opening the app again, and the only one nothing inside the app links to: there is no
+route from Glass to the iOS widget gallery, so a student who is never told simply never finds
+it. Anchorless steps are never filtered out by the on-screen check, and `onTarget` is not fired
+for them.
+
+**The two halves of that step are deliberately asymmetric.** The Home Screen says "choose the
+widget you want" because six declare `systemSmall`/`Medium`/`Large`; the Lock Screen names
+**Daily fact** outright because it is the only widget declaring accessory families, so there is
+nothing to choose between. Check `supportedFamilies` before editing either half — if a second
+accessory widget is ever added, the Lock Screen line stops being true. The body says "several"
+rather than a count for the same reason "The three tabs" went stale when the Shop pane landed.
 
 **Competitive events** — `Data/DECAEvents.swift`. 50 events keyed by the code students say out
 loud, each modelling `regional` and `provincial` components **separately**, because some events

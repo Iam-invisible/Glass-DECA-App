@@ -74,14 +74,19 @@ private let guideSteps: [GuideStep] = [
     // opening the app again, and the only one they cannot stumble across from
     // inside it — nothing in Glass links to the iOS widget gallery.
     GuideStep(target: nil,
-              title: "Add the daily fact",
-              body: "One fact from your cluster every day, without opening the app. Add it once and it changes on its own. Both widgets are called Daily fact.",
+              title: "Add a widget",
+              // "Several" rather than a count: naming a number is how the tab
+              // copy above went stale, and widgets are the likeliest thing to
+              // be added to later.
+              body: "Glass has several widgets for the Home Screen and one for the Lock Screen. Add one and it keeps itself up to date, without you opening the app.",
               howTo: [
                 HowTo(place: "Home Screen", steps: [
                     "Touch and hold an empty part of the screen until the icons wobble.",
                     "Tap the plus button, then search for Glass.",
-                    "Pick Daily fact and add it.",
+                    "Choose the widget you want and add it.",
                 ]),
+                // Only the daily fact declares accessory families, so there is
+                // genuinely one to pick here and naming it saves a hunt.
                 HowTo(place: "Lock Screen", steps: [
                     "Touch and hold the Lock Screen, then tap Customise.",
                     "Tap the space under the clock.",
@@ -186,7 +191,7 @@ struct GuideOverlay: View {
                 Text("Quick tour?")
                     .font(.appTitle)
                     .foregroundStyle(Palette.textPrimary)
-                Text("Four steps, about a minute. It points out your daily goal, the ways to study, what each tab does, and how to put the daily fact on your Lock Screen. You can replay it any time from Settings.")
+                Text("Four steps, about a minute. It points out your daily goal, the ways to study, what each tab does, and how to add a widget. You can replay it any time from Settings.")
                     .font(.appFootnote)
                     .foregroundStyle(Palette.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
