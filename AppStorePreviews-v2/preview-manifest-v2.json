@@ -1,0 +1,98 @@
+{
+  "size": [
+    1668,
+    3216
+  ],
+  "frames": [
+    {
+      "n": 1,
+      "theme": "light",
+      "src": "13-ways-to-study.png",
+      "title": "Ways To Study",
+      "body": "Review, mock exams, roleplay, and cram stay offline.",
+      "layout": "modes",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-01.png"
+    },
+    {
+      "n": 2,
+      "theme": "dark",
+      "src": "03-explanation.png",
+      "title": "Every Answer Explained",
+      "body": "See the reasoning after each choice.",
+      "layout": "explain",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-02.png"
+    },
+    {
+      "n": 3,
+      "theme": "light",
+      "src": "07-mistake-notebook.png",
+      "title": "Mistakes Stay Useful",
+      "body": "Missed questions become focused review.",
+      "layout": "mistakes",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-03.png"
+    },
+    {
+      "n": 4,
+      "theme": "dark",
+      "src": "09-performance-indicators.png",
+      "title": "Track Every Skill",
+      "body": "Performance indicators show what to practise next.",
+      "layout": "skills",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-04.png"
+    },
+    {
+      "n": 5,
+      "theme": "light",
+      "src": "11b-quick-think-answered.png",
+      "title": "Practice Under Pressure",
+      "body": "Timed prompts build concise business thinking.",
+      "layout": "quick",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-05.png"
+    },
+    {
+      "n": 6,
+      "theme": "dark",
+      "src": "15-roleplay-brief.png",
+      "title": "Roleplay Prep",
+      "body": "Scenario briefs keep preparation structured.",
+      "layout": "roleplay",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-06.png"
+    },
+    {
+      "n": 7,
+      "theme": "light",
+      "src": "16-roleplay-rubric.png",
+      "title": "Judge The Details",
+      "body": "Score the response against a clear rubric.",
+      "layout": "rubric",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-07.png"
+    },
+    {
+      "n": 8,
+      "theme": "dark",
+      "src": "18-mock-exam-setup.png",
+      "title": "Mock Exams",
+      "body": "Build a timed practice exam in seconds.",
+      "layout": "setup",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-08.png"
+    },
+    {
+      "n": 9,
+      "theme": "light",
+      "src": "20-mock-exam-results.png",
+      "title": "Results By Topic",
+      "body": "See strengths and gaps after each exam.",
+      "layout": "results",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-09.png"
+    },
+    {
+      "n": 10,
+      "theme": "dark",
+      "src": "21-achievements.png",
+      "title": "Purposeful Streaks",
+      "body": "Achievements reward consistent study.",
+      "layout": "achieve",
+      "output": "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews-v2/glass-preview-v2-10.png"
+    }
+  ]
+}

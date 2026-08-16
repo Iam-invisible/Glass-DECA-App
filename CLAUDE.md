@@ -445,6 +445,13 @@ companion, icons, themes, intros, sounds.
   a swatch and being charged was the thing this replaced.
 - **Promo codes** in `PromoCode`: `GLASSUNLOCK` owns everything and tops up, `GLASSRESET` puts it
   all back. Not a security boundary — see §8.30.
+- **`GLASSPREVIEW` is `#if DEBUG` only**, and the asymmetry is the point. The other two are safe to
+  treat as public because the worst they cost a curious student is a cosmetic they did not earn.
+  This one calls `resetProgress` before it seeds, so in a shipping build it would erase a
+  student's whole history behind a string §8.30 says is recoverable in minutes. It builds the App
+  Store screenshot phone — twelve days of history, a live streak, real indicator mastery — through
+  the app's own funnels (`PreviewSeed.swift`), so the seeded state is internally consistent rather
+  than merely full. Screenshots come off a Debug build, which is pixel-identical for the purpose.
 
 **The bunny** (`Bunny.swift`, `BunnyCompanionView`) is a 600-coin companion in the bottom-right of
 every screen. **Owning it and showing it are separate**: `settings.companionEnabled` gates the

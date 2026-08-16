@@ -439,6 +439,14 @@ final class UserSettings: ObservableObject {
             coins = max(coins, PromoCode.unlockGrant)
         case .resetEverything:
             resetPurchases()
+        #if DEBUG
+        case .previewState:
+            // Settings-side only. The study history this code exists for lives
+            // in Core Data, which `UserSettings` cannot reach — `ShopView`
+            // calls `AppStore.applyPreviewSeed()` for that half.
+            ownedAppItemIDs = Set(AppCosmeticCatalogue.all.map(\.id))
+            ownedCosmeticIDs = Set(CosmeticCatalogue.all.map(\.id))
+        #endif
         }
         return code
     }

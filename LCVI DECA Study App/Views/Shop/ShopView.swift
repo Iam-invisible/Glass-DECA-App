@@ -490,6 +490,11 @@ struct ShopView: View {
     private func redeem() {
         promoFocused = false
         if let code = settings.redeem(promoEntry) {
+            #if DEBUG
+            // The Core Data half of the preview code. Runs after `redeem` so
+            // the seed sees the cluster and event it just set.
+            if code == .previewState { store.applyPreviewSeed() }
+            #endif
             promoFailed = false
             promoResult = code.confirmation
             promoEntry = ""

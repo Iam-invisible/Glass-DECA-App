@@ -32,6 +32,16 @@ enum PromoCode: String, CaseIterable {
     /// counterpart matters as much as the unlock — without it, testing the
     /// earning path again means deleting the app.
     case resetEverything = "GLASSRESET"
+    #if DEBUG
+    /// Builds the App Store screenshot phone: a fortnight of history, a live
+    /// streak, real indicator mastery. See `PreviewSeed.swift`.
+    ///
+    /// **Debug only, unlike the two above.** Those are safe to treat as public
+    /// because they only ever cost a student cosmetics. This one erases
+    /// progress before it seeds, so shipping it would put a student's whole
+    /// history behind a string that is recoverable from the binary in minutes.
+    case previewState = "GLASSPREVIEW"
+    #endif
 
     /// Matched case- and whitespace-insensitively; nobody types a code exactly.
     init?(entry: String) {
@@ -48,6 +58,9 @@ enum PromoCode: String, CaseIterable {
         switch self {
         case .unlockEverything: return "Everything unlocked, and coins topped up."
         case .resetEverything:  return "Reset. Nothing owned, no coins."
+        #if DEBUG
+        case .previewState:     return "Preview state loaded."
+        #endif
         }
     }
 

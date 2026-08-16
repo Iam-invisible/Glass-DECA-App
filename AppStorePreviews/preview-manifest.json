@@ -1,0 +1,63 @@
+{
+  "size": [
+    1320,
+    2868
+  ],
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "frames": [
+    {
+      "n": 1,
+      "src": "13-ways-to-study.png",
+      "headline": "STUDY YOUR WAY",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/13-ways-to-study.png"
+    },
+    {
+      "n": 2,
+      "src": "03-explanation.png",
+      "headline": "ANSWERS EXPLAINED",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/03-explanation.png"
+    },
+    {
+      "n": 3,
+      "src": "07-mistake-notebook.png",
+      "headline": "MISTAKES TO REVIEW",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/07-mistake-notebook.png"
+    },
+    {
+      "n": 4,
+      "src": "09-performance-indicators.png",
+      "headline": "TRACK EVERY SKILL",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/09-performance-indicators.png"
+    },
+    {
+      "n": 5,
+      "src": "15-roleplay-brief.png",
+      "headline": "ROLEPLAY PREP",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/15-roleplay-brief.png"
+    },
+    {
+      "n": 6,
+      "src": "20-mock-exam-results.png",
+      "headline": "MOCK EXAM READY",
+      "source_path": "/Users/shail/Desktop/Glass-AppStore-Screenshots/20-mock-exam-results.png"
+    }
+  ],
+  "outputs": [
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-01.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-02.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-03.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-04.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-05.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-light-06.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-01.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-02.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-03.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-04.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-05.png",
+    "/Users/shail/Desktop/LCVI DECA Study App/AppStorePreviews/glass-preview-dark-06.png"
+  ],
+  "notes": "App Store preview frames for Glass using bundled Michroma headings and the requested palette. Each frame uses one screenshot, one short headline, opaque device/card fill, hairline border, soft shadow, and low-opacity blurred light pools."
+}
