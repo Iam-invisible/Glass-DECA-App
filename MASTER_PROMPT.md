@@ -10,15 +10,17 @@
 
 ## 0. How to use this document
 
-You are continuing work on a **shipped, working iOS app that is about to be submitted to the
-App Store.** This is not a greenfield project and not a mockup. Everything described below is
-already built, builds clean in Debug and Release with zero warnings, and runs.
+You are continuing work on a **shipped, working iOS app that has been submitted to the App
+Store.** This is not a greenfield project and not a mockup. Everything described below is
+already built, builds clean in Debug and Release with zero warnings, and runs. Version 1.0
+build 1 is delivered and in review.
 
 Before proposing anything, assume the current design is deliberate. Most of it is the result of a
 specific request or a specific bug. If something looks wrong, check §8 first — it may already have
 been tried and rejected.
 
-**Start here:** §9 is the pre-submission punch list. That is the live work.
+**Start here:** §9 is the punch list — now a v1.1 list, since submission has happened. §9a is
+what was actually claimed to App Review, and some of it constrains the code.
 
 **First three commands of any session**, before proposing anything:
 
@@ -39,13 +41,21 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
 - Swift + SwiftUI, **iOS 16.4** deployment target. It was 16.0; llama.cpp's XCFramework is
   built for 16.4 and binds at launch, so a 16.0 target would have failed to start on 16.0–16.3.
   The iPhone 8 requirement survives — that device runs iOS 16.7.
-- **iPhone only.** `TARGETED_DEVICE_FAMILY = 1` on both the app and widget targets, so the App
-  Store lists it as iPhone-only rather than "Works on iPad" — nothing in the design system is
-  iPad-adapted (every screen is hand-tuned iPhone geometry: the `DayArc` well, the tab bar's
-  10pt home-indicator clearance, the Michroma ladder), and it would have shipped as a stretched
-  iPhone layout with the full width unused. No Mac Catalyst, no visionOS, no watchOS target. The
-  built app's `Info.plist` is the source of truth — `UIDeviceFamily` should read `[1]` in both
-  the app and `DECAStudyWidget.appex`, checked with
+- **iPhone only, closed at two levels.** Nothing in the design system is iPad-adapted — every
+  screen is hand-tuned iPhone geometry (the `DayArc` well, the tab bar's 10pt home-indicator
+  clearance, the Michroma ladder), with no size-class handling and no width cap, so any larger
+  canvas is a stretched layout rather than an adapted one.
+  1. `TARGETED_DEVICE_FAMILY = 1` on **both** the app and widget targets. This is what stops the
+     App Store listing it as "Works on iPad".
+  2. On the app target only (extensions inherit destinations from their container):
+     `SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"`, `SUPPORTS_MACCATALYST = NO`,
+     `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO`, `SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO`.
+
+  **These are separate settings and the first does not imply the second** — device family alone
+  still leaves Mac Catalyst, "Designed for iPad" on Apple silicon, and the visionOS
+  compatibility destination on the table. No watchOS target exists at all.
+  The built app's `Info.plist` is the source of truth — `UIDeviceFamily` should read `[1]` in
+  both the app and `DECAStudyWidget.appex`:
   `/usr/libexec/PlistBuddy -c "Print :UIDeviceFamily" <path>/Info.plist`.
 - **Four panes: Study · Progress · Shop · Settings** (six tabs → three → four; see §4 and §6)
 - Feel: premium, calm, adult. Explicitly **not** a children's quiz game. Strong motion, haptics,
@@ -103,6 +113,11 @@ Branches may be ahead of their remotes; §10 has the inventory and what each bra
   the student then had to work out themselves. Headings name the action; body text says what
   the control does and what changes as a result. The one exception is the intro prologue's
   three lines, which are a title sequence and were kept deliberately.
+- **Two constructions are banned outright, in UI copy and store copy alike:** "not just X, but Y",
+  and the three-item list. Both were called out by name and both had to be rewritten out of a
+  finished App Store description, so they are a standing rule rather than one edit. When a
+  sentence wants a triple, cut it to two or split it. Applies to §9a's store copy as much as to
+  the app.
 
 ---
 
@@ -670,10 +685,22 @@ app survive ~1 GB resident on a 4 GB phone.
     order — one flag alone loses the race in whichever direction it is not checked. This shipped
     because `.touch` mode reports its own taps from the drag's `onEnded` and was the only
     activation ever exercised: two call sites, and the working one is the celebration badge.
+40. **Restricting the device family does not restrict the destinations.**
+    `TARGETED_DEVICE_FAMILY = 1` governs what the App Store lists and what `UIDeviceFamily` says;
+    Mac Catalyst, "Designed for iPad" on Apple silicon, and the visionOS compatibility target are
+    each a *separate* build setting that defaults to available. Setting one and assuming the rest
+    followed is the easy mistake — see §1 for the four keys and where each belongs. Related: the
+    `ITMS-90892` "missing 152×152 iPad icon" warning is a *device-family* symptom, so the fix is
+    to stop claiming iPad, never to generate iPad icons for a platform the app dropped.
 
 ---
 
-## 9. Pre-submission punch list — the live work
+## 9. Punch list — the live work
+
+**The app has been submitted.** Build 1 of version 1.0 was uploaded to App Store Connect and
+delivered successfully, and the App Review questionnaire was answered (§9a). That changes what
+this list is for: it is no longer a gate before submitting, it is the list of what a v1.1 has to
+carry. Nothing below blocks the review that is already in flight.
 
 **Still open**
 
@@ -692,7 +719,7 @@ app survive ~1 GB resident on a 4 GB phone.
    the delete button that reclaims the 808 MB is right there, instead of a green tick that
    contradicts the AI status one screen over. The failure path is now honest; whether there *is*
    a failure on real hardware is still unknown.
-2. **Nothing since `v5-immersive` has had a device pass**, and 67 commits have landed since
+2. **Nothing since `v5-immersive` has had a device pass**, and 76 commits have landed since
    `v9-pre-michroma`. Highest risk first:
    - The Shop end to end: buy, preview, apply an alternate icon, redeem a promo code.
    - **An upgrade install over an old build**, to exercise the Core Data lightweight migration.
@@ -703,12 +730,16 @@ app survive ~1 GB resident on a 4 GB phone.
      clean and only shows as "Please adopt containerBackground API" on the device itself (§8.12);
      that shipped once already this session.
    - Michroma at every size, and the generated bold, on a real panel.
-   - **Both `TiltCard` activations**, now that the press-mode tap is fixed (§8.39): tapping an
-     earned achievement on Progress must replay its badge, holding one must tilt it without
-     replaying, and the list must still scroll. None of that has been seen working.
+   - **Both `TiltCard` activations** (§8.39). Verified in the **simulator** — tap replays the
+     badge, hold tilts without replaying, the list still scrolls — but never on a real panel,
+     where the gesture timings that caused the original bug actually live.
    - The tab bar at 10pt clearance, which deliberately lets the home indicator graze the capsule.
-3. **Check App Store metadata for DECA trademark exposure.** The in-app disclaimer is solid; the
-   store listing is a separate surface. Avoid "DECA" leading the app name, subtitle or keywords.
+3. **DECA trademark exposure in App Store metadata — partly closed, one thread left.** The
+   description, keywords and review answers were all written to keep "DECA" out of the leading
+   position and to carry the non-affiliation disclaimer verbatim from `PrivacyPolicy.swift`
+   (§9a). The thread still open: the delivered build's **app name is "Glass: DECA Study App"**,
+   which does lead with the product but puts DECA in the name itself. That was already uploaded,
+   so it is a decision to revisit for v1.1 rather than something to change now.
 4. **One open catalogue question.** Whether Series, Principles and Team Decision Making run their
    roleplay *at regionals*. Left as exam + roleplay at both levels — the error that over-prepares.
    Worth one question to an advisor. Flagged in `DECAEvents.swift`'s header.
@@ -754,6 +785,62 @@ app survive ~1 GB resident on a 4 GB phone.
 
 - The **intro style toggle** is now a shop item rather than a free setting, which gives the second
   intro a reason to exist. This is closed unless the shop item is dropped.
+
+---
+
+## 9a. The submission — what was sent, and what it committed us to
+
+Version 1.0, build 1, delivered to App Store Connect. Delivery succeeded. Keep this section in
+step with what is actually live, because these are public claims the app now has to honour.
+
+**One warning came back, and it is already fixed.** `ITMS-90892: Missing recommended icon` — no
+alternate app icon at 152×152 for iPad. Every alternate icon ships only as loose `@2x`/`@3x`
+PNGs at 120 and 180, which are iPhone sizes, and the delivered build still declared
+`TARGETED_DEVICE_FAMILY = "1,2"`, so Apple's validator looked for an iPad variant and found
+none. Closed by `a83a9e8` (device family) and `3ca7ad4` (destinations) — the next upload should
+not raise it. **Do not fix this by generating 152×152 icons**: that quietly re-supports a
+platform the app deliberately dropped, and the warning was never a rejection.
+
+**The store copy is written to a rule.** No "not just X, but Y" constructions and no
+three-item lists — asked for explicitly, and it survives rewriting, so hold it. Counts in the
+copy are real and checked against the codebase (600 questions, 71 roleplays, 90 Quick Think
+prompts, 6 clusters, 50 Ontario events); the widgets line says "several" rather than a number
+for the same reason "The three tabs" went stale.
+
+**Keywords** — the 100-character field is full, exactly:
+
+```
+deca,roleplay,indicator,cluster,rubric,mock,exam,finance,personal,marketing,entrepreneur,hospitality
+```
+
+Single words, never compounds: Apple combines comma-separated keywords to match multi-word
+queries, so `mock,exam` covers "mock exam", "mock" and "exam", while `mockexam` matches only a
+string nobody types. One open efficiency question — words already in the App Name or Subtitle
+are indexed anyway and are wasted here, and the delivered app name contains "DECA", so `deca`
+may be dead weight worth ~15 characters. It was kept rather than gambled with, since it is the
+single most important term in the list.
+
+**The App Review questionnaire** (functions and audience, setup instructions, external services,
+regional differences, regulated-industry material) was answered in a single field under a
+4,000-character cap; the final text ran 3,878. Three claims in it are load-bearing and must stay
+true of the shipping app:
+
+- **No payment processor, no IAP, no StoreKit, anywhere.** Coins are earned only by studying and
+  spent only on cosmetics. Adding any real-money path contradicts a written submission answer,
+  not merely §6a's design rule.
+- **The only outbound request in the whole app** is the optional, user-initiated, Wi-Fi-only,
+  SHA-256-pinned model download. No analytics, no crash reporting, no backend, no auth.
+- **`GLASSUNLOCK` was given to App Review** as the way to see every Shop item without earning
+  coins. It is now effectively public — which §8.30 always assumed — so it must keep unlocking
+  nothing but cosmetics. `GLASSPREVIEW` was *not* disclosed and must stay `#if DEBUG` (§6a).
+
+**App Store preview graphics** live outside the repo at `~/Desktop/Glass-AppStore-Previews/`
+(ten 1320×2868 PNGs, upload-ready) with `build-previews.py` beside them, and the raw device
+screenshots at `~/Desktop/Glass-AppStore-Screenshots/`. Two decisions worth not relitigating:
+they are **dark mode**, because the app's ambient glows, gold streak and green completion arc
+are built to glow and read as pale washes on light; and the two-slot spreads carry a sentence
+across the seam while keeping whole words in each frame, because a headline sliced mid-word
+reads as a mistake in the App Store grid where either shot may be seen alone.
 
 ---
 
@@ -848,15 +935,22 @@ Four panes, Michroma throughout with a generated bold, the blue-grey palette, a 
 a coin economy with a Shop that previews before it charges, a reacting companion, an app icon
 family built from the same letterform, and a daily-fact widget on both the home and lock screens.
 
+**Version 1.0 build 1 has been submitted to the App Store** and the review questionnaire
+answered — §9a is the record of what was claimed, and §9 is now a v1.1 list rather than a gate.
+**iPhone only**, closed at both levels: `TARGETED_DEVICE_FAMILY = 1` and an explicit destination
+list ruling out Mac Catalyst, Designed-for-iPad and the visionOS compatibility target (§1).
+
 Debug and Release both build clean with zero warnings, and **all three** content validators pass
 (`check_questions.py`, `check_roleplays.py`, `check_tips.py`). Uncommitted work: none. Unpushed:
-75 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
+81 commits on `v7-events-goals`, and `v9-pre-michroma` is still local only (§10). `gh-pages` is
 published and current.
 
-**Nothing since `v5-immersive` has had a full device pass**, and 67 commits have landed since
-`v9-pre-michroma`. The single hardware report so far — an iPhone 12 — found two real bugs in the
-local AI coach, and one bug this session ("Please adopt containerBackground API") shipped with both
-configurations green and every validator passing. Treat "it builds" as a weak signal.
+**Nothing since `v5-immersive` has had a full device pass.** The single hardware report so far —
+an iPhone 12 — found two real bugs in the local AI coach, and one bug ("Please adopt
+containerBackground API") shipped with both configurations green and every validator passing.
+Treat "it builds" as a weak signal. Two things have since been exercised in the **simulator**,
+which is better than nothing and worse than a phone: both `TiltCard` activations (tap replays,
+hold tilts, list still scrolls) and the full four-step app guide.
 
 Seven things worth knowing before touching this again:
 
